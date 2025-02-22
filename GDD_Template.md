@@ -56,6 +56,7 @@ The player will have to be clever and persevere to gain better items from the sh
 3. [Technical](#technical)
 
     1. [Screens](#screens)
+
     Black screen that dissipates to show time and scenery changes in the game. 
     - When the start game screen is dismissed
     - After the player moves from one level to another
@@ -75,25 +76,27 @@ Special Attacks/Abilities: Press “X” for special abilities, which the player
 
 3. [Mechanics](#mechanics)
 
-1. Rooms and Exploration
+1. Rooms and Dungeon Layout:
 
-Rooms and Dungeon Layout:
 The dungeon consists of 10 rooms that the player must progress through.
 Each room may have different layouts, obstacles, enemies, and interactions.
 Some rooms contain NPCs, item shops, warning/advice fairies, or hidden treasures.
 In the final room of the dungeon, players will face either a strong boss enemy or discover a hidden treasure that may provide valuable rewards.
 
 Room Progression:
+
 The player advances to the next room by pressing the Up Arrow when near the exit.
 Difficulty increases with each room. Enemies become stronger, and the environment presents more complex challenges.
 
 2. Combat and Enemy Mechanics
 
 Enemies:
+
 Each room contains at least one enemy, which the player must defeat before progressing.
 As the player advances, enemy difficulty increases—enemies get stronger, faster, and potentially gain new abilities.
 
 Combat Mechanics:
+
 Attack: Players can defeat enemies by using their weapon. The damage output depends on the weapon's stats.
 Health: The player has a health bar. If health reaches 0, the player dies and must restart from the beginning.
 Item Use in Combat: Items such as healing potions or stat-boosting potions are gained as the player progresses between levels and/or the character dies.
@@ -115,6 +118,7 @@ Hidden treasures unlock items.
 Some side quests may also involve combat.
 
 5. Permanent death and Starting Over:
+
 Upon dying, the player must restart the dungeon from the first room, losing most of their resources but keeping the starting sword and some strength.
 This creates a challenge where players must carefully strategize and improve their items and abilities to progress further in each subsequent playthrough.
 
