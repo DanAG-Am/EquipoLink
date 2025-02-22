@@ -18,6 +18,7 @@
 2. [Game Design](#game-design)
 
     1. [Summary](#summary)
+
 The Lost Sentinel combines Zelda-style exploration with RPG progression mechanics. 
 Players can freely explore an open world, engage in combat, solve puzzles, and interact with NPCs to complete various quests.
 Defeat powerful bosses and collect legendary items!
@@ -42,15 +43,15 @@ Without hesitation, the young man takes a step forward and ventures into the dar
 The elderly man hands him a wooden sword and pushes him out of the shop.
 
 2. [Gameplay](#gameplay)
-     Player starts off in the menu. Link walks accross the screen until the player clicks the button to start. 
-     A screen with a summary of the game's story is displayed.
-     A black screen is shown and then it dissipates. 
-     The player is then shown a young man in a dungeon. He is lying on the ground. The player can use the arrow keys to move accross the map. To move from one room to another, the player has to press the upward arrow key.The player will find some npcs, item shops and a warning/advice fairy. In this last room, the player will either find a strong enemy or a hidden treasure in the following room. 
-     The player will have to move accross 10 different rooms. In each, the player will find an enemy. Difficulty will increase with each room. 
+Player starts off in the menu. Link walks accross the screen until the player clicks the button to start. 
+A screen with a summary of the game's story is displayed.
+A black screen is shown and then it dissipates. 
+The player is then shown a young man in a dungeon. He is lying on the ground. The player can use the arrow keys to move accross the map. To move from one room to another, the player has to press the upward arrow key.The player will find some npcs, item shops and a warning/advice fairy. In this last room, the player will either find a strong enemy or a hidden treasure in the following room. 
+The player will have to move accross 10 different rooms. In each, the player will find an enemy. Difficulty will increase with each room. 
 
 3. [Mindset](#mindset)
-    The player will feel weak in the beginning, since the weapons available may not be able to defeat all of the enemies.
-    The player will have to be clever and persevere to gain better items from the shop. 
+The player will feel weak in the beginning, since the weapons available may not be able to defeat all of the enemies.
+The player will have to be clever and persevere to gain better items from the shop. 
     
 3. [Technical](#technical)
 
@@ -63,6 +64,7 @@ The elderly man hands him a wooden sword and pushes him out of the shop.
     - When the player enters a new room
 
     2. [Controls](#controls)
+
 Movement: The player controls the protagonist's movement using the arrow keys (Up, Down, Left, Right).
 Up Arrow: Move to the next room (if possible).
 Other Arrows: Move in the respective directions within a room or dungeon.
