@@ -15,14 +15,54 @@
 ---
 
 1. [Index](#index)
+
 2. [Game Design](#game-design)
-
     1. [Summary](#summary)
+    2. [Gameplay](#gameplay)
+    3. [Mindset](#mindset)  
 
+3. [Technical](#technical)
+    1. [Screens](#screens)
+    2. [Controls](#controls)
+
+3. [Mechanics](#mechanics)
+
+4. [Level Design](#level-design)
+    1. [Themes](#themes)
+        1. Ambience
+        2. Objects
+            1. Ambient
+            2. Interactive
+        3. Challenges
+
+5. [Game Flow](#game-flow)
+
+6. [Development](#development)
+    1. [Abstract Classes](#abstract-classes--components)
+    2. [Derived Classes](#derived-classes--component-compositions)
+
+7. [Graphics](#graphics)
+    1. [Style Attributes](#style-attributes)
+    2. [Graphics Needed](#graphics-needed)
+
+8. [Sounds/Music](#soundsmusic)
+    1. [Style Attributes](#style-attributes-1)
+    2. [Sounds Needed](#sounds-needed)
+    3. [Music Needed](#music-needed)
+
+9. [Schedule](#schedule)
+
+## _Game Design_
+
+---
+
+### **Summary**
 The Lost Sentinel combines Zelda-style exploration with RPG progression mechanics. 
 Players can freely explore an open world, engage in combat, solve puzzles, and interact with NPCs to complete various quests.
 Defeat powerful bosses and collect legendary items!
 
+### **Gameplay**
+What should the gameplay be like? What is the goal of the game, and what kind of obstacles are in the way? What tactics should the player use to overcome them?
 Prologue
 
 The darkness dissipates.
@@ -42,29 +82,45 @@ The elderly man gazes at him intently and adds solemnly:
 Without hesitation, the young man takes a step forward and ventures into the darkness. The true test is about to begin.
 The elderly man hands him a wooden sword and pushes him out of the shop.
 
-2. [Gameplay](#gameplay)
-Player starts off in the menu. Link walks accross the screen until the player clicks the button to start. 
+Player starts off in the start menu. Link walks accross the screen until the player clicks the button to start. 
 A screen with a summary of the game's story is displayed.
 A black screen is shown and then it dissipates. 
 The player is then shown a young man in a dungeon. He is lying on the ground. The player can use the arrow keys to move accross the map. To move from one room to another, the player has to press the upward arrow key.The player will find some npcs, item shops and a warning/advice fairy. In this last room, the player will either find a strong enemy or a hidden treasure in the following room. 
 The player will have to move accross 10 different rooms. In each, the player will find an enemy. Difficulty will increase with each room. 
 
-3. [Mindset](#mindset)
+### **Mindset**
+
 The player will feel weak in the beginning, since the weapons available may not be able to defeat all of the enemies.
-The player will have to be clever and persevere to gain better items from the shop. 
-    
-3. [Technical](#technical)
+The player will have to be clever and persevere to gain better items from the shop in order to complete either the full or more levels of the game. 
+Gaining advantages will serve as engagement and as an incentive for the player to keep trying. 
 
-    1. [Screens](#screens)
+## _Technical_
 
-    Black screen that dissipates to show time and scenery changes in the game. 
-    - When the start game screen is dismissed
-    - After the player moves from one level to another
-    - Game credits 
-    Yellow screen with bushes and doors. Random object placement. 
-    - When the player enters a new room
+---
 
-    2. [Controls](#controls)
+### **Screens**
+1. Title Screens: Sneak peak at the map. The main character, Sentinel, walks across the screen until the player clicks the start button.
+
+2. Story Screen: A summary of how Sentinel ended up in the dungeon is displayed. Text flows from top to bottom. Screen dissipates. This screen will appear every 3 chambers to reveal more information about Sentinel's character and his relationship with the main villain. 
+
+3. Options: 
+    Start Button will request for the player to log in using appropriate credentials. "Please, try again" message will appear until credentials successfully match. 
+        - Username
+        - Password
+    Game controls screen
+        - png of the corresponding key and what the player can do with it. All arrows, cursor and left click, 'Q' and 'Z'
+4. Game
+    1. Inventory: Screen with square images of all artifacts and items collected. Accumulated currency shown at the upper right of the screen. 
+    2. Assessment / Next Level: Black screen that dissipates to show time and scenery changes in the game. Yellow screen with bushes, wood houses and doors to switch between levels. Random object placement as player increases between levels.
+    3. Game Over: Black screen with a message that says "Game Over" and a button to restart from the beginning. 
+    4. Dungeon Screen (described below)
+    5. Leaving the dungeon: natural light, map with bushes and yellow concrete. 
+
+5. End Credits: Black screen that shows all characters in square images. Ends with creators' names and apa references for borrowed or inspiration content (sound effects and music)
+
+_(example)_
+
+### **Controls**
 
 Movement: The player controls the protagonist's movement using the arrow keys (Up, Down, Left, Right).
 Up Arrow: Move to the next room (if possible).
@@ -74,7 +130,12 @@ Combat Controls:
 Attack: Press “Z” to perform an attack (basic sword or weapon).
 Special Attacks/Abilities: Press “X” for special abilities, which the player can acquire throughout the game.
 
-3. [Mechanics](#mechanics)
+Interactive controls:
+Interact: Press left click with the mouse to interact with objects, NPCs, or items.
+
+Inventory: Press "I" to open up the inventory. Player will be able to visualize accumulated currency and items-artefacts. 
+
+### **Mechanics**
 
 1. Rooms and Dungeon Layout:
 
@@ -122,98 +183,48 @@ Some side quests may also involve combat.
 Upon dying, the player must restart the dungeon from the first room, losing most of their resources but keeping the starting sword and some strength.
 This creates a challenge where players must carefully strategize and improve their items and abilities to progress further in each subsequent playthrough.
 
-4. [Level Design](#level-design)
-    1. [Themes](#themes)
-        1. Ambience
-        2. Objects
-            1. Ambient
-            2. Interactive
-        3. Challenges
-    2. [Game Flow](#game-flow)
-5. [Development](#development)
-    1. [Abstract Classes](#abstract-classes--components)
-    2. [Derived Classes](#derived-classes--component-compositions)
-6. [Graphics](#graphics)
-    1. [Style Attributes](#style-attributes)
-    2. [Graphics Needed](#graphics-needed)
-7. [Sounds/Music](#soundsmusic)
-    1. [Style Attributes](#style-attributes-1)
-    2. [Sounds Needed](#sounds-needed)
-    3. [Music Needed](#music-needed)
-8. [Schedule](#schedule)
-
-## _Game Design_
-
----
-
-### **Summary**
-
-Sum up your game idea in 2 sentences. A kind of elevator pitch. Keep it simple!
-
-### **Gameplay**
-
-What should the gameplay be like? What is the goal of the game, and what kind of obstacles are in the way? What tactics should the player use to overcome them?
-
-### **Mindset**
-
-What kind of mindset do you want to provoke in the player? Do you want them to feel powerful, or weak? Adventurous, or nervous? Hurried, or calm? How do you intend to provoke those emotions?
-
-## _Technical_
-
----
-
-### **Screens**
-
-1. Title Screen
-    1. Options
-2. Level Select
-3. Game
-    1. Inventory
-    2. Assessment / Next Level
-4. End Credits
-
-_(example)_
-
-### **Controls**
-
-How will the player interact with the game? Will they be able to choose the controls? What kind of in-game events are they going to be able to trigger, and how? (e.g. pressing buttons, opening doors, etc.)
-
-### **Mechanics**
-
-Are there any interesting mechanics? If so, how are you going to accomplish them? Physics, algorithms, etc.
 
 ## _Level Design_
-
 ---
-
-_(Note : These sections can safely be skipped if they&#39;re not relevant, or you&#39;d rather go about it another way. For most games, at least one of them should be useful. But I&#39;ll understand if you don&#39;t want to use them. It&#39;ll only hurt my feelings a little bit.)_
-
 ### **Themes**
 
-1. Forest
+1. Dungeon chambers
     1. Mood
-        1. Dark, calm, foreboding
+        1. Dark, broody, 
     2. Objects
         1. _Ambient_
-            1. Fireflies
-            2. Beams of moonlight
-            3. Tall grass
+            1. Lit by torches
+            2. Stone-like building, dirty, crumpling noises as player walks through the levelsl, blocks of stone, stone pillars
+            3. Doors are represented by hollow, black areas in the corners or bounds of the chamber. 
         2. _Interactive_
-            1. Wolves
-            2. Goblins
-            3. Rocks
-2. Castle
+            1. Doors
+            2. Fairy NPC's
+            3. Trapped wildlife (player can give them medicine items and unlock achievements)
+
+2. Shop with old man (npc)
     1. Mood
-        1. Dangerous, tense, active
+        1. Inviting, calm, warm
     2. Objects
         1. _Ambient_
-            1. Rodents
-            2. Torches
-            3. Suits of armor
+            1. More light compared to the dungeon
+            2. Antique
+            3. Old man NPC standing in front of the shelves with items and weapons
         2. _Interactive_
-            1. Guards
-            2. Giant rats
-            3. Chests
+            1. Old man's do not touch items. He will stop you and get mad. On the third try, he will kick you out. 
+            2. Cat
+            3. Item and weapon shelves. Player will get to pick one of either or each depending on the run. 
+
+3. Fairy npc's realm 
+    1. Mood
+        1. Off-putting, mysterious, fairytale
+    2. Objects
+        1. _Ambient_
+            1. Natural light
+            2. Has a pond, wildlife and trees
+            3. If fairy gets angry (warning fairy), ambient turns hostile, red and scary. 
+        2. _Interactive_
+            1. Treasure: get coins or a special item. 
+            2. Enemies: extremely strong and will have to fight them to continue the game.
 
 _(example)_
 
@@ -247,14 +258,13 @@ _(example)_
 ### **Derived Classes / Component Compositions**
 
 1. BasePlayer
-    1. PlayerMain
-    2. PlayerUnlockable
+    1. PlayerMainSentinel
 2. BaseEnemy
-    1. EnemyWolf
-    2. EnemyGoblin
-    3. EnemyGuard (may drop key)
-    4. EnemyGiantRat
-    5. EnemyPrisoner
+    1. Enemy
+    2. Enemy
+    3. Enemy
+    4. Enemy
+    5. Enemy
 3. BaseObject
     1. ObjectRock (pick-up-able, throwable)
     2. ObjectChest (pick-up-able, throwable, spits gold coins with key)
@@ -274,43 +284,80 @@ _(example)_
 ---
 
 ### **Style Attributes**
+1. Color
+    Muted earth tones dominate the game, with deep browns and grays for the dungeon's stone walls, contrasted by occasional glimmers of torchlight in warm yellows and oranges. 
+    The shop and fairy realms feature brighter colors like golds, greens, and soft blues, giving them a more welcoming atmosphere. 
+    The enemies, especially bosses, use darker shades with red or eerie green accents to emphasize danger.
 
-What kinds of colors will you be using? Do you have a limited palette to work with? A post-processed HSV map/image? Consistency is key for immersion.
+2. Texture
+    The dungeon's walls are rough and cracked, with the cold stone underfoot feeling gritty. 
+    The shop's wooden shelves are worn but polished, adding warmth to the environment. 
+    In the fairy realm, soft textures like smooth water, mossy stones, and delicate foliage provide contrast to the harsh dungeon textures.
 
-What kind of graphic style are you going for? Cartoony? Pixel-y? Cute? How, specifically? Solid, thick outlines with flat hues? Non-black outlines with limited tints/shades? Emphasize smooth curvatures over sharp angles? Describe a set of general rules depicting your style here.
+3. Graphic style
+    The game adopts a pixel art style reminiscent of retro RPGs, with simple yet expressive character sprites and detailed environments. 
+    The animation is fluid, focusing on action-heavy moments like combat and puzzle-solving. 
+    The visual clarity ensures that the player can easily navigate the environments and identify interactable objects.
 
-Well-designed feedback, both good (e.g. leveling up) and bad (e.g. being hit), are great for teaching the player how to play through trial and error, instead of scripting a lengthy tutorial. What kind of visual feedback are you going to use to let the player know they&#39;re interacting with something? That they \*can\* interact with something?
+4. Animation style
+    Subtle, old-school animation with slight movements to bring environments to life (flickering torches, waves of water). 
+    Combat animations are simple but impacting, such as slashes or explosions. 
+    Non-playable characters and enemies have smooth transitions for interactions, such as talking or attacking, zoom in when necessary.
+
+5. Lighting style
+    Dim, atmospheric lighting sets a mysterious tone in the dungeon with torchlight casting flickering shadows. 
+    The shop is brighter, with soft overhead light illuminating the items. 
+    In the fairy realm, natural light filters through the trees, but hostile elements make the lighting shift to ominous reds when danger is near.
+
+6. Sound effects style
+    Minimalistic, atmospheric sounds with echoing footsteps, crackling torches, and distant growls building tension in the dungeon. 
+    The shop features the soft chime of items being placed, while the fairy realm has calming water and bird sounds—until it shifts to eerie tones when enemies approach. 
+    Combat sounds are punchy and satisfying with sword clashes and enemy roars.
+
+7. Music style
+    A haunting, atmospheric soundtrack with a mix of piano, strings, and soft percussion.
+    The shop has a light, pleasant melody. 
+    The fairy realm has whimsical and mysterious music that turns tense during hostile encounters.
+
+8. UI style
+    The UI is simple and intuitive, using pixel-art icons for the inventory and health bar. 
+    Text boxes display story elements and NPC interactions clearly, with minimalist borders that don't distract from gameplay. 
+    The inventory screen is clean, with clearly labeled items and currency.
+
+9. Interactivity signs 
+    Interactive elements are indicated with subtle visual cues, like a glowing outline or a slight shift in the object's texture. 
+    NPCs can be highlighted by a small aura or exclamation marks when they have something important to say. 
+    In combat, enemies flash or glow when they're vulnerable or ready for an attack.
 
 ### **Graphics Needed**
 
 1. Characters
     1. Human-like
-        1. Goblin (idle, walking, throwing)
-        2. Guard (idle, walking, stabbing)
-        3. Prisoner (walking, running)
+        1. Sentinel (idle, walking, throwing, attacking (sword and bow))
+        2. Enemy 1(idle, walking, stabbing)
+
     2. Other
-        1. Wolf (idle, walking, running)
-        2. Giant Rat (idle, scurrying)
+        1. Fairy (idle, flying)
+        2. Old man npc (idle, angry, talking/thinking)
 2. Blocks
     1. Dirt
-    2. Dirt/Grass
+    2. Pebbles
     3. Stone Block
     4. Stone Bricks
-    5. Tiled Floor
+    5. Stone pillar 
     6. Weathered Stone Block
     7. Weathered Stone Bricks
 3. Ambient
-    1. Tall Grass
-    2. Rodent (idle, scurrying)
+    1. Bushes
+    2. Cracked walls and stone
     3. Torch
-    4. Armored Suit
-    5. Chains (matching Weathered Stone Bricks)
-    6. Blood stains (matching Weathered Stone Bricks)
+    4. Shadows
+    5. Rodents
+    6. Shops and realms
 4. Other
-    1. Chest
-    2. Door (matching Stone Bricks)
-    3. Gate
-    4. Button (matching Weathered Stone Bricks)
+    1. Treasure Chest
+    2. Door (hollow, black area)
+    3. Gate (appears in front of the door if Sentinel has not fought with enemies)
 
 _(example)_
 
@@ -389,5 +436,35 @@ _(define the main activities and the expected dates when they should be finished
     3. mind the pacing, let the player play between lessons
 6. design sounds
 7. design music
+
+1. Week 1: Core Setup
+Base Classes: Implement base classes (entity, player, enemy, block).
+App States: Set up basic game states (game world, menu world).
+Player Controls: Develop basic player movement and interactions.
+
+2. Week 2: Physics & Collisions
+Player Physics: Implement gravity, jumping, and smooth controls.
+Block Mechanics: Set up basic blocks (static, movable, falling).
+Collision Detection: Develop collision system for player-block interactions.
+
+3. Week 3: Derived Classes & Advanced Physics
+Moving/Falling Blocks: Implement moving platforms and falling blocks.
+Enemy AI: Create basic enemy types with simple behaviors.
+Combat Mechanics: Develop basic player-enemy interactions (attacking, health).
+
+4. Week 4: Refine Controls & Add Enemies
+Smooth Controls: Refine movement and physics for fluid gameplay.
+New Enemies: Add more enemy types (e.g., rat, soldier) with varied behaviors.
+Combat System: Improve combat mechanics, including animations and attacks.
+
+5. Week 5: Level Design & New Mechanics
+Level 1 Design: Create and test the first level with basic mechanics.
+Introduce Motion/Jumping: Implement moving platforms, jumping, and environmental puzzles.
+Throwing Mechanics: Add object-throwing functionality (bombs, ranged weapons).
+
+6. Week 6: Sounds, Music & Polish
+Sound Design: Add sound effects for actions, environments, and enemies.
+Music Implementation: Develop and integrate background music.
+Polish & Testing: Finalize UI, fix bugs, and balance gameplay.
 
 _(example)_
