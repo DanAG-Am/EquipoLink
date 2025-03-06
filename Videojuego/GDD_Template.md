@@ -1,470 +1,927 @@
 # **The Lost Sentinel**
 
-## _Game Design Document_
+## _Documento de Diseño de Juego_
 
 ---
 
-##### **Copyright notice / author information / boring legal stuff nobody likes**
+### **Aviso de derechos de autor / información del autor**
 - Amilka Daniela Lopez Aguilar A01029277
 - Emiliano Deyta Illescas A01785881
 - Jin Sik Yoon A01026630
 
-##
-## _Index_
+---
+
+## **Índice**
+
+1. [Índice](#índice)
+2. [Diseño del Juego](#diseño-del-juego)
+   1. [Resumen](#resumen)
+   2. [Jugabilidad](#jugabilidad)
+   3. [Mentalidad del Jugador](#mentalidad-del-jugador)
+3. [Aspectos Técnicos](#aspectos-técnicos)
+   1. [Pantallas](#pantallas)
+   2. [Controles](#controles)
+4. [Mecánicas](#mecánicas)
+5. [Diseño de Niveles](#diseño-de-niveles)
+   1. [Temas](#temas)
+      1. [Ambiente](#ambiente)
+      2. [Objetos](#objetos)
+         1. [Ambientales](#ambientales)
+         2. [Interactivos](#interactivos)
+      3. [Desafíos](#desafíos)
+6. [Flujo del Juego](#flujo-del-juego)
+7. [Desarrollo](#desarrollo)
+   1. [Clases Abstractas](#clases-abstractas)
+   2. [Clases Derivadas](#clases-derivadas)
+8. [Gráficos](#gráficos)
+   1. [Atributos de Estilo](#atributos-de-estilo)
+   2. [Gráficos Necesarios](#gráficos-necesarios)
+9. [Sonidos/Música](#sonidosmúsica)
+   1. [Atributos de Estilo](#atributos-de-estilo-1)
+   2. [Sonidos Necesarios](#sonidos-necesarios)
+   3. [Música Necesaria](#música-necesaria)
+10. [Cronograma](#cronograma)
 
 ---
 
-1. [Index](#index)
+## **Diseño del Juego**
 
-2. [Game Design](#game-design)
-    1. [Summary](#summary)
-    2. [Gameplay](#gameplay)
-    3. [Mindset](#mindset)  
+### **Resumen**
 
-3. [Technical](#technical)
-    1. [Screens](#screens)
-    2. [Controls](#controls)
+_The Lost Sentinel_ combina exploración estilo Zelda con mecánicas de progresión RPG. 
+Los jugadores pueden explorar un mundo abierto, enfrentar combates en tiempo real, resolver acertijos escondidos e interactuar con NPCs para completar misiones y recoger recompensas.
 
-3. [Mechanics](#mechanics)
+#### 🎯 **Objetivo Principal:**
+El jugador toma el rol de Sentinel, un guerrero que despierta en una mazmorra misteriosa sin recordar cómo llegó ahí. Guiado por un anciano NPC y un hada, Sentinel debe escapar de la mazmorra, descubrir la verdad detrás del **Ejército de la Oscuridad** y derrotar al jefe final antes de que sea demasiado tarde.
 
-4. [Level Design](#level-design)
-    1. [Themes](#themes)
-        1. Ambience
-        2. Objects
-            1. Ambient
-            2. Interactive
-        3. Challenges
-
-5. [Game Flow](#game-flow)
-
-6. [Development](#development)
-    1. [Abstract Classes](#abstract-classes--components)
-    2. [Derived Classes](#derived-classes--component-compositions)
-
-7. [Graphics](#graphics)
-    1. [Style Attributes](#style-attributes)
-    2. [Graphics Needed](#graphics-needed)
-
-8. [Sounds/Music](#soundsmusic)
-    1. [Style Attributes](#style-attributes-1)
-    2. [Sounds Needed](#sounds-needed)
-    3. [Music Needed](#music-needed)
-
-9. [Schedule](#schedule)
-
-## _Game Design_
+**A lo largo del juego, los jugadores podrán:**
+- Combatir enemigos cada vez más difíciles en 10 habitaciones desafiantes.
+- Interactuar con NPCs que ofrecen misiones, pistas y objetos.
+- Mejorar armas, armaduras y habilidades en tiendas y cofres ocultos.
+- Derrotar jefes poderosos que protegen la salida de la mazmorra.
 
 ---
 
-### **Summary**
-The Lost Sentinel combines Zelda-style exploration with RPG progression mechanics. 
-Players can freely explore an open world, engage in combat, solve puzzles, and interact with NPCs to complete various quests.
-Defeat powerful bosses and collect legendary items!
+### **Jugabilidad**
 
-### **Gameplay**
-What should the gameplay be like? What is the goal of the game, and what kind of obstacles are in the way? What tactics should the player use to overcome them?
-Prologue
+#### **Prólogo**
 
-The darkness dissipates.
-The young man awakens and wanders through the dungeon, finding an item shop attended by an elderly man.
-On the cold stone floor, a young man slowly opens his eyes. The faint light of a torch flickers on the walls, casting dancing shadows in the damp cave. He tries to rise, but his body feels heavy.
-Then, a rough voice breaks the silence.
-"At last, you have awakened, young hero."
-Before him stands an elderly man with a wrinkled face. He wears a worn-out robe and holds a small wooden staff.
-The young man blinks, confused. He doesn't remember how he got there or why he's in this place. His mind is clouded with fog and unanswered questions.
-The elderly man steps forward slowly and, with a firm but calm voice, says:
-"There is no time to waste. Your family has been captured by the army of darkness."
-The young man's eyes widen.
-"If you want to save them, you will need a weapon. Leave the cave and turn left. There, my companion will give you a sword."
-The young man clenches his fists. He feels fear, uncertainty, but also an undeniable calling.
-The elderly man gazes at him intently and adds solemnly:
-"The path will be difficult, but your destiny has already been sealed. Go now, hero."
-Without hesitation, the young man takes a step forward and ventures into the darkness. The true test is about to begin.
-The elderly man hands him a wooden sword and pushes him out of the shop.
+La oscuridad se disipa. Sentinel despierta en un frío suelo de piedra, con el eco de gotas cayendo a su alrededor. La tenue luz de una antorcha ilumina la cueva.  
+Se siente débil, sin recuerdos de cómo llegó allí.  
+Un anciano se le acerca. **"Por fin has despertado, joven héroe"**, dice con voz firme.  
+Le advierte que su familia ha sido capturada por el **Ejército de la Oscuridad** y que necesita un arma para enfrentarlo.  
+**"Sal de la cueva y busca a mi compañero. Él te dará una espada."**  
+A pesar de la incertidumbre, Sentinel siente una fuerza desconocida dentro de él.  
+Toma la espada de madera y da su primer paso hacia la oscuridad. La verdadera prueba ha comenzado.  
 
-Player starts off in the start menu. Link walks accross the screen until the player clicks the button to start. 
-A screen with a summary of the game's story is displayed.
-A black screen is shown and then it dissipates. 
-The player is then shown a young man in a dungeon. He is lying on the ground. The player can use the arrow keys to move accross the map. To move from one room to another, the player has to press the upward arrow key.The player will find some npcs, item shops and a warning/advice fairy. In this last room, the player will either find a strong enemy or a hidden treasure in the following room. 
-The player will have to move accross 10 different rooms. In each, the player will find an enemy. Difficulty will increase with each room. 
+#### **Mentalidad del Jugador**
 
-### **Mindset**
+- El jugador se sentirá débil al inicio, ya que las armas disponibles pueden no ser lo suficientemente fuertes para derrotar a todos los enemigos.
+- Tendrá que ser astuto y perseverante para conseguir mejores objetos en la tienda y así avanzar en más niveles del juego.
+- Conseguir ventajas servirá como una forma de compromiso e incentivo para que el jugador siga intentando completar el nivel.
 
-The player will feel weak in the beginning, since the weapons available may not be able to defeat all of the enemies.
-The player will have to be clever and persevere to gain better items from the shop in order to complete either the full or more levels of the game. 
-Gaining advantages will serve as engagement and as an incentive for the player to keep trying. 
+---
 
 ## _Technical_
 
 ---
 
-### **Screens**
-1. Title Screens: Sneak peak at the map. The main character, Sentinel, walks across the screen until the player clicks the start button.
+## **Aspectos Técnicos**
 
-2. Story Screen: A summary of how Sentinel ended up in the dungeon is displayed. Text flows from top to bottom. Screen dissipates. This screen will appear every 3 chambers to reveal more information about Sentinel's character and his relationship with the main villain. 
+### **Pantallas**
 
-3. Options: 
-    Start Button will request for the player to log in using appropriate credentials. "Please, try again" message will appear until credentials successfully match. 
-        - Username
-        - Password
-    Game controls screen
-        - png of the corresponding key and what the player can do with it. All arrows, cursor and left click, 'Q' and 'Z'
-4. Game
-    1. Inventory: Screen with square images of all artifacts and items collected. Accumulated currency shown at the upper right of the screen. 
-    2. Assessment / Next Level: Black screen that dissipates to show time and scenery changes in the game. Yellow screen with bushes, wood houses and doors to switch between levels. Random object placement as player increases between levels.
-    3. Game Over: Black screen with a message that says "Game Over" and a button to restart from the beginning. 
-    4. Dungeon Screen (described below)
-    5. Leaving the dungeon: natural light, map with bushes and yellow concrete. 
+- **Pantalla de Inicio:** Vista previa del mapa. Sentinel camina por la pantalla hasta que el jugador haga clic en el botón de inicio.
+- **Pantalla de Historia:** Se muestra un resumen de la historia breve de cómo Sentinel terminó en la mazmorra.
+- **Opciones:**
+  - El botón de inicio solicitará al jugador que inicie sesión con su nombre de usuario.
+  - Pantalla de controles con las teclas de dirección, clic izquierdo, 'Q' y 'Z'.
+- **Juego:**
+  - **Inventario:** Pantalla con imágenes de todos los objetos recolectados y monedas acumuladas.
+  - **Evaluación / Siguiente Nivel:** Pantalla negra que muestra cambios en el tiempo y entorno.
+  - **Game Over:** Pantalla negra con el mensaje "Game Over" y un botón para reiniciar.
+  - **Pantalla de Mazmorra**
+  - **Salida de la mazmorra:** Iluminación natural, mapa con arbustos y suelo amarillo de concreto.
+  - **Créditos Finales:** Nombres de los creadores y referencias en formato APA.
 
-5. End Credits: Black screen that shows all characters in square images. Ends with creators' names and apa references for borrowed or inspiration content (sound effects and music)
+### **Controles**
 
-_(example)_
+📌 **Movimiento**
 
-### **Controls**
+- ⬆️ Flecha Arriba → Mover a la siguiente habitación (si la puerta está abierta).
+- ⬇️ Flecha Abajo → Regresar a una habitación anterior.
+- ⬅️ Flecha Izquierda → Moverse lateralmente en la habitación o entrar en puertas a la izquierda.
+- ➡️ Flecha Derecha → Moverse lateralmente en la habitación o entrar en puertas a la derecha.
 
-Movement: The player controls the protagonist's movement using the arrow keys (Up, Down, Left, Right).
-Up Arrow: Move to the next room (if possible).
-Other Arrows: Move in the respective directions within a room or dungeon.
+⚔️ **Combate**
 
-Combat Controls:
-Attack: Press “Z” to perform an attack (basic sword or weapon).
-Special Attacks/Abilities: Press “X” for special abilities, which the player can acquire throughout the game.
+- **"Z"** → Ataque con espada.
+- **"X"** → Disparo con arco.
+- **"A"** → Colocar bomba (explota tras unos segundos).
 
-Interactive controls:
-Interact: Press left click with the mouse to interact with objects, NPCs, or items.
+🎮 **Interacción**
 
-Inventory: Press "I" to open up the inventory. Player will be able to visualize accumulated currency and items-artefacts. 
+- **Clic Izquierdo** → Interactuar con NPCs, objetos o abrir cofres.
+- **"I"** → Abrir inventario.  
+- **"ESC"** → Abrir menú de pausa.
+
+---
 
 ### **Mechanics**
 
-1. Rooms and Dungeon Layout:
+#### 1. Distribución de Habitaciones y Mazmorra
+- La mazmorra consta de **10 habitaciones** que el jugador debe atravesar para progresar.
+- Cada habitación puede tener diferentes diseños, obstáculos, enemigos e interacciones.
+- Las habitaciones **3, 6 y 9** contienen:
+  - **NPCs** que dan información útil.
+  - **Tiendas de objetos** donde se pueden mejorar habilidades y equipamiento.
+  - **Hadas consejeras** que ofrecen pistas sobre desafíos futuros.
+- Algunas habitaciones contienen **tesoros ocultos** con recompensas valiosas.
+- En la última habitación, el jugador se enfrentará a un **jefe poderoso** y podrá obtener un **tesoro especial**.
 
-The dungeon consists of 10 rooms that the player must progress through.
-Each room may have different layouts, obstacles, enemies, and interactions.
-Some rooms contain NPCs, item shops, warning/advice fairies, or hidden treasures.
-In the final room of the dungeon, players will face either a strong boss enemy or discover a hidden treasure that may provide valuable rewards.
+##### **Progresión de Habitaciones**
+- El jugador avanza presionando la **Flecha Arriba** cuando está frente a la **puerta de salida**.
+- En los pisos de descanso, puede moverse lateralmente:
+  - **Izquierda** → Tienda del anciano.
+  - **Derecha** → Reino del hada.
+- La dificultad aumenta con cada habitación:
+  - Los enemigos se **vuelven un 10% más fuertes** en comparación con la habitación anterior.
+  - Los entornos presentan **desafíos más complejos**.
 
-Room Progression:
+---
 
-The player advances to the next room by pressing the Up Arrow when near the exit.
-Difficulty increases with each room. Enemies become stronger, and the environment presents more complex challenges.
+#### 2. Mecánicas de Combate y Enemigos
 
-2. Combat and Enemy Mechanics
+##### **Enemigos**
+- Cada habitación contiene al menos **un enemigo**, que el jugador debe derrotar antes de avanzar.
+- A medida que el jugador progresa:
+  - Los enemigos se **vuelven más fuertes**.
+  - Ganan **más velocidad** y nuevas habilidades.
 
-Enemies:
+##### **Mecánicas de Combate**
+- **Ataque**: Los jugadores pueden derrotar enemigos usando su **arma equipada**. El daño depende de sus estadísticas.
+- **Salud**: El jugador tiene una **barra de vida**. Si llega a **0**, muere y debe **reiniciar desde el principio**.
 
-Each room contains at least one enemy, which the player must defeat before progressing.
-As the player advances, enemy difficulty increases—enemies get stronger, faster, and potentially gain new abilities.
+##### **Uso de Objetos en Combate**
+- Los jugadores pueden recolectar:
+  - **Pociones de curación** que restauran vida.
+  - **Objetos de mejora** para fortalecer atributos o armas.
+  - **Ítems especiales** que pueden cambiar la estrategia de juego.
 
-Combat Mechanics:
+---
 
-Attack: Players can defeat enemies by using their weapon. The damage output depends on the weapon's stats.
-Health: The player has a health bar. If health reaches 0, the player dies and must restart from the beginning.
-Item Use in Combat: Items such as healing potions or stat-boosting potions are gained as the player progresses between levels and/or the character dies.
+#### 3. NPCs - Asistencia de Hadas
+- En las habitaciones **3, 6 y 9**, hay **hadas consejeras** que:
+  - Dan pistas sobre desafíos futuros.  
+    _Ejemplo_: "¡Ten cuidado! ¡El próximo enemigo es muy fuerte!"
+  - Proporcionan información sobre **tesoros ocultos**.
+  - En ocasiones, pueden **recompensar al jugador** con objetos útiles.
 
-3. NPCS
+---
 
-Fairy Assistance:
-Some rooms contain advice fairies that provide helpful hints or warnings about upcoming challenges (e.g., “Be careful! The next enemy is very strong!”).
-These fairies may also offer clues to hidden treasures.
+#### 4. Misiones y Trama
 
-4. Quests and Storyline
+##### **Misión Principal**
+- El jugador debe **escapar de la mazmorra** completando la historia principal.
+- A lo largo de la aventura, descubrirá el **misterio del Ejército de la Oscuridad** y su relación con Sentinel.
 
-Main Quest:
-The player must complete a main questline that revolves around escaping the dungeon and uncovering the mystery behind the traps and enemies.
-Along the way, players will encounter mini-quests from NPCs..
+##### **Misiones Secundarias**
+- **Tesoros ocultos**: Pueden desbloquear **objetos especiales** o mejoras permanentes.
+- Algunas misiones pueden involucrar **enfrentamientos adicionales** con enemigos desafiantes.
 
-Side Quests:
-Hidden treasures unlock items.
-Some side quests may also involve combat.
+---
 
-5. Permanent death and Starting Over:
+#### 5. Muerte Permanente y Reinicio
+- Al **morir**, el jugador **reinicia desde la primera habitación**.
+- Pierde la mayoría de sus recursos, pero conserva:
+  - Su **espada inicial**.
+  - **Algunas monedas** acumuladas en la partida.
+- Esta mecánica obliga a los jugadores a:
+  - **Planificar estratégicamente** el uso de recursos.
+  - Mejorar su equipo y habilidades para **progresar más en cada intento**.
 
-Upon dying, the player must restart the dungeon from the first room, losing most of their resources but keeping the starting sword and some strength.
-This creates a challenge where players must carefully strategize and improve their items and abilities to progress further in each subsequent playthrough.
-
+---
 
 ## _Level Design_
+
 ---
+
 ### **Themes**
 
-1. Dungeon chambers
-    1. Mood
-        1. Dark, broody, 
-    2. Objects
-        1. _Ambient_
-            1. Lit by torches
-            2. Stone-like building, dirty, crumpling noises as player walks through the levelsl, blocks of stone, stone pillars
-            3. Doors are represented by hollow, black areas in the corners or bounds of the chamber. 
-        2. _Interactive_
-            1. Doors
-            2. Fairy NPC's
-            3. Trapped wildlife (player can give them medicine items and unlock achievements)
+### 1. Cámaras de la Mazmorra
 
-2. Shop with old man (npc)
-    1. Mood
-        1. Inviting, calm, warm
-    2. Objects
-        1. _Ambient_
-            1. More light compared to the dungeon
-            2. Antique
-            3. Old man NPC standing in front of the shelves with items and weapons
-        2. _Interactive_
-            1. Old man's do not touch items. He will stop you and get mad. On the third try, he will kick you out. 
-            2. Cat
-            3. Item and weapon shelves. Player will get to pick one of either or each depending on the run. 
+#### 🎭 **Ambiente**
+- Oscuro, sombrío, opresivo y desafiante.
 
-3. Fairy npc's realm 
-    1. Mood
-        1. Off-putting, mysterious, fairytale
-    2. Objects
-        1. _Ambient_
-            1. Natural light
-            2. Has a pond, wildlife and trees
-            3. If fairy gets angry (warning fairy), ambient turns hostile, red and scary. 
-        2. _Interactive_
-            1. Treasure: get coins or a special item. 
-            2. Enemies: extremely strong and will have to fight them to continue the game.
+#### 🏰 **Objetos**
+##### 🔹 **Ambientales**
+- Iluminación tenue con **antorchas brillantes**.
+- Estructuras de **piedra envejecida** con suelo sucio.
+- Sonidos de **escombros crujientes** al caminar.
+- **Bloques de piedra** y **pilares antiguos**.
+- **Puertas representadas como áreas huecas y negras** en los límites de la cámara.
 
-_(example)_
+##### 🎮 **Interactivos**
+- **Puertas con mecanismos ocultos** que deben activarse para abrirse.
+- **NPCs misteriosos** que ofrecen advertencias o pistas crípticas.
+- **Trampas ocultas** con picos que infligen daño si el jugador cae en ellas.
+- **Cofres escondidos** que contienen monedas o armas mejoradas.
+
+---
+
+### 2. Tienda de Objetos _(Tienda del Anciano)_
+
+#### 🎭 **Ambiente**
+- Un espacio **acogedor, tranquilo y cálido**, donde el jugador se siente **seguro**.
+
+#### 🏪 **Objetos**
+##### 🔹 **Ambientales**
+- **Más iluminado** que la mazmorra, con luces cálidas y tenues.
+- **Estantes de madera antiguos**, llenos de objetos curiosos, armas y pociones.
+- **Suelos de madera chirriantes** que añaden una sensación de rusticidad.
+- Un **gato dormido** en la esquina, aportando un toque de vida.
+
+##### 🎮 **Interactivos**
+- **El anciano se enoja** si el jugador intenta tocar sus objetos sin pagar.
+- Si el jugador intenta **robar tres veces**, el anciano lo expulsa de la tienda.
+- El jugador puede **comprar objetos de curación, mejoras de armas y habilidades** _(HP, Atk, Def, etc.)_.
+
+---
+
+### 3. Reino de las Hadas
+
+#### 🎭 **Ambiente**
+- Un lugar **misterioso, de cuento de hadas, mágico y enigmático**.
+
+#### 🌿 **Objetos**
+##### 🔹 **Ambientales**
+- **Luz natural** filtrándose entre los árboles, creando un ambiente sereno.
+- **Rocas cubiertas de musgo flotando** en el aire, aumentando el aire de fantasía.
+
+##### 🎮 **Interactivos**
+- Si el jugador intenta **atacar a un hada**, el entorno se **vuelve rojizo y amenazante**.
+- **Posibilidad de encontrar cofres** con monedas o artefactos únicos.
+- Algunas hadas ofrecen **pistas sobre enemigos poderosos** o tesoros ocultos.
+- En ciertos encuentros, el jugador puede **verse obligado a luchar contra hadas hostiles**.
 
 ### **Game Flow**
 
-1. Player starts in forest
-2. Pond to the left, must move right
-3. To the right is a hill, player jumps to traverse it (&quot;jump&quot; taught)
-4. Player encounters castle - door&#39;s shut and locked
-5. There&#39;s a window within jump height, and a rock on the ground
-6. Player picks up rock and throws at glass (&quot;throw&quot; taught)
-7. … etc.
+## **Game Flow**
 
-_(example)_
-
-## _Development_
+### 📜 **Introducción y Menú de Inicio**
+1. El juego comienza con una **pantalla de título**, donde Sentinel camina a través de la pantalla.
+2. El jugador debe hacer clic en el **botón "Inicio"** para continuar.
+3. Aparece la **pantalla de inicio de sesión**, donde el jugador ingresa su nombre de usuario.
+4. Una vez que inicia sesión, el jugador es llevado a la **Pantalla de Historia**.
 
 ---
 
-### **Abstract Classes / Components**
-
-1. BasePhysics
-    1. BasePlayer
-    2. BaseEnemy
-    3. BaseObject
-2. BaseObstacle
-3. BaseInteractable
-
-_(example)_
-
-### **Derived Classes / Component Compositions**
-
-1. BasePlayer
-    1. PlayerMainSentinel
-2. BaseEnemy
-    1. Enemy
-    2. Enemy
-    3. Enemy
-    4. Enemy
-    5. Enemy
-3. BaseObject
-    1. ObjectRock (pick-up-able, throwable)
-    2. ObjectChest (pick-up-able, throwable, spits gold coins with key)
-    3. ObjectGoldCoin (cha-ching!)
-    4. ObjectKey (pick-up-able, throwable)
-4. BaseObstacle
-    1. ObstacleWindow (destroyed with rock)
-    2. ObstacleWall
-    3. ObstacleGate (watches to see if certain buttons are pressed)
-5. BaseInteractable
-    1. InteractableButton
-
-_(example)_
-
-## _Graphics_
+### 🎭 **Pantalla de Historia y Prólogo**
+1. Un **prólogo corto** se desplaza de arriba hacia abajo, presentando la historia del juego.
+2. La pantalla **se desvanece a negro** y da paso a la **primera escena jugable**.
 
 ---
 
-### **Style Attributes**
-1. Color
-    Muted earth tones dominate the game, with deep browns and grays for the dungeon's stone walls, contrasted by occasional glimmers of torchlight in warm yellows and oranges. 
-    The shop and fairy realms feature brighter colors like golds, greens, and soft blues, giving them a more welcoming atmosphere. 
-    The enemies, especially bosses, use darker shades with red or eerie green accents to emphasize danger.
-
-2. Texture
-    The dungeon's walls are rough and cracked, with the cold stone underfoot feeling gritty. 
-    The shop's wooden shelves are worn but polished, adding warmth to the environment. 
-    In the fairy realm, soft textures like smooth water, mossy stones, and delicate foliage provide contrast to the harsh dungeon textures.
-
-3. Graphic style
-    The game adopts a pixel art style reminiscent of retro RPGs, with simple yet expressive character sprites and detailed environments. 
-    The animation is fluid, focusing on action-heavy moments like combat and puzzle-solving. 
-    The visual clarity ensures that the player can easily navigate the environments and identify interactable objects.
-
-4. Animation style
-    Subtle, old-school animation with slight movements to bring environments to life (flickering torches, waves of water). 
-    Combat animations are simple but impacting, such as slashes or explosions. 
-    Non-playable characters and enemies have smooth transitions for interactions, such as talking or attacking, zoom in when necessary.
-
-5. Lighting style
-    Dim, atmospheric lighting sets a mysterious tone in the dungeon with torchlight casting flickering shadows. 
-    The shop is brighter, with soft overhead light illuminating the items. 
-    In the fairy realm, natural light filters through the trees, but hostile elements make the lighting shift to ominous reds when danger is near.
-
-6. Sound effects style
-    Minimalistic, atmospheric sounds with echoing footsteps, crackling torches, and distant growls building tension in the dungeon. 
-    The shop features the soft chime of items being placed, while the fairy realm has calming water and bird sounds—until it shifts to eerie tones when enemies approach. 
-    Combat sounds are punchy and satisfying with sword clashes and enemy roars.
-
-7. Music style
-    A haunting, atmospheric soundtrack with a mix of piano, strings, and soft percussion.
-    The shop has a light, pleasant melody. 
-    The fairy realm has whimsical and mysterious music that turns tense during hostile encounters.
-
-8. UI style
-    The UI is simple and intuitive, using pixel-art icons for the inventory and health bar. 
-    Text boxes display story elements and NPC interactions clearly, with minimalist borders that don't distract from gameplay. 
-    The inventory screen is clean, with clearly labeled items and currency.
-
-9. Interactivity signs 
-    Interactive elements are indicated with subtle visual cues, like a glowing outline or a slight shift in the object's texture. 
-    NPCs can be highlighted by a small aura or exclamation marks when they have something important to say. 
-    In combat, enemies flash or glow when they're vulnerable or ready for an attack.
-
-### **Graphics Needed**
-
-1. Characters
-    1. Human-like
-        1. Sentinel (idle, walking, throwing, attacking (sword and bow))
-        2. Enemy 1(idle, walking, stabbing)
-
-    2. Other
-        1. Fairy (idle, flying)
-        2. Old man npc (idle, angry, talking/thinking)
-2. Blocks
-    1. Dirt
-    2. Pebbles
-    3. Stone Block
-    4. Stone Bricks
-    5. Stone pillar 
-    6. Weathered Stone Block
-    7. Weathered Stone Bricks
-3. Ambient
-    1. Bushes
-    2. Cracked walls and stone
-    3. Torch
-    4. Shadows
-    5. Rodents
-    6. Shops and realms
-4. Other
-    1. Treasure Chest
-    2. Door (hollow, black area)
-    3. Gate (appears in front of the door if Sentinel has not fought with enemies)
-
-_(example)_
-
-
-## _Sounds/Music_
+### 🏰 **Despertar en la Mazmorra**
+1. Sentinel despierta **inconsciente** en una cámara oscura de piedra.
+2. Aparece una pantalla con el **tutorial de controles**:
+   - **⬆️⬇️⬅️➡️ Flechas del teclado** → Moverse por el mapa.
+   - **"Z"** → Ataque básico con espada.
+   - **"X"** → Ataque con arco.
+   - **"A"** → Colocar una bomba.
+   - **🖱️ Click Izquierdo** → Interactuar con objetos/NPCs.
+   - **"I"** → Abrir inventario.
+   - **"ESC"** → Abrir el menú de pausa.
+3. Sentinel **conoce a un NPC anciano**, quien le explica su misión.
+4. El anciano le entrega **una espada de madera** como su primera arma.
+5. El jugador puede **explorar la mazmorra** e interactuar con NPCs.
 
 ---
 
-### **Style Attributes**
-
-Again, consistency is key. Define that consistency here. What kind of instruments do you want to use in your music? Any particular tempo, key? Influences, genre? Mood?
-
-Stylistically, what kind of sound effects are you looking for? Do you want to exaggerate actions with lengthy, cartoony sounds (e.g. mario&#39;s jump), or use just enough to let the player know something happened (e.g. mega man&#39;s landing)? Going for realism? You can use the music style as a bit of a reference too.
-
- Remember, auditory feedback should stand out from the music and other sound effects so the player hears it well. Volume, panning, and frequency/pitch are all important aspects to consider in both music _and_ sounds - so plan accordingly!
-
-### **Sounds Needed**
-
-1. Effects
-    1. Soft Footsteps (dirt floor)
-    2. Sharper Footsteps (stone floor)
-    3. Soft Landing (low vertical velocity)
-    4. Hard Landing (high vertical velocity)
-    5. Glass Breaking
-    6. Chest Opening
-    7. Door Opening
-2. Feedback
-    1. Relieved &quot;Ahhhh!&quot; (health)
-    2. Shocked &quot;Ooomph!&quot; (attacked)
-    3. Happy chime (extra life)
-    4. Sad chime (died)
-
-_(example)_
-
-### **Music Needed**
-
-1. Slow-paced, nerve-racking &quot;forest&quot; track
-2. Exciting &quot;castle&quot; track
-3. Creepy, slow &quot;dungeon&quot; track
-4. Happy ending credits track
-5. Rick Astley&#39;s hit #1 single &quot;Never Gonna Give You Up&quot;
-
-_(example)_
-
-
-## _Schedule_
+### 🏹 **Explorando la Mazmorra**
+La mazmorra tiene **10 cámaras**, cada una con:
+- **Enemigos** de dificultad creciente.
+- **Tiendas** donde el jugador puede comprar mejor equipo.
+- **NPCs**, incluidas hadas que dan consejos o advertencias.
+- **Habitaciones ocultas** con tesoros o desafíos adicionales.
 
 ---
 
-_(define the main activities and the expected dates when they should be finished. This is only a reference, and can change as the project is developed)_
+### ⚔️ **Primer Encuentro con un Enemigo**
+1. El jugador entra en una habitación y **se enfrenta a su primer enemigo**.
+2. Se introduce el **tutorial de combate**:
+   - **"Z"** → Ataque con espada.
+   - **Estrategias de movimiento** para esquivar ataques enemigos.
+3. Al derrotar al enemigo, el jugador **recibe monedas** como recompensa.
 
-1. develop base classes
-    1. base entity
-        1. base player
-        2. base enemy
-        3. base block
-  2. base app state
-        1. game world
-        2. menu world
-2. develop player and basic block classes
-    1. physics / collisions
-3. find some smooth controls/physics
-4. develop other derived classes
-    1. blocks
-        1. moving
-        2. falling
-        3. breaking
-        4. cloud
-    2. enemies
-        1. soldier
-        2. rat
-        3. etc.
-5. design levels
-    1. introduce motion/jumping
-    2. introduce throwing
-    3. mind the pacing, let the player play between lessons
-6. design sounds
-7. design music
+---
 
-1. Week 1: Core Setup
-Base Classes: Implement base classes (entity, player, enemy, block).
-App States: Set up basic game states (game world, menu world).
-Player Controls: Develop basic player movement and interactions.
+### 🚪 **Navegación en la Mazmorra**
+El jugador avanza enfrentando:
+- **Enemigos más fuertes** con nuevas habilidades.
+- **Tiendas** para mejorar armas y armaduras.
+- **Hadas consejeras**, que dan advertencias sobre peligros futuros.
+- Cada **tres habitaciones**, se revelan **más detalles** sobre el pasado de Sentinel y los motivos del villano principal.
 
-2. Week 2: Physics & Collisions
-Player Physics: Implement gravity, jumping, and smooth controls.
-Block Mechanics: Set up basic blocks (static, movable, falling).
-Collision Detection: Develop collision system for player-block interactions.
+---
 
-3. Week 3: Derived Classes & Advanced Physics
-Moving/Falling Blocks: Implement moving platforms and falling blocks.
-Enemy AI: Create basic enemy types with simple behaviors.
-Combat Mechanics: Develop basic player-enemy interactions (attacking, health).
+### 🛒 **Visitación a la Tienda y al Reino de las Hadas**
+En las habitaciones **3, 6 y 9**, el jugador puede **visitar**:
+   - **🛒 Tienda** para comprar ítems con las monedas obtenidas.
+   - **🧚 Reino de las Hadas** para recibir pistas y objetos mágicos.
 
-4. Week 4: Refine Controls & Add Enemies
-Smooth Controls: Refine movement and physics for fluid gameplay.
-New Enemies: Add more enemy types (e.g., rat, soldier) with varied behaviors.
-Combat System: Improve combat mechanics, including animations and attacks.
+---
 
-5. Week 5: Level Design & New Mechanics
-Level 1 Design: Create and test the first level with basic mechanics.
-Introduce Motion/Jumping: Implement moving platforms, jumping, and environmental puzzles.
-Throwing Mechanics: Add object-throwing functionality (bombs, ranged weapons).
+### 🏆 **Batalla contra el Jefe Final y Créditos**
+1. En la **décima habitación**, el jugador se enfrenta a un **jefe poderoso**.
+2. Si el jugador gana, se muestra una **escena final** de la historia.
+3. Aparecen los **créditos finales**, que incluyen:
+   - **Retratos de los personajes**.
+   - **Nombres de los desarrolladores**.
+   - **Créditos de la música y efectos de sonido**.
 
-6. Week 6: Sounds, Music & Polish
-Sound Design: Add sound effects for actions, environments, and enemies.
-Music Implementation: Develop and integrate background music.
-Polish & Testing: Finalize UI, fix bugs, and balance gameplay.
+# **Development**
 
-_(example)_
+---
+
+## **Abstract Classes / Components**
+
+### 🏗 **BaseEntity**
+Clase padre para todas las entidades del juego (jugadores, enemigos, NPCs, objetos interactivos).  
+Define propiedades básicas como posición, movimiento y renderizado.
+
+**📌 Atributos:**
+- `position (x, y)`: Define las coordenadas de la entidad en el mundo del juego.
+- `sprite`: Representación visual de la entidad.
+- `velocity`: Velocidad de movimiento.
+- `hitbox`: Límites de detección de colisiones.
+
+**⚙️ Métodos:**
+- `update()`: Actualiza la posición y el estado de la entidad.
+- `render()`: Dibuja la entidad en la pantalla.
+- `collide(other_entity)`: Verifica la colisión con otra entidad.
+
+---
+
+### 👤 **BaseCharacter**
+Representa a todos los personajes (jugador, NPCs y enemigos).  
+Maneja la salud, el movimiento y las animaciones.
+
+**📌 Atributos:**
+- `health`: Puntos de vida del personaje.
+- `damage`: Cantidad de daño que el personaje puede causar.
+- `inventory`: Lista de objetos que el personaje posee.
+
+**⚙️ Métodos:**
+- `move(direction)`: Mueve el personaje en una dirección específica.
+- `attack(target)`: Realiza un ataque contra otra entidad.
+- `take_damage(amount)`: Reduce la salud en función del daño recibido.
+- `interact(object)`: Permite la interacción con objetos o NPCs.
+
+---
+
+### 🏠 **BaseObject**
+Representa todos los objetos con los que se puede interactuar (puertas, cofres del tesoro, interruptores).
+
+**📌 Atributos:**
+- `is_interactable`: Determina si el objeto puede ser interactivo.
+
+**⚙️ Métodos:**
+- `trigger()`: Activa un efecto cuando el objeto es interactuado.
+
+---
+
+### 🎒 **BaseItem**
+Representa todos los objetos coleccionables (armas, pociones, objetos de misión).
+
+**📌 Atributos:**
+- `effect`: Define el impacto del objeto (curación, aumento de daño, etc.).
+
+**⚙️ Métodos:**
+- `use(player)`: Aplica el efecto del objeto al jugador.
+
+---
+
+### ⚔️ **BaseWeapon**
+Define las propiedades de diferentes armas.
+
+**📌 Atributos:**
+- `damage`: Potencia de ataque.
+- `range`: Alcance del arma.
+
+**⚙️ Métodos:**
+- `swing()`: Realiza un ataque cuerpo a cuerpo.
+- `shoot()`: Dispara un proyectil (para arcos, armas mágicas).
+
+---
+
+## **Derived Classes / Component Compositions**
+
+### 🛡 **PlayerCharacter**
+El personaje principal jugable, **Sentinel**, es controlado por el jugador.
+
+**📌 Atributos:**
+- `base_health = 100` → Salud base del personaje.
+- `base_damage = 10` → Daño base que puede causar.
+- `inventory = []` → Inventario vacío al inicio del juego.
+
+---
+
+### 👹 **Enemigos**
+Cada tipo de enemigo extiende la clase **BaseEnemy** con comportamientos únicos.
+
+**📌 Atributos:**
+- `health`: Puntos de vida del enemigo.
+- `damage`: Cantidad de daño que inflige.
+- `speed`: Velocidad de movimiento.
+- `type_of_attack`: Tipo de ataque que usa.
+- `aggression_level`: Nivel de agresividad.
+
+**⚙️ Métodos:**
+- `chase(player)`: Si el enemigo persigue rápidamente al jugador.
+- `attack()`: Define cómo el enemigo ataca al jugador.
+- `flee()`: Si el enemigo huye cuando su salud es baja.
+
+---
+
+### 🏪 **NPCs**
+
+#### 🧓 **Vendedor (Shopkeeper)**
+Un anciano que administra la tienda del juego.
+
+**📌 Atributos:**
+- `dialogue = ["¡Bienvenido!", "¡No toques eso!", "Compra algo o vete."]`
+- `inventory = [Poción de vida, Espada, Arco, Bomba]`
+
+**⚙️ Métodos:**
+- `sell_item(player, item)`: Transfiere un objeto al jugador a cambio de oro.
+- `kick_out()`: Expulsa al jugador si intenta robar.
+
+#### 🧚 **Hada Consejera (FairyAdviser)**
+Un NPC guía que proporciona pistas.
+
+**📌 Atributos:**
+- `dialogue = ["¡Cuidado con la siguiente habitación!", "¡Un tesoro oculto espera a los valientes!"]`
+
+**⚙️ Métodos:**
+- `give_hint()`: Muestra consejos útiles.
+
+---
+
+### ⚒️ **Objetos**
+
+#### ⚔️ **Espada (Sword)**
+El arma estándar de combate cuerpo a cuerpo.
+
+**📌 Atributos:**
+- `damage = 10` → Daño causado al atacar.
+- `range = 1` → Alcance del golpe.
+
+**⚙️ Métodos:**
+- `swing()`: Realiza un ataque con la espada.
+
+---
+
+#### 🏹 **Arco (Bow)**
+Un arma de combate a distancia.
+
+**📌 Atributos:**
+- `damage = 5` → Daño del proyectil.
+- `range = 7` → Alcance del disparo.
+
+**⚙️ Métodos:**
+- `shoot_arrow()`: Dispara una flecha.
+
+---
+
+#### 💣 **Bomba (Bomb)**
+Explota después de un tiempo determinado.
+
+**📌 Atributos:**
+- `damage = 15` → Daño de la explosión.
+- `range = 3` → Área de impacto.
+- `time = 3` segundos → Tiempo antes de la explosión.
+
+**⚙️ Métodos:**
+- `put_bomb()`: Coloca la bomba en el suelo.
+
+---
+
+#### ❤️ **Poción de Salud (Health Potion)**
+Objeto consumible que restaura la salud del jugador.
+
+**📌 Atributos:**
+- `effect = "restore 30 HP"` → Cantidad de vida recuperada.
+
+**⚙️ Métodos:**
+- `use(player)`: Restaura la salud del jugador.
+
+---
+
+### 🎁 **Objetos Interactivos**
+
+#### 🏆 **Cofre del Tesoro (Treasure Chest)**
+Un cofre que contiene recompensas.
+
+**📌 Atributos:**
+- `contents = ["Oro", "Llave", "Armas"]` → Posibles objetos dentro del cofre.
+
+**⚙️ Métodos:**
+- `open(player)`: Da un objeto aleatorio al jugador.
+
+---
+
+#### 🚪 **Puertas (Doors)**
+Pasajes entre habitaciones.
+
+**📌 Atributos:**
+- `is_locked = True` → Determina si la puerta está bloqueada.
+
+**⚙️ Métodos:**
+- `block()`: Evita el acceso hasta que se derroten a los enemigos.
+
+# **Graphics**
+
+---
+
+## 🎨 **Style Attributes**
+
+### 🎨 **Color**
+- Los tonos **tierra apagados** dominan el juego, con **marrones oscuros y grises** para las paredes de piedra de la mazmorra.
+- Se contrastan con destellos ocasionales de luz de **antorchas en amarillos y naranjas cálidos**.
+- **La tienda y el reino de las hadas** presentan colores más brillantes como **dorados, verdes y azules suaves**, generando una atmósfera más acogedora.
+- Los **enemigos y jefes** utilizan tonos más oscuros con acentos **rojos o verdes espectrales** para enfatizar el peligro.
+
+---
+
+### 🏗 **Textura**
+- **Mazmorra:** Paredes **ásperas y agrietadas**, con un suelo de piedra **frío y rugoso**.
+- **Tienda:** Estantes de madera **desgastados pero pulidos**, agregando calidez al entorno.
+- **Reino de las hadas:** Texturas suaves como **agua cristalina, piedras cubiertas de musgo y follaje delicado**, contrastando con la dureza de la mazmorra.
+
+---
+
+### 🖌 **Estilo Gráfico**
+- **Arte en píxeles**, inspirado en los **RPG retro**.
+- Personajes **expresivos** y entornos **detallados**.
+- **Animaciones fluidas**, enfocadas en combate y resolución de acertijos.
+- Se prioriza la **claridad visual** para que el jugador pueda identificar fácilmente objetos y NPCs interactivos.
+
+---
+
+### 🎬 **Estilo de Animación**
+- **Animaciones sutiles** para dar vida al entorno:
+  - 🔥 **Antorchas parpadeantes**
+  - 🌊 **Olas de agua en movimiento**
+- **Animaciones de combate impactantes**, con efectos como:
+  - ⚔️ **Cortes de espada**
+  - 💥 **Explosiones**
+- **NPCs y enemigos con transiciones fluidas** en interacciones:
+  - 📢 **Diálogos**
+  - 🏹 **Ataques**
+  - 🔎 **Zooms o acercamientos cuando sea necesario**
+
+---
+
+### 💡 **Estilo de Iluminación**
+- **Mazmorra:** Iluminación **tenue y atmosférica**, con **sombras parpadeantes** proyectadas por antorchas.
+- **Tienda:** Más **brillante y cálida**, con luz superior **suave** iluminando los objetos.
+- **Reino de las hadas:** Luz **natural filtrándose entre los árboles**.
+  - ⚠️ **Cuando hay peligro, la iluminación cambia a tonos rojos ominosos**.
+
+---
+
+### 🔊 **Estilo de Efectos de Sonido**
+- **Sonidos ambientales minimalistas**, como:
+  - 👣 **Ecos de pasos** en la mazmorra.
+  - 🔥 **Antorchas crepitando**.
+  - 🐉 **Gruñidos lejanos de enemigos**.
+- **Efectos en la tienda:**
+  - 🔔 **Suaves tintineos de monedas**.
+  - 🛍️ **Sonidos sutiles al mover objetos**.
+- **Reino de las hadas:**
+  - 🌊 **Sonidos de agua y aves**.
+  - 😨 **Cambios a tonos inquietantes cuando aparecen enemigos**.
+- **Sonidos de combate impactantes:**
+  - ⚔️ **Choques de espadas**.
+  - 🐲 **Rugidos de enemigos**.
+
+---
+
+### 🎶 **Estilo de Música**
+- 🎼 **Mazmorra:** Sonidos **oscuros y envolventes**, con uso de **piano, cuerdas y percusión suave**.
+- 🏪 **Tienda:** Melodía **ligera y tranquila**.
+- 🧚 **Reino de las hadas:** Música **misteriosa y mágica**.
+  - **⚠️ En momentos de peligro, la música se vuelve más tensa**.
+
+---
+
+### 🖥 **Estilo de UI (Interfaz de Usuario)**
+- **Minimalista e intuitiva** 🏹.
+- **Íconos en píxeles** para el inventario y la barra de salud.
+- **Cuadros de texto claros**, sin bordes distractores.
+- **Pantalla de inventario limpia** 📜:
+  - 🎒 Objetos claramente etiquetados.
+  - 💰 Monedas visibles.
+
+---
+
+### 🚀 **Indicadores de Interactividad**
+- **Objetos interactivos destacados** con:
+  - ✨ **Brillo sutil** o contorno resaltado.
+  - 🔍 **Cambio en la textura**.
+- **NPCs con indicaciones visuales:**
+  - 🛑 Aura o signos de **exclamación** cuando tienen información importante.
+- **Combate:**
+  - ❗ **Enemigos parpadean cuando están vulnerables o listos para atacar**.
+
+---
+
+# **Graphics Needed** 🎨🎮
+
+---
+
+## 🎭 **Personaje Jugable**
+- 🕹 **Animación en reposo:** De pie sin moverse.
+- 🚶 **Animación de caminata:** Ciclo de **4 fotogramas** en todas las direcciones (arriba, abajo, izquierda, derecha).
+- ⚔️ **Animación de ataque (Espada):** Animación de **corte** con **3 fotogramas**.
+- 🏹 **Animación de ataque (Arco):** Animación de **preparación y disparo** con **2 fotogramas**.
+
+---
+
+## 👾 **Enemigos**
+- **Animación en reposo:** 2-3 fotogramas.
+- **Animación de movimiento:** 3-4 fotogramas.
+- **Animación de ataque:** 2-3 fotogramas.
+
+---
+
+## 🧓 **NPCs**
+### 🏪 **Anciano Tendero**
+- **Animación en reposo:** De pie detrás del mostrador.
+- **Animación enojado:** **Rostro rojo**, tembloroso.
+
+### 🧚 **Hadas NPC**
+- **Animación en reposo:** Flotando en su lugar.
+- **Animación de hada enojada:** Se vuelve **roja y agresiva**.
+
+---
+
+## 🏰 **Entorno y Tilesets**
+### 🔥 **Mazmorra**
+- **Paredes:** Ladrillos de **piedra oscura con grietas**.
+- **Suelos:** Baldosas variadas (**piedra, musgo, manchas de sangre**).
+- **Puertas:** Abiertas o cerradas.
+- **Antorchas con llamas encendidas**.
+
+### 🏪 **Tienda**
+- **Paredes y suelos de madera**.
+- **Estantes** llenos de **armas, pociones y pergaminos**.
+- **Mostrador con monedas de oro esparcidas**.
+- 🐱 **Gato NPC sentado sobre un barril**.
+
+### 🧝 **Reino de las Hadas**
+- **Paleta de colores brillantes en tonos azules y verdes**.
+- **Árboles coloridos**.
+
+---
+
+## 🎭 **Objetos Interactivos**
+### 💰 **Cofres del tesoro**
+- **Cofre cerrado**.
+- **Cofre abierto**.
+
+### 🚪 **Puertas**
+- **Puerta cerrada**.
+- **Puerta abierta**.
+
+---
+
+## 🖥 **Elementos de UI / HUD**
+- ❤️ **Barra de salud:** Corazones o barra segmentada.
+- 💚 **Barra de resistencia:** Indicador verde debajo de la salud.
+- 📜 **Pantalla de inventario:** Espacios para objetos (vacíos o llenos con **armas, pociones, monedas**).
+- 💬 **Cuadro de diálogo:** Bocadillo de texto en arte pixelado.
+- 💀 **Pantalla de Game Over:**  
+  - **Fondo oscuro** con el mensaje **"Has muerto"**.
+  - Botones **"Reintentar" / "Salir"**.
+
+---
+
+# **Sounds Needed** 🔊🎶
+
+---
+
+## 🎼 **Efectos de sonido**
+- 👣 **Pasos suaves** (suelo de tierra).
+- 🏛 **Pasos más marcados** (suelo de piedra).
+- 🪂 **Aterrizaje suave** (baja velocidad de caída).
+- 💥 **Aterrizaje fuerte** (alta velocidad de caída).
+- 🪞 **Vidrio rompiéndose**.
+- 🏆 **Apertura de cofre**.
+- 🚪 **Apertura de puerta**.
+
+---
+
+## 🎵 **Retroalimentación de Jugador**
+- 😌 **Sonido de alivio** (“Ahhhh!” al recuperar salud).
+- 😵 **Sonido de impacto** (“Ooomph!” al ser atacado).
+- 🔔 **Campanilla alegre** (al obtener una vida extra).
+- 🔕 **Campanilla triste** (al morir).
+
+---
+
+# **Music Needed** 🎼🎮
+
+---
+
+## 🎶 **Pistas de fondo**
+- 🌲 **Pista de "bosque":**  
+  - **Melodía de ritmo lento y tensa** para generar una sensación inquietante.
+- 🏰 **Pista de "castillo":**  
+  - **Música emocionante** que refuerce la sensación de grandeza y peligro.
+- 🏚 **Pista de "mazmorra":**  
+  - **Sonido lento y espeluznante** para aumentar la sensación de misterio y tensión.
+- 🎬 **Pista de créditos finales:**  
+  - **Melodía alegre y satisfactoria** para cerrar la experiencia del jugador.
+
+---
+
+## 🎵 **Easter Egg**
+- 🎤 **La canción #1 de Rick Astley:**
+  - 🕺 **"Never Gonna Give You Up"** como un **easter egg** o contenido especial dentro del juego.
+
+---
+# **📅 Schedule** 🕹️🎮
+
+---
+
+## **Fases de Desarrollo**
+### 🛠 **Desarrollo de Clases Base**
+- ✅ **Entidad Base**
+- ✅ **Jugador Base**
+- ✅ **Enemigo Base**
+- ✅ **Bloque Base**
+- ✅ **Estado Base de la Aplicación**
+  - 🌎 **Mundo del juego**
+  - 📜 **Mundo del menú**
+
+---
+
+## **🏗 Desarrollo de Características Principales**
+- ✅ **Física y colisiones**
+- ✅ **Optimización de controles y física**
+- ✅ **Clases Derivadas**
+  - 🔲 **Bloques**: Móviles, Que caen, Que se rompen, Nube.
+  - 👾 **Enemigos**: Soldado, Rata, Otros.
+- ✅ **Diseño de niveles**
+  - 🎮 **Movimiento y saltos**
+  - 🎯 **Mecánica de lanzamiento**
+  - 🏗 **Ritmo de aprendizaje**
+- ✅ **Sonidos y Música**
+  - 🔊 **Efectos de sonido**
+  - 🎵 **Banda sonora**
+
+---
+
+# **📅 Plan Semanal**  
+
+## **Semana 1: Configuración Base del Proyecto**
+✅ **Implementación de clases base**  
+- Creación de las clases **BaseEntity, BaseCharacter, BaseObject, BaseItem, BaseWeapon**.  
+- Configuración de atributos y métodos esenciales.  
+
+✅ **Configuración del motor de juego**  
+- Definir la **estructura de archivos y carpetas**.  
+- Configurar el **motor gráfico** y el **sistema de colisiones**.  
+- Implementar un **loop de juego** básico con **renderizado y actualización**.  
+
+✅ **Implementación del menú principal**  
+- Creación de la **pantalla de inicio**.  
+- Implementación de la **pantalla de selección de usuario y carga de partidas**.  
+
+---
+
+## **Semana 2: Desarrollo del Jugador y Controles**
+✅ **Implementación del personaje principal (Sentinel)**  
+- Creación de la clase **PlayerCharacter**.  
+- Animaciones de **caminar, atacar y recibir daño**.  
+
+✅ **Implementación de los controles**  
+- Movimiento con las **teclas de dirección**.  
+- Ataques básicos (**espada, arco**).  
+- Uso de **objetos del inventario**.  
+
+✅ **Sistema de colisiones y física del jugador**  
+- Detección de **colisiones con paredes y objetos**.  
+- Implementación de **rebote y empuje al recibir golpes**.  
+
+---
+
+## **Semana 3: Implementación de Enemigos y Combate**
+✅ **Creación de la clase EnemyCharacter con diferentes tipos de enemigos**  
+- Implementar IA básica (**perseguir al jugador, atacar, patrullar**).  
+- Crear enemigos básicos como **ratas y soldados oscuros**.  
+
+✅ **Desarrollo del sistema de combate**  
+- Implementación de la **mecánica de ataque y daño**.  
+- Sistema de **barra de salud y muertes de enemigos**.  
+- Colisiones entre **ataques y enemigos**.  
+
+✅ **Introducción del sistema de habilidades y mejoras**  
+- Implementación de **ataques cargados y golpes críticos**.  
+- Diferenciación de armas con **distintas velocidades y daños**.  
+
+---
+
+## **Semana 4: Implementación del Inventario y Tienda**
+✅ **Creación del sistema de inventario**  
+- Menú de **inventario con casillas de objetos**.  
+- Implementación de **uso de objetos desde el inventario**.  
+
+✅ **Implementación de la tienda del anciano**  
+- **Sistema de compra y venta** de objetos.  
+- **Restricciones por monedas y espacio** en el inventario.  
+- **Diálogos y mecánicas de interacción** con NPCs.  
+
+✅ **Sistema de recompensas y economía**  
+
+---
+
+## **Semana 5: Diseño de Niveles y Mazmorras**
+✅ **Creación de las habitaciones de la mazmorra**  
+- Implementación de las **10 habitaciones principales** con diferentes distribuciones.  
+- Diseño de **obstáculos y trampas**.  
+- Creación de **cofres con recompensas aleatorias**.  
+
+✅ **Mecánicas de exploración**  
+- Interacción con **puertas y mecanismos ocultos**.  
+- Activación de **trampas y acertijos ambientales**.  
+- Implementación del **sistema de progresión por habitaciones**.  
+
+---
+
+## **Semana 6: Implementación de Jefes y Eventos Especiales**
+✅ **Creación de la IA del jefe final**  
+- Implementación de **fases de combate con ataques especiales**.  
+- Comportamiento dinámico del jefe según la **vida restante**.  
+
+✅ **Misiones secundarias y NPCs adicionales**  
+- Interacciones avanzadas con NPCs.  
+- Recompensas ocultas por explorar ciertas áreas.  
+
+✅ **Incorporación del sistema de diálogos y pistas de la historia**  
+
+---
+
+## **Semana 7: Pulido de Interfaz, HUD y Sonido**
+✅ **Implementación del HUD del jugador**  
+- **Barra de salud y resistencia**.  
+- **Minimapa y brújula** para la mazmorra.  
+- **Indicadores de interactividad** en objetos y NPCs.  
+
+✅ **Adición de efectos visuales**  
+- **Iluminación dinámica** en las habitaciones.  
+- **Partículas de fuego** en antorchas y explosiones.  
+- **Brillos** en objetos mágicos y ataques especiales.  
+
+✅ **Integración de efectos de sonido y música**  
+- Sonidos **ambientales en la mazmorra**.  
+- **Efectos de sonido para golpes, saltos y movimientos**.  
+- Implementación de **música de fondo** en cada zona.  
+
+---
+
+## **Semana 8: Optimización y Balanceo del Juego**
+✅ **Ajustes en la dificultad del juego**  
+- Balance de **daño de armas y resistencia de enemigos**.  
+- Modificación de **velocidades de ataque y evasión**.  
+
+✅ **Optimización del rendimiento**  
+- Reducción de **consumo de memoria y carga de texturas**.  
+- Mejora en la eficiencia del código de **IA y colisiones**.  
+
+✅ **Ajustes en el diseño de niveles y recompensas**  
+- Distribución estratégica de **enemigos y cofres**.  
+- Revisión de **acertijos para mantener la fluidez del juego**.  
+
+---
+
+## **Semana 9: Pruebas y Corrección de Errores**
+✅ **Pruebas de jugabilidad**  
+- Testeo de **bugs en mecánicas de combate y exploración**.  
+- Corrección de **errores de colisión y físicas**.  
+
+✅ **Balanceo de la dificultad**  
+- Ajustes en el **nivel de daño de enemigos y duración de combates**.  
+- Ajuste de **precios en la tienda y recompensas**.  
+
+✅ **Pruebas con jugadores externos**  
+- Recolección de **retroalimentación y mejoras finales**.  
+
+---
+
+## **Semana 10: Últimos Ajustes y Lanzamiento**
+✅ **Implementación de la pantalla de créditos y final del juego**.  
+✅ **Integración de cinemáticas y transiciones entre niveles**.  
+✅ **Últimos ajustes en animaciones y efectos visuales**.  
+✅ **Preparación del juego para distribución y publicación**.
