@@ -9,6 +9,8 @@
 - Emiliano Deyta Illescas A01785881
 - Jin Sik Yoon A01026630
 
+![Two](Assets/four.png)
+
 ---
 
 ## **Índice**
@@ -50,6 +52,8 @@
 
 _The Lost Sentinel_ combina exploración estilo Zelda con mecánicas de progresión RPG. 
 Los jugadores pueden explorar un mundo abierto, enfrentar combates en tiempo real, resolver acertijos escondidos e interactuar con NPCs para completar misiones y recoger recompensas.
+
+![Three](Assets/three.png)
 
 #### 🎯 **Objetivo Principal:**
 El jugador toma el rol de Sentinel, un guerrero que despierta en una mazmorra misteriosa sin recordar cómo llegó ahí. Guiado por un anciano NPC y un hada, Sentinel debe escapar de la mazmorra, descubrir la verdad detrás del **Ejército de la Oscuridad** y derrotar al jefe final antes de que sea demasiado tarde.
@@ -126,7 +130,7 @@ Toma la espada de madera y da su primer paso hacia la oscuridad. La verdadera pr
 
 ---
 
-### **Mechanics**
+### **Mecánicas**
 
 #### 1. Distribución de Habitaciones y Mazmorra
 - La mazmorra consta de **10 habitaciones** que el jugador debe atravesar para progresar.
@@ -201,11 +205,11 @@ Toma la espada de madera y da su primer paso hacia la oscuridad. La verdadera pr
 
 ---
 
-## _Level Design_
+## _Diseño de Niveles_
 
 ---
-
-### **Themes**
+![Four](Assets/two.png)
+### **Temas**
 
 ### 1. Cámaras de la Mazmorra
 
@@ -263,9 +267,9 @@ Toma la espada de madera y da su primer paso hacia la oscuridad. La verdadera pr
 - Algunas hadas ofrecen **pistas sobre enemigos poderosos** o tesoros ocultos.
 - En ciertos encuentros, el jugador puede **verse obligado a luchar contra hadas hostiles**.
 
-### **Game Flow**
+### **Flujo del Juego**
 
-## **Game Flow**
+## **Flujo del Juego**
 
 ### 📜 **Introducción y Menú de Inicio**
 1. El juego comienza con una **pantalla de título**, donde Sentinel camina a través de la pantalla.
@@ -339,11 +343,11 @@ En las habitaciones **3, 6 y 9**, el jugador puede **visitar**:
    - **Nombres de los desarrolladores**.
    - **Créditos de la música y efectos de sonido**.
 
-# **Development**
+# **Desarrollo**
 
 ---
 
-## **Abstract Classes / Components**
+## **Clases Abstractas**
 
 ### 🏗 **BaseEntity**
 Clase padre para todas las entidades del juego (jugadores, enemigos, NPCs, objetos interactivos).  
@@ -414,7 +418,7 @@ Define las propiedades de diferentes armas.
 
 ---
 
-## **Derived Classes / Component Compositions**
+## **Clases Derivadas**
 
 ### 🛡 **PlayerCharacter**
 El personaje principal jugable, **Sentinel**, es controlado por el jugador.
@@ -443,6 +447,7 @@ Cada tipo de enemigo extiende la clase **BaseEnemy** con comportamientos únicos
 
 ---
 
+
 ### 🏪 **NPCs**
 
 #### 🧓 **Vendedor (Shopkeeper)**
@@ -466,6 +471,8 @@ Un NPC guía que proporciona pistas.
 - `give_hint()`: Muestra consejos útiles.
 
 ---
+
+![One](Assets/one.png)
 
 ### ⚒️ **Objetos**
 
@@ -539,11 +546,11 @@ Pasajes entre habitaciones.
 **⚙️ Métodos:**
 - `block()`: Evita el acceso hasta que se derroten a los enemigos.
 
-# **Graphics**
+# **Gráficos**
 
 ---
 
-## 🎨 **Style Attributes**
+## 🎨 **Atributos de Estilo**
 
 ### 🎨 **Color**
 - Los tonos **tierra apagados** dominan el juego, con **marrones oscuros y grises** para las paredes de piedra de la mazmorra.
@@ -636,7 +643,7 @@ Pasajes entre habitaciones.
 
 ---
 
-# **Graphics Needed** 🎨🎮
+# **Gráficos Necesarios** 🎨🎮
 
 ---
 
@@ -707,11 +714,11 @@ Pasajes entre habitaciones.
 
 ---
 
-# **Sounds Needed** 🔊🎶
+# **Sonidos/Música** 🔊🎶
 
 ---
 
-## 🎼 **Efectos de sonido**
+## 🎼 **Sonidos Necesarios**
 - 👣 **Pasos suaves** (suelo de tierra).
 - 🏛 **Pasos más marcados** (suelo de piedra).
 - 🪂 **Aterrizaje suave** (baja velocidad de caída).
@@ -730,7 +737,7 @@ Pasajes entre habitaciones.
 
 ---
 
-# **Music Needed** 🎼🎮
+# **Música Necesaria** 🎼🎮
 
 ---
 
@@ -751,7 +758,7 @@ Pasajes entre habitaciones.
   - 🕺 **"Never Gonna Give You Up"** como un **easter egg** o contenido especial dentro del juego.
 
 ---
-# **📅 Schedule** 🕹️🎮
+# **Cronograma** 🕹️🎮
 
 ---
 
