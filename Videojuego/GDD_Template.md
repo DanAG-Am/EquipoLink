@@ -53,7 +53,7 @@
 _The Lost Sentinel_ combina exploración estilo Zelda con mecánicas de progresión RPG. 
 Los jugadores pueden explorar un mundo abierto, enfrentar combates en tiempo real, resolver acertijos escondidos e interactuar con NPCs para completar misiones y recoger recompensas.
 
-![Three](Assets/three.png)
+![Three](assets/three.png)
 
 #### 🎯 **Objetivo Principal:**
 El jugador toma el rol de Sentinel, un guerrero que despierta en una mazmorra misteriosa sin recordar cómo llegó ahí. Guiado por un anciano NPC y un hada, Sentinel debe escapar de la mazmorra, descubrir la verdad detrás del **Ejército de la Oscuridad** y derrotar al jefe final antes de que sea demasiado tarde.
@@ -557,7 +557,7 @@ Pasajes entre habitaciones.
 - Se contrastan con destellos ocasionales de luz de **antorchas en amarillos y naranjas cálidos**.
 - **La tienda y el reino de las hadas** presentan colores más brillantes como **dorados, verdes y azules suaves**, generando una atmósfera más acogedora.
 - Los **enemigos y jefes** utilizan tonos más oscuros con acentos **rojos o verdes espectrales** para enfatizar el peligro.
-
+![Colors](Assets/Colores.png)
 ---
 
 ### 🏗 **Textura**
@@ -707,10 +707,12 @@ Pasajes entre habitaciones.
 - ❤️ **Barra de salud:** Corazones o barra segmentada.
 - 💚 **Barra de resistencia:** Indicador verde debajo de la salud.
 - 📜 **Pantalla de inventario:** Espacios para objetos (vacíos o llenos con **armas, pociones, monedas**).
-- 💬 **Cuadro de diálogo:** Bocadillo de texto en arte pixelado.
+- 💬 **Cuadro de diálogo:** Texto en arte pixelado.
 - 💀 **Pantalla de Game Over:**  
-  - **Fondo oscuro** con el mensaje **"Has muerto"**.
+  - **Fondo oscuro** con el mensaje **"Moriste "**.
   - Botones **"Reintentar" / "Salir"**.
+
+  ![Pantallas](Assets/Pantallas.png)
 
 ---
 
@@ -740,6 +742,9 @@ Pasajes entre habitaciones.
 # **Música Necesaria** 🎼🎮
 
 ---
+
+Utilizaremos la siguiente página web:
+https://opengameart.org/
 
 ## 🎶 **Pistas de fondo**
 - 🌲 **Pista de "bosque":**  
