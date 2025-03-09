@@ -58,8 +58,9 @@ _The Lost Sentinel_ combina exploración estilo Zelda con mecánicas de progresi
 Los jugadores pueden explorar un mundo abierto, enfrentar combates en tiempo real, resolver acertijos escondidos e interactuar con NPCs para completar misiones y recoger recompensas.
 
 --
+The lost Sentinel Start Page
 
-![Three](assets/three.png)
+![Three](Assets/Three.png)
 
 --
 #### 🎯 **Objetivo Principal:**
