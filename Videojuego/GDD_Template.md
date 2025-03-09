@@ -5,11 +5,15 @@
 ---
 
 ### **Aviso de derechos de autor / información del autor**
+
+![TecLogo](Assets/tec.png)
 - Amilka Daniela Lopez Aguilar A01029277
 - Emiliano Deyta Illescas A01785881
 - Jin Sik Yoon A01026630
 
-![Two](Assets/four.png)
+TeamLink
+
+![Two](Assets/Four.png)
 
 ---
 
@@ -53,8 +57,11 @@
 _The Lost Sentinel_ combina exploración estilo Zelda con mecánicas de progresión RPG. 
 Los jugadores pueden explorar un mundo abierto, enfrentar combates en tiempo real, resolver acertijos escondidos e interactuar con NPCs para completar misiones y recoger recompensas.
 
+--
+
 ![Three](assets/three.png)
 
+--
 #### 🎯 **Objetivo Principal:**
 El jugador toma el rol de Sentinel, un guerrero que despierta en una mazmorra misteriosa sin recordar cómo llegó ahí. Guiado por un anciano NPC y un hada, Sentinel debe escapar de la mazmorra, descubrir la verdad detrás del **Ejército de la Oscuridad** y derrotar al jefe final antes de que sea demasiado tarde.
 
