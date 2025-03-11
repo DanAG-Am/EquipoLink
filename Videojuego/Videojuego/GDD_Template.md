@@ -6,14 +6,14 @@
 
 ### **Aviso de derechos de autor / información del autor**
 
-![TecLogo](Assets/tec.png)
+![TecLogo](Assets/MDAssets/tec.png)
 - Amilka Daniela Lopez Aguilar A01029277
 - Emiliano Deyta Illescas A01785881
 - Jin Sik Yoon A01026630
 
 TeamLink
 
-![Two](Assets/Four.png)
+![Two](Assets/MDAssets/Four.png)
 
 Team Link logo
 
@@ -63,7 +63,7 @@ Los jugadores pueden explorar un mundo abierto, enfrentar combates en tiempo rea
 
 The lost Sentinel Start Page
 
-![Three](Assets/Three.png)
+![Three](Assets/MDAssets/Three.png)
 
 --
 
@@ -252,7 +252,7 @@ Habitación 10: Batalla contra el Jefe Final.
 
 ---
 
-![Four](Assets/two.png)
+![Four](Assets/MDAssets/two.png)
 ### **Temas**
 
 ### 1. Cámaras de la Mazmorra
@@ -769,7 +769,7 @@ Pasajes entre habitaciones.
 - Se contrastan con destellos ocasionales de luz de **antorchas en amarillos y naranjas cálidos**.
 - **La tienda y el reino de las hadas** presentan colores más brillantes como **dorados, verdes y azules suaves**, generando una atmósfera más acogedora.
 - Los **enemigos y jefes** utilizan tonos más oscuros con acentos **rojos o verdes espectrales** para enfatizar el peligro.
-![Colors](Assets/Colores.png)
+![Colors](Assets/MDAssets/Colores.png)
 ---
 
 ### **Textura**
@@ -924,7 +924,7 @@ Pasajes entre habitaciones.
   - **Fondo oscuro** con el mensaje **"Moriste "**.
   - Botones **"Reintentar" / "Salir"**.
 
-  ![Pantallas](Assets/Pantallas.png)
+  ![Pantallas](Assets/MDAssets/Pantallas.png)
 
 ---
 
