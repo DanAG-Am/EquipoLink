@@ -13,7 +13,9 @@
 
 TeamLink
 
-![Two](Assets\Four.png)
+![Two](Assets/Four.png)
+
+Team Link logo
 
 ---
 
