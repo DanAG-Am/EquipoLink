@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Sprites</title>
+        <link rel="stylesheet" href="styles.css">
+        <script src="game_classes.js"></script>
+        <script src="prototipo.js"></script>
+    </head>
+    <body>
+        <canvas id="canvas"></canvas>
+        <div id="loginForm" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+            <h2 style="color: white;">Login</h2>
+            <label style="color: white;">Username:</label>
+            <input type="text" id="usernameInput"><br><br>
+            <label style="color: white;">Password:</label>
+            <input type="password" id="passwordInput"><br><br>
+            <button id="loginButton">Continue</button>
+            <button id="registerButton">Register</button>
+        </div>
+        <div id="registerForm" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; background: black; padding: 20px; border: 2px solid white; color: white;">
+            <h2>Register</h2>
+            <label>Username:</label>
+            <input type="text" id="registerUsername"><br><br>
+            <label>Confirm Username:</label>
+            <input type="text" id="confirmRegisterUsername"><br><br>
+            <label>Password:</label>
+            <input type="password" id="registerPassword"><br><br>
+            <label>Confirm Password:</label>
+            <input type="password" id="confirmRegisterPassword"><br><br>
+            <button id="returnLoginButton">Back</button>
+            <button id="confirmRegisterButton">Submit</button>
+        </div>
+        <script> main(); </script>
+    </body>
+</html>
