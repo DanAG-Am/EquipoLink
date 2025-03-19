@@ -1,7 +1,7 @@
 /*
  * Collection of classes that will be used in the games
  *
- * Gilberto Echeverria
+ * TeamLink
  * 2025-02-25
  */
 
@@ -27,20 +27,6 @@ class Vec {
         return Math.sqrt(this.x ** 2 + this.y ** 2);
     }
 }
-
-
-/*
- * Test the Vector class
- */
-//let p = new Vec(0, 8);
-//let v = new Vec(1, 1);
-//console.log("Initial position: ", p);
-//p = p.plus(v.times(1));
-//console.log("New position: ", p);
-//console.log("plus: ", p.plus(v));
-//console.log("minus: ", p.minus(v));
-//console.log("times: ", p.times(3));
-//console.log("magnitude: ", p.magnitude());
 
 class Rect {
     constructor(x, y, width, height) {

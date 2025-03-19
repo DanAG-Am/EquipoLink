@@ -1,30 +1,20 @@
 /*
  * Simple animation on the HTML canvas
  *
- * Gilberto Echeverria
+ * TeamLink
  * 2025-02-19
  */
 
 "use strict";
 
-// Global variables
 const canvasWidth = 800;
 const canvasHeight = 600;
-
-// Context of the Canvas
-let ctx;
-
-// A variable to store the game object
-let game;
-
-// Variable to store the time at the previous frame
+let ctx, game;
 let oldTime;
 let playerSpeed = 0.25;
-
 const bottomBar1 = new GameObject(new Vec(0, canvasHeight - 20), canvasWidth / 2 - 50, 20, "black", "obstacle");
 const bottomBar2 = new GameObject(new Vec(canvasWidth / 2 + 50, canvasHeight - 20), canvasWidth / 2 - 50, 20, "black", "obstacle");
 
-// Class for the main character in the game
 class Player extends GameObject{
     constructor(position, width, height, color){
         super(position, width, height, color, "player");
@@ -85,7 +75,7 @@ class Game{
     }
 
     initObjects() {
-        this.player = new Player(new Vec(canvasWidth / 2 - 20, 455), 50, 50, "red");
+        this.player = new Player(new Vec(canvasWidth / 2 - 14, 405), 32, 32);
         this.actors = [];
     }
 
@@ -95,8 +85,6 @@ class Game{
         if (this.showMainMenu) {
             // Dibujar el logo
             ctx.drawImage(this.logo, canvasWidth / 2 - 228, 80, 450, 450);
-            // Dibujar al jugador debajo del logo
-            this.player.draw(ctx);
             // Dibujar el mensaje
             ctx.fillStyle = "white";
             ctx.font = "20px Arial";
@@ -105,8 +93,6 @@ class Game{
         } else if (this.showLoginScreen){
             // Dibujar el logo
             ctx.drawImage(this.logo, canvasWidth / 2 - 228, 80, 450, 450);
-            // Dibujar al jugador debajo del logo
-            this.player.draw(ctx);
             // Dibujar el cuadro del login
             ctx.fillStyle = "black";
             ctx.fillRect(canvasWidth / 2 - 200, canvasHeight / 2 - 100, 400, 200);
@@ -134,7 +120,7 @@ class Game{
             ctx.fillStyle = "white";
             ctx.font = "60px Arial";
             ctx.textAlign = "center";
-            ctx.fillText("Prologo", canvasWidth / 2, 75);
+            ctx.fillText("Prologo", canvasWidth / 2, 85);
             // Dibujar el cuadro del prólogo
             ctx.fillStyle = "black";
             ctx.fillRect(canvasWidth / 2 - 340, canvasHeight / 2 - 180, canvasWidth / 4 + 480, canvasHeight / 2 + 70);
@@ -157,13 +143,12 @@ class Game{
                 ctx.fillText(line, canvasWidth / 2, yPosition);
                 yPosition += 50;
             });
-
             // Mensaje para continuar
             ctx.font = "20px Arial";
             ctx.fillText("Press Enter to continue", canvasWidth / 2, canvasHeight / 4 + canvasHeight / 2 + 70);
         } else if (this.mainMap){
             // Dibuja el hombre viejo
-            ctx.drawImage(this.oldMan, canvasWidth / 2 - 20, 200, 50, 50);
+            ctx.drawImage(this.oldMan, canvasWidth / 2 - 14, 200, 32, 32);
             // Dibuja el jugador
             this.player.draw(ctx);
             // Dibuja la puerta
@@ -172,8 +157,6 @@ class Game{
             if (this.dialogueStage < 5) {
                 this.drawDialogue(ctx);
             }
-            ctx.drawImage(this.oldMan, canvasWidth / 2 - 20, 200, 50, 50);
-            this.player.draw(ctx);
             if (this.player.position.y + this.player.height >= canvasHeight &&
                 this.player.position.x >= canvasWidth / 2 - 50 &&
                 this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
