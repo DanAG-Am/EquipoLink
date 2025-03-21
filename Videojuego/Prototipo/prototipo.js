@@ -12,31 +12,54 @@ const canvasHeight = 600;
 let ctx, game;
 let oldTime;
 let playerSpeed = 0.25;
-const bottomBar1 = new GameObject(new Vec(0, canvasHeight - 20), canvasWidth / 2 - 50, 20, "black", "obstacle");
-const bottomBar2 = new GameObject(new Vec(canvasWidth / 2 + 50, canvasHeight - 20), canvasWidth / 2 - 50, 20, "black", "obstacle");
+const bottomBar1 = new GameObject(new Vec(0, canvasHeight - 20), canvasWidth / 2 - 50, 20, "orange", "obstacle");
+const bottomBar2 = new GameObject(new Vec(canvasWidth / 2 + 50, canvasHeight - 20), canvasWidth / 2 - 50, 20, "orange", "obstacle");
 
-class Player extends GameObject{
-    constructor(position, width, height, color){
-        super(position, width, height, color, "player");
+class Player extends AnimatedObject{
+    constructor(position, width, height){
+        super("#ff0000", width, height, position.x, position.y, "player");
+        this.position = new Vec(position.x, position.y);
         this.velocity = new Vec(0, 0);
         this.sprites ={
-            "down": "../Videojuego/Assets/GameAssets/Basic_Movements/Basic_movement_1.png",
-            "right": "../Videojuego/Assets/GameAssets/Basic_Movements/Basic_movement_3.png",
-            "left": "../Videojuego/Assets/GameAssets/Basic_Movements/Basic_movement_3.png", // Se invertirá en el dibujo
-            "up": "../Videojuego/Assets/GameAssets/Basic_Movements/Basic_movement_5.png"
+            "down": ["../Videojuego/Assets/GameAssets/Basic_Movements/Basic_movement_1.png", "../Videojuego/Assets/GameAssets/Basic_Movements/Basic_movement_2.png"],
+            "right": ["../Videojuego/Assets/GameAssets/Basic_Movements/Basic_movement_3.png", "../Videojuego/Assets/GameAssets/Basic_Movements/Basic_movement_4.png"],
+            "left": ["../Videojuego/Assets/GameAssets/Basic_Movements/Basic_movement_3.png", "../Videojuego/Assets/GameAssets/Basic_Movements/Basic_movement_4.png"],
+            "up": ["../Videojuego/Assets/GameAssets/Basic_Movements/Basic_movement_5.png", "../Videojuego/Assets/GameAssets/Basic_Movements/Basic_movement_6.png"]
         };
-        this.currentSprite = this.sprites["up"];
+        this.currentDirection = "up";
         this.facingLeft = false;
+        this.frameIndex = 0;
         this.image = new Image();
-        this.image.src = this.currentSprite;
+        this.image.src = this.sprites[this.currentDirection][this.frameIndex];
+        this.animationSpeed = 150;
+        this.lastFrameChange = 250;
     }
 
-    update(deltaTime){
-        this.position = this.position.plus(this.velocity.times(deltaTime));
+    update(deltaTime) {
+        if (!(this.position instanceof Vec)) {
+            this.position = new Vec(this.position.x, this.position.y);
+        }
+        let nextPosition = this.position.plus(this.velocity.times(deltaTime));
+        let futureBox = {
+            position: nextPosition,
+            width: this.width,
+            height: this.height
+        };
+        if (!boxOverlap(futureBox, game.oldManBox)) {
+            this.position = nextPosition;
+        }
 
-        // Limitar el movimiento dentro del canvas
         this.position.x = Math.max(0, Math.min(canvasWidth - this.width, this.position.x));
         this.position.y = Math.max(0, Math.min(canvasHeight - this.height, this.position.y));
+
+        if (this.velocity.x !== 0 || this.velocity.y !== 0) {
+            this.lastFrameChange += deltaTime;
+            if (this.lastFrameChange > this.animationSpeed) {
+                this.frameIndex = (this.frameIndex + 1) % 2;
+                this.image.src = this.sprites[this.currentDirection][this.frameIndex];
+                this.lastFrameChange = 0;
+            }
+        }
     }
 
     draw(ctx){
@@ -50,9 +73,12 @@ class Player extends GameObject{
         ctx.restore();
     }
 
-    setSprite(spriteKey) {
-        this.currentSprite = this.sprites[spriteKey];
-        this.image.src = this.currentSprite;
+    setDirection(direction) {
+        if (this.sprites[direction] && direction !== this.currentDirection) {
+            this.currentDirection = direction;
+            this.frameIndex = 0;
+            this.image.src = this.sprites[direction][this.frameIndex];
+        }
     }
 }
 
@@ -68,14 +94,26 @@ class Game{
         this.showRegisterScreen = false;
         this.mainMap = false;
         this.dialogueStage = 0;
+        this.showTutorial = false;
+        this.tutorialWasShown = false;
         this.logo = new Image();
         this.logo.src = "../Videojuego/Assets/MDAssets/Three.png";
         this.oldMan = new Image();
         this.oldMan.src = "../Videojuego/Assets/GameAssets/NPC/Old_man.png";
+        this.oldManRight = new Image();
+        this.oldManRight.src = "../Videojuego/Assets/GameAssets/NPC/Old_man_2.png";
+        this.oldManBack = new Image();
+        this.oldManBack.src = "../Videojuego/Assets/GameAssets/NPC/Old_man_3.png";
+        this.oldManPosition = new Vec(canvasWidth / 2 - 14, 200);
+        this.oldManBox = {
+            position: new Vec(this.oldManPosition.x, this.oldManPosition.y),
+            width: 32,
+            height: 32
+        };
     }
 
     initObjects() {
-        this.player = new Player(new Vec(canvasWidth / 2 - 14, 405), 32, 32);
+        this.player = new Player(new Vec(canvasWidth / 2 - 14, 305), 32, 32);
         this.actors = [];
     }
 
@@ -89,38 +127,30 @@ class Game{
             ctx.fillStyle = "white";
             ctx.font = "20px Arial";
             ctx.textAlign = "center";
-            ctx.fillText("Press Enter to start the game", canvasWidth / 2, 570);
+            ctx.fillText("Presiona Enter para empezar el juego", canvasWidth / 2, 570);
         } else if (this.showLoginScreen){
             // Dibujar el logo
             ctx.drawImage(this.logo, canvasWidth / 2 - 228, 80, 450, 450);
             // Dibujar el cuadro del login
             ctx.fillStyle = "black";
-            ctx.fillRect(canvasWidth / 2 - 200, canvasHeight / 2 - 100, 400, 200);
+            ctx.fillRect(canvasWidth / 2 - 200, canvasHeight / 2, 400, 200);
             ctx.strokeStyle = "white";
             ctx.lineWidth = 2;
-            ctx.strokeRect(canvasWidth / 2 - 200, canvasHeight / 2 - 100, 400, 200);
+            ctx.strokeRect(canvasWidth / 2 - 200, canvasHeight / 2, 400, 200);
             // Dibujar el formulario
             document.getElementById("loginForm").style.display = "block";
-            document.getElementById("registerForm").style.display = "none";
         } else if (this.showRegisterScreen){
             // Dibujar el logo
             ctx.drawImage(this.logo, canvasWidth / 2 - 228, 80, 450, 450);
-            // Dibujar al jugador debajo del logo
-            this.player.draw(ctx);
             // Dibujar el cuadro del register
             ctx.fillStyle = "black";
-            ctx.fillRect(canvasWidth / 2 - 200, canvasHeight / 2 - 100, 400, 200);
+            ctx.fillRect(canvasWidth / 2 - 200, canvasHeight / 2, 400, 200);
             ctx.strokeStyle = "white";
             ctx.lineWidth = 2;
-            ctx.strokeRect(canvasWidth / 2 - 200, canvasHeight / 2 - 100, 400, 200);
+            ctx.strokeRect(canvasWidth / 2 - 200, canvasHeight / 2, 400, 200);
             // Dibujar el formulario
             document.getElementById("registerForm").style.display = "block";
-            document.getElementById("loginForm").style.display = "none";
         } else if (this.showPrologue){
-            ctx.fillStyle = "white";
-            ctx.font = "60px Arial";
-            ctx.textAlign = "center";
-            ctx.fillText("Prologo", canvasWidth / 2, 85);
             // Dibujar el cuadro del prólogo
             ctx.fillStyle = "black";
             ctx.fillRect(canvasWidth / 2 - 340, canvasHeight / 2 - 180, canvasWidth / 4 + 480, canvasHeight / 2 + 70);
@@ -128,6 +158,10 @@ class Game{
             ctx.lineWidth = 2;
             ctx.strokeRect(canvasWidth / 2 - 340, canvasHeight / 2 - 180, canvasWidth / 4 + 480, canvasHeight / 2 + 70);
             // Dibujar el texto del prólogo
+            ctx.fillStyle = "white";
+            ctx.font = "40px Arial";
+            ctx.textAlign = "center";
+            ctx.fillText("Prologo", canvasWidth / 2, 185);
             ctx.fillStyle = "white";
             ctx.font = "18px Arial";
             ctx.textAlign = "center";
@@ -138,17 +172,22 @@ class Game{
                 "Se siente debil, sin recuerdos de como llego alli.",
                 "Un anciano se le acerca y empieza a hablar."
             ];
-            let yPosition = canvasHeight / 4 + 60;
+            let yPosition = canvasHeight / 4 + 90;
             prologueText.forEach(line => {
                 ctx.fillText(line, canvasWidth / 2, yPosition);
                 yPosition += 50;
             });
             // Mensaje para continuar
             ctx.font = "20px Arial";
-            ctx.fillText("Press Enter to continue", canvasWidth / 2, canvasHeight / 4 + canvasHeight / 2 + 70);
+            ctx.fillText("Presiona Enter para continuar", canvasWidth / 2, canvasHeight / 4 + canvasHeight / 2 + 70);
         } else if (this.mainMap){
+            console.log("Posición del jugador:", this.player.position);
+            console.log("Dimensiones del jugador:", this.player.width, this.player.height);
+            console.log("Posición del viejo:", this.oldManBox.position);
+            console.log("Dimensiones del viejo:", this.oldManBox.width, this.oldManBox.height);
+            console.log("Colisión detectada:", boxOverlap(this.player, this.oldManBox));
             // Dibuja el hombre viejo
-            ctx.drawImage(this.oldMan, canvasWidth / 2 - 14, 200, 32, 32);
+            ctx.drawImage(this.oldMan, this.oldManPosition.x, this.oldManPosition.y, 32, 32);
             // Dibuja el jugador
             this.player.draw(ctx);
             // Dibuja la puerta
@@ -156,6 +195,14 @@ class Game{
             bottomBar2.draw(ctx);
             if (this.dialogueStage < 5) {
                 this.drawDialogue(ctx);
+                // Mensaje para continuar
+                ctx.font = "15px Arial";
+                ctx.fillText("Presiona Enter para continuar", canvasWidth / 2 + 200, 190, 600, 100);
+            } else if (this.dialogueStage === 5 && !this.tutorialWasShown) {
+                this.showTutorial = true;
+                this.tutorialWasShown = true;
+            } else if (this.showTutorial) {
+                this.drawTutorial(ctx);
             }
             if (this.player.position.y + this.player.height >= canvasHeight &&
                 this.player.position.x >= canvasWidth / 2 - 50 &&
@@ -197,6 +244,42 @@ class Game{
         });
     }
 
+    drawTutorial(ctx) {
+        ctx.fillStyle = "black";
+        ctx.fillRect(canvasWidth / 2 - 300, 100, 600, 400);
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(canvasWidth / 2 - 300, 100, 600, 400);
+
+        ctx.fillStyle = "white";
+        ctx.font = "22px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText("Tutorial de Controles", canvasWidth / 2, 150);
+
+        const controls = [
+            "Flechas = Moverse",
+            "Z = Atacar con espada",
+            "X = Atacar con arco",
+            "A = Dejar bomba",
+            "C = Atacar con magia",
+            "Shift = Defender con escudo",
+            "I = Abrir inventario",
+            "ESC = Menu de pausa",
+            "SPACE = Interactuar con NPCs/Cofres",
+            "T = Abrir tutorial"
+        ];
+
+        let yPosition = 200;
+        ctx.font = "18px Arial";
+        controls.forEach(line => {
+            ctx.fillText(line, canvasWidth / 2, yPosition);
+            yPosition += 30;
+        });
+
+        ctx.font = "20px Arial";
+        ctx.fillText("Presiona Enter para continuar", canvasWidth / 2, 530);
+    }
+
     update(deltaTime){
         if (!this.showMainMenu && !this.showPrologue) {
             for (let actor of this.actors){
@@ -223,30 +306,46 @@ class Game{
                 this.dialogueStage++;
                 return;
             }
-            if (this.mainMap && this.dialogueStage >= 5) {
-                if (event.key == 'ArrowUp'){
+            if (this.mainMap && this.dialogueStage === 5 && !this.showTutorial && !this.tutorialWasShown) {
+                this.showTutorial = true;
+                this.tutorialWasShown = true;
+                return;
+            }
+            if (this.showTutorial && event.key === 'Enter') {
+                this.showTutorial = false;
+                return;
+            }
+            if (!this.showTutorial && event.key === 't') {
+                this.showTutorial = true;
+                return;
+            }
+            if (this.mainMap && this.dialogueStage >= 5 && !this.showTutorial) {
+                if (event.key == 'ArrowUp') {
                     this.player.velocity.y = -playerSpeed;
-                    this.player.setSprite("up");
-                } else if (event.key == 'ArrowLeft'){
+                    this.player.setDirection("up");
+                } else if (event.key == 'ArrowLeft') {
                     this.player.velocity.x = -playerSpeed;
-                    this.player.setSprite("left");
+                    this.player.setDirection("left");
                     this.player.facingLeft = true;
-                } else if (event.key == 'ArrowDown'){
+                } else if (event.key == 'ArrowDown') {
                     this.player.velocity.y = playerSpeed;
-                    this.player.setSprite("down");
-                } else if (event.key == 'ArrowRight'){
+                    this.player.setDirection("down");
+                } else if (event.key == 'ArrowRight') {
                     this.player.velocity.x = playerSpeed;
-                    this.player.setSprite("right");
+                    this.player.setDirection("right");
                     this.player.facingLeft = false;
                 }
             }
+            if (this.mainMap && boxOverlap(this.player, this.oldManBox) && event.code === 'Space') {
+                alert("You have left the cave. The demo game is over.");
+            }
         });
 
-        window.addEventListener('keyup', (event) =>{
-            if (this.mainMap && this.dialogueStage >= 5) {
-                if (event.key == 'ArrowUp' || event.key == 'ArrowDown'){
+        window.addEventListener('keyup', (event) => {
+            if (this.mainMap && !this.showTutorial) {
+                if (event.key == 'ArrowUp' || event.key == 'ArrowDown') {
                     this.player.velocity.y = 0;
-                } else if (event.key == 'ArrowLeft' || event.key == 'ArrowRight'){
+                } else if (event.key == 'ArrowLeft' || event.key == 'ArrowRight') {
                     this.player.velocity.x = 0;
                 }
             }
@@ -261,7 +360,7 @@ class Game{
                 this.showLoginScreen = false;
                 this.showPrologue = true;
             } else {
-                alert("Please enter a username and password.");
+                alert("Por favor ingresa el usuario y contrasena valido.");
             }
         });
 
@@ -278,18 +377,18 @@ class Game{
             let regPassword = document.getElementById("registerPassword").value;
             let confirmRegPassword = document.getElementById("confirmRegisterPassword").value;
             if (!regUsername || !confirmRegUsername || !regPassword || !confirmRegPassword) {
-                alert("Please fill in all fields.");
+                alert("Por favor llena todos los campos.");
                 return;
             }
             if (regUsername !== confirmRegUsername) {
-                alert("Usernames do not match. Please try again.");
+                alert("Usuarios no coinciden. Intenta de nuevo.");
                 return;
             }
             if (regPassword !== confirmRegPassword) {
-                alert("Passwords do not match. Please try again.");
+                alert("Contrasenas no coinciden. Intenta de nuevo.");
                 return;
             }
-            alert("Registration successful!");
+            alert("Usuario registrado exitosamente!");
             document.getElementById("registerForm").style.display = "none";
             this.showRegisterScreen = false;
             this.showLoginScreen = true;
@@ -310,6 +409,7 @@ class Game{
         this.showLoginScreen = false;
         this.mainMap = false;
         this.dialogueStage = 0;
+        this.tutorialWasShown = false;
         this.initObjects();
     }
 }
@@ -330,7 +430,6 @@ function main() {
 
     drawScene(0);
 }
-
 
 // Main loop function to be called once per frame
 function drawScene(newTime) {

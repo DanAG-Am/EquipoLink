@@ -7,28 +7,31 @@
         <script src="prototipo.js"></script>
     </head>
     <body>
-        <canvas id="canvas"></canvas>
+        <div class="container">
+            <canvas id="canvas"></canvas>
+            <canvas id="uiCanvas"></canvas>
+        </div>
         <div id="loginForm" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
             <h2 style="color: white;">Login</h2>
-            <label style="color: white;">Username:</label>
+            <label style="color: white;">Usuario:</label>
             <input type="text" id="usernameInput"><br><br>
-            <label style="color: white;">Password:</label>
+            <label style="color: white;">Contrasena:</label>
             <input type="password" id="passwordInput"><br><br>
-            <button id="loginButton">Continue</button>
-            <button id="registerButton">Register</button>
+            <button id="loginButton">Continuar</button>
+            <button id="registerButton">Registrar</button>
         </div>
         <div id="registerForm" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; background: black; padding: 20px; border: 2px solid white; color: white;">
-            <h2>Register</h2>
-            <label>Username:</label>
+            <h2>Registrar</h2>
+            <label>Usuario:</label>
             <input type="text" id="registerUsername"><br><br>
-            <label>Confirm Username:</label>
+            <label>Confirma Usuario:</label>
             <input type="text" id="confirmRegisterUsername"><br><br>
-            <label>Password:</label>
+            <label>Contrasena:</label>
             <input type="password" id="registerPassword"><br><br>
-            <label>Confirm Password:</label>
+            <label>Confirma Contrasena:</label>
             <input type="password" id="confirmRegisterPassword"><br><br>
-            <button id="returnLoginButton">Back</button>
-            <button id="confirmRegisterButton">Submit</button>
+            <button id="returnLoginButton">Regresar</button>
+            <button id="confirmRegisterButton">Confirmar</button>
         </div>
         <script> main(); </script>
     </body>
