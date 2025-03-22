@@ -7,12 +7,13 @@
         <script src="prototipo.js"></script>
     </head>
     <body>
+        <header>EQUIPOLINK VIDEOGAMES</header>
         <div class="container">
             <canvas id="canvas"></canvas>
             <canvas id="uiCanvas"></canvas>
         </div>
         <div id="loginForm" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
-            <h2 style="color: white;">Login</h2>
+            <h2 style="color: rgb(255, 255, 255); background-color: black;">Login</h2>
             <label style="color: white;">Usuario:</label>
             <input type="text" id="usernameInput"><br><br>
             <label style="color: white;">Contrasena:</label>
@@ -20,7 +21,7 @@
             <button id="loginButton">Continuar</button>
             <button id="registerButton">Registrar</button>
         </div>
-        <div id="registerForm" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; background: black; padding: 20px; border: 2px solid white; color: white;">
+        <div id="registerForm" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; background: rgb(0, 0, 0); padding: 40px; border: 2px solid white; color: white;">
             <h2>Registrar</h2>
             <label>Usuario:</label>
             <input type="text" id="registerUsername"><br><br>
@@ -34,5 +35,8 @@
             <button id="confirmRegisterButton">Confirmar</button>
         </div>
         <script> main(); </script>
+        <footer>
+            <p>EquipoLink &copy; 2025</p>
+        </footer>
     </body>
 </html>
