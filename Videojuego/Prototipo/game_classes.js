@@ -95,7 +95,6 @@ class AnimatedObject extends GameObject {
         this.minFrame = 0;
         this.maxFrame = 0;
         this.sheetCols = 0;
-
         this.repeat = true;
 
         // Delay between frames (in milliseconds)

@@ -12,6 +12,7 @@ const canvasHeight = 600;
 let ctx, game;
 let oldTime;
 let playerSpeed = 0.25;
+let gamePaused = false;
 const bottomBar1 = new GameObject(new Vec(0, canvasHeight - 20), canvasWidth / 2 - 50, 20, "orange", "obstacle");
 const bottomBar2 = new GameObject(new Vec(canvasWidth / 2 + 50, canvasHeight - 20), canvasWidth / 2 - 50, 20, "orange", "obstacle");
 
@@ -24,7 +25,11 @@ class Player extends AnimatedObject{
             "down": ["../Videojuego/Assets/GameAssets/Basic_Movements/Basic_movement_1.png", "../Videojuego/Assets/GameAssets/Basic_Movements/Basic_movement_2.png"],
             "right": ["../Videojuego/Assets/GameAssets/Basic_Movements/Basic_movement_3.png", "../Videojuego/Assets/GameAssets/Basic_Movements/Basic_movement_4.png"],
             "left": ["../Videojuego/Assets/GameAssets/Basic_Movements/Basic_movement_3.png", "../Videojuego/Assets/GameAssets/Basic_Movements/Basic_movement_4.png"],
-            "up": ["../Videojuego/Assets/GameAssets/Basic_Movements/Basic_movement_5.png", "../Videojuego/Assets/GameAssets/Basic_Movements/Basic_movement_6.png"]
+            "up": ["../Videojuego/Assets/GameAssets/Basic_Movements/Basic_movement_5.png", "../Videojuego/Assets/GameAssets/Basic_Movements/Basic_movement_6.png"],
+            "defend": ["../Videojuego/Assets/GameAssets/Magical_shield/Magical_shield_3.png", "../Videojuego/Assets/GameAssets/Magical_shield/Magical_shield_4.png"],
+            "attackSword": ["../Videojuego/Assets/GameAssets/Magical_sword/Magical_sword_5.png", "../Videojuego/Assets/GameAssets/Magical_sword/Magical_sword_8.png"],
+            "attackMagic": ["../Videojuego/Assets/GameAssets/Magical_rod/Magical_rod_5.png","../Videojuego/Assets/GameAssets/Magical_rod/Magical_rod_8.png"],
+            "leaveBomb": ["../Videojuego/Assets/GameAssets/Pick_up_item/Pick_up_item_1.png","../Videojuego/Assets/GameAssets/Pickup/pickup_Bomb.png"]
         };
         this.currentDirection = "up";
         this.facingLeft = false;
@@ -33,9 +38,15 @@ class Player extends AnimatedObject{
         this.image.src = this.sprites[this.currentDirection][this.frameIndex];
         this.animationSpeed = 150;
         this.lastFrameChange = 250;
-    }
+        this.shieldActive = false;
+        this.swordActive = false;
+        this.magicActive = false; 
+        this.bombActive = false;
+    }   
 
     update(deltaTime) {
+        if (gamePaused) return;
+        
         if (!(this.position instanceof Vec)) {
             this.position = new Vec(this.position.x, this.position.y);
         }
@@ -67,8 +78,49 @@ class Player extends AnimatedObject{
         if (this.facingLeft){
             ctx.scale(-1, 1);
             ctx.drawImage(this.image, -this.position.x - this.width, this.position.y, this.width, this.height);
+            if (this.shieldActive) {
+                let shieldImage = new Image();
+                shieldImage.src = this.sprites["defend"][this.frameIndex];
+                ctx.drawImage(shieldImage, -this.position.x - this.width, this.position.y, this.width, this.height);
+            }
+            if(this.swordActive){
+                let swordImage = new Image();
+                swordImage.src = this.sprites["attackSword"][this.frameIndex];
+                ctx.drawImage(swordImage, -this.position.x - this.width, this.position.y, this.width, this.height);
+            }
+            if(this.magicActive){
+                let magicImage = new Image();
+                magicImage.src = this.sprites["attackMagic"][this.frameIndex];
+                ctx.drawImage(magicImage, -this.position.x - this.width, this.position.y, this.width,this.height);
+            }
+            if(this.bombActive){
+                let bombImage = new Image();
+                bombImage.src = this.sprites["leaveBomb"][this.frameIndex];
+                ctx.drawImage(bombImage, -this.position.x - this.width, this.position.y, this.width,this.height);
+
+            }
         } else {
             ctx.drawImage(this.image, this.position.x, this.position.y, this.width, this.height);
+        }
+        if (this.shieldActive) {
+            let shieldImage = new Image();
+            shieldImage.src = this.sprites["defend"][this.frameIndex];
+            ctx.drawImage(shieldImage, this.position.x, this.position.y, this.width, this.height);
+        }
+        if(this.swordActive){
+            let swordImage = new Image();
+            swordImage.src = this.sprites["attackSword"][this.frameIndex];
+            ctx.drawImage(swordImage, this.position.x, this.position.y, this.width, this.height);
+        }
+        if(this.magicActive){
+            let magicImage = new Image();
+            magicImage.src = this.sprites["attackMagic"][this.frameIndex];
+            ctx.drawImage(magicImage, this.position.x, this.position.y, this.width, this.height);
+        }
+        if(this.bombActive){
+            let bombImage = new Image();
+            bombImage.src = this.sprites["leaveBomb"][this.frameIndex];
+            ctx.drawImage(bombImage, this.position.x, this.position.y, this.width, this.height);
         }
         ctx.restore();
     }
@@ -77,8 +129,19 @@ class Player extends AnimatedObject{
         if (this.sprites[direction] && direction !== this.currentDirection) {
             this.currentDirection = direction;
             this.frameIndex = 0;
-            this.image.src = this.sprites[direction][this.frameIndex];
-        }
+            this.image.src = this.sprites[direction][this.frameIndex];        }
+    }
+    toggleShield(active) {
+        this.shieldActive = active; // Set whether the shield is active or not
+    }
+    toggleSword(active) {
+        this.swordActive = active; // Set whether the sword is active or not
+    }
+    toggleMagic(active) {
+        this.magicActive = active; // Set whether the magic is active or not
+    }
+    toggleBomb(active){
+        this.bombActive = active; // Set whether the bomb is active or not
     }
 }
 
@@ -216,6 +279,9 @@ class Game{
             }
             this.player.draw(ctx);
         }
+        if (gamePaused) {
+            drawPauseMenu(ctx);
+        }
     }
 
     drawDialogue(ctx) {
@@ -335,9 +401,24 @@ class Game{
                     this.player.setDirection("right");
                     this.player.facingLeft = false;
                 }
+                else if (event.key == "Shift") {
+                    this.player.toggleShield(true);  // Enable shield
+                }
+                else if(event.key=="z"){
+                    this.player.toggleSword(true);  
+                }
+                else if(event.key=="c"){
+                    this.player.toggleMagic(true);  
+                }
+                else if (event.key == "a") {
+                    this.player.toggleBomb(true);  
+                }
             }
             if (this.mainMap && boxOverlap(this.player, this.oldManBox) && event.code === 'Space') {
                 alert("You have left the cave. The demo game is over.");
+            }
+            if (event.key === "Escape") {
+                gamePaused = !gamePaused;
             }
         });
 
@@ -347,6 +428,18 @@ class Game{
                     this.player.velocity.y = 0;
                 } else if (event.key == 'ArrowLeft' || event.key == 'ArrowRight') {
                     this.player.velocity.x = 0;
+                }
+                else if (event.key == "Shift") {
+                    this.player.toggleShield(false);  // Disable shield
+                }
+                else if(event.key=="z"){
+                    this.player.toggleSword(false); 
+                }
+                else if(event.key=="c"){
+                    this.player.toggleMagic(false);  
+                }
+                else if (event.key == "a") {
+                    this.player.toggleBomb(false);  
                 }
             }
         });
@@ -401,6 +494,7 @@ class Game{
             this.showLoginScreen = true;
             document.getElementById("loginForm").style.display = "block";
         });
+        
     }
 
     resetGame() {
@@ -446,4 +540,17 @@ function drawScene(newTime) {
 
     oldTime = newTime;
     requestAnimationFrame(drawScene);
+}
+function drawPauseMenu(ctx) {
+    ctx.save();
+    ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
+    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+    ctx.fillStyle = "white";
+    ctx.font = "30px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText("PAUSED", canvasWidth / 2, canvasHeight / 2 - 50);
+    ctx.fillText("Press ESC to resume", canvasWidth / 2, canvasHeight / 2);
+
+    ctx.restore();
 }
