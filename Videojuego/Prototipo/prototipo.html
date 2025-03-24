@@ -13,11 +13,12 @@
             <canvas id="uiCanvas"></canvas>
         </div>
         <div id="loginForm" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
-            <h2 style="color: rgb(255, 255, 255); background-color: black;">Login</h2>
+            <h2 style="color: white;">Login</h2>
             <label style="color: white;">Usuario:</label>
             <input type="text" id="usernameInput"><br><br>
             <label style="color: white;">Contrasena:</label>
             <input type="password" id="passwordInput"><br><br>
+            <div id="loginError" style="color: white; margin: 10px 0;"></div>
             <button id="loginButton">Continuar</button>
             <button id="registerButton">Registrar</button>
         </div>
@@ -25,12 +26,11 @@
             <h2>Registrar</h2>
             <label>Usuario:</label>
             <input type="text" id="registerUsername"><br><br>
-            <label>Confirma Usuario:</label>
-            <input type="text" id="confirmRegisterUsername"><br><br>
             <label>Contrasena:</label>
             <input type="password" id="registerPassword"><br><br>
             <label>Confirma Contrasena:</label>
             <input type="password" id="confirmRegisterPassword"><br><br>
+            <div id="registerError" style="color: white; margin: 10px 0;"></div>
             <button id="returnLoginButton">Regresar</button>
             <button id="confirmRegisterButton">Confirmar</button>
         </div>

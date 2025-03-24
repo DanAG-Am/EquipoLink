@@ -9,12 +9,69 @@
 
 const canvasWidth = 800;
 const canvasHeight = 600;
-let ctx, game;
+let ctx, uiCtx, game;
 let oldTime;
 let playerSpeed = 0.25;
+let showUI = false;
 let gamePaused = false;
 const bottomBar1 = new GameObject(new Vec(0, canvasHeight - 20), canvasWidth / 2 - 50, 20, "orange", "obstacle");
 const bottomBar2 = new GameObject(new Vec(canvasWidth / 2 + 50, canvasHeight - 20), canvasWidth / 2 - 50, 20, "orange", "obstacle");
+//ui Images
+const rupeeImg = new Image();
+rupeeImg.src = "../Videojuego/Assets/GameAssets/Pickup/pickup_Rupee1.png";
+const heartImg = new Image();
+heartImg.src = "../Videojuego/Assets/GameAssets/Pickup/pickup_HealthUpgrade.png";
+const potionImg = new Image();
+potionImg.src = "../Videojuego/Assets/GameAssets/Pickup/pickup_PotionHealth.png";
+const arrowImg = new Image();
+arrowImg.src = "../Videojuego/Assets/GameAssets/Weapons/Arrow_2.png";
+const bombIcon = new Image();
+bombIcon.src = "../Videojuego/Assets/GameAssets/Weapons/Bomb_1.png";
+let playerStats = {
+    level: 0,
+    life: 100,
+    rupees: 0,
+    potions: 0,
+    arrows: 0,
+    bombs: 0
+};
+
+class Bomb {
+    constructor(position) {
+        this.position = position;
+        this.frameIndex = 0;
+        this.frames = [
+            "../Videojuego/Assets/GameAssets/Pickup/pickup_Bomb.png",
+            "../Videojuego/Assets/GameAssets/Weapons/Bomb_2.png",
+            "../Videojuego/Assets/GameAssets/Weapons/Bomb_3.png",
+            "../Videojuego/Assets/GameAssets/Weapons/Bomb_4.png"
+        ];
+        this.image = new Image();
+        this.image.src = this.frames[this.frameIndex];
+        this.alive = true;
+
+        // Programar cambios de frame
+        setTimeout(() => this.setFrame(1), 2000);
+        setTimeout(() => this.setFrame(2), 2200);
+        setTimeout(() => this.setFrame(3), 2400);
+        setTimeout(() => this.explode(), 2600);
+    }
+
+    setFrame(index) {
+        this.frameIndex = index;
+        this.image.src = this.frames[index];
+    }
+
+    explode() {
+        this.alive = false; // dejar de dibujar
+    }
+
+    draw(ctx) {
+        if (this.alive) {
+            ctx.drawImage(this.image, this.position.x, this.position.y, 32, 32);
+        }
+    }
+}
 
 class Player extends AnimatedObject{
     constructor(position, width, height){
@@ -27,9 +84,12 @@ class Player extends AnimatedObject{
             "left": ["../Videojuego/Assets/GameAssets/Basic_Movements/Basic_movement_3.png", "../Videojuego/Assets/GameAssets/Basic_Movements/Basic_movement_4.png"],
             "up": ["../Videojuego/Assets/GameAssets/Basic_Movements/Basic_movement_5.png", "../Videojuego/Assets/GameAssets/Basic_Movements/Basic_movement_6.png"],
             "defend": ["../Videojuego/Assets/GameAssets/Magical_shield/Magical_shield_3.png", "../Videojuego/Assets/GameAssets/Magical_shield/Magical_shield_4.png"],
-            "attackSword": ["../Videojuego/Assets/GameAssets/Magical_sword/Magical_sword_5.png", "../Videojuego/Assets/GameAssets/Magical_sword/Magical_sword_8.png"],
-            "attackMagic": ["../Videojuego/Assets/GameAssets/Magical_rod/Magical_rod_5.png","../Videojuego/Assets/GameAssets/Magical_rod/Magical_rod_8.png"],
-            "leaveBomb": ["../Videojuego/Assets/GameAssets/Pick_up_item/Pick_up_item_1.png","../Videojuego/Assets/GameAssets/Pickup/pickup_Bomb.png"]
+            "attackSwordDown": "../Videojuego/Assets/GameAssets/White_sword/White_sword_4.png",
+            "attackSwordRight": "../Videojuego/Assets/GameAssets/White_sword/White_sword_8.png",
+            "attackSwordUp": "../Videojuego/Assets/GameAssets/White_sword/White_sword_12.png",
+            "attackMagicDown": "../Videojuego/Assets/GameAssets/Magical_rod/Magical_rod_4.png",
+            "attackMagicRight": "../Videojuego/Assets/GameAssets/Magical_rod/Magical_rod_8.png",
+            "attackMagicUp": "../Videojuego/Assets/GameAssets/Magical_rod/Magical_rod_12.png",
         };
         this.currentDirection = "up";
         this.facingLeft = false;
@@ -41,7 +101,6 @@ class Player extends AnimatedObject{
         this.shieldActive = false;
         this.swordActive = false;
         this.magicActive = false; 
-        this.bombActive = false;
     }   
 
     update(deltaTime) {
@@ -73,55 +132,52 @@ class Player extends AnimatedObject{
         }
     }
 
-    draw(ctx){
+    draw(ctx) {
         ctx.save();
-        if (this.facingLeft){
+    
+        let flip = this.facingLeft;
+        let drawX = this.position.x;
+        let drawY = this.position.y;
+    
+        if (this.swordActive && this.currentDirection === "left") {
             ctx.scale(-1, 1);
-            ctx.drawImage(this.image, -this.position.x - this.width, this.position.y, this.width, this.height);
-            if (this.shieldActive) {
-                let shieldImage = new Image();
-                shieldImage.src = this.sprites["defend"][this.frameIndex];
-                ctx.drawImage(shieldImage, -this.position.x - this.width, this.position.y, this.width, this.height);
-            }
-            if(this.swordActive){
-                let swordImage = new Image();
-                swordImage.src = this.sprites["attackSword"][this.frameIndex];
-                ctx.drawImage(swordImage, -this.position.x - this.width, this.position.y, this.width, this.height);
-            }
-            if(this.magicActive){
-                let magicImage = new Image();
-                magicImage.src = this.sprites["attackMagic"][this.frameIndex];
-                ctx.drawImage(magicImage, -this.position.x - this.width, this.position.y, this.width,this.height);
-            }
-            if(this.bombActive){
-                let bombImage = new Image();
-                bombImage.src = this.sprites["leaveBomb"][this.frameIndex];
-                ctx.drawImage(bombImage, -this.position.x - this.width, this.position.y, this.width,this.height);
-
-            }
-        } else {
-            ctx.drawImage(this.image, this.position.x, this.position.y, this.width, this.height);
+            drawX = -this.position.x - this.width;
+        } else if (this.magicActive && this.currentDirection === "left") {
+            ctx.scale(-1, 1);
+            drawX = -this.position.x - this.width;
+        } else if (flip) {
+            ctx.scale(-1, 1);
+            drawX = -this.position.x - this.width;
         }
-        if (this.shieldActive) {
-            let shieldImage = new Image();
-            shieldImage.src = this.sprites["defend"][this.frameIndex];
-            ctx.drawImage(shieldImage, this.position.x, this.position.y, this.width, this.height);
-        }
-        if(this.swordActive){
+    
+        if (this.swordActive) {
             let swordImage = new Image();
-            swordImage.src = this.sprites["attackSword"][this.frameIndex];
-            ctx.drawImage(swordImage, this.position.x, this.position.y, this.width, this.height);
-        }
-        if(this.magicActive){
+            if (this.currentDirection === "up") {
+                swordImage.src = this.sprites["attackSwordUp"];
+            } else if (this.currentDirection === "down") {
+                swordImage.src = this.sprites["attackSwordDown"];
+            } else if (this.currentDirection === "right") {
+                swordImage.src = this.sprites["attackSwordRight"];
+            } else if (this.currentDirection === "left") {
+                swordImage.src = this.sprites["attackSwordRight"];
+            }
+            ctx.drawImage(swordImage, drawX, drawY, this.width, this.height);
+        } else if (this.magicActive) {
             let magicImage = new Image();
-            magicImage.src = this.sprites["attackMagic"][this.frameIndex];
-            ctx.drawImage(magicImage, this.position.x, this.position.y, this.width, this.height);
+            if (this.currentDirection === "up") {
+                magicImage.src = this.sprites["attackMagicUp"];
+            } else if (this.currentDirection === "down") {
+                magicImage.src = this.sprites["attackMagicDown"];
+            } else if (this.currentDirection === "right") {
+                magicImage.src = this.sprites["attackMagicRight"];
+            } else if (this.currentDirection === "left") {
+                magicImage.src = this.sprites["attackMagicRight"];
+            }
+            ctx.drawImage(magicImage, drawX, drawY, this.width, this.height);
+        } else {
+            ctx.drawImage(this.image, drawX, drawY, this.width, this.height);
         }
-        if(this.bombActive){
-            let bombImage = new Image();
-            bombImage.src = this.sprites["leaveBomb"][this.frameIndex];
-            ctx.drawImage(bombImage, this.position.x, this.position.y, this.width, this.height);
-        }
+    
         ctx.restore();
     }
 
@@ -129,7 +185,7 @@ class Player extends AnimatedObject{
         if (this.sprites[direction] && direction !== this.currentDirection) {
             this.currentDirection = direction;
             this.frameIndex = 0;
-            this.image.src = this.sprites[direction][this.frameIndex];        }
+            this.image.src = this.sprites[direction][this.frameIndex];}
     }
     toggleShield(active) {
         this.shieldActive = active; // Set whether the shield is active or not
@@ -159,6 +215,7 @@ class Game{
         this.dialogueStage = 0;
         this.showTutorial = false;
         this.tutorialWasShown = false;
+        this.showInventory = false;
         this.logo = new Image();
         this.logo.src = "../Videojuego/Assets/MDAssets/Three.png";
         this.oldMan = new Image();
@@ -173,6 +230,7 @@ class Game{
             width: 32,
             height: 32
         };
+        this.bombs = [];
     }
 
     initObjects() {
@@ -186,6 +244,7 @@ class Game{
         if (this.showMainMenu) {
             // Dibujar el logo
             ctx.drawImage(this.logo, canvasWidth / 2 - 228, 80, 450, 450);
+            showUI = false;
             // Dibujar el mensaje
             ctx.fillStyle = "white";
             ctx.font = "20px Arial";
@@ -196,10 +255,10 @@ class Game{
             ctx.drawImage(this.logo, canvasWidth / 2 - 228, 80, 450, 450);
             // Dibujar el cuadro del login
             ctx.fillStyle = "black";
-            ctx.fillRect(canvasWidth / 2 - 200, canvasHeight / 2, 400, 200);
+            ctx.fillRect(canvasWidth / 2 - 200, canvasHeight / 2 - 100, 400, 350);
             ctx.strokeStyle = "white";
             ctx.lineWidth = 2;
-            ctx.strokeRect(canvasWidth / 2 - 200, canvasHeight / 2, 400, 200);
+            ctx.strokeRect(canvasWidth / 2 - 200, canvasHeight / 2 - 100, 400, 350);
             // Dibujar el formulario
             document.getElementById("loginForm").style.display = "block";
         } else if (this.showRegisterScreen){
@@ -244,13 +303,9 @@ class Game{
             ctx.font = "20px Arial";
             ctx.fillText("Presiona Enter para continuar", canvasWidth / 2, canvasHeight / 4 + canvasHeight / 2 + 70);
         } else if (this.mainMap){
-            console.log("Posición del jugador:", this.player.position);
-            console.log("Dimensiones del jugador:", this.player.width, this.player.height);
-            console.log("Posición del viejo:", this.oldManBox.position);
-            console.log("Dimensiones del viejo:", this.oldManBox.width, this.oldManBox.height);
-            console.log("Colisión detectada:", boxOverlap(this.player, this.oldManBox));
             // Dibuja el hombre viejo
             ctx.drawImage(this.oldMan, this.oldManPosition.x, this.oldManPosition.y, 32, 32);
+            this.bombs.forEach(b => b.draw(ctx));
             // Dibuja el jugador
             this.player.draw(ctx);
             // Dibuja la puerta
@@ -264,6 +319,7 @@ class Game{
             } else if (this.dialogueStage === 5 && !this.tutorialWasShown) {
                 this.showTutorial = true;
                 this.tutorialWasShown = true;
+                playerStats.bombs = 10;
             } else if (this.showTutorial) {
                 this.drawTutorial(ctx);
             }
@@ -272,6 +328,9 @@ class Game{
                 this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
                     alert("You have left the cave. The demo game is over.");
                     this.resetGame();
+            }
+            if (this.showInventory) {
+                this.drawInventory(ctx);
             }
         } else {
             for (let actor of this.actors){
@@ -300,7 +359,7 @@ class Game{
             ["Tu hermano ha sido capturado", "por el Ejercito de la Oscuridad!"],
             ["Ha sido llevado a su fortaleza en los ultimos cuartos de esta mazmorra,", "donde su lider..."],
             ["El Rey Aquamentus!"],
-            ["Sal de la cueva y busca a mi companero en la tienda.", "El te dara una espada para empezar tu exploracion."]
+            ["Te doy unas armas para empezar tu exploracion.", "Intenta visitar a la tienda para mejorar tus habilidades."]
         ];
         let lines = dialogueTexts[this.dialogueStage];
         let yPosition = 110;
@@ -346,6 +405,32 @@ class Game{
         ctx.fillText("Presiona Enter para continuar", canvasWidth / 2, 530);
     }
 
+    drawInventory(ctx) {
+        ctx.save();
+        ctx.fillStyle = "black";
+        ctx.globalAlpha = 0.9;
+        ctx.fillRect(canvasWidth / 2 - 150, canvasHeight / 2 - 100, 300, 200);
+        ctx.globalAlpha = 1;
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(canvasWidth / 2 - 150, canvasHeight / 2 - 100, 300, 200);
+    
+        ctx.fillStyle = "white";
+        ctx.font = "20px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText("Inventario", canvasWidth / 2, canvasHeight / 2 - 60);
+    
+        ctx.drawImage(arrowImg, canvasWidth / 2 - 40, canvasHeight / 2 - 30, 24, 48);
+        ctx.fillText(`x${playerStats.arrows}`, canvasWidth / 2 + 20, canvasHeight / 2);
+        ctx.drawImage(bombIcon, canvasWidth / 2 - 40, canvasHeight / 2 + 10, 24, 48);
+        ctx.fillText(`x${playerStats.bombs}`, canvasWidth / 2 + 20, canvasHeight / 2 + 50);
+    
+        ctx.font = "16px Arial";
+        ctx.fillText("Presiona I para cerrar", canvasWidth / 2, canvasHeight / 2 + 90);
+    
+        ctx.restore();
+    }
+
     update(deltaTime){
         if (!this.showMainMenu && !this.showPrologue) {
             for (let actor of this.actors){
@@ -385,6 +470,14 @@ class Game{
                 this.showTutorial = true;
                 return;
             }
+            if (event.key === 'i' && this.showInventory) {
+                this.showInventory = false;
+                return;
+            }
+            if (event.key === 'i' && this.mainMap && !this.showInventory && !this.showTutorial) {
+                this.showInventory = true;
+                return;
+            }
             if (this.mainMap && this.dialogueStage >= 5 && !this.showTutorial) {
                 if (event.key == 'ArrowUp') {
                     this.player.velocity.y = -playerSpeed;
@@ -411,11 +504,22 @@ class Game{
                     this.player.toggleMagic(true);  
                 }
                 else if (event.key == "a") {
-                    this.player.toggleBomb(true);  
+                    if (playerStats.bombs > 0) {
+                        playerStats.bombs--;
+                        this.player.toggleBomb(true);
+                        
+                        let offset = new Vec(0, 0);
+                        if (this.player.currentDirection === "up") offset = new Vec(0, 32);
+                        if (this.player.currentDirection === "down") offset = new Vec(0, -32);
+                        if (this.player.currentDirection === "left") offset = new Vec(32, 0);
+                        if (this.player.currentDirection === "right") offset = new Vec(-32, 0);
+                
+                        let bombPos = this.player.position.plus(offset);
+                        this.bombs.push(new Bomb(bombPos));
+                    } else {
+                        this.player.toggleBomb(false);
+                    }
                 }
-            }
-            if (this.mainMap && boxOverlap(this.player, this.oldManBox) && event.code === 'Space') {
-                alert("You have left the cave. The demo game is over.");
             }
             if (event.key === "Escape") {
                 gamePaused = !gamePaused;
@@ -438,23 +542,23 @@ class Game{
                 else if(event.key=="c"){
                     this.player.toggleMagic(false);  
                 }
-                else if (event.key == "a") {
-                    this.player.toggleBomb(false);  
-                }
             }
         });
 
         document.getElementById("loginButton").addEventListener("click", () => {
             let username = document.getElementById("usernameInput").value;
             let password = document.getElementById("passwordInput").value;
+            let errorDiv = document.getElementById("loginError");
 
             if (username && password) {
                 document.getElementById("loginForm").style.display = "none";
                 this.showLoginScreen = false;
                 this.showPrologue = true;
             } else {
-                alert("Por favor ingresa el usuario y contrasena valido.");
+                errorDiv.innerText = "Por favor, llena todos los campos";
+                return;
             }
+            errorDiv.innerText = "";
         });
 
         document.getElementById("registerButton").addEventListener("click", () => {
@@ -466,22 +570,18 @@ class Game{
 
         document.getElementById("confirmRegisterButton").addEventListener("click", () => {
             let regUsername = document.getElementById("registerUsername").value;
-            let confirmRegUsername = document.getElementById("confirmRegisterUsername").value;
             let regPassword = document.getElementById("registerPassword").value;
             let confirmRegPassword = document.getElementById("confirmRegisterPassword").value;
-            if (!regUsername || !confirmRegUsername || !regPassword || !confirmRegPassword) {
-                alert("Por favor llena todos los campos.");
-                return;
-            }
-            if (regUsername !== confirmRegUsername) {
-                alert("Usuarios no coinciden. Intenta de nuevo.");
+            let errorDiv = document.getElementById("registerError");
+            if (!regUsername || !regPassword || !confirmRegPassword) {
+                errorDiv.innerText = "Por favor, llena todos los campos";
                 return;
             }
             if (regPassword !== confirmRegPassword) {
-                alert("Contrasenas no coinciden. Intenta de nuevo.");
+                errorDiv.innerText = "Las contrasenas no coinciden";
                 return;
             }
-            alert("Usuario registrado exitosamente!");
+            errorDiv.innerText = "";
             document.getElementById("registerForm").style.display = "none";
             this.showRegisterScreen = false;
             this.showLoginScreen = true;
@@ -504,7 +604,15 @@ class Game{
         this.mainMap = false;
         this.dialogueStage = 0;
         this.tutorialWasShown = false;
+        this.showInventory = false;
         this.initObjects();
+
+        playerStats.level = 0;
+        playerStats.life = 100;
+        playerStats.rupees = 0;
+        playerStats.potions = 0;
+        playerStats.arrows = 0;
+        playerStats.bombs = 0;
     }
 }
 
@@ -513,11 +621,13 @@ class Game{
 function main() {
     // Get a reference to the object with id 'canvas' in the page
     const canvas = document.getElementById('canvas');
+    const uiCanvas = document.getElementById("uiCanvas");
     // Resize the element
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;
     // Get the context for drawing in 2D
-    ctx = canvas.getContext('2d');
+    ctx = canvas.getContext('2d')
+    uiCtx = uiCanvas.getContext("2d");
 
     // Create the game object
     game = new Game();
@@ -536,10 +646,29 @@ function drawScene(newTime) {
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
     game.draw(ctx);
+    drawUI();
     game.update(deltaTime);
 
     oldTime = newTime;
     requestAnimationFrame(drawScene);
+}
+function drawUI() {
+    uiCtx.clearRect(0, 0, canvasWidth, 60);
+    uiCtx.fillStyle = "white";
+    uiCtx.font = "20px Arial";
+    uiCtx.textAlign = "left";
+
+    // Draw stats with icons
+    uiCtx.drawImage(rupeeImg, 120, 80, 16, 32);
+    uiCtx.fillText(`x${playerStats.rupees}`, 140, 100);
+
+    uiCtx.drawImage(heartImg, 30, 80, 16, 32);
+    uiCtx.fillText(`x${playerStats.life}`, 50, 100);
+
+    uiCtx.drawImage(potionImg, 210, 80, 16, 32);
+    uiCtx.fillText(`x${playerStats.potions}`, 230, 100);
+
+    uiCtx.fillText(`LEVEL - ${playerStats.level}`, 100, 60);
 }
 function drawPauseMenu(ctx) {
     ctx.save();
