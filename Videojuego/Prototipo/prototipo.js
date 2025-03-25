@@ -36,6 +36,7 @@ const arrowImg = new Image();
 arrowImg.src = "../Videojuego/Assets/GameAssets/Weapons/Arrow_2.png";
 const bombIcon = new Image();
 bombIcon.src = "../Videojuego/Assets/GameAssets/Weapons/Bomb_1.png";
+
 let playerStats = {
     level: 0,
     life: 100,
@@ -44,6 +45,7 @@ let playerStats = {
     arrows: 0,
     bombs: 0
 };
+
 function getWallBoxes(layoutName) {
     const wallBoxes = [];
     const layout = processedFloors[layoutName];
@@ -63,6 +65,293 @@ function getWallBoxes(layoutName) {
     return wallBoxes;
 }
 
+class Boss extends AnimatedObject{
+    constructor(position, width, height) {
+        super("#000000", width, height, position.x, position.y, "bat");
+        this.position = new Vec(position.x, position.y);
+        this.velocity = new Vec(0, 0);
+        this.sprites = {
+            "attackBoss": ["../Videojuego/Assets/GameAssets/Bosses/boss_Dragon/Boss1-1.png","../Videojuego/Assets/GameAssets/Bosses/boss_Dragon/Boss1-2.png","../Videojuego/Assets/GameAssets/Bosses/boss_Dragon/Boss1-3.png", "../Videojuego/Assets/GameAssets/Bosses/boss_Dragon/Boss1-4.png"]
+        };
+        this.currentDirection = "fly";
+        this.frameIndex = 0;
+        this.image = new Image();
+        this.image.src = this.sprites[this.currentDirection][this.frameIndex];
+        this.animationSpeed = 150;
+        this.lastFrameChange = 250;
+    }
+
+    update(deltaTime) {
+        if (gamePaused) return;
+
+        this.velocity = new Vec(1, 1);
+
+        // Update bat position
+        let nextPosition = this.position.plus(this.velocity.times(deltaTime));
+        this.position = nextPosition;
+
+        // Update bat animation
+        this.lastFrameChange += deltaTime;
+        if (this.lastFrameChange > this.animationSpeed) {
+            this.frameIndex = (this.frameIndex + 1) % 2;
+            this.image.src = this.sprites[this.currentDirection][this.frameIndex];
+            this.lastFrameChange = 0;
+        }
+
+        if (this.position.x + this.width > canvasWidth || this.position.x < 0) {
+            this.velocity.x = -this.velocity.x;
+        }
+        if (this.position.y + this.height > canvasHeight || this.position.y < 0) {
+            this.velocity.y = -this.velocity.y;
+        }
+    }
+
+    draw(ctx) {
+        ctx.save();
+        ctx.drawImage(this.image, this.position.x, this.position.y, this.width, this.height);
+        ctx.restore();
+    }
+}
+
+class Bat extends AnimatedObject {
+    constructor(position, width, height) {
+        super("#000000", width, height, position.x, position.y, "bat");
+        this.position = new Vec(position.x, position.y);
+        this.velocity = new Vec(0, 0);
+        this.sprites = {
+            "fly": ["..\Videojuego\Assets\GameAssets\Enemies\enemy_Bat\Bat-1.png","..\Videojuego\Assets\GameAssets\Enemies\enemy_Bat\Bat-2.png"],
+        };
+        this.currentDirection = "fly";
+        this.frameIndex = 0;
+        this.image = new Image();
+        this.image.src = this.sprites[this.currentDirection][this.frameIndex];
+        this.animationSpeed = 150;
+        this.lastFrameChange = 250;
+    }
+
+    update(deltaTime) {
+        if (gamePaused) return;
+
+        this.velocity = new Vec(1, 1);
+
+        // Update bat position
+        let nextPosition = this.position.plus(this.velocity.times(deltaTime));
+        this.position = nextPosition;
+
+        // Update bat animation
+        this.lastFrameChange += deltaTime;
+        if (this.lastFrameChange > this.animationSpeed) {
+            this.frameIndex = (this.frameIndex + 1) % 2;
+            this.image.src = this.sprites[this.currentDirection][this.frameIndex];
+            this.lastFrameChange = 0;
+        }
+
+        if (this.position.x + this.width > canvasWidth || this.position.x < 0) {
+            this.velocity.x = -this.velocity.x;
+        }
+        if (this.position.y + this.height > canvasHeight || this.position.y < 0) {
+            this.velocity.y = -this.velocity.y;
+        }
+    }
+
+    draw(ctx) {
+        ctx.save();
+        ctx.drawImage(this.image, this.position.x, this.position.y, this.width, this.height);
+        ctx.restore();
+    }
+}
+
+class Knight extends AnimatedObject{
+    constructor(position, width, height) {
+        super("#000000", width, height, position.x, position.y, "bat");
+        this.position = new Vec(position.x, position.y);
+        this.velocity = new Vec(0, 0);
+        this.sprites = {
+            "attackKnight": ["..\Videojuego\Assets\GameAssets\Enemies\enemy_Knight\Knight-1.png","..\Videojuego\Assets\GameAssets\Enemies\enemy_Bat\Knight-2.png","..\Videojuego\Assets\GameAssets\Enemies\enemy_Bat\Knight-3.png"],
+        };
+        this.currentDirection = "attackKnight";
+        this.frameIndex = 0;
+        this.image = new Image();
+        this.image.src = this.sprites[this.currentDirection][this.frameIndex];
+        this.animationSpeed = 150;
+        this.lastFrameChange = 250;
+    }
+
+    update(deltaTime) {
+        if (gamePaused) return;
+
+        this.velocity = new Vec(1, 1);
+
+        // Update bat position
+        let nextPosition = this.position.plus(this.velocity.times(deltaTime));
+        this.position = nextPosition;
+
+        // Update bat animation
+        this.lastFrameChange += deltaTime;
+        if (this.lastFrameChange > this.animationSpeed) {
+            this.frameIndex = (this.frameIndex + 1) % 2;
+            this.image.src = this.sprites[this.currentDirection][this.frameIndex];
+            this.lastFrameChange = 0;
+        }
+
+        if (this.position.x + this.width > canvasWidth || this.position.x < 0) {
+            this.velocity.x = -this.velocity.x;
+        }
+        if (this.position.y + this.height > canvasHeight || this.position.y < 0) {
+            this.velocity.y = -this.velocity.y;
+        }
+    }
+
+    draw(ctx) {
+        ctx.save();
+        ctx.drawImage(this.image, this.position.x, this.position.y, this.width, this.height);
+        ctx.restore();
+    }
+}
+
+class Mage extends AnimatedObject{
+    constructor(position, width, height) {
+        super("#000000", width, height, position.x, position.y, "bat");
+        this.position = new Vec(position.x, position.y);
+        this.velocity = new Vec(0, 0);
+        this.sprites = {
+            "attackMage": ["..\Videojuego\Assets\GameAssets\Enemies\enemy_Mage\Mage-1.png","..\Videojuego\Assets\GameAssets\Enemies\enemy_Bat\Mage-2.png"],
+        };
+        this.currentDirection = "attackMage";
+        this.frameIndex = 0;
+        this.image = new Image();
+        this.image.src = this.sprites[this.currentDirection][this.frameIndex];
+        this.animationSpeed = 150;
+        this.lastFrameChange = 250;
+    }
+
+    update(deltaTime) {
+        if (gamePaused) return;
+
+        this.velocity = new Vec(1, 1);
+
+        // Update bat position
+        let nextPosition = this.position.plus(this.velocity.times(deltaTime));
+        this.position = nextPosition;
+
+        // Update bat animation
+        this.lastFrameChange += deltaTime;
+        if (this.lastFrameChange > this.animationSpeed) {
+            this.frameIndex = (this.frameIndex + 1) % 2;
+            this.image.src = this.sprites[this.currentDirection][this.frameIndex];
+            this.lastFrameChange = 0;
+        }
+
+        if (this.position.x + this.width > canvasWidth || this.position.x < 0) {
+            this.velocity.x = -this.velocity.x;
+        }
+        if (this.position.y + this.height > canvasHeight || this.position.y < 0) {
+            this.velocity.y = -this.velocity.y;
+        }
+    }
+
+    draw(ctx) {
+        ctx.save();
+        ctx.drawImage(this.image, this.position.x, this.position.y, this.width, this.height);
+        ctx.restore();
+    }
+}
+
+class Skull extends AnimatedObject{
+    constructor(position, width, height) {
+        super("#000000", width, height, position.x, position.y, "bat");
+        this.position = new Vec(position.x, position.y);
+        this.velocity = new Vec(0, 0);
+        this.sprites = {
+            "attackMage": ["..\Videojuego\Assets\GameAssets\Enemies\enemy_Skull\Skull.png"]
+        };
+        this.currentDirection = "attackSkull";
+        this.frameIndex = 0;
+        this.image = new Image();
+        this.image.src = this.sprites[this.currentDirection][this.frameIndex];
+        this.animationSpeed = 150;
+        this.lastFrameChange = 250;
+    }
+
+    update(deltaTime) {
+        if (gamePaused) return;
+
+        this.velocity = new Vec(1, 1);
+
+        // Update bat position
+        let nextPosition = this.position.plus(this.velocity.times(deltaTime));
+        this.position = nextPosition;
+
+        // Update bat animation
+        this.lastFrameChange += deltaTime;
+        if (this.lastFrameChange > this.animationSpeed) {
+            this.frameIndex = (this.frameIndex + 1) % 2;
+            this.image.src = this.sprites[this.currentDirection][this.frameIndex];
+            this.lastFrameChange = 0;
+        }
+
+        if (this.position.x + this.width > canvasWidth || this.position.x < 0) {
+            this.velocity.x = -this.velocity.x;
+        }
+        if (this.position.y + this.height > canvasHeight || this.position.y < 0) {
+            this.velocity.y = -this.velocity.y;
+        }
+    }
+
+    draw(ctx) {
+        ctx.save();
+        ctx.drawImage(this.image, this.position.x, this.position.y, this.width, this.height);
+        ctx.restore();
+    }
+}
+
+class Slime extends AnimatedObject{
+    constructor(position, width, height) {
+        super("#000000", width, height, position.x, position.y, "bat");
+        this.position = new Vec(position.x, position.y);
+        this.velocity = new Vec(0, 0);
+        this.sprites = {
+            "attackSlime": ["..\Videojuego\Assets\GameAssets\Enemies\enemy_Slime\Slime-1.png","..\Videojuego\Assets\GameAssets\Enemies\enemy_Slime\Slime-2.png"]
+        };
+        this.currentDirection = "attackSlime";
+        this.frameIndex = 0;
+        this.image = new Image();
+        this.image.src = this.sprites[this.currentDirection][this.frameIndex];
+        this.animationSpeed = 150;
+        this.lastFrameChange = 250;
+    }
+
+    update(deltaTime) {
+        if (gamePaused) return;
+
+        this.velocity = new Vec(1, 1);
+
+        // Update bat position
+        let nextPosition = this.position.plus(this.velocity.times(deltaTime));
+        this.position = nextPosition;
+
+        // Update bat animation
+        this.lastFrameChange += deltaTime;
+        if (this.lastFrameChange > this.animationSpeed) {
+            this.frameIndex = (this.frameIndex + 1) % 2;
+            this.image.src = this.sprites[this.currentDirection][this.frameIndex];
+            this.lastFrameChange = 0;
+        }
+
+        if (this.position.x + this.width > canvasWidth || this.position.x < 0) {
+            this.velocity.x = -this.velocity.x;
+        }
+        if (this.position.y + this.height > canvasHeight || this.position.y < 0) {
+            this.velocity.y = -this.velocity.y;
+        }
+    }
+
+    draw(ctx) {
+        ctx.save();
+        ctx.drawImage(this.image, this.position.x, this.position.y, this.width, this.height);
+        ctx.restore();
+    }
+}
 class Bomb {
     constructor(position) {
         this.position = position;
@@ -117,6 +406,9 @@ class Player extends AnimatedObject{
             "attackMagicDown": "../Videojuego/Assets/GameAssets/Magical_rod/Magical_rod_4.png",
             "attackMagicRight": "../Videojuego/Assets/GameAssets/Magical_rod/Magical_rod_8.png",
             "attackMagicUp": "../Videojuego/Assets/GameAssets/Magical_rod/Magical_rod_12.png",
+            "attackBowDown": [],
+            "attackBowRight": [],
+            "attackBowUp": [],
         };
         this.currentDirection = "up";
         this.facingLeft = false;
