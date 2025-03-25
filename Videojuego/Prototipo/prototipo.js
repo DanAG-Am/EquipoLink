@@ -352,6 +352,7 @@ class Slime extends AnimatedObject{
         ctx.restore();
     }
 }
+
 class Bomb {
     constructor(position) {
         this.position = position;
@@ -406,9 +407,9 @@ class Player extends AnimatedObject{
             "attackMagicDown": "../Videojuego/Assets/GameAssets/Magical_rod/Magical_rod_4.png",
             "attackMagicRight": "../Videojuego/Assets/GameAssets/Magical_rod/Magical_rod_8.png",
             "attackMagicUp": "../Videojuego/Assets/GameAssets/Magical_rod/Magical_rod_12.png",
-            "attackBowDown": [],
-            "attackBowRight": [],
-            "attackBowUp": [],
+            "attackBowDown": "../Videojuego/Assets/GameAssets/Bow/bow_down.png",
+            "attackBowRight": "../Videojuego/Assets/GameAssets/Bow/bow_right.png",
+            "attackBowUp": "../Videojuego/Assets/GameAssets/Bow/bow_up.png"
         };
         this.currentDirection = "up";
         this.facingLeft = false;
@@ -420,6 +421,7 @@ class Player extends AnimatedObject{
         this.shieldActive = false;
         this.swordActive = false;
         this.magicActive = false; 
+        this.bowActive = false;
     }   
 
     update(deltaTime) {
@@ -472,6 +474,9 @@ class Player extends AnimatedObject{
         } else if (this.magicActive && this.currentDirection === "left") {
             ctx.scale(-1, 1);
             drawX = -this.position.x - this.width;
+        } else if (this.bowActive && this.currentDirection === "left") {
+            ctx.scale(-1, 1);
+            drawX = -this.position.x - this.width;
         } else if (flip) {
             ctx.scale(-1, 1);
             drawX = -this.position.x - this.width;
@@ -501,7 +506,25 @@ class Player extends AnimatedObject{
                 magicImage.src = this.sprites["attackMagicRight"];
             }
             ctx.drawImage(magicImage, drawX, drawY, this.width, this.height);
-        } else {
+        } 
+        else if (this.bowActive){
+            let bowImage = new Image();
+            if (this.currentDirection === "up") {
+                bowImage.src = this.sprites["attackBowUp"];
+            } 
+            else if (this.currentDirection === "down") {
+                bowImage.src = this.sprites["attackBowDown"];
+            } 
+            else if (this.currentDirection === "right") {
+                bowImage.src = this.sprites["attackBowRight"];
+            }
+            else if (this.currentDirection === "left") {
+                bowImage.src = this.sprites["attackBowRight"];
+            }
+            ctx.drawImage(bowImage, drawX, drawY, this.width, this.height);
+        }
+            
+        else {
             ctx.drawImage(this.image, drawX, drawY, this.width, this.height);
         }
     
@@ -525,6 +548,9 @@ class Player extends AnimatedObject{
     }
     toggleBomb(active){
         this.bombActive = active; // Set whether the bomb is active or not
+    }
+    toggleBow(active){
+        this.bowActive = active; // Set whether the bow is active or not
     }
 }
 
@@ -829,6 +855,9 @@ class Game{
                 else if(event.key=="c"){
                     this.player.toggleMagic(true);  
                 }
+                else if(event.key == "x"){
+                    this.player.toggleBow(true);  // Disable shield
+                }
                 else if (event.key == "a") {
                     if (playerStats.bombs > 0) {
                         playerStats.bombs--;
@@ -867,6 +896,9 @@ class Game{
                 }
                 else if(event.key=="c"){
                     this.player.toggleMagic(false);  
+                }
+                else if(event.key == "x"){
+                    this.player.toggleBow(false);  // Disable shield
                 }
             }
         });
