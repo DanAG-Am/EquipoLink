@@ -8,14 +8,23 @@
 "use strict";
 
 const canvasWidth = 800;
-const canvasHeight = 600;
+const canvasHeight = 608;
 let ctx, uiCtx, game;
 let oldTime;
-let playerSpeed = 0.25;
+let playerSpeed = 0.15;
 let showUI = false;
 let gamePaused = false;
-const bottomBar1 = new GameObject(new Vec(0, canvasHeight - 20), canvasWidth / 2 - 50, 20, "orange", "obstacle");
-const bottomBar2 = new GameObject(new Vec(canvasWidth / 2 + 50, canvasHeight - 20), canvasWidth / 2 - 50, 20, "orange", "obstacle");
+//tiles
+const tileSize = 32;
+const processedFloors = {};
+const floorTile1 = new Image();
+floorTile1.src = "../Videojuego/Assets/GameAssets/Map/Floor/floor_Tile.png";
+const floorTile2 = new Image();
+floorTile2.src = "../Videojuego/Assets/GameAssets/Map/Floor/floor_Tile2.png";
+const floorDoor = new Image();
+floorDoor.src = "../Videojuego/Assets/GameAssets/Map/Floor/floor_Void.png";
+const wallTile = new Image();
+wallTile.src = "../Videojuego/Assets/GameAssets/Map/Floor/floor_Block.png";
 //ui Images
 const rupeeImg = new Image();
 rupeeImg.src = "../Videojuego/Assets/GameAssets/Pickup/pickup_Rupee1.png";
@@ -35,6 +44,24 @@ let playerStats = {
     arrows: 0,
     bombs: 0
 };
+function getWallBoxes(layoutName) {
+    const wallBoxes = [];
+    const layout = processedFloors[layoutName];
+    if (!layout) return wallBoxes;
+
+    for (let y = 0; y < layout.length; y++) {
+        for (let x = 0; x < layout[y].length; x++) {
+            if (layout[y][x] === 'wall') {
+                wallBoxes.push({
+                    position: new Vec(x * tileSize, y * tileSize),
+                    width: tileSize,
+                    height: tileSize
+                });
+            }
+        }
+    }
+    return wallBoxes;
+}
 
 class Bomb {
     constructor(position) {
@@ -115,7 +142,15 @@ class Player extends AnimatedObject{
             width: this.width,
             height: this.height
         };
-        if (!boxOverlap(futureBox, game.oldManBox)) {
+        let collidesWithWall = false;
+        const wallBoxes = getWallBoxes("mainMap");
+        for (let wall of wallBoxes) {
+            if (boxOverlap(futureBox, wall)) {
+                collidesWithWall = true;
+                break;
+            }
+        }
+        if (!collidesWithWall && !boxOverlap(futureBox, game.oldManBox)) {
             this.position = nextPosition;
         }
 
@@ -224,7 +259,7 @@ class Game{
         this.oldManRight.src = "../Videojuego/Assets/GameAssets/NPC/Old_man_2.png";
         this.oldManBack = new Image();
         this.oldManBack.src = "../Videojuego/Assets/GameAssets/NPC/Old_man_3.png";
-        this.oldManPosition = new Vec(canvasWidth / 2 - 14, 200);
+        this.oldManPosition = new Vec(canvasWidth / 2 - 16, 200);
         this.oldManBox = {
             position: new Vec(this.oldManPosition.x, this.oldManPosition.y),
             width: 32,
@@ -273,12 +308,13 @@ class Game{
             // Dibujar el formulario
             document.getElementById("registerForm").style.display = "block";
         } else if (this.showPrologue){
+            drawBackground("prologue", ctx);
             // Dibujar el cuadro del prólogo
             ctx.fillStyle = "black";
-            ctx.fillRect(canvasWidth / 2 - 340, canvasHeight / 2 - 180, canvasWidth / 4 + 480, canvasHeight / 2 + 70);
+            ctx.fillRect(canvasWidth / 2 - 300, canvasHeight / 2 - 180, canvasWidth / 4 + 400, canvasHeight / 2 + 70);
             ctx.strokeStyle = "white";
             ctx.lineWidth = 2;
-            ctx.strokeRect(canvasWidth / 2 - 340, canvasHeight / 2 - 180, canvasWidth / 4 + 480, canvasHeight / 2 + 70);
+            ctx.strokeRect(canvasWidth / 2 - 300, canvasHeight / 2 - 180, canvasWidth / 4 + 400, canvasHeight / 2 + 70);
             // Dibujar el texto del prólogo
             ctx.fillStyle = "white";
             ctx.font = "40px Arial";
@@ -303,14 +339,12 @@ class Game{
             ctx.font = "20px Arial";
             ctx.fillText("Presiona Enter para continuar", canvasWidth / 2, canvasHeight / 4 + canvasHeight / 2 + 70);
         } else if (this.mainMap){
+            drawBackground("mainMap", ctx);
             // Dibuja el hombre viejo
             ctx.drawImage(this.oldMan, this.oldManPosition.x, this.oldManPosition.y, 32, 32);
             this.bombs.forEach(b => b.draw(ctx));
             // Dibuja el jugador
             this.player.draw(ctx);
-            // Dibuja la puerta
-            bottomBar1.draw(ctx);
-            bottomBar2.draw(ctx);
             if (this.dialogueStage < 5) {
                 this.drawDialogue(ctx);
                 // Mensaje para continuar
@@ -402,31 +436,31 @@ class Game{
         });
 
         ctx.font = "20px Arial";
-        ctx.fillText("Presiona Enter para continuar", canvasWidth / 2, 530);
+        ctx.fillText("Presiona T para continuar", canvasWidth / 2, 530);
     }
 
     drawInventory(ctx) {
         ctx.save();
         ctx.fillStyle = "black";
         ctx.globalAlpha = 0.9;
-        ctx.fillRect(canvasWidth / 2 - 150, canvasHeight / 2 - 100, 300, 200);
+        ctx.fillRect(canvasWidth / 2 - 150, canvasHeight / 2 + 80, 300, 180);
         ctx.globalAlpha = 1;
         ctx.strokeStyle = "white";
         ctx.lineWidth = 2;
-        ctx.strokeRect(canvasWidth / 2 - 150, canvasHeight / 2 - 100, 300, 200);
+        ctx.strokeRect(canvasWidth / 2 - 150, canvasHeight / 2 + 80, 300, 180);
     
         ctx.fillStyle = "white";
         ctx.font = "20px Arial";
         ctx.textAlign = "center";
-        ctx.fillText("Inventario", canvasWidth / 2, canvasHeight / 2 - 60);
+        ctx.fillText("Inventario", canvasWidth / 2, canvasHeight / 2 + 110);
     
-        ctx.drawImage(arrowImg, canvasWidth / 2 - 40, canvasHeight / 2 - 30, 24, 48);
-        ctx.fillText(`x${playerStats.arrows}`, canvasWidth / 2 + 20, canvasHeight / 2);
-        ctx.drawImage(bombIcon, canvasWidth / 2 - 40, canvasHeight / 2 + 10, 24, 48);
-        ctx.fillText(`x${playerStats.bombs}`, canvasWidth / 2 + 20, canvasHeight / 2 + 50);
+        ctx.drawImage(arrowImg, canvasWidth / 2 - 40, canvasHeight / 2 + 120, 24, 48);
+        ctx.fillText(`x${playerStats.arrows}`, canvasWidth / 2 + 20, canvasHeight / 2 + 150);
+        ctx.drawImage(bombIcon, canvasWidth / 2 - 40, canvasHeight / 2 + 160, 24, 48);
+        ctx.fillText(`x${playerStats.bombs}`, canvasWidth / 2 + 20, canvasHeight / 2 + 200);
     
         ctx.font = "16px Arial";
-        ctx.fillText("Presiona I para cerrar", canvasWidth / 2, canvasHeight / 2 + 90);
+        ctx.fillText("Presiona I para cerrar", canvasWidth / 2, canvasHeight / 2 + 250);
     
         ctx.restore();
     }
@@ -462,7 +496,7 @@ class Game{
                 this.tutorialWasShown = true;
                 return;
             }
-            if (this.showTutorial && event.key === 'Enter') {
+            if (this.showTutorial && event.key === 't') {
                 this.showTutorial = false;
                 return;
             }
@@ -474,7 +508,7 @@ class Game{
                 this.showInventory = false;
                 return;
             }
-            if (event.key === 'i' && this.mainMap && !this.showInventory && !this.showTutorial) {
+            if (event.key === 'i' && !this.showInventory && !this.showTutorial) {
                 this.showInventory = true;
                 return;
             }
@@ -616,6 +650,48 @@ class Game{
     }
 }
 
+function processBackgroundLayout(layoutName) {
+    const layout = BACKGROUND_LAYOUTS[layoutName];
+    const result = [];
+    for (let y = 0; y < layout.length; y++) {
+        const row = [];
+        for (let x = 0; x < layout[y].length; x++) {
+            const char = layout[y][x];
+            if (char === '#') {
+                row.push('wall');
+            } else if (char === '-') {
+                row.push('door');
+            } else {
+                const rand = Math.random();
+                row.push(rand < 0.1 ? 'floor1' : 'floor2');
+            }
+        }
+        result.push(row);
+    }
+    processedFloors[layoutName] = result;
+}
+
+function drawBackground(layoutName, ctx) {
+    const layout = BACKGROUND_LAYOUTS[layoutName];
+    const floorData = processedFloors[layoutName];
+    if (!layout || !floorData) return;
+    for (let y = 0; y < layout.length; y++) {
+        for (let x = 0; x < layout[y].length; x++) {
+            const type = floorData[y][x];
+            const posX = x * tileSize;
+            const posY = y * tileSize;
+            if (type === 'wall') {
+                ctx.drawImage(wallTile, posX, posY, tileSize, tileSize);
+            } else if (type === 'floor1') {
+                ctx.drawImage(floorTile1, posX, posY, tileSize, tileSize);
+            } else if (type === 'floor2') {
+                ctx.drawImage(floorTile2, posX, posY, tileSize, tileSize);
+            } else if (type === 'door') {
+                ctx.drawImage(floorDoor, posX, posY, tileSize, tileSize);
+            }
+        }
+    }
+}
 
 // Starting function that will be called from the HTML page
 function main() {
@@ -628,6 +704,9 @@ function main() {
     // Get the context for drawing in 2D
     ctx = canvas.getContext('2d')
     uiCtx = uiCanvas.getContext("2d");
+
+    processBackgroundLayout("prologue");
+    processBackgroundLayout("mainMap");
 
     // Create the game object
     game = new Game();
