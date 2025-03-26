@@ -39,9 +39,9 @@ const bombIcon = new Image();
 bombIcon.src = "../Videojuego/Assets/GameAssets/Weapons/Bomb_1.png";
 
 const chestClosed = new Image();
-chestClosed.src = "..\Videojuego\Assets\GameAssets\Chest\chest_closed.png";
+chestClosed.src = "../Videojuego/Assets/GameAssets/Chest/chest_closed.png";
 const chestOpened = new Image();
-chestOpened.src = "..\Videojuego\Assets\GameAssets\Chest\chest_open.png";
+chestOpened.src = "../Videojuego/Assets/GameAssets/Chest/chest_open.png";
 
 let playerStats = {
     level: 0,
@@ -52,7 +52,8 @@ let playerStats = {
     bombs: 0
 };
 
-function getWallBoxes(layoutName) {
+function getWallBoxes() {
+    const layoutName = game.mainMap ? "mainMap" : game.level ? "levelClosed" : null;
     const wallBoxes = [];
     const layout = processedFloors[layoutName];
     if (!layout) return wallBoxes;
@@ -414,7 +415,7 @@ class Player extends AnimatedObject{
             "attackMagicRight": "../Videojuego/Assets/GameAssets/Magical_rod/Magical_rod_8.png",
             "attackMagicUp": "../Videojuego/Assets/GameAssets/Magical_rod/Magical_rod_12.png",
             "attackBowDown": "../Videojuego/Assets/GameAssets/Bow/bow_down.png",
-            "attackBowRight": "../Videojuego/Assets/GameAssets/Bow/bow_right.png",
+            "attackBowLeft": "../Videojuego/Assets/GameAssets/Bow/bow_left.png",
             "attackBowUp": "../Videojuego/Assets/GameAssets/Bow/bow_up.png"
         };
         this.currentDirection = "up";
@@ -450,7 +451,11 @@ class Player extends AnimatedObject{
                 break;
             }
         }
-        if (!collidesWithWall && !boxOverlap(futureBox, game.oldManBox)) {
+        let collidesWithOldMan = false;
+        if (game.mainMap) {
+            collidesWithOldMan = boxOverlap(futureBox, game.oldManBox);
+        }
+        if (!collidesWithWall && !collidesWithOldMan) {
             this.position = nextPosition;
         }
 
@@ -522,10 +527,10 @@ class Player extends AnimatedObject{
                 bowImage.src = this.sprites["attackBowDown"];
             } 
             else if (this.currentDirection === "right") {
-                bowImage.src = this.sprites["attackBowRight"];
+                bowImage.src = this.sprites["attackBowLeft"];
             }
             else if (this.currentDirection === "left") {
-                bowImage.src = this.sprites["attackBowRight"];
+                bowImage.src = this.sprites["attackBowLeft"];
             }
             ctx.drawImage(bowImage, drawX, drawY, this.width, this.height);
         }
@@ -571,6 +576,8 @@ class Game{
         this.showLoginScreen = false;
         this.showRegisterScreen = false;
         this.mainMap = false;
+        this.level = false;
+        this.enteredLevel = false;
         this.dialogueStage = 0;
         this.showTutorial = false;
         this.tutorialWasShown = false;
@@ -684,11 +691,35 @@ class Game{
             if (this.player.position.y + this.player.height >= canvasHeight &&
                 this.player.position.x >= canvasWidth / 2 - 50 &&
                 this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
-                    alert("You have left the cave. The demo game is over.");
-                    this.resetGame();
+                    this.mainMap = false;
+                    this.level = true;
+                    this.player.position = new Vec(canvasWidth / 2 - 16, tileSize);
+                    playerStats.level += 1;
             }
             if (this.showInventory) {
                 this.drawInventory(ctx);
+            }
+        } else if (this.level){
+            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+            drawBackground("levelClosed", ctx);
+            // Dibuja bombas
+            this.bombs.forEach(b => b.draw(ctx));
+            // Dibuja el jugador
+            this.player.draw(ctx);
+            // Dibuja el inventario y tutorial si está abierto
+            if (this.showInventory) {
+                this.drawInventory(ctx);
+            } else if (this.showTutorial) {
+                this.drawTutorial(ctx);
+            }
+            if (this.player.position.y <= 0 &&
+                this.player.position.x >= canvasWidth / 2 - 50 &&
+                this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
+                    
+                this.level = false;
+                this.mainMap = true;
+                this.player.position = new Vec (canvasWidth / 2 - 16, canvasHeight - tileSize);
+                playerStats.level -= 1;
             }
         } else {
             for (let actor of this.actors){
@@ -839,7 +870,7 @@ class Game{
                 this.showInventory = true;
                 return;
             }
-            if (this.mainMap && this.dialogueStage >= 5 && !this.showTutorial) {
+            if ((this.mainMap || this.level) && this.dialogueStage >= 5 && !this.showTutorial) {
                 if (event.key == 'ArrowUp') {
                     this.player.velocity.y = -playerSpeed;
                     this.player.setDirection("up");
@@ -894,7 +925,7 @@ class Game{
         });
 
         window.addEventListener('keyup', (event) => {
-            if (this.mainMap && !this.showTutorial) {
+            if ((this.mainMap || this.level) && !this.showTutorial) {
                 if (event.key == 'ArrowUp' || event.key == 'ArrowDown') {
                     this.player.velocity.y = 0;
                 } else if (event.key == 'ArrowLeft' || event.key == 'ArrowRight') {
@@ -1006,7 +1037,6 @@ function processBackgroundLayout(layoutName) {
     }
     processedFloors[layoutName] = result;
 }
-
 function drawBackground(layoutName, ctx) {
     const layout = BACKGROUND_LAYOUTS[layoutName];
     const floorData = processedFloors[layoutName];
@@ -1043,6 +1073,7 @@ function main() {
 
     processBackgroundLayout("prologue");
     processBackgroundLayout("mainMap");
+    processBackgroundLayout("levelClosed");
 
     // Create the game object
     game = new Game();
