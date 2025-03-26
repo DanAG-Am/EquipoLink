@@ -14,6 +14,7 @@ let oldTime;
 let playerSpeed = 0.15;
 let showUI = false;
 let gamePaused = false;
+let interactingNPC = false;
 //tiles
 const tileSize = 32;
 const processedFloors = {};
@@ -36,6 +37,11 @@ const arrowImg = new Image();
 arrowImg.src = "../Videojuego/Assets/GameAssets/Weapons/Arrow_2.png";
 const bombIcon = new Image();
 bombIcon.src = "../Videojuego/Assets/GameAssets/Weapons/Bomb_1.png";
+
+const chestClosed = new Image();
+chestClosed.src = "..\Videojuego\Assets\GameAssets\Chest\chest_closed.png";
+const chestOpened = new Image();
+chestOpened.src = "..\Videojuego\Assets\GameAssets\Chest\chest_open.png";
 
 let playerStats = {
     level: 0,
@@ -693,6 +699,9 @@ class Game{
         if (gamePaused) {
             drawPauseMenu(ctx);
         }
+        if (interactingNPC){
+            drawNPCTutorial(ctx);
+        }
     }
 
     drawDialogue(ctx) {
@@ -878,6 +887,9 @@ class Game{
             }
             if (event.key === "Escape") {
                 gamePaused = !gamePaused;
+            }
+            if (event.key === " "){
+                interactingNPC = !interactingNPC;
             }
         });
 
@@ -1081,8 +1093,28 @@ function drawPauseMenu(ctx) {
     ctx.fillStyle = "white";
     ctx.font = "30px Arial";
     ctx.textAlign = "center";
-    ctx.fillText("PAUSED", canvasWidth / 2, canvasHeight / 2 - 50);
-    ctx.fillText("Press ESC to resume", canvasWidth / 2, canvasHeight / 2);
+    ctx.fillText("PAUSADO", canvasWidth / 2, canvasHeight / 2 - 50);
+    ctx.fillText("Presione ESC para continuar", canvasWidth / 2, canvasHeight / 2);
 
+    ctx.restore();
+}
+
+function drawNPCTutorial(ctx) {
+    ctx.save();
+    ctx.fillStyle = "rgba(146, 74, 39, 0.8)"; // light gray background
+    ctx.fillRect(canvasWidth / 2 - 150, canvasHeight - 100, 300, 200); // narrower and taller box
+    ctx.strokeStyle = "black"; // border color
+    ctx.lineWidth = 2; // border width
+    ctx.fillStyle = "black";
+    ctx.strokeRect(canvasWidth / 2 - 150, canvasHeight - 100, 300, 200); // draw border
+    ctx.fillStyle = "black";
+    ctx.font = "16px Arial"; // smaller font  size
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    const boxY = canvasHeight - 100;
+    const boxHeight = 200;
+    const textY = boxY + boxHeight - 170;
+    ctx.fillText("Corre, Sentinel. Una aventura te espera.", canvasWidth / 2, textY); // centered text inside the box
+    ctx.fillText("(presione space para cerrar)", canvasWidth / 2, textY + 40); // centered text inside the box
     ctx.restore();
 }
