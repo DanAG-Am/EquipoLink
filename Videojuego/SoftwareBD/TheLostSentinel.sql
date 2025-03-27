@@ -1,7 +1,7 @@
 CREATE DATABASE TheLostSentinel;
 USE TheLostSentinel;
 
-CREATE TABLE Mapa (
+CREATE TABLE Mapa(
 	id_mapa INT AUTO_INCREMENT,
 	nombre VARCHAR(50),
 	descripcion TEXT,
@@ -11,52 +11,29 @@ CREATE TABLE Mapa (
 	UNIQUE KEY (nombre)
 );
 
-CREATE TABLE Cuarto (
+CREATE TABLE Cuarto(
 	id_cuarto INT AUTO_INCREMENT,
 	id_mapa INT,
 	descripcion TEXT,
-	tipo ENUM('normal', 'con_npc', 'con_enemigo', 'tienda', 'reino_hada', 'tesoro', 'con_jefe'),
+	tipo ENUM('normal','con_npc','con_enemigo','tienda','reino_hada','tesoro','con_jefe'),
 	acceso_bloqueado BOOLEAN DEFAULT FALSE,
 	PRIMARY KEY (id_cuarto),
 	FOREIGN KEY (id_mapa) REFERENCES Mapa(id_mapa)
 );
 
-CREATE TABLE Cofre (
-	id_cofre INT AUTO_INCREMENT,
-	id_cuarto INT,
-	requiere_llave BOOLEAN DEFAULT FALSE,
-	abierto BOOLEAN DEFAULT FALSE,
-	PRIMARY KEY (id_cofre),
-	FOREIGN KEY (id_cuarto) REFERENCES Cuarto(id_cuarto)
-);
-
-CREATE TABLE Jugador (
-	id_jugador INT AUTO_INCREMENT,
-	id_cuarto INT,
-	nombre VARCHAR(50),
-	hp_actual INT CHECK (hp_actual BETWEEN 0 AND 100),
-	hp_max INT DEFAULT 100,
-	mp_actual INT CHECK (mp_actual BETWEEN 0 AND 100),
-	mp_max INT DEFAULT 100,
-	monedas INT CHECK (monedas >= 0),
-	llaves INT CHECK (llaves >= 0),
-	PRIMARY KEY (id_jugador),
-	FOREIGN KEY (id_cuarto) REFERENCES Cuarto(id_cuarto)
-);
-
-CREATE TABLE Objeto (
+CREATE TABLE Objeto(
 	id_objeto INT AUTO_INCREMENT,
 	nombre VARCHAR(50),
-	tipo ENUM('bomba', 'flecha', 'tech', 'pocion', 'moneda'),
+	tipo ENUM('bomba','tech','pocion','moneda'),
 	efecto TEXT,
 	stackable BOOLEAN,
 	precio INT,
 	PRIMARY KEY (id_objeto)
 );
 
-CREATE TABLE Arma (
+CREATE TABLE Arma(
 	id_arma INT,
-	tipo ENUM('espada', 'arco', 'barita_magica', 'bomba'),
+	tipo ENUM('espada','arco','barita_magica','bomba'),
 	daño INT CHECK (daño >= 0),
 	radio_explosion INT,
 	alcance INT,
@@ -65,7 +42,23 @@ CREATE TABLE Arma (
 	FOREIGN KEY (id_arma) REFERENCES Objeto(id_objeto)
 );
 
-CREATE TABLE Inventario (
+CREATE TABLE Jugador(
+	id_jugador INT AUTO_INCREMENT,
+	id_cuarto INT,
+	usuario VARCHAR(50),
+	contrasena VARCHAR(50),
+	hp_actual INT CHECK (hp_actual BETWEEN 0 AND 100),
+	hp_max INT DEFAULT 100,
+	mp_actual INT CHECK (mp_actual BETWEEN 0 AND 100),
+	mp_max INT DEFAULT 100,
+	monedas INT CHECK (monedas >= 0),
+	llaves INT CHECK (llaves >= 0),
+	PRIMARY KEY (id_jugador),
+	UNIQUE KEY (usuario),
+	FOREIGN KEY (id_cuarto) REFERENCES Cuarto(id_cuarto)
+);
+
+CREATE TABLE Inventario(
 	id_inventario INT AUTO_INCREMENT,
 	id_jugador INT,
 	id_objeto INT,
@@ -75,7 +68,16 @@ CREATE TABLE Inventario (
 	FOREIGN KEY (id_objeto) REFERENCES Objeto(id_objeto)
 );
 
-CREATE TABLE Contenido_Cofre (
+CREATE TABLE Cofre(
+	id_cofre INT AUTO_INCREMENT,
+	id_cuarto INT,
+	requiere_llave BOOLEAN DEFAULT TRUE,
+	abierto BOOLEAN DEFAULT FALSE,
+	PRIMARY KEY (id_cofre),
+	FOREIGN KEY (id_cuarto) REFERENCES Cuarto(id_cuarto)
+);
+
+CREATE TABLE Contenido_Cofre(
 	id_contenido INT AUTO_INCREMENT,
 	id_cofre INT,
 	id_objeto INT,
@@ -85,29 +87,29 @@ CREATE TABLE Contenido_Cofre (
 	FOREIGN KEY (id_objeto) REFERENCES Objeto(id_objeto)
 );
 
-CREATE TABLE NPC (
+CREATE TABLE NPC(
 	id_npc INT AUTO_INCREMENT,
 	id_cuarto INT,
 	nombre VARCHAR(50),
-	rol ENUM('viejo', 'hada', 'mercantil'),
+	role ENUM('viejo','hada','mercantil'),
 	dialogo TEXT,
 	activo BOOLEAN,
 	intercambiable BOOLEAN,
 	PRIMARY KEY (id_npc),
-	FOREIGN KEY (id_cuarto) REFERENCES Cuarto(id_cuarto),
-	UNIQUE KEY (nombre)
-);
-
-CREATE TABLE Tienda (
-	id_tienda INT AUTO_INCREMENT,
-	id_shop INT,
-	id_cuarto INT,
-	PRIMARY KEY (id_tienda),
-	FOREIGN KEY (id_shop) REFERENCES NPC(id_npc),
+	UNIQUE KEY (nombre),
 	FOREIGN KEY (id_cuarto) REFERENCES Cuarto(id_cuarto)
 );
 
-CREATE TABLE Producto_Tienda (
+CREATE TABLE Tienda(
+	id_shop INT AUTO_INCREMENT,
+	id_npc INT,
+	id_cuarto INT,
+	PRIMARY KEY (id_shop),
+	FOREIGN KEY (id_npc) REFERENCES NPC(id_npc),
+	FOREIGN KEY (id_cuarto) REFERENCES Cuarto(id_cuarto)
+);
+
+CREATE TABLE Producto_Tienda(
 	id_producto_tienda INT AUTO_INCREMENT,
 	id_tienda INT,
 	id_objeto INT,
@@ -115,19 +117,19 @@ CREATE TABLE Producto_Tienda (
 	cantidad INT CHECK (cantidad >= 0),
 	stock_infinito BOOLEAN DEFAULT FALSE,
 	PRIMARY KEY (id_producto_tienda),
-	FOREIGN KEY (id_tienda) REFERENCES Tienda(id_tienda),
+	FOREIGN KEY (id_tienda) REFERENCES Tienda(id_shop),
 	FOREIGN KEY (id_objeto) REFERENCES Objeto(id_objeto)
 );
 
-CREATE TABLE Elemento_Cuarto (
+CREATE TABLE Elemento_Cuarto(
 	id_elemento INT AUTO_INCREMENT,
 	id_cuarto INT,
-	tipo ENUM('npc', 'enemigo', 'tienda', 'tesoro', 'jefe'),
+	tipo ENUM('npc','enemigo','tienda','tesoro','jefe'),
 	PRIMARY KEY (id_elemento),
 	FOREIGN KEY (id_cuarto) REFERENCES Cuarto(id_cuarto)
 );
 
-CREATE TABLE Enemigo (
+CREATE TABLE Enemigo(
 	id_enemigo INT AUTO_INCREMENT,
 	id_cuarto INT,
 	nombre VARCHAR(50),
@@ -141,28 +143,28 @@ CREATE TABLE Enemigo (
 	UNIQUE KEY (nombre)
 );
 
-CREATE TABLE Jefe (
+CREATE TABLE Jefe(
 	id_jefe INT AUTO_INCREMENT,
+	id_enemigo INT,
 	id_cuarto INT,
-	id_elemento INT,
 	nombre VARCHAR(50),
 	vida INT,
 	daño INT,
 	velocidad INT,
 	PRIMARY KEY (id_jefe),
-	FOREIGN KEY (id_cuarto) REFERENCES Cuarto(id_cuarto),
-	FOREIGN KEY (id_elemento) REFERENCES Elemento_Cuarto(id_elemento),
-	UNIQUE KEY (nombre)
+	UNIQUE KEY (nombre),
+	FOREIGN KEY (id_enemigo) REFERENCES Enemigo(id_enemigo),
+	FOREIGN KEY (id_cuarto) REFERENCES Cuarto(id_cuarto)
 );
 
-CREATE TABLE Accion (
+CREATE TABLE Accion(
 	id_accion INT AUTO_INCREMENT,
-	nombre ENUM('atacar_espada', 'disparar_flecha', 'dejar_bomba'),
+	nombre ENUM('atacar_espada','disparar_flecha','dejar_bomba'),
 	descripcion TEXT,
 	PRIMARY KEY (id_accion)
 );
 
-CREATE TABLE Jugador_Accion (
+CREATE TABLE Jugador_Accion(
 	id_jugador_accion INT AUTO_INCREMENT,
 	id_jugador INT,
 	id_accion INT,
