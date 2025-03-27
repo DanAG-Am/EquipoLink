@@ -23,6 +23,10 @@ class Vec {
         return new Vec(this.x * scalar, this.y * scalar);
     }
 
+    length() {
+        return Math.sqrt(this.x * this.x + this.y * this.y);
+    }
+
     magnitude() {
         return Math.sqrt(this.x ** 2 + this.y ** 2);
     }

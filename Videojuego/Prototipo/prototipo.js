@@ -46,6 +46,7 @@ chestOpened.src = "../Videojuego/Assets/GameAssets/Chest/chest_open.png";
 let playerStats = {
     level: 0,
     life: 100,
+    mana: 100,
     rupees: 0,
     potions: 0,
     arrows: 0,
@@ -360,6 +361,7 @@ class Slime extends AnimatedObject{
     }
 }
 
+// Clases de proyectiles
 class Bomb {
     constructor(position) {
         this.position = position;
@@ -394,6 +396,110 @@ class Bomb {
         if (this.alive) {
             ctx.drawImage(this.image, this.position.x, this.position.y, 32, 32);
         }
+    }
+}
+class Arrow {
+    constructor(position, direction) {
+        this.alive = true;
+        this.position = position;
+        this.direction = direction;
+        this.velocityArrow = 0.3;
+        this.distanceTraveled = 0;
+        this.maxDistance = tileSize * 10;
+        this.width = 32;
+        this.height = 32;
+
+        this.image = new Image();
+        if (direction === "up" || direction === "down") {
+            this.image.src = "../Videojuego/Assets/GameAssets/Weapons/Fire_arrow_1.png";
+        } else {
+            this.image.src = "../Videojuego/Assets/GameAssets/Weapons/Fire_arrow_2.png";
+        }
+
+        this.velocity = {
+            up: new Vec(0, -this.velocityArrow),
+            down: new Vec(0, this.velocityArrow),
+            left: new Vec(-this.velocityArrow, 0),
+            right: new Vec(this.velocityArrow, 0)
+        }[direction];
+    }
+
+    update(deltaTime) {
+        let movement = this.velocity.times(deltaTime);
+        this.position = this.position.plus(movement);
+        this.distanceTraveled += movement.length();
+
+        if (this.distanceTraveled >= this.maxDistance) {
+            this.alive = false;
+        }
+    }
+
+    draw(ctx) {
+        ctx.save();
+        let drawX = this.position.x;
+        let drawY = this.position.y;
+        if (this.direction === "left") {
+            ctx.scale(-1, 1);
+            drawX = -drawX - this.width;
+        }
+        if (this.direction === "down") {
+            ctx.scale(1, -1);
+            drawY = -drawY - this.height;
+        }
+        ctx.drawImage(this.image, drawX, drawY, this.width, this.height);
+        ctx.restore();
+    }
+}
+class Magic {
+    constructor(position, direction) {
+        this.alive = true;
+        this.position = position;
+        this.direction = direction;
+        this.velocityArrow = 0.3;
+        this.distanceTraveled = 0;
+        this.maxDistance = tileSize * 5;
+        this.width = 32;
+        this.height = 32;
+
+        this.image = new Image();
+        if (direction === "up" || direction === "down") {
+            this.image.src = "../Videojuego/Assets/GameAssets/Weapons/Magic_3.png";
+        } else {
+            this.image.src = "../Videojuego/Assets/GameAssets/Weapons/Magic_7.png";
+        }
+
+        this.velocity = {
+            up: new Vec(0, -this.velocityArrow),
+            down: new Vec(0, this.velocityArrow),
+            left: new Vec(-this.velocityArrow, 0),
+            right: new Vec(this.velocityArrow, 0)
+        }[direction];
+    }
+
+    update(deltaTime) {
+        let movement = this.velocity.times(deltaTime);
+        this.position = this.position.plus(movement);
+        this.distanceTraveled += movement.length();
+
+        if (this.distanceTraveled >= this.maxDistance) {
+            this.alive = false;
+        }
+    }
+
+    draw(ctx) {
+        ctx.save();
+        let drawX = this.position.x;
+        let drawY = this.position.y;
+        if (this.direction === "left") {
+            ctx.scale(-1, 1);
+            drawX = -drawX - this.width;
+        }
+        if (this.direction === "down") {
+            ctx.scale(1, -1);
+            drawY = -drawY - this.height;
+        }
+        ctx.drawImage(this.image, drawX, drawY, this.width, this.height);
+        ctx.restore();
     }
 }
 
@@ -597,6 +703,8 @@ class Game{
             height: 32
         };
         this.bombs = [];
+        this.arrows = [];
+        this.magics = [];
     }
 
     initObjects() {
@@ -674,6 +782,8 @@ class Game{
             // Dibuja el hombre viejo
             ctx.drawImage(this.oldMan, this.oldManPosition.x, this.oldManPosition.y, 32, 32);
             this.bombs.forEach(b => b.draw(ctx));
+            this.arrows.forEach(a => a.draw(ctx));
+            this.magics.forEach(m => m.draw(ctx));
             // Dibuja el jugador
             this.player.draw(ctx);
             if (this.dialogueStage < 5) {
@@ -685,6 +795,7 @@ class Game{
                 this.showTutorial = true;
                 this.tutorialWasShown = true;
                 playerStats.bombs = 10;
+                playerStats.arrows = 20;
             } else if (this.showTutorial) {
                 this.drawTutorial(ctx);
             }
@@ -693,7 +804,7 @@ class Game{
                 this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
                     this.mainMap = false;
                     this.level = true;
-                    this.player.position = new Vec(canvasWidth / 2 - 16, tileSize);
+                    this.player.position = new Vec(canvasWidth / 2 - 16, 0);
                     playerStats.level += 1;
             }
             if (this.showInventory) {
@@ -702,8 +813,10 @@ class Game{
         } else if (this.level){
             ctx.clearRect(0, 0, canvasWidth, canvasHeight);
             drawBackground("levelClosed", ctx);
-            // Dibuja bombas
+            // Dibuja proyectiles
             this.bombs.forEach(b => b.draw(ctx));
+            this.arrows.forEach(a => a.draw(ctx));
+            this.magics.forEach(m => m.draw(ctx));
             // Dibuja el jugador
             this.player.draw(ctx);
             // Dibuja el inventario y tutorial si está abierto
@@ -829,6 +942,10 @@ class Game{
                 actor.update(deltaTime);
             }
             this.player.update(deltaTime);
+            this.arrows.forEach(a => a.update(deltaTime));
+            this.arrows = this.arrows.filter(a => a.alive !== false);
+            this.magics.forEach(m => m.update(deltaTime));
+            this.magics = this.magics.filter(m => m.alive !== false);
         }
     }
 
@@ -893,12 +1010,39 @@ class Game{
                     this.player.toggleSword(true);  
                 }
                 else if(event.key=="c"){
-                    this.player.toggleMagic(true);  
+                    if (playerStats.mana > 0) {
+                        playerStats.mana -= 10;
+                        this.player.toggleMagic(true);
+                        
+                        let offset = new Vec(0, 0);
+                        if (this.player.currentDirection === "up") offset = new Vec(0, -tileSize);
+                        if (this.player.currentDirection === "down") offset = new Vec(0, tileSize);
+                        if (this.player.currentDirection === "left") offset = new Vec(-tileSize, 0);
+                        if (this.player.currentDirection === "right") offset = new Vec(tileSize, 0);
+                    
+                        let magicPos = this.player.position.plus(offset);
+                        this.magics.push(new Magic(magicPos, this.player.currentDirection));
+                    } else {
+                        this.player.toggleMagic(true);
+                    }
                 }
                 else if(event.key == "x"){
-                    this.player.toggleBow(true);  // Disable shield
-                }
-                else if (event.key == "a") {
+                    if (playerStats.arrows > 0) {
+                        playerStats.arrows--;
+                        this.player.toggleBow(true);
+                        
+                        let offset = new Vec(0, 0);
+                        if (this.player.currentDirection === "up") offset = new Vec(0, -tileSize);
+                        if (this.player.currentDirection === "down") offset = new Vec(0, tileSize);
+                        if (this.player.currentDirection === "left") offset = new Vec(-tileSize, 0);
+                        if (this.player.currentDirection === "right") offset = new Vec(tileSize, 0);
+                    
+                        let arrowPos = this.player.position.plus(offset);
+                        this.arrows.push(new Arrow(arrowPos, this.player.currentDirection));
+                    } else {
+                        this.player.toggleBow(true);
+                    }
+                }else if (event.key == "a") {
                     if (playerStats.bombs > 0) {
                         playerStats.bombs--;
                         this.player.toggleBomb(true);
@@ -1010,6 +1154,7 @@ class Game{
 
         playerStats.level = 0;
         playerStats.life = 100;
+        playerStats.mana = 100;
         playerStats.rupees = 0;
         playerStats.potions = 0;
         playerStats.arrows = 0;
@@ -1099,22 +1244,24 @@ function drawScene(newTime) {
     requestAnimationFrame(drawScene);
 }
 function drawUI() {
-    uiCtx.clearRect(0, 0, canvasWidth, 60);
+    uiCtx.clearRect(0, 0, canvasWidth, 150);
     uiCtx.fillStyle = "white";
     uiCtx.font = "20px Arial";
     uiCtx.textAlign = "left";
 
     // Draw stats with icons
-    uiCtx.drawImage(rupeeImg, 120, 80, 16, 32);
-    uiCtx.fillText(`x${playerStats.rupees}`, 140, 100);
+    uiCtx.drawImage(rupeeImg, 140, 80, 16, 32);
+    uiCtx.fillText(`x${playerStats.rupees}`, 160, 100);
 
-    uiCtx.drawImage(heartImg, 30, 80, 16, 32);
-    uiCtx.fillText(`x${playerStats.life}`, 50, 100);
+    uiCtx.fillText(`H P`, 20, 80);
+    uiCtx.fillText(`x ${playerStats.life}`, 60, 80);
+    uiCtx.fillText(`M P`, 20, 120);
+    uiCtx.fillText(`x ${playerStats.mana}`, 60, 120);
 
-    uiCtx.drawImage(potionImg, 210, 80, 16, 32);
-    uiCtx.fillText(`x${playerStats.potions}`, 230, 100);
+    uiCtx.drawImage(potionImg, 230, 80, 16, 32);
+    uiCtx.fillText(`x${playerStats.potions}`, 250, 100);
 
-    uiCtx.fillText(`LEVEL - ${playerStats.level}`, 100, 60);
+    uiCtx.fillText(`LEVEL - ${playerStats.level}`, 100, 40);
 }
 function drawPauseMenu(ctx) {
     ctx.save();
