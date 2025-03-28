@@ -15,6 +15,7 @@ let playerSpeed = 0.15;
 let showUI = false;
 let gamePaused = false;
 let interactingNPC = false;
+let chestIsOpen = false; 
 //tiles
 const tileSize = 32;
 const processedFloors = {};
@@ -37,11 +38,6 @@ const arrowImg = new Image();
 arrowImg.src = "../Videojuego/Assets/GameAssets/Weapons/Arrow_2.png";
 const bombIcon = new Image();
 bombIcon.src = "../Videojuego/Assets/GameAssets/Weapons/Bomb_1.png";
-
-const chestClosed = new Image();
-chestClosed.src = "../Videojuego/Assets/GameAssets/Chest/chest_closed.png";
-const chestOpened = new Image();
-chestOpened.src = "../Videojuego/Assets/GameAssets/Chest/chest_open.png";
 
 let playerStats = {
     level: 0,
@@ -360,7 +356,6 @@ class Slime extends AnimatedObject{
         ctx.restore();
     }
 }
-
 // Clases de proyectiles
 class Bomb {
     constructor(position) {
@@ -688,15 +683,26 @@ class Game{
         this.showTutorial = false;
         this.tutorialWasShown = false;
         this.showInventory = false;
+        this.chestIsOpen = false;
         this.logo = new Image();
         this.logo.src = "../Videojuego/Assets/MDAssets/Three.png";
+        this.chestClosed = new Image ();
+        this.chestClosed.src = "../Videojuego/Assets/GameAssets/Chest/chest_closed.png";
+        this.chestOpened = new Image();
+        this.chestOpened.src = "../Videojuego/Assets/GameAssets/Chest/chest_open.png";
+        this.chestPosition = new Vec(canvasWidth / 2 - 70, 200);
+        this.chestBox = {
+            position: new Vec(this.chestPosition.x, this.chestPosition.y),
+            width: 32,
+            height: 32
+        }
         this.oldMan = new Image();
         this.oldMan.src = "../Videojuego/Assets/GameAssets/NPC/Old_man.png";
         this.oldManRight = new Image();
         this.oldManRight.src = "../Videojuego/Assets/GameAssets/NPC/Old_man_2.png";
         this.oldManBack = new Image();
         this.oldManBack.src = "../Videojuego/Assets/GameAssets/NPC/Old_man_3.png";
-        this.oldManPosition = new Vec(canvasWidth / 2 - 16, 200);
+        this.oldManPosition = new Vec(canvasWidth / 2 +100, 200);
         this.oldManBox = {
             position: new Vec(this.oldManPosition.x, this.oldManPosition.y),
             width: 32,
@@ -781,6 +787,14 @@ class Game{
             drawBackground("mainMap", ctx);
             // Dibuja el hombre viejo
             ctx.drawImage(this.oldMan, this.oldManPosition.x, this.oldManPosition.y, 32, 32);
+            if (this.chestIsOpen) {
+                this.chestClosed = null;
+                ctx.drawImage(this.chestOpened, this.chestPosition.x, this.chestPosition.y, 32,32);
+                this.player.draw(ctx);
+            } else {
+                ctx.drawImage(this.chestClosed, this.chestPosition.x, this.chestPosition.y, 32,32);
+            }
+            this.player.draw(ctx);
             this.bombs.forEach(b => b.draw(ctx));
             this.arrows.forEach(a => a.draw(ctx));
             this.magics.forEach(m => m.draw(ctx));
@@ -895,7 +909,8 @@ class Game{
             "Shift = Defender con escudo",
             "I = Abrir inventario",
             "ESC = Menu de pausa",
-            "SPACE = Interactuar con NPCs/Cofres",
+            "SPACE = Interactuar con NPCs",
+            "O = Interactuar con cofres",
             "T = Abrir tutorial"
         ];
 
@@ -1058,13 +1073,47 @@ class Game{
                     } else {
                         this.player.toggleBomb(false);
                     }
+                } 
+            }
+            if (event.key == "o"){
+                if (this.mainMap) {
+                    const playerNearChest = this.player.position.x > this.chestPosition.x - 32 &&
+                    this.player.position.x < this.chestPosition.x + 32 &&
+                    this.player.position.y > this.chestPosition.y - 32 &&
+                    this.player.position.y < this.chestPosition.y + 32;
+
+                    if (playerNearChest) {
+                    this.chestIsOpen = !this.chestIsOpen;
+                    }
+                    if (this.chestIsOpen){
+                        let item = Math.random();
+                        if (item <= 0.33) {
+                            playerStats.bombs +=1;
+                        }
+                        else if (item <= 0.66) {
+                           playerStats.arrows +=1;
+                        }
+                        else {
+                            playerStats.potions +=1;
+                        }
+                    }
                 }
             }
             if (event.key === "Escape") {
                 gamePaused = !gamePaused;
             }
+
             if (event.key === " "){
-                interactingNPC = !interactingNPC;
+                    if (this.mainMap) {
+                    const playerNearNPC = this.player.position.x > this.oldManPosition.x - 36 &&
+                    this.player.position.x < this.oldManPosition.x + 36 &&
+                    this.player.position.y > this.oldManPosition.y - 36 &&
+                    this.player.position.y < this.oldManPosition.y + 36;
+
+                    if (playerNearNPC) {
+                    interactingNPC = !interactingNPC;
+                    }
+                }
             }
         });
 
@@ -1296,3 +1345,4 @@ function drawNPCTutorial(ctx) {
     ctx.fillText("(presione space para cerrar)", canvasWidth / 2, textY + 40); // centered text inside the box
     ctx.restore();
 }
+
