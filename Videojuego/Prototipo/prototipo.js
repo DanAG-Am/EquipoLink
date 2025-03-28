@@ -15,6 +15,8 @@ let playerSpeed = 0.15;
 let showUI = false;
 let gamePaused = false;
 let interactingNPC = false;
+let interactingMerchant = false;
+let currentItemType = "";
 //tiles
 const tileSize = 32;
 const processedFloors = {};
@@ -47,7 +49,7 @@ let playerStats = {
     level: 0,
     life: 100,
     mana: 100,
-    rupees: 0,
+    rupees: 99,
     potions: 0,
     arrows: 0,
     bombs: 0
@@ -538,7 +540,7 @@ class Player extends AnimatedObject{
     }   
 
     update(deltaTime) {
-        if (gamePaused) return;
+        if (gamePaused || interactingMerchant) return;
         
         if (!(this.position instanceof Vec)) {
             this.position = new Vec(this.position.x, this.position.y);
@@ -561,7 +563,11 @@ class Player extends AnimatedObject{
         if (game.mainMap) {
             collidesWithOldMan = boxOverlap(futureBox, game.oldManBox);
         }
-        if (!collidesWithWall && !collidesWithOldMan) {
+        let collidesWithMerchant = false;
+        if (game.mainMap) {
+            collidesWithMerchant = boxOverlap(futureBox, game.tienda.getHitbox());
+        }
+        if (!collidesWithWall && !collidesWithOldMan && !collidesWithMerchant) {
             this.position = nextPosition;
         }
 
@@ -705,6 +711,7 @@ class Game{
         this.bombs = [];
         this.arrows = [];
         this.magics = [];
+        this.tienda = new Tienda();
     }
 
     initObjects() {
@@ -781,6 +788,8 @@ class Game{
             drawBackground("mainMap", ctx);
             // Dibuja el hombre viejo
             ctx.drawImage(this.oldMan, this.oldManPosition.x, this.oldManPosition.y, 32, 32);
+            //Dibuja el npc de tienda
+            this.tienda.draw(ctx); 
             this.bombs.forEach(b => b.draw(ctx));
             this.arrows.forEach(a => a.draw(ctx));
             this.magics.forEach(m => m.draw(ctx));
@@ -845,6 +854,9 @@ class Game{
         }
         if (interactingNPC){
             drawNPCTutorial(ctx);
+        }
+        if (interactingMerchant) {
+            this.tienda.drawDialogue(ctx);
         }
     }
 
@@ -1065,6 +1077,19 @@ class Game{
             }
             if (event.key === " "){
                 interactingNPC = !interactingNPC;
+                if (isNear(game.player, game.tienda.getHitbox(), 50)) {
+                    if (!interactingMerchant) {
+                        interactingMerchant = true;
+                    } else {
+                        if (game.tienda.dialogueStage < game.tienda.dialogueTexts.length - 1) {
+                            game.tienda.nextDialogue();
+                        } else {
+                            interactingMerchant = false;
+                            game.tienda.dialogueStage = 0;
+                        }
+                    }
+                }
+        
             }
         });
 
@@ -1139,7 +1164,104 @@ class Game{
             this.showLoginScreen = true;
             document.getElementById("loginForm").style.display = "block";
         });
-        
+
+        let currentItemType = "";
+
+        const canvas = document.getElementById('canvas');
+        canvas.addEventListener('click', (event) => {
+            if (interactingMerchant && game.tienda.dialogueStage === 1 && game.tienda.buttonPositions) {
+                let rect = canvas.getBoundingClientRect();
+                let scaleX = canvas.width / rect.width;
+                let scaleY = canvas.height / rect.height;
+                let clickX = (event.clientX - rect.left) * scaleX;
+                let clickY = (event.clientY - rect.top) * scaleY;
+            
+                let btn1 = game.tienda.buttonPositions.button1;
+                let btn2 = game.tienda.buttonPositions.button2;
+                let btn3 = game.tienda.buttonPositions.button3;
+            
+                if (clickX >= btn1.x && clickX <= btn1.x + btn1.width &&
+                    clickY >= btn1.y && clickY <= btn1.y + btn1.height) {
+                    currentItemType = "pociones";
+                    showPurchaseDialog(currentItemType);
+                } else if (clickX >= btn2.x && clickX <= btn2.x + btn2.width &&
+                           clickY >= btn2.y && clickY <= btn2.y + btn2.height) {
+                    currentItemType = "flechas";
+                    showPurchaseDialog(currentItemType);
+                } else if (clickX >= btn3.x && clickX <= btn3.x + btn3.width &&
+                           clickY >= btn3.y && clickY <= btn3.y + btn3.height) {
+                    currentItemType = "bombas";
+                    showPurchaseDialog(currentItemType);
+                }
+            }
+        });
+
+        document.getElementById("purchaseButton").addEventListener("click", () => {
+            let purchaseInput = document.getElementById("purchaseQuantity");
+            let qtyStr = purchaseInput.value.trim();
+            if (qtyStr === "" || isNaN(parseInt(qtyStr))) {
+                let errorDialog = document.getElementById("errorDialog");
+                let errorMessage = document.getElementById("errorMessage");
+                errorMessage.innerText = "No se ingresó cantidad. Compra cancelada.";
+                errorDialog.style.display = "block";
+                document.getElementById("purchaseDialog").style.display = "none";
+                return;
+            }
+
+            let qty = parseInt(qtyStr);
+
+            let price = 0;
+            if (currentItemType === "pociones") {
+                price = 20;
+            } else if (currentItemType === "flechas") {
+                price = 7;
+            } else if (currentItemType === "bombas") {
+                price = 5;
+            }
+            
+            let totalCost = price * qty;
+
+            if (playerStats.rupees < totalCost) {
+                let errorDialog = document.getElementById("errorDialog");
+                let errorMessage = document.getElementById("errorMessage");
+                errorMessage.innerText = "No tienes suficientes rupias para esta compra.";
+                errorDialog.style.display = "block";
+                document.getElementById("purchaseDialog").style.display = "none";
+                interactingMerchant = false;
+                game.tienda.dialogueStage = 0;
+                return;
+            }
+            
+            if (currentItemType === "pociones") {
+                playerStats.potions += qty;
+            } else if (currentItemType === "flechas") {
+                playerStats.arrows += qty;
+            } else if (currentItemType === "bombas") {
+                playerStats.bombs += qty;
+            }
+
+            playerStats.rupees -= totalCost;
+            console.log("Compra de " + qty + " " + currentItemType + ". Total: " + totalCost + " rupias. Nuevas rupias: " + playerStats.rupees);
+            document.getElementById("purchaseDialog").style.display = "none";
+        });
+
+        document.getElementById("cancelButton").addEventListener("click", () => {
+            console.log("Compra cancelada.");
+            document.getElementById("purchaseDialog").style.display = "none";
+        });
+
+        document.getElementById("errorOkButton").addEventListener("click", () => {
+            document.getElementById("errorDialog").style.display = "none";
+        });
+
+        document.getElementById("purchaseQuantity").addEventListener("input", function() {
+            let value = parseInt(this.value);
+            if (value < 1) {
+                this.value = 1;
+            } else if (value > 20) {
+                this.value = 20;
+            }
+        });
     }
 
     resetGame() {
@@ -1295,4 +1417,136 @@ function drawNPCTutorial(ctx) {
     ctx.fillText("Corre, Sentinel. Una aventura te espera.", canvasWidth / 2, textY); // centered text inside the box
     ctx.fillText("(presione space para cerrar)", canvasWidth / 2, textY + 40); // centered text inside the box
     ctx.restore();
+}
+
+function Tienda() {
+    this.image = new Image();
+    this.image.src = "../Videojuego/Assets/GameAssets/NPC/Merchant_1.png";
+    this.shopItemsImage = new Image();
+    this.shopItemsImage.src = "../Videojuego/Assets/GameAssets/NPC/Item_shop.png";
+    this.position = new Vec(canvasWidth / 2 - 200, 200);
+    this.width = 32;
+    this.height = 32;
+    this.box = {
+        position: new Vec(this.position.x, this.position.y),
+        width: this.width,
+        height: this.height
+    };
+    this.dialogueTexts = [
+        ["Bienvenido a mi tienda"],
+        [" "],
+    ];
+    this.dialogueStage = 0;
+}
+
+Tienda.prototype.draw = function(ctx) {
+    ctx.drawImage(this.image, this.position.x, this.position.y, this.width, this.height);
+};
+
+Tienda.prototype.drawDialogue = function(ctx) {
+    let boxWidth = 320;
+    let boxHeight = 180;
+    let boxX = this.position.x - ((boxWidth - this.width) / 2);
+    let boxY = this.position.y - boxHeight - 10;
+
+    ctx.save();
+    ctx.fillStyle = "black";
+    ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
+
+    ctx.fillStyle = "white";
+    ctx.font = "18px Arial";
+    ctx.textAlign = "center";
+
+    let texts = this.dialogueTexts[this.dialogueStage];
+    let lineHeight = 25;
+    let startY = boxY + 25;
+    
+    for (let i = 0; i < texts.length; i++) {
+        ctx.fillText(texts[i], boxX + boxWidth / 2, startY + i * lineHeight);
+    }
+
+    if (this.dialogueStage === 1) {
+        let scaledWidth = boxWidth - 10;
+        let scaledHeight = 120;
+        let imgX = boxX + 10;
+        let imgY = boxY + 10;
+
+        ctx.drawImage(this.shopItemsImage, imgX, imgY, scaledWidth, scaledHeight);
+
+        let itemButtonWidth = 80;
+        let itemButtonHeight = 24;
+        let firstButtonX = boxX + 20;
+        let buttonY = imgY + scaledHeight - 20;
+        let secondButtonX = firstButtonX + 100;
+        let thirdButtonX = secondButtonX + 100;
+        
+        // Botón 1
+        ctx.fillStyle = "#222";
+        ctx.fillRect(firstButtonX, buttonY, itemButtonWidth, itemButtonHeight);
+        ctx.strokeStyle = "white";
+        ctx.strokeRect(firstButtonX, buttonY, itemButtonWidth, itemButtonHeight);
+        
+        // Botón 2
+        ctx.fillStyle = "#222";
+        ctx.fillRect(secondButtonX, buttonY, itemButtonWidth, itemButtonHeight);
+        ctx.strokeRect(secondButtonX, buttonY, itemButtonWidth, itemButtonHeight);
+        
+        // Botón 3
+        ctx.fillStyle = "#222";
+        ctx.fillRect(thirdButtonX, buttonY, itemButtonWidth, itemButtonHeight);
+        ctx.strokeRect(thirdButtonX, buttonY, itemButtonWidth, itemButtonHeight);
+
+        this.buttonPositions = {
+            button1: { x: firstButtonX, y: buttonY, width: itemButtonWidth, height: itemButtonHeight },
+            button2: { x: secondButtonX, y: buttonY, width: itemButtonWidth, height: itemButtonHeight },
+            button3: { x: thirdButtonX, y: buttonY, width: itemButtonWidth, height: itemButtonHeight }
+        };
+
+        ctx.save();
+        ctx.fillStyle = "white";
+        ctx.font = "14px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("COMPRAR", firstButtonX + itemButtonWidth / 2, buttonY + itemButtonHeight / 2);
+        ctx.fillText("COMPRAR", secondButtonX + itemButtonWidth / 2, buttonY + itemButtonHeight / 2);
+        ctx.fillText("COMPRAR", thirdButtonX + itemButtonWidth / 2, buttonY + itemButtonHeight / 2);
+        ctx.restore();
+    }   
+
+    ctx.font = "14px Arial";
+    ctx.fillStyle = "white";
+    let instruction;
+    if (this.dialogueStage < this.dialogueTexts.length - 1) {
+        instruction = "Presiona space para continuar";
+    } else {
+        instruction = "Presiona space para cerrar";
+    }
+    ctx.fillText(instruction, boxX + boxWidth / 2, boxY + boxHeight - 10);
+    
+    ctx.restore();
+};
+
+Tienda.prototype.nextDialogue = function() {
+    if (this.dialogueStage < this.dialogueTexts.length - 1) {
+        this.dialogueStage++;
+    }
+};
+
+Tienda.prototype.getHitbox = function() {
+    return {
+         position: new Vec(this.position.x, this.position.y),
+         width: this.width,
+         height: this.height
+    };
+};
+
+function showPurchaseDialog(itemType) {
+    let purchaseDialog = document.getElementById("purchaseDialog");
+    let purchaseMessage = document.getElementById("purchaseMessage");
+    purchaseMessage.innerText = "¿Cuántas " + itemType + " deseas comprar?";
+    document.getElementById("purchaseQuantity").value = "1";
+    purchaseDialog.style.display = "block";
 }

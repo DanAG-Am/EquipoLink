@@ -151,3 +151,29 @@ function boxOverlap(obj1, obj2) {
            obj1.position.y < obj2.position.y + obj2.height &&
            obj1.position.y + obj1.height > obj2.position.y
 }
+
+function isNear(obj1, obj2, threshold) {
+    let center1 = new Vec(obj1.position.x + obj1.width / 2, obj1.position.y + obj1.height / 2);
+    let center2 = new Vec(obj2.position.x + obj2.width / 2, obj2.position.y + obj2.height / 2);
+    return center1.minus(center2).length() <= threshold;
+}
+
+function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+    var words = text.split(" ");
+    var line = "";
+    var lines = [];
+    for (var n = 0; n < words.length; n++) {
+        var testLine = line + words[n] + " ";
+        var metrics = ctx.measureText(testLine);
+        if (metrics.width > maxWidth && n > 0) {
+            lines.push(line);
+            line = words[n] + " ";
+        } else {
+            line = testLine;
+        }
+    }
+    lines.push(line);
+    for (var i = 0; i < lines.length; i++) {
+        ctx.fillText(lines[i], x, y + i * lineHeight);
+    }
+}
