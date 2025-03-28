@@ -1233,7 +1233,7 @@ class Game{
 
         const canvas = document.getElementById('canvas');
         canvas.addEventListener('click', (event) => {
-            if (interactingMerchant && game.tienda.dialogueStage === 1 && game.tienda.buttonPositions) {
+            if (interactingMerchant && game.tienda.dialogueStage === 0 && game.tienda.buttonPositions) {
                 let rect = canvas.getBoundingClientRect();
                 let scaleX = canvas.width / rect.width;
                 let scaleY = canvas.height / rect.height;
@@ -1495,8 +1495,7 @@ function Tienda() {
         height: this.height
     };
     this.dialogueTexts = [
-        ["Bienvenido a mi tienda"],
-        [" "],
+        ["Bienvenido a mi tienda"]
     ];
     this.dialogueStage = 0;
 }
@@ -1530,53 +1529,49 @@ Tienda.prototype.drawDialogue = function(ctx) {
         ctx.fillText(texts[i], boxX + boxWidth / 2, startY + i * lineHeight);
     }
 
-    if (this.dialogueStage === 1) {
-        let scaledWidth = boxWidth - 10;
-        let scaledHeight = 120;
-        let imgX = boxX + 10;
-        let imgY = boxY + 10;
+    let scaledWidth = boxWidth - 10;
+    let scaledHeight = 120;
+    let imgX = boxX + 5;
+    let imgY = boxY + 25;
+    ctx.drawImage(this.shopItemsImage, imgX, imgY, scaledWidth, scaledHeight);
+    let itemButtonWidth = 80;
+    let itemButtonHeight = 24;
+    let firstButtonX = boxX + 20;
+    let buttonY = imgY + scaledHeight - 20;
+    let secondButtonX = firstButtonX + 100;
+    let thirdButtonX = secondButtonX + 100;
+    
+    // Botón 1
+    ctx.fillStyle = "#222";
+    ctx.fillRect(firstButtonX, buttonY, itemButtonWidth, itemButtonHeight);
+    ctx.strokeStyle = "white";
+    ctx.strokeRect(firstButtonX, buttonY, itemButtonWidth, itemButtonHeight);
+    
+    // Botón 2
+    ctx.fillStyle = "#222";
+    ctx.fillRect(secondButtonX, buttonY, itemButtonWidth, itemButtonHeight);
+    ctx.strokeRect(secondButtonX, buttonY, itemButtonWidth, itemButtonHeight);
+    
+    // Botón 3
+    ctx.fillStyle = "#222";
+    ctx.fillRect(thirdButtonX, buttonY, itemButtonWidth, itemButtonHeight);
+    ctx.strokeRect(thirdButtonX, buttonY, itemButtonWidth, itemButtonHeight);
 
-        ctx.drawImage(this.shopItemsImage, imgX, imgY, scaledWidth, scaledHeight);
+    this.buttonPositions = {
+        button1: { x: firstButtonX, y: buttonY, width: itemButtonWidth, height: itemButtonHeight },
+        button2: { x: secondButtonX, y: buttonY, width: itemButtonWidth, height: itemButtonHeight },
+        button3: { x: thirdButtonX, y: buttonY, width: itemButtonWidth, height: itemButtonHeight }
+    };
 
-        let itemButtonWidth = 80;
-        let itemButtonHeight = 24;
-        let firstButtonX = boxX + 20;
-        let buttonY = imgY + scaledHeight - 20;
-        let secondButtonX = firstButtonX + 100;
-        let thirdButtonX = secondButtonX + 100;
-        
-        // Botón 1
-        ctx.fillStyle = "#222";
-        ctx.fillRect(firstButtonX, buttonY, itemButtonWidth, itemButtonHeight);
-        ctx.strokeStyle = "white";
-        ctx.strokeRect(firstButtonX, buttonY, itemButtonWidth, itemButtonHeight);
-        
-        // Botón 2
-        ctx.fillStyle = "#222";
-        ctx.fillRect(secondButtonX, buttonY, itemButtonWidth, itemButtonHeight);
-        ctx.strokeRect(secondButtonX, buttonY, itemButtonWidth, itemButtonHeight);
-        
-        // Botón 3
-        ctx.fillStyle = "#222";
-        ctx.fillRect(thirdButtonX, buttonY, itemButtonWidth, itemButtonHeight);
-        ctx.strokeRect(thirdButtonX, buttonY, itemButtonWidth, itemButtonHeight);
-
-        this.buttonPositions = {
-            button1: { x: firstButtonX, y: buttonY, width: itemButtonWidth, height: itemButtonHeight },
-            button2: { x: secondButtonX, y: buttonY, width: itemButtonWidth, height: itemButtonHeight },
-            button3: { x: thirdButtonX, y: buttonY, width: itemButtonWidth, height: itemButtonHeight }
-        };
-
-        ctx.save();
-        ctx.fillStyle = "white";
-        ctx.font = "14px Arial";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText("COMPRAR", firstButtonX + itemButtonWidth / 2, buttonY + itemButtonHeight / 2);
-        ctx.fillText("COMPRAR", secondButtonX + itemButtonWidth / 2, buttonY + itemButtonHeight / 2);
-        ctx.fillText("COMPRAR", thirdButtonX + itemButtonWidth / 2, buttonY + itemButtonHeight / 2);
-        ctx.restore();
-    }   
+    ctx.save();
+    ctx.fillStyle = "white";
+    ctx.font = "14px Arial";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("COMPRAR", firstButtonX + itemButtonWidth / 2, buttonY + itemButtonHeight / 2);
+    ctx.fillText("COMPRAR", secondButtonX + itemButtonWidth / 2, buttonY + itemButtonHeight / 2);
+    ctx.fillText("COMPRAR", thirdButtonX + itemButtonWidth / 2, buttonY + itemButtonHeight / 2);
+    ctx.restore();   
 
     ctx.font = "14px Arial";
     ctx.fillStyle = "white";
@@ -1611,4 +1606,5 @@ function showPurchaseDialog(itemType) {
     purchaseMessage.innerText = "¿Cuántas " + itemType + " deseas comprar?";
     document.getElementById("purchaseQuantity").value = "1";
     purchaseDialog.style.display = "block";
+    //test
 }
