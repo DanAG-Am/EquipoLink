@@ -152,12 +152,6 @@ function boxOverlap(obj1, obj2) {
            obj1.position.y + obj1.height > obj2.position.y
 }
 
-function isNear(obj1, obj2, threshold) {
-    let center1 = new Vec(obj1.position.x + obj1.width / 2, obj1.position.y + obj1.height / 2);
-    let center2 = new Vec(obj2.position.x + obj2.width / 2, obj2.position.y + obj2.height / 2);
-    return center1.minus(center2).length() <= threshold;
-}
-
 function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
     var words = text.split(" ");
     var line = "";
