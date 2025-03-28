@@ -1606,4 +1606,5 @@ function showPurchaseDialog(itemType) {
     purchaseMessage.innerText = "¿Cuántas " + itemType + " deseas comprar?";
     document.getElementById("purchaseQuantity").value = "1";
     purchaseDialog.style.display = "block";
+    //test
 }
