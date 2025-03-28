@@ -151,3 +151,23 @@ function boxOverlap(obj1, obj2) {
            obj1.position.y < obj2.position.y + obj2.height &&
            obj1.position.y + obj1.height > obj2.position.y
 }
+
+function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+    var words = text.split(" ");
+    var line = "";
+    var lines = [];
+    for (var n = 0; n < words.length; n++) {
+        var testLine = line + words[n] + " ";
+        var metrics = ctx.measureText(testLine);
+        if (metrics.width > maxWidth && n > 0) {
+            lines.push(line);
+            line = words[n] + " ";
+        } else {
+            line = testLine;
+        }
+    }
+    lines.push(line);
+    for (var i = 0; i < lines.length; i++) {
+        ctx.fillText(lines[i], x, y + i * lineHeight);
+    }
+}
