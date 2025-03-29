@@ -45,7 +45,7 @@ let playerStats = {
     level: 0,
     life: 100,
     mana: 100,
-    rupees: 99,
+    rupees: 0,
     potions: 0,
     arrows: 0,
     bombs: 0
@@ -791,7 +791,9 @@ class Game{
             // Mensaje para continuar
             ctx.font = "20px Arial";
             ctx.fillText("Presiona Enter para continuar", canvasWidth / 2, canvasHeight / 4 + canvasHeight / 2 + 70);
-        } else if (this.mainMap){
+        } 
+        else if (this.mainMap){ 
+
             drawBackground("mainMap", ctx);
             // Dibuja el hombre viejo
             ctx.drawImage(this.oldMan, this.oldManPosition.x, this.oldManPosition.y, 32, 32);
@@ -805,6 +807,12 @@ class Game{
                 ctx.drawImage(this.chestClosed, this.chestPosition.x, this.chestPosition.y, 32,32);
             }
             this.player.draw(ctx);
+            if (!rupeesInitialized) {
+                initializeRupees();
+                rupeesInitialized = true; // Set the flag to true after initialization
+            }
+            drawRupees(ctx, this.player);
+            // Initialize rupees only once when entering the main map
             this.bombs.forEach(b => b.draw(ctx));
             this.arrows.forEach(a => a.draw(ctx));
             this.magics.forEach(m => m.draw(ctx));
@@ -830,6 +838,7 @@ class Game{
                     this.level = true;
                     this.player.position = new Vec(canvasWidth / 2 - 16, 0);
                     playerStats.level += 1;
+                    rupeesInitialized=false;
             }
             if (this.showInventory) {
                 this.drawInventory(ctx);
@@ -843,6 +852,14 @@ class Game{
             this.magics.forEach(m => m.draw(ctx));
             // Dibuja el jugador
             this.player.draw(ctx);
+            if (!rupeesInitialized) {
+                initializeRupees();  // Initialize rupees for level 1
+                rupeesInitialized = true;  // Mark rupees as initialized
+            }
+    
+            // Draw rupees for this level
+            drawRupees(ctx, this.player);
+    
             // Dibuja el inventario y tutorial si está abierto
             if (this.showInventory) {
                 this.drawInventory(ctx);
@@ -857,6 +874,7 @@ class Game{
                 this.mainMap = true;
                 this.player.position = new Vec (canvasWidth / 2 - 16, canvasHeight - tileSize);
                 playerStats.level -= 1;
+                rupeesInitialized = false;
             }
         } else {
             for (let actor of this.actors){
@@ -1088,30 +1106,31 @@ class Game{
                     }
                 } 
             }
-            if (event.key == "o"){
+            if (event.key == "o") {
                 if (this.mainMap) {
                     const playerNearChest = this.player.position.x > this.chestPosition.x - 32 &&
-                    this.player.position.x < this.chestPosition.x + 32 &&
-                    this.player.position.y > this.chestPosition.y - 32 &&
-                    this.player.position.y < this.chestPosition.y + 32;
-
-                    if (playerNearChest) {
-                    this.chestIsOpen = !this.chestIsOpen;
-                    }
-                    if (this.chestIsOpen){
-                        let item = Math.random();
-                        if (item <= 0.33) {
-                            playerStats.bombs +=1;
-                        }
-                        else if (item <= 0.66) {
-                           playerStats.arrows +=1;
-                        }
-                        else {
-                            playerStats.potions +=1;
+                        this.player.position.x < this.chestPosition.x + 32 &&
+                        this.player.position.y > this.chestPosition.y - 32 &&
+                        this.player.position.y < this.chestPosition.y + 32;
+            
+                    if (playerNearChest && !this.chestHasBeenOpened) { 
+                        this.chestIsOpen = !this.chestIsOpen;
+            
+                        if (this.chestIsOpen) {
+                            let item = Math.random();
+                            if (item <= 0.33) {
+                                playerStats.bombs += 1;
+                            } else if (item <= 0.66) {
+                                playerStats.arrows += 1;
+                            } else {
+                                playerStats.potions += 1;
+                            }
+                            this.chestHasBeenOpened = true;
                         }
                     }
                 }
             }
+            
             if (event.key === "Escape") {
                 gamePaused = !gamePaused;
             }
@@ -1334,6 +1353,7 @@ class Game{
         this.dialogueStage = 0;
         this.tutorialWasShown = false;
         this.showInventory = false;
+        this.initializeRupees = false;
         this.initObjects();
 
         playerStats.level = 0;
@@ -1607,4 +1627,48 @@ function showPurchaseDialog(itemType) {
     document.getElementById("purchaseQuantity").value = "1";
     purchaseDialog.style.display = "block";
     //test
+}
+
+let rupees = [];  // Store rupee positions
+let rupeesInitialized = false; // Flag to track initialization
+
+// Function to initialize or reset rupees
+function initializeRupees() {
+    // Random number of rupees between 5 and 10
+    const numSprites = Math.floor(Math.random() * 6) + 5;
+
+    rupees = [];  // Reset the rupee array
+
+    // Create rupees at random positions
+    for (let i = 0; i < numSprites; i++) {
+        const xPos = Math.floor(Math.random() * (canvas.width - 36)); // Random x position
+        const yPos = Math.floor(Math.random() * (canvas.height - 36)); // Random y position
+
+        // Store the rupee's position
+        rupees.push({ x: xPos, y: yPos });
+    }
+}
+
+function drawRupees(ctx, player) {
+    // Draw rupees at their positions
+    for (let i = 0; i < rupees.length; i++) {
+        const rupee = rupees[i];
+
+        // Draw the rupee at its position
+        ctx.drawImage(rupeeImg, rupee.x, rupee.y, 16, 16);
+
+        // Check if player is near the rupee
+        const playerNearRupee =
+            player.position.x > rupee.x - 16 && player.position.x < rupee.x + 16 &&
+            player.position.y > rupee.y - 16 && player.position.y < rupee.y + 16;
+
+        if (playerNearRupee) {
+            // Remove the rupee by splicing it from the array
+            rupees.splice(i, 1);
+            i--; // Adjust index because we removed an element
+            playerStats.rupees += 1; // Increase player's rupee count
+
+            // Optional: Play a sound or add an animation when a rupee is collected
+        }
+    }
 }
