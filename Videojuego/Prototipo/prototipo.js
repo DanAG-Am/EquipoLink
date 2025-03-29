@@ -942,6 +942,7 @@ class Game{
             "X = Atacar con arco",
             "A = Dejar bomba",
             "C = Atacar con magia",
+            "D = Tomar pocion",
             "Shift = Defender con escudo",
             "I = Abrir inventario",
             "ESC = Menu de pausa",
@@ -1133,6 +1134,14 @@ class Game{
                             this.chestHasBeenOpened = true;
                         }
                     }
+                }
+            }
+            if (event.key == "d") {
+                if (playerStats.potions > 0 && playerStats.life < 100){
+                    playerStats.potions--;
+                    //random life regeneration 
+                    let lifeRegen = Math.floor(Math.random() * 20) + 10;
+                    playerStats.life += lifeRegen;
                 }
             }
             
@@ -1644,12 +1653,14 @@ function initializeRupees() {
 
     rupees = [];  // Reset the rupee array
 
-    // Create rupees at random positions
-    for (let i = 0; i < numSprites; i++) {
-        const xPos = Math.floor(Math.random() * (canvas.width - 36)); // Random x position
-        const yPos = Math.floor(Math.random() * (canvas.height - 36)); // Random y position
+    const margin = 40; // Set a margin from the edges
 
-        // Store the rupee's position
+    // Create rupees at random positions, ensuring they are not too close to the perimeter
+    for (let i = 0; i < numSprites; i++) {
+        const xPos = Math.floor(Math.random() * (canvas.width - 2 * margin - 36)) + margin; // Random x position within the margin
+        const yPos = Math.floor(Math.random() * (canvas.height - 2 * margin - 36)) + margin; // Random y position within the margin
+
+        // Store the valid rupee's position
         rupees.push({ x: xPos, y: yPos });
     }
 }
@@ -1677,3 +1688,4 @@ function drawRupees(ctx, player) {
         }
     }
 }
+
