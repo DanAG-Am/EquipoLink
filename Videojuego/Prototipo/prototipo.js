@@ -563,9 +563,14 @@ class Player extends AnimatedObject{
         if (game.mainMap) {
             collidesWithMerchant = boxOverlap(futureBox, game.tienda.getHitbox());
         }
-        if (!collidesWithWall && !collidesWithOldMan && !collidesWithMerchant) {
+        let collidesWithChest = false;
+        if (game.mainMap) {
+            collidesWithChest = boxOverlap(futureBox, game.chestBox);
+        }
+        if (!collidesWithWall && !collidesWithOldMan && !collidesWithMerchant && !collidesWithChest) {
             this.position = nextPosition;
         }
+        
 
         this.position.x = Math.max(0, Math.min(canvasWidth - this.width, this.position.x));
         this.position.y = Math.max(0, Math.min(canvasHeight - this.height, this.position.y));
@@ -1108,10 +1113,10 @@ class Game{
             }
             if (event.key == "o") {
                 if (this.mainMap) {
-                    const playerNearChest = this.player.position.x > this.chestPosition.x - 32 &&
-                        this.player.position.x < this.chestPosition.x + 32 &&
-                        this.player.position.y > this.chestPosition.y - 32 &&
-                        this.player.position.y < this.chestPosition.y + 32;
+                    const playerNearChest = this.player.position.x > this.chestPosition.x - 36 &&
+                        this.player.position.x < this.chestPosition.x + 36 &&
+                        this.player.position.y > this.chestPosition.y - 36 &&
+                        this.player.position.y < this.chestPosition.y + 36;
             
                     if (playerNearChest && !this.chestHasBeenOpened) { 
                         this.chestIsOpen = !this.chestIsOpen;
