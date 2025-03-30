@@ -50,7 +50,7 @@ CREATE TABLE Objeto(
 );
 
 CREATE TABLE Arma(
-	id_arma INT,
+	id_arma INT AUTO_INCREMENT,
 	tipo ENUM('espada','arco','barrita_magica','bomba'),
 	daño INT CHECK (daño >= 0),
 	radio_explosion INT,
@@ -100,7 +100,7 @@ CREATE TABLE NPC(
 	activo BOOLEAN,
 	intercambiable BOOLEAN,
 	PRIMARY KEY (id_npc),
-	UNIQUE KEY (nombre),
+
 	FOREIGN KEY (id_cuarto) REFERENCES Cuarto(id_cuarto)
 );
 
@@ -113,13 +113,13 @@ CREATE TABLE Tienda(
 
 CREATE TABLE Producto_Tienda(
 	id_producto_tienda INT AUTO_INCREMENT,
-	id_tienda INT,
+	id_shop INT,
 	id_objeto INT,
 	precio INT CHECK (precio >= 0),
 	cantidad INT CHECK (cantidad >= 0),
 	stock_infinito BOOLEAN DEFAULT FALSE,
 	PRIMARY KEY (id_producto_tienda),
-	FOREIGN KEY (id_tienda) REFERENCES Tienda(id_shop),
+	FOREIGN KEY (id_shop) REFERENCES Tienda(id_shop),
 	FOREIGN KEY (id_objeto) REFERENCES Objeto(id_objeto)
 );
 
@@ -141,7 +141,6 @@ CREATE TABLE Enemigo(
 	daño INT,
 	drop_monedas INT,
 	PRIMARY KEY (id_enemigo),
-	UNIQUE KEY (nombre),
 	FOREIGN KEY (id_cuarto) REFERENCES Cuarto(id_cuarto)
 );
 
@@ -154,7 +153,6 @@ CREATE TABLE Jefe(
 	daño INT,
 	velocidad INT,
 	PRIMARY KEY (id_jefe),
-	UNIQUE KEY (nombre),
 	FOREIGN KEY (id_enemigo) REFERENCES Enemigo(id_enemigo),
 	FOREIGN KEY (id_cuarto) REFERENCES Cuarto(id_cuarto)
 );
