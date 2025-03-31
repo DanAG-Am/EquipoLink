@@ -1,152 +1,514 @@
 USE TheLostSentinel;
-
--- 1. Mapa
-INSERT INTO Mapa (nombre, descripcion, tamano_x, tamano_y)
-VALUES ('Calabozo', 'Un oscuro calabozo lleno de misterios y desafíos', 50, 50);
-
--- 2. Cuarto (11 cuartos según el orden especificado)
--- Sala 1: con NPC
-INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado)
-VALUES (1, 'Sala 1: Encuentro con un NPC', 'con_npc', FALSE);
--- Salas 2, 3 y 4: con enemigo
-INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado)
-VALUES (1, 'Sala 2: Zona con enemigos', 'con_enemigo', FALSE);
-INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado)
-VALUES (1, 'Sala 3: Pasillo de enemigos', 'con_enemigo', FALSE);
-INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado)
-VALUES (1, 'Sala 4: Habitación de combate', 'con_enemigo', FALSE);
--- Sala 5: con NPC
-INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado)
-VALUES (1, 'Sala 5: Encuentro con un NPC', 'con_npc', FALSE);
--- Salas 6, 7 y 8: con enemigo
-INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado)
-VALUES (1, 'Sala 6: Área infestada de enemigos', 'con_enemigo', FALSE);
-INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado)
-VALUES (1, 'Sala 7: Corredor de combate', 'con_enemigo', FALSE);
-INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado)
-VALUES (1, 'Sala 8: Zona hostil', 'con_enemigo', FALSE);
--- Sala 9: con NPC
-INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado)
-VALUES (1, 'Sala 9: Encuentro con un NPC', 'con_npc', FALSE);
--- Sala 10: con enemigo
-INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado)
-VALUES (1, 'Sala 10: Confrontación con enemigos', 'con_enemigo', FALSE);
--- Sala 11: con jefe (acceso bloqueado)
-INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado)
-VALUES (1, 'Sala 11: Cámara del jefe', 'con_jefe', TRUE);
-
--- 3. NPC (en las salas que tienen NPC: 1, 5 y 9)
-INSERT INTO NPC (id_cuarto, nombre, role, dialogo)
-VALUES (1, 'Guardián Sabio', 'viejo', 'Bienvenido, aventurero.');
-INSERT INTO NPC (id_cuarto, nombre, role, dialogo)
-VALUES (5, 'Hada Mística', 'hada', 'La magia te guía.');
-INSERT INTO NPC (id_cuarto, nombre, role, dialogo)
-VALUES (9, 'Mercader Errante', 'mercantil', 'Compra o vende, tu destino es incierto.');
-
--- 4. Enemigo (en las salas con enemigos: 2, 3, 4, 6, 7, 8 y 10)
-INSERT INTO Enemigo (id_cuarto, nombre, vida_max, vida_actual, velocidad, dano, drop_monedas)
-VALUES (2, 'Enemigo_A', 40, 40, 8, 6, 3);
-INSERT INTO Enemigo (id_cuarto, nombre, vida_max, vida_actual, velocidad, dano, drop_monedas)
-VALUES (3, 'Enemigo_B', 45, 45, 7, 7, 4);
-INSERT INTO Enemigo (id_cuarto, nombre, vida_max, vida_actual, velocidad, dano, drop_monedas)
-VALUES (4, 'Enemigo_C', 50, 50, 6, 8, 5);
-INSERT INTO Enemigo (id_cuarto, nombre, vida_max, vida_actual, velocidad, dano, drop_monedas)
-VALUES (6, 'Enemigo_D', 35, 35, 9, 5, 2);
-INSERT INTO Enemigo (id_cuarto, nombre, vida_max, vida_actual, velocidad, dano, drop_monedas)
-VALUES (7, 'Enemigo_E', 55, 55, 5, 10, 6);
-INSERT INTO Enemigo (id_cuarto, nombre, vida_max, vida_actual, velocidad, dano, drop_monedas)
-VALUES (8, 'Enemigo_F', 60, 60, 4, 12, 7);
-INSERT INTO Enemigo (id_cuarto, nombre, vida_max, vida_actual, velocidad, dano, drop_monedas)
-VALUES (10, 'Enemigo_G', 50, 50, 6, 8, 5);
-
--- 5. Enemigo para el jefe (en sala 11)
-INSERT INTO Enemigo (id_cuarto, nombre, vida_max, vida_actual, velocidad, dano, drop_monedas)
-VALUES (11, 'Enemigo_Boss', 150, 150, 3, 20, 15);
-
--- 6. Jefe (referenciando al enemigo anterior en sala 11)
-INSERT INTO Jefe (id_enemigo, id_cuarto, nombre, vida, dano, velocidad)
-VALUES ((SELECT id_enemigo FROM Enemigo WHERE nombre = 'Enemigo_Boss'), 11, 'Señor del Calabozo', 200, 25, 2);
-
--- 7. Jugador (asignados a distintos cuartos)
-INSERT INTO Jugador (id_cuarto, usuario, contrasena, hp_actual, hp_max, mp_actual, mp_max, monedas, pociones, bombas, flechas)
-VALUES (1, 'Hero1', 'pass1', 80, 100, 50, 100, 30, 2, 1, 10);
-INSERT INTO Jugador (id_cuarto, usuario, contrasena, hp_actual, hp_max, mp_actual, mp_max, monedas, pociones, bombas, flechas)
-VALUES (2, 'Hero2', 'pass2', 90, 100, 60, 100, 45, 3, 0, 15);
-
--- 8. Estadísticas para cada jugador
-INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado)
-VALUES (1, 5, 2, 3, 0, '01:30:00');
-INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado)
-VALUES (2, 8, 3, 4, 1, '02:15:00');
-
--- 9. Objetos (diferentes tipos)
-INSERT INTO Objeto (nombre, tipo, efecto, stackable, precio)
-VALUES ('Bomba Pequeña', 'bomba', 'Explosión de corto alcance', FALSE, 50);
-INSERT INTO Objeto (nombre, tipo, efecto, stackable, precio)
-VALUES ('Flecha de Hielo', 'flecha', 'Ralentiza al enemigo', TRUE, 10);
-INSERT INTO Objeto (nombre, tipo, efecto, stackable, precio)
-VALUES ('Poción de Vida', 'pocion', 'Recupera 20 HP', TRUE, 15);
-INSERT INTO Objeto (nombre, tipo, efecto, stackable, precio)
-VALUES ('Moneda de Oro', 'moneda', 'Moneda de cambio', TRUE, 1);
-
--- 10. Arma (usando objetos existentes)
-INSERT INTO Arma (id_arma, tipo, daño, radio_explosion, alcance, consumo_mp)
-VALUES (1, 'bomba', 30, 2, 0, 0);
-INSERT INTO Arma (id_arma, tipo, daño, radio_explosion, alcance, consumo_mp)
-VALUES (2, 'arco', 15, 0, 50, 5);
-
--- 11. Inventario (asociado a los jugadores)
-INSERT INTO Inventario (id_jugador, id_objeto, cantidad)
-VALUES (1, 3, 5);
-INSERT INTO Inventario (id_jugador, id_objeto, cantidad)
-VALUES (1, 4, 20);
-INSERT INTO Inventario (id_jugador, id_objeto, cantidad)
-VALUES (2, 2, 15);
-
--- 12. Cofre (en algunas salas)
-INSERT INTO Cofre (id_cuarto, id_objeto, enemigos_derrotados, abierto)
-VALUES (3, 3, FALSE, FALSE);
-INSERT INTO Cofre (id_cuarto, id_objeto, enemigos_derrotados, abierto)
-VALUES (10, 4, TRUE, TRUE);
-
--- 13. Contenido_Cofre (para el primer cofre)
-INSERT INTO Contenido_Cofre (id_cofre, id_objeto, cantidad)
-VALUES (1, 3, 2);
-
--- 14. Tienda (asociada a un NPC; se utiliza el NPC de la sala 1)
-INSERT INTO Tienda (id_npc, tipo)
-VALUES (1, 'pociones');
-
--- 15. Producto_Tienda (para la tienda anterior)
-INSERT INTO Producto_Tienda (id_tienda, id_objeto, precio, cantidad, stock_infinito)
-VALUES (1, 3, 20, 10, FALSE);
-
--- 16. Elemento_Cuarto (registrando el elemento presente en cada cuarto)
-INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (1, 'npc');
-INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (2, 'enemigo');
-INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (3, 'enemigo');
+INSERT INTO Mapa (nombre, descripcion, tamano_x, tamano_y) VALUES ('Mapa_1', 'Descripción mapa 1', 89, 63);
+INSERT INTO Mapa (nombre, descripcion, tamano_x, tamano_y) VALUES ('Mapa_2', 'Descripción mapa 2', 65, 85);
+INSERT INTO Mapa (nombre, descripcion, tamano_x, tamano_y) VALUES ('Mapa_3', 'Descripción mapa 3', 93, 61);
+INSERT INTO Mapa (nombre, descripcion, tamano_x, tamano_y) VALUES ('Mapa_4', 'Descripción mapa 4', 63, 73);
+INSERT INTO Mapa (nombre, descripcion, tamano_x, tamano_y) VALUES ('Mapa_5', 'Descripción mapa 5', 57, 93);
+INSERT INTO Mapa (nombre, descripcion, tamano_x, tamano_y) VALUES ('Mapa_6', 'Descripción mapa 6', 32, 45);
+INSERT INTO Mapa (nombre, descripcion, tamano_x, tamano_y) VALUES ('Mapa_7', 'Descripción mapa 7', 36, 30);
+INSERT INTO Mapa (nombre, descripcion, tamano_x, tamano_y) VALUES ('Mapa_8', 'Descripción mapa 8', 45, 71);
+INSERT INTO Mapa (nombre, descripcion, tamano_x, tamano_y) VALUES ('Mapa_9', 'Descripción mapa 9', 46, 96);
+INSERT INTO Mapa (nombre, descripcion, tamano_x, tamano_y) VALUES ('Mapa_10', 'Descripción mapa 10', 90, 56);
+INSERT INTO Mapa (nombre, descripcion, tamano_x, tamano_y) VALUES ('Mapa_11', 'Descripción mapa 11', 36, 48);
+INSERT INTO Mapa (nombre, descripcion, tamano_x, tamano_y) VALUES ('Mapa_12', 'Descripción mapa 12', 37, 55);
+INSERT INTO Mapa (nombre, descripcion, tamano_x, tamano_y) VALUES ('Mapa_13', 'Descripción mapa 13', 71, 96);
+INSERT INTO Mapa (nombre, descripcion, tamano_x, tamano_y) VALUES ('Mapa_14', 'Descripción mapa 14', 41, 78);
+INSERT INTO Mapa (nombre, descripcion, tamano_x, tamano_y) VALUES ('Mapa_15', 'Descripción mapa 15', 90, 46);
+INSERT INTO Mapa (nombre, descripcion, tamano_x, tamano_y) VALUES ('Mapa_16', 'Descripción mapa 16', 56, 52);
+INSERT INTO Mapa (nombre, descripcion, tamano_x, tamano_y) VALUES ('Mapa_17', 'Descripción mapa 17', 92, 81);
+INSERT INTO Mapa (nombre, descripcion, tamano_x, tamano_y) VALUES ('Mapa_18', 'Descripción mapa 18', 88, 55);
+INSERT INTO Mapa (nombre, descripcion, tamano_x, tamano_y) VALUES ('Mapa_19', 'Descripción mapa 19', 67, 35);
+INSERT INTO Mapa (nombre, descripcion, tamano_x, tamano_y) VALUES ('Mapa_20', 'Descripción mapa 20', 96, 37);
+INSERT INTO Mapa (nombre, descripcion, tamano_x, tamano_y) VALUES ('Mapa_21', 'Descripción mapa 21', 57, 90);
+INSERT INTO Mapa (nombre, descripcion, tamano_x, tamano_y) VALUES ('Mapa_22', 'Descripción mapa 22', 64, 58);
+INSERT INTO Mapa (nombre, descripcion, tamano_x, tamano_y) VALUES ('Mapa_23', 'Descripción mapa 23', 39, 56);
+INSERT INTO Mapa (nombre, descripcion, tamano_x, tamano_y) VALUES ('Mapa_24', 'Descripción mapa 24', 65, 38);
+INSERT INTO Mapa (nombre, descripcion, tamano_x, tamano_y) VALUES ('Mapa_25', 'Descripción mapa 25', 57, 33);
+INSERT INTO Mapa (nombre, descripcion, tamano_x, tamano_y) VALUES ('Mapa_26', 'Descripción mapa 26', 75, 73);
+INSERT INTO Mapa (nombre, descripcion, tamano_x, tamano_y) VALUES ('Mapa_27', 'Descripción mapa 27', 34, 36);
+INSERT INTO Mapa (nombre, descripcion, tamano_x, tamano_y) VALUES ('Mapa_28', 'Descripción mapa 28', 85, 79);
+INSERT INTO Mapa (nombre, descripcion, tamano_x, tamano_y) VALUES ('Mapa_29', 'Descripción mapa 29', 63, 80);
+INSERT INTO Mapa (nombre, descripcion, tamano_x, tamano_y) VALUES ('Mapa_30', 'Descripción mapa 30', 81, 45);
+INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado) VALUES (6, 'Cuarto 1', 'con_npc', 1);
+INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado) VALUES (22, 'Cuarto 2', 'con_enemigo', 1);
+INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado) VALUES (19, 'Cuarto 3', 'con_enemigo', 1);
+INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado) VALUES (2, 'Cuarto 4', 'normal', 0);
+INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado) VALUES (27, 'Cuarto 5', 'con_enemigo', 1);
+INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado) VALUES (17, 'Cuarto 6', 'normal', 0);
+INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado) VALUES (4, 'Cuarto 7', 'con_tesoro', 0);
+INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado) VALUES (29, 'Cuarto 8', 'con_npc', 0);
+INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado) VALUES (24, 'Cuarto 9', 'con_npc', 1);
+INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado) VALUES (22, 'Cuarto 10', 'con_npc', 0);
+INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado) VALUES (9, 'Cuarto 11', 'normal', 1);
+INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado) VALUES (9, 'Cuarto 12', 'con_enemigo', 1);
+INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado) VALUES (1, 'Cuarto 13', 'con_tesoro', 0);
+INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado) VALUES (21, 'Cuarto 14', 'con_npc', 1);
+INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado) VALUES (13, 'Cuarto 15', 'con_enemigo', 0);
+INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado) VALUES (30, 'Cuarto 16', 'normal', 0);
+INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado) VALUES (21, 'Cuarto 17', 'normal', 1);
+INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado) VALUES (13, 'Cuarto 18', 'con_npc', 1);
+INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado) VALUES (8, 'Cuarto 19', 'normal', 0);
+INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado) VALUES (12, 'Cuarto 20', 'con_npc', 0);
+INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado) VALUES (20, 'Cuarto 21', 'con_tesoro', 0);
+INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado) VALUES (3, 'Cuarto 22', 'con_enemigo', 0);
+INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado) VALUES (14, 'Cuarto 23', 'con_tesoro', 1);
+INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado) VALUES (9, 'Cuarto 24', 'con_tesoro', 0);
+INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado) VALUES (26, 'Cuarto 25', 'con_enemigo', 1);
+INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado) VALUES (6, 'Cuarto 26', 'con_enemigo', 0);
+INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado) VALUES (5, 'Cuarto 27', 'con_jefe', 1);
+INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado) VALUES (23, 'Cuarto 28', 'con_jefe', 1);
+INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado) VALUES (3, 'Cuarto 29', 'con_jefe', 0);
+INSERT INTO Cuarto (id_mapa, descripcion, tipo, acceso_bloqueado) VALUES (29, 'Cuarto 30', 'con_npc', 0);
+INSERT INTO Jugador (id_cuarto, usuario, contrasena, hp_actual, hp_max, mp_actual, mp_max, monedas, pociones, bombas, flechas) VALUES (15, 'usuario_1', 'pass_1', 6, 100, 27, 100, 498, 0, 4, 6);
+INSERT INTO Jugador (id_cuarto, usuario, contrasena, hp_actual, hp_max, mp_actual, mp_max, monedas, pociones, bombas, flechas) VALUES (15, 'usuario_2', 'pass_2', 84, 100, 6, 100, 423, 4, 5, 14);
+INSERT INTO Jugador (id_cuarto, usuario, contrasena, hp_actual, hp_max, mp_actual, mp_max, monedas, pociones, bombas, flechas) VALUES (27, 'usuario_3', 'pass_3', 89, 100, 22, 100, 253, 3, 1, 17);
+INSERT INTO Jugador (id_cuarto, usuario, contrasena, hp_actual, hp_max, mp_actual, mp_max, monedas, pociones, bombas, flechas) VALUES (27, 'usuario_4', 'pass_4', 22, 100, 5, 100, 328, 10, 4, 10);
+INSERT INTO Jugador (id_cuarto, usuario, contrasena, hp_actual, hp_max, mp_actual, mp_max, monedas, pociones, bombas, flechas) VALUES (3, 'usuario_5', 'pass_5', 36, 100, 53, 100, 436, 6, 4, 13);
+INSERT INTO Jugador (id_cuarto, usuario, contrasena, hp_actual, hp_max, mp_actual, mp_max, monedas, pociones, bombas, flechas) VALUES (14, 'usuario_6', 'pass_6', 33, 100, 78, 100, 134, 5, 4, 10);
+INSERT INTO Jugador (id_cuarto, usuario, contrasena, hp_actual, hp_max, mp_actual, mp_max, monedas, pociones, bombas, flechas) VALUES (23, 'usuario_7', 'pass_7', 88, 100, 19, 100, 68, 7, 0, 15);
+INSERT INTO Jugador (id_cuarto, usuario, contrasena, hp_actual, hp_max, mp_actual, mp_max, monedas, pociones, bombas, flechas) VALUES (4, 'usuario_8', 'pass_8', 100, 100, 10, 100, 120, 4, 2, 13);
+INSERT INTO Jugador (id_cuarto, usuario, contrasena, hp_actual, hp_max, mp_actual, mp_max, monedas, pociones, bombas, flechas) VALUES (7, 'usuario_9', 'pass_9', 54, 100, 99, 100, 304, 6, 1, 13);
+INSERT INTO Jugador (id_cuarto, usuario, contrasena, hp_actual, hp_max, mp_actual, mp_max, monedas, pociones, bombas, flechas) VALUES (24, 'usuario_10', 'pass_10', 14, 100, 95, 100, 177, 5, 3, 1);
+INSERT INTO Jugador (id_cuarto, usuario, contrasena, hp_actual, hp_max, mp_actual, mp_max, monedas, pociones, bombas, flechas) VALUES (6, 'usuario_11', 'pass_11', 88, 100, 33, 100, 46, 2, 3, 13);
+INSERT INTO Jugador (id_cuarto, usuario, contrasena, hp_actual, hp_max, mp_actual, mp_max, monedas, pociones, bombas, flechas) VALUES (15, 'usuario_12', 'pass_12', 35, 100, 61, 100, 301, 8, 5, 0);
+INSERT INTO Jugador (id_cuarto, usuario, contrasena, hp_actual, hp_max, mp_actual, mp_max, monedas, pociones, bombas, flechas) VALUES (22, 'usuario_13', 'pass_13', 76, 100, 79, 100, 126, 5, 5, 20);
+INSERT INTO Jugador (id_cuarto, usuario, contrasena, hp_actual, hp_max, mp_actual, mp_max, monedas, pociones, bombas, flechas) VALUES (13, 'usuario_14', 'pass_14', 37, 100, 69, 100, 156, 10, 4, 17);
+INSERT INTO Jugador (id_cuarto, usuario, contrasena, hp_actual, hp_max, mp_actual, mp_max, monedas, pociones, bombas, flechas) VALUES (25, 'usuario_15', 'pass_15', 50, 100, 21, 100, 90, 0, 2, 5);
+INSERT INTO Jugador (id_cuarto, usuario, contrasena, hp_actual, hp_max, mp_actual, mp_max, monedas, pociones, bombas, flechas) VALUES (11, 'usuario_16', 'pass_16', 51, 100, 81, 100, 148, 5, 0, 7);
+INSERT INTO Jugador (id_cuarto, usuario, contrasena, hp_actual, hp_max, mp_actual, mp_max, monedas, pociones, bombas, flechas) VALUES (8, 'usuario_17', 'pass_17', 89, 100, 50, 100, 208, 2, 3, 18);
+INSERT INTO Jugador (id_cuarto, usuario, contrasena, hp_actual, hp_max, mp_actual, mp_max, monedas, pociones, bombas, flechas) VALUES (21, 'usuario_18', 'pass_18', 66, 100, 98, 100, 492, 5, 0, 2);
+INSERT INTO Jugador (id_cuarto, usuario, contrasena, hp_actual, hp_max, mp_actual, mp_max, monedas, pociones, bombas, flechas) VALUES (28, 'usuario_19', 'pass_19', 91, 100, 76, 100, 371, 8, 1, 17);
+INSERT INTO Jugador (id_cuarto, usuario, contrasena, hp_actual, hp_max, mp_actual, mp_max, monedas, pociones, bombas, flechas) VALUES (8, 'usuario_20', 'pass_20', 25, 100, 44, 100, 411, 10, 2, 15);
+INSERT INTO Jugador (id_cuarto, usuario, contrasena, hp_actual, hp_max, mp_actual, mp_max, monedas, pociones, bombas, flechas) VALUES (11, 'usuario_21', 'pass_21', 71, 100, 34, 100, 71, 1, 0, 15);
+INSERT INTO Jugador (id_cuarto, usuario, contrasena, hp_actual, hp_max, mp_actual, mp_max, monedas, pociones, bombas, flechas) VALUES (2, 'usuario_22', 'pass_22', 71, 100, 11, 100, 264, 10, 5, 4);
+INSERT INTO Jugador (id_cuarto, usuario, contrasena, hp_actual, hp_max, mp_actual, mp_max, monedas, pociones, bombas, flechas) VALUES (28, 'usuario_23', 'pass_23', 25, 100, 27, 100, 103, 5, 2, 7);
+INSERT INTO Jugador (id_cuarto, usuario, contrasena, hp_actual, hp_max, mp_actual, mp_max, monedas, pociones, bombas, flechas) VALUES (13, 'usuario_24', 'pass_24', 88, 100, 52, 100, 138, 4, 4, 17);
+INSERT INTO Jugador (id_cuarto, usuario, contrasena, hp_actual, hp_max, mp_actual, mp_max, monedas, pociones, bombas, flechas) VALUES (24, 'usuario_25', 'pass_25', 84, 100, 47, 100, 157, 1, 2, 20);
+INSERT INTO Jugador (id_cuarto, usuario, contrasena, hp_actual, hp_max, mp_actual, mp_max, monedas, pociones, bombas, flechas) VALUES (30, 'usuario_26', 'pass_26', 15, 100, 38, 100, 342, 9, 5, 9);
+INSERT INTO Jugador (id_cuarto, usuario, contrasena, hp_actual, hp_max, mp_actual, mp_max, monedas, pociones, bombas, flechas) VALUES (21, 'usuario_27', 'pass_27', 45, 100, 55, 100, 48, 9, 4, 0);
+INSERT INTO Jugador (id_cuarto, usuario, contrasena, hp_actual, hp_max, mp_actual, mp_max, monedas, pociones, bombas, flechas) VALUES (5, 'usuario_28', 'pass_28', 12, 100, 87, 100, 416, 4, 1, 6);
+INSERT INTO Jugador (id_cuarto, usuario, contrasena, hp_actual, hp_max, mp_actual, mp_max, monedas, pociones, bombas, flechas) VALUES (1, 'usuario_29', 'pass_29', 97, 100, 38, 100, 316, 10, 5, 6);
+INSERT INTO Jugador (id_cuarto, usuario, contrasena, hp_actual, hp_max, mp_actual, mp_max, monedas, pociones, bombas, flechas) VALUES (17, 'usuario_30', 'pass_30', 50, 100, 60, 100, 474, 10, 0, 17);
+INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (1, 20, 8, 7, 3, '07:47:00');
+INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (2, 20, 4, 9, 5, '02:13:00');
+INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (3, 4, 6, 1, 4, '01:24:00');
+INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (4, 18, 10, 6, 1, '04:41:00');
+INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (5, 18, 0, 7, 0, '02:22:00');
+INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (6, 14, 7, 8, 1, '08:22:00');
+INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (7, 3, 5, 8, 0, '07:48:00');
+INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (8, 4, 7, 6, 1, '02:31:00');
+INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (9, 4, 9, 6, 5, '01:18:00');
+INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (10, 7, 9, 3, 2, '07:29:00');
+INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (11, 1, 2, 2, 2, '05:16:00');
+INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (12, 13, 2, 8, 2, '04:42:00');
+INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (13, 18, 6, 1, 1, '03:52:00');
+INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (14, 4, 6, 2, 1, '00:53:00');
+INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (15, 3, 6, 3, 5, '03:26:00');
+INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (16, 14, 10, 2, 3, '05:17:00');
+INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (17, 0, 2, 6, 1, '09:16:00');
+INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (18, 14, 9, 9, 0, '03:12:00');
+INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (19, 4, 3, 6, 1, '07:57:00');
+INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (20, 16, 6, 6, 5, '01:55:00');
+INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (21, 13, 10, 1, 2, '02:47:00');
+INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (22, 12, 1, 1, 1, '02:21:00');
+INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (23, 0, 6, 8, 0, '03:49:00');
+INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (24, 19, 5, 10, 3, '05:55:00');
+INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (25, 17, 2, 0, 5, '00:48:00');
+INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (26, 16, 4, 5, 3, '09:55:00');
+INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (27, 17, 8, 8, 3, '04:19:00');
+INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (28, 2, 10, 7, 1, '07:14:00');
+INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (29, 16, 2, 4, 0, '04:11:00');
+INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (30, 6, 4, 8, 2, '01:40:00');
+INSERT INTO Objeto (nombre, tipo, efecto, stackable, precio) VALUES ('objeto_1', 'flecha', 'Efecto 1', 1, 84);
+INSERT INTO Objeto (nombre, tipo, efecto, stackable, precio) VALUES ('objeto_2', 'pocion', 'Efecto 2', 1, 53);
+INSERT INTO Objeto (nombre, tipo, efecto, stackable, precio) VALUES ('objeto_3', 'pocion', 'Efecto 3', 1, 80);
+INSERT INTO Objeto (nombre, tipo, efecto, stackable, precio) VALUES ('objeto_4', 'flecha', 'Efecto 4', 1, 3);
+INSERT INTO Objeto (nombre, tipo, efecto, stackable, precio) VALUES ('objeto_5', 'moneda', 'Efecto 5', 1, 46);
+INSERT INTO Objeto (nombre, tipo, efecto, stackable, precio) VALUES ('objeto_6', 'bomba', 'Efecto 6', 1, 100);
+INSERT INTO Objeto (nombre, tipo, efecto, stackable, precio) VALUES ('objeto_7', 'flecha', 'Efecto 7', 0, 74);
+INSERT INTO Objeto (nombre, tipo, efecto, stackable, precio) VALUES ('objeto_8', 'flecha', 'Efecto 8', 1, 84);
+INSERT INTO Objeto (nombre, tipo, efecto, stackable, precio) VALUES ('objeto_9', 'flecha', 'Efecto 9', 1, 90);
+INSERT INTO Objeto (nombre, tipo, efecto, stackable, precio) VALUES ('objeto_10', 'pocion', 'Efecto 10', 0, 1);
+INSERT INTO Objeto (nombre, tipo, efecto, stackable, precio) VALUES ('objeto_11', 'moneda', 'Efecto 11', 0, 91);
+INSERT INTO Objeto (nombre, tipo, efecto, stackable, precio) VALUES ('objeto_12', 'flecha', 'Efecto 12', 1, 79);
+INSERT INTO Objeto (nombre, tipo, efecto, stackable, precio) VALUES ('objeto_13', 'flecha', 'Efecto 13', 0, 68);
+INSERT INTO Objeto (nombre, tipo, efecto, stackable, precio) VALUES ('objeto_14', 'pocion', 'Efecto 14', 0, 85);
+INSERT INTO Objeto (nombre, tipo, efecto, stackable, precio) VALUES ('objeto_15', 'moneda', 'Efecto 15', 0, 45);
+INSERT INTO Objeto (nombre, tipo, efecto, stackable, precio) VALUES ('objeto_16', 'bomba', 'Efecto 16', 0, 26);
+INSERT INTO Objeto (nombre, tipo, efecto, stackable, precio) VALUES ('objeto_17', 'moneda', 'Efecto 17', 1, 34);
+INSERT INTO Objeto (nombre, tipo, efecto, stackable, precio) VALUES ('objeto_18', 'bomba', 'Efecto 18', 0, 66);
+INSERT INTO Objeto (nombre, tipo, efecto, stackable, precio) VALUES ('objeto_19', 'bomba', 'Efecto 19', 1, 77);
+INSERT INTO Objeto (nombre, tipo, efecto, stackable, precio) VALUES ('objeto_20', 'flecha', 'Efecto 20', 1, 51);
+INSERT INTO Objeto (nombre, tipo, efecto, stackable, precio) VALUES ('objeto_21', 'bomba', 'Efecto 21', 0, 59);
+INSERT INTO Objeto (nombre, tipo, efecto, stackable, precio) VALUES ('objeto_22', 'moneda', 'Efecto 22', 1, 75);
+INSERT INTO Objeto (nombre, tipo, efecto, stackable, precio) VALUES ('objeto_23', 'pocion', 'Efecto 23', 0, 64);
+INSERT INTO Objeto (nombre, tipo, efecto, stackable, precio) VALUES ('objeto_24', 'bomba', 'Efecto 24', 0, 25);
+INSERT INTO Objeto (nombre, tipo, efecto, stackable, precio) VALUES ('objeto_25', 'moneda', 'Efecto 25', 0, 83);
+INSERT INTO Objeto (nombre, tipo, efecto, stackable, precio) VALUES ('objeto_26', 'flecha', 'Efecto 26', 0, 43);
+INSERT INTO Objeto (nombre, tipo, efecto, stackable, precio) VALUES ('objeto_27', 'bomba', 'Efecto 27', 0, 8);
+INSERT INTO Objeto (nombre, tipo, efecto, stackable, precio) VALUES ('objeto_28', 'moneda', 'Efecto 28', 1, 68);
+INSERT INTO Objeto (nombre, tipo, efecto, stackable, precio) VALUES ('objeto_29', 'flecha', 'Efecto 29', 1, 37);
+INSERT INTO Objeto (nombre, tipo, efecto, stackable, precio) VALUES ('objeto_30', 'flecha', 'Efecto 30', 0, 97);
+INSERT INTO Arma (id_arma, tipo, daño, radio_explosion, alcance, consumo_mp) VALUES (1, 'bomba', 12, 2, 41, 12);
+INSERT INTO Arma (id_arma, tipo, daño, radio_explosion, alcance, consumo_mp) VALUES (2, 'barrita_magica', 12, 1, 96, 19);
+INSERT INTO Arma (id_arma, tipo, daño, radio_explosion, alcance, consumo_mp) VALUES (3, 'espada', 13, 3, 87, 5);
+INSERT INTO Arma (id_arma, tipo, daño, radio_explosion, alcance, consumo_mp) VALUES (4, 'bomba', 26, 3, 78, 15);
+INSERT INTO Arma (id_arma, tipo, daño, radio_explosion, alcance, consumo_mp) VALUES (5, 'espada', 24, 2, 35, 10);
+INSERT INTO Arma (id_arma, tipo, daño, radio_explosion, alcance, consumo_mp) VALUES (6, 'bomba', 12, 0, 92, 16);
+INSERT INTO Arma (id_arma, tipo, daño, radio_explosion, alcance, consumo_mp) VALUES (7, 'arco', 20, 2, 69, 19);
+INSERT INTO Arma (id_arma, tipo, daño, radio_explosion, alcance, consumo_mp) VALUES (8, 'barrita_magica', 42, 5, 82, 18);
+INSERT INTO Arma (id_arma, tipo, daño, radio_explosion, alcance, consumo_mp) VALUES (9, 'arco', 21, 5, 10, 4);
+INSERT INTO Arma (id_arma, tipo, daño, radio_explosion, alcance, consumo_mp) VALUES (10, 'espada', 40, 3, 16, 13);
+INSERT INTO Arma (id_arma, tipo, daño, radio_explosion, alcance, consumo_mp) VALUES (11, 'espada', 41, 1, 65, 9);
+INSERT INTO Arma (id_arma, tipo, daño, radio_explosion, alcance, consumo_mp) VALUES (12, 'arco', 23, 1, 51, 3);
+INSERT INTO Arma (id_arma, tipo, daño, radio_explosion, alcance, consumo_mp) VALUES (13, 'espada', 23, 5, 57, 10);
+INSERT INTO Arma (id_arma, tipo, daño, radio_explosion, alcance, consumo_mp) VALUES (14, 'bomba', 44, 5, 42, 15);
+INSERT INTO Arma (id_arma, tipo, daño, radio_explosion, alcance, consumo_mp) VALUES (15, 'arco', 25, 1, 51, 15);
+INSERT INTO Arma (id_arma, tipo, daño, radio_explosion, alcance, consumo_mp) VALUES (16, 'bomba', 44, 0, 75, 16);
+INSERT INTO Arma (id_arma, tipo, daño, radio_explosion, alcance, consumo_mp) VALUES (17, 'barrita_magica', 30, 0, 76, 0);
+INSERT INTO Arma (id_arma, tipo, daño, radio_explosion, alcance, consumo_mp) VALUES (18, 'arco', 17, 5, 65, 6);
+INSERT INTO Arma (id_arma, tipo, daño, radio_explosion, alcance, consumo_mp) VALUES (19, 'espada', 22, 1, 41, 7);
+INSERT INTO Arma (id_arma, tipo, daño, radio_explosion, alcance, consumo_mp) VALUES (20, 'barrita_magica', 35, 0, 85, 13);
+INSERT INTO Arma (id_arma, tipo, daño, radio_explosion, alcance, consumo_mp) VALUES (21, 'barrita_magica', 34, 1, 30, 1);
+INSERT INTO Arma (id_arma, tipo, daño, radio_explosion, alcance, consumo_mp) VALUES (22, 'arco', 47, 2, 75, 9);
+INSERT INTO Arma (id_arma, tipo, daño, radio_explosion, alcance, consumo_mp) VALUES (23, 'barrita_magica', 40, 1, 96, 9);
+INSERT INTO Arma (id_arma, tipo, daño, radio_explosion, alcance, consumo_mp) VALUES (24, 'arco', 25, 1, 92, 16);
+INSERT INTO Arma (id_arma, tipo, daño, radio_explosion, alcance, consumo_mp) VALUES (25, 'barrita_magica', 28, 2, 95, 2);
+INSERT INTO Arma (id_arma, tipo, daño, radio_explosion, alcance, consumo_mp) VALUES (26, 'espada', 11, 3, 22, 9);
+INSERT INTO Arma (id_arma, tipo, daño, radio_explosion, alcance, consumo_mp) VALUES (27, 'arco', 29, 1, 85, 7);
+INSERT INTO Arma (id_arma, tipo, daño, radio_explosion, alcance, consumo_mp) VALUES (28, 'bomba', 46, 5, 79, 11);
+INSERT INTO Arma (id_arma, tipo, daño, radio_explosion, alcance, consumo_mp) VALUES (29, 'arco', 49, 4, 12, 0);
+INSERT INTO Arma (id_arma, tipo, daño, radio_explosion, alcance, consumo_mp) VALUES (30, 'barrita_magica', 40, 5, 72, 4);
+INSERT INTO Inventario (id_jugador, id_objeto, cantidad) VALUES (9, 9, 4);
+INSERT INTO Inventario (id_jugador, id_objeto, cantidad) VALUES (14, 6, 1);
+INSERT INTO Inventario (id_jugador, id_objeto, cantidad) VALUES (20, 5, 8);
+INSERT INTO Inventario (id_jugador, id_objeto, cantidad) VALUES (14, 6, 8);
+INSERT INTO Inventario (id_jugador, id_objeto, cantidad) VALUES (20, 18, 4);
+INSERT INTO Inventario (id_jugador, id_objeto, cantidad) VALUES (19, 25, 2);
+INSERT INTO Inventario (id_jugador, id_objeto, cantidad) VALUES (19, 25, 10);
+INSERT INTO Inventario (id_jugador, id_objeto, cantidad) VALUES (1, 9, 2);
+INSERT INTO Inventario (id_jugador, id_objeto, cantidad) VALUES (6, 18, 3);
+INSERT INTO Inventario (id_jugador, id_objeto, cantidad) VALUES (15, 20, 3);
+INSERT INTO Inventario (id_jugador, id_objeto, cantidad) VALUES (22, 8, 3);
+INSERT INTO Inventario (id_jugador, id_objeto, cantidad) VALUES (21, 11, 9);
+INSERT INTO Inventario (id_jugador, id_objeto, cantidad) VALUES (2, 26, 5);
+INSERT INTO Inventario (id_jugador, id_objeto, cantidad) VALUES (22, 15, 10);
+INSERT INTO Inventario (id_jugador, id_objeto, cantidad) VALUES (13, 8, 7);
+INSERT INTO Inventario (id_jugador, id_objeto, cantidad) VALUES (1, 22, 10);
+INSERT INTO Inventario (id_jugador, id_objeto, cantidad) VALUES (6, 8, 4);
+INSERT INTO Inventario (id_jugador, id_objeto, cantidad) VALUES (8, 8, 2);
+INSERT INTO Inventario (id_jugador, id_objeto, cantidad) VALUES (27, 15, 2);
+INSERT INTO Inventario (id_jugador, id_objeto, cantidad) VALUES (11, 21, 4);
+INSERT INTO Inventario (id_jugador, id_objeto, cantidad) VALUES (27, 28, 5);
+INSERT INTO Inventario (id_jugador, id_objeto, cantidad) VALUES (21, 7, 10);
+INSERT INTO Inventario (id_jugador, id_objeto, cantidad) VALUES (10, 14, 2);
+INSERT INTO Inventario (id_jugador, id_objeto, cantidad) VALUES (28, 13, 3);
+INSERT INTO Inventario (id_jugador, id_objeto, cantidad) VALUES (21, 3, 7);
+INSERT INTO Inventario (id_jugador, id_objeto, cantidad) VALUES (1, 27, 6);
+INSERT INTO Inventario (id_jugador, id_objeto, cantidad) VALUES (18, 2, 6);
+INSERT INTO Inventario (id_jugador, id_objeto, cantidad) VALUES (18, 28, 10);
+INSERT INTO Inventario (id_jugador, id_objeto, cantidad) VALUES (18, 12, 9);
+INSERT INTO Inventario (id_jugador, id_objeto, cantidad) VALUES (12, 2, 10);
+INSERT INTO Cofre (id_cuarto, id_objeto, enemigos_derrotados, abierto) VALUES (30, 2, 1, 0);
+INSERT INTO Cofre (id_cuarto, id_objeto, enemigos_derrotados, abierto) VALUES (4, 19, 0, 0);
+INSERT INTO Cofre (id_cuarto, id_objeto, enemigos_derrotados, abierto) VALUES (26, 20, 0, 1);
+INSERT INTO Cofre (id_cuarto, id_objeto, enemigos_derrotados, abierto) VALUES (30, 17, 1, 1);
+INSERT INTO Cofre (id_cuarto, id_objeto, enemigos_derrotados, abierto) VALUES (6, 29, 1, 1);
+INSERT INTO Cofre (id_cuarto, id_objeto, enemigos_derrotados, abierto) VALUES (20, 9, 0, 0);
+INSERT INTO Cofre (id_cuarto, id_objeto, enemigos_derrotados, abierto) VALUES (4, 8, 0, 0);
+INSERT INTO Cofre (id_cuarto, id_objeto, enemigos_derrotados, abierto) VALUES (2, 7, 0, 0);
+INSERT INTO Cofre (id_cuarto, id_objeto, enemigos_derrotados, abierto) VALUES (9, 16, 0, 0);
+INSERT INTO Cofre (id_cuarto, id_objeto, enemigos_derrotados, abierto) VALUES (26, 25, 0, 0);
+INSERT INTO Cofre (id_cuarto, id_objeto, enemigos_derrotados, abierto) VALUES (6, 24, 1, 0);
+INSERT INTO Cofre (id_cuarto, id_objeto, enemigos_derrotados, abierto) VALUES (2, 20, 0, 0);
+INSERT INTO Cofre (id_cuarto, id_objeto, enemigos_derrotados, abierto) VALUES (15, 12, 1, 0);
+INSERT INTO Cofre (id_cuarto, id_objeto, enemigos_derrotados, abierto) VALUES (2, 8, 1, 0);
+INSERT INTO Cofre (id_cuarto, id_objeto, enemigos_derrotados, abierto) VALUES (30, 16, 0, 1);
+INSERT INTO Cofre (id_cuarto, id_objeto, enemigos_derrotados, abierto) VALUES (8, 4, 0, 0);
+INSERT INTO Cofre (id_cuarto, id_objeto, enemigos_derrotados, abierto) VALUES (9, 1, 1, 0);
+INSERT INTO Cofre (id_cuarto, id_objeto, enemigos_derrotados, abierto) VALUES (8, 3, 1, 1);
+INSERT INTO Cofre (id_cuarto, id_objeto, enemigos_derrotados, abierto) VALUES (24, 8, 0, 0);
+INSERT INTO Cofre (id_cuarto, id_objeto, enemigos_derrotados, abierto) VALUES (5, 24, 0, 1);
+INSERT INTO Cofre (id_cuarto, id_objeto, enemigos_derrotados, abierto) VALUES (19, 30, 0, 0);
+INSERT INTO Cofre (id_cuarto, id_objeto, enemigos_derrotados, abierto) VALUES (12, 13, 1, 0);
+INSERT INTO Cofre (id_cuarto, id_objeto, enemigos_derrotados, abierto) VALUES (10, 17, 0, 0);
+INSERT INTO Cofre (id_cuarto, id_objeto, enemigos_derrotados, abierto) VALUES (9, 19, 1, 0);
+INSERT INTO Cofre (id_cuarto, id_objeto, enemigos_derrotados, abierto) VALUES (5, 9, 0, 1);
+INSERT INTO Cofre (id_cuarto, id_objeto, enemigos_derrotados, abierto) VALUES (20, 11, 0, 0);
+INSERT INTO Cofre (id_cuarto, id_objeto, enemigos_derrotados, abierto) VALUES (8, 6, 1, 1);
+INSERT INTO Cofre (id_cuarto, id_objeto, enemigos_derrotados, abierto) VALUES (4, 1, 1, 1);
+INSERT INTO Cofre (id_cuarto, id_objeto, enemigos_derrotados, abierto) VALUES (22, 11, 1, 0);
+INSERT INTO Cofre (id_cuarto, id_objeto, enemigos_derrotados, abierto) VALUES (12, 15, 0, 0);
+INSERT INTO Contenido_Cofre (id_cofre, id_objeto, cantidad) VALUES (8, 7, 8);
+INSERT INTO Contenido_Cofre (id_cofre, id_objeto, cantidad) VALUES (7, 9, 1);
+INSERT INTO Contenido_Cofre (id_cofre, id_objeto, cantidad) VALUES (7, 24, 6);
+INSERT INTO Contenido_Cofre (id_cofre, id_objeto, cantidad) VALUES (12, 29, 9);
+INSERT INTO Contenido_Cofre (id_cofre, id_objeto, cantidad) VALUES (15, 12, 8);
+INSERT INTO Contenido_Cofre (id_cofre, id_objeto, cantidad) VALUES (2, 7, 10);
+INSERT INTO Contenido_Cofre (id_cofre, id_objeto, cantidad) VALUES (3, 4, 5);
+INSERT INTO Contenido_Cofre (id_cofre, id_objeto, cantidad) VALUES (28, 21, 10);
+INSERT INTO Contenido_Cofre (id_cofre, id_objeto, cantidad) VALUES (23, 21, 8);
+INSERT INTO Contenido_Cofre (id_cofre, id_objeto, cantidad) VALUES (24, 8, 10);
+INSERT INTO Contenido_Cofre (id_cofre, id_objeto, cantidad) VALUES (11, 10, 4);
+INSERT INTO Contenido_Cofre (id_cofre, id_objeto, cantidad) VALUES (18, 5, 4);
+INSERT INTO Contenido_Cofre (id_cofre, id_objeto, cantidad) VALUES (19, 23, 5);
+INSERT INTO Contenido_Cofre (id_cofre, id_objeto, cantidad) VALUES (29, 8, 3);
+INSERT INTO Contenido_Cofre (id_cofre, id_objeto, cantidad) VALUES (19, 5, 2);
+INSERT INTO Contenido_Cofre (id_cofre, id_objeto, cantidad) VALUES (3, 19, 5);
+INSERT INTO Contenido_Cofre (id_cofre, id_objeto, cantidad) VALUES (21, 27, 10);
+INSERT INTO Contenido_Cofre (id_cofre, id_objeto, cantidad) VALUES (21, 12, 3);
+INSERT INTO Contenido_Cofre (id_cofre, id_objeto, cantidad) VALUES (6, 14, 1);
+INSERT INTO Contenido_Cofre (id_cofre, id_objeto, cantidad) VALUES (13, 8, 7);
+INSERT INTO Contenido_Cofre (id_cofre, id_objeto, cantidad) VALUES (11, 17, 3);
+INSERT INTO Contenido_Cofre (id_cofre, id_objeto, cantidad) VALUES (5, 28, 9);
+INSERT INTO Contenido_Cofre (id_cofre, id_objeto, cantidad) VALUES (26, 15, 6);
+INSERT INTO Contenido_Cofre (id_cofre, id_objeto, cantidad) VALUES (17, 6, 9);
+INSERT INTO Contenido_Cofre (id_cofre, id_objeto, cantidad) VALUES (18, 9, 5);
+INSERT INTO Contenido_Cofre (id_cofre, id_objeto, cantidad) VALUES (28, 2, 7);
+INSERT INTO Contenido_Cofre (id_cofre, id_objeto, cantidad) VALUES (27, 9, 3);
+INSERT INTO Contenido_Cofre (id_cofre, id_objeto, cantidad) VALUES (21, 20, 7);
+INSERT INTO Contenido_Cofre (id_cofre, id_objeto, cantidad) VALUES (25, 4, 7);
+INSERT INTO Contenido_Cofre (id_cofre, id_objeto, cantidad) VALUES (25, 24, 1);
+INSERT INTO NPC (id_cuarto, nombre, role, dialogo) VALUES (12, 'npc_1', 'viejo', 'Dialogo 1');
+INSERT INTO NPC (id_cuarto, nombre, role, dialogo) VALUES (4, 'npc_2', 'mercantil', 'Dialogo 2');
+INSERT INTO NPC (id_cuarto, nombre, role, dialogo) VALUES (7, 'npc_3', 'viejo', 'Dialogo 3');
+INSERT INTO NPC (id_cuarto, nombre, role, dialogo) VALUES (18, 'npc_4', 'hada', 'Dialogo 4');
+INSERT INTO NPC (id_cuarto, nombre, role, dialogo) VALUES (6, 'npc_5', 'viejo', 'Dialogo 5');
+INSERT INTO NPC (id_cuarto, nombre, role, dialogo) VALUES (10, 'npc_6', 'hada', 'Dialogo 6');
+INSERT INTO NPC (id_cuarto, nombre, role, dialogo) VALUES (12, 'npc_7', 'viejo', 'Dialogo 7');
+INSERT INTO NPC (id_cuarto, nombre, role, dialogo) VALUES (9, 'npc_8', 'mercantil', 'Dialogo 8');
+INSERT INTO NPC (id_cuarto, nombre, role, dialogo) VALUES (21, 'npc_9', 'hada', 'Dialogo 9');
+INSERT INTO NPC (id_cuarto, nombre, role, dialogo) VALUES (18, 'npc_10', 'mercantil', 'Dialogo 10');
+INSERT INTO NPC (id_cuarto, nombre, role, dialogo) VALUES (2, 'npc_11', 'mercantil', 'Dialogo 11');
+INSERT INTO NPC (id_cuarto, nombre, role, dialogo) VALUES (25, 'npc_12', 'mercantil', 'Dialogo 12');
+INSERT INTO NPC (id_cuarto, nombre, role, dialogo) VALUES (25, 'npc_13', 'hada', 'Dialogo 13');
+INSERT INTO NPC (id_cuarto, nombre, role, dialogo) VALUES (28, 'npc_14', 'viejo', 'Dialogo 14');
+INSERT INTO NPC (id_cuarto, nombre, role, dialogo) VALUES (8, 'npc_15', 'mercantil', 'Dialogo 15');
+INSERT INTO NPC (id_cuarto, nombre, role, dialogo) VALUES (21, 'npc_16', 'mercantil', 'Dialogo 16');
+INSERT INTO NPC (id_cuarto, nombre, role, dialogo) VALUES (3, 'npc_17', 'viejo', 'Dialogo 17');
+INSERT INTO NPC (id_cuarto, nombre, role, dialogo) VALUES (20, 'npc_18', 'hada', 'Dialogo 18');
+INSERT INTO NPC (id_cuarto, nombre, role, dialogo) VALUES (18, 'npc_19', 'mercantil', 'Dialogo 19');
+INSERT INTO NPC (id_cuarto, nombre, role, dialogo) VALUES (9, 'npc_20', 'hada', 'Dialogo 20');
+INSERT INTO NPC (id_cuarto, nombre, role, dialogo) VALUES (21, 'npc_21', 'viejo', 'Dialogo 21');
+INSERT INTO NPC (id_cuarto, nombre, role, dialogo) VALUES (1, 'npc_22', 'viejo', 'Dialogo 22');
+INSERT INTO NPC (id_cuarto, nombre, role, dialogo) VALUES (19, 'npc_23', 'hada', 'Dialogo 23');
+INSERT INTO NPC (id_cuarto, nombre, role, dialogo) VALUES (1, 'npc_24', 'hada', 'Dialogo 24');
+INSERT INTO NPC (id_cuarto, nombre, role, dialogo) VALUES (6, 'npc_25', 'mercantil', 'Dialogo 25');
+INSERT INTO NPC (id_cuarto, nombre, role, dialogo) VALUES (24, 'npc_26', 'viejo', 'Dialogo 26');
+INSERT INTO NPC (id_cuarto, nombre, role, dialogo) VALUES (17, 'npc_27', 'viejo', 'Dialogo 27');
+INSERT INTO NPC (id_cuarto, nombre, role, dialogo) VALUES (27, 'npc_28', 'mercantil', 'Dialogo 28');
+INSERT INTO NPC (id_cuarto, nombre, role, dialogo) VALUES (18, 'npc_29', 'hada', 'Dialogo 29');
+INSERT INTO NPC (id_cuarto, nombre, role, dialogo) VALUES (9, 'npc_30', 'viejo', 'Dialogo 30');
+INSERT INTO Tienda (id_npc, tipo) VALUES (30, 'pociones');
+INSERT INTO Tienda (id_npc, tipo) VALUES (22, 'flecha');
+INSERT INTO Tienda (id_npc, tipo) VALUES (26, 'bomba');
+INSERT INTO Tienda (id_npc, tipo) VALUES (14, 'flecha');
+INSERT INTO Tienda (id_npc, tipo) VALUES (23, 'flecha');
+INSERT INTO Tienda (id_npc, tipo) VALUES (5, 'flecha');
+INSERT INTO Tienda (id_npc, tipo) VALUES (25, 'bomba');
+INSERT INTO Tienda (id_npc, tipo) VALUES (4, 'bomba');
+INSERT INTO Tienda (id_npc, tipo) VALUES (30, 'bomba');
+INSERT INTO Tienda (id_npc, tipo) VALUES (26, 'bomba');
+INSERT INTO Tienda (id_npc, tipo) VALUES (5, 'flecha');
+INSERT INTO Tienda (id_npc, tipo) VALUES (28, 'bomba');
+INSERT INTO Tienda (id_npc, tipo) VALUES (29, 'bomba');
+INSERT INTO Tienda (id_npc, tipo) VALUES (30, 'pociones');
+INSERT INTO Tienda (id_npc, tipo) VALUES (2, 'pociones');
+INSERT INTO Tienda (id_npc, tipo) VALUES (14, 'bomba');
+INSERT INTO Tienda (id_npc, tipo) VALUES (25, 'pociones');
+INSERT INTO Tienda (id_npc, tipo) VALUES (23, 'bomba');
+INSERT INTO Tienda (id_npc, tipo) VALUES (3, 'flecha');
+INSERT INTO Tienda (id_npc, tipo) VALUES (15, 'pociones');
+INSERT INTO Tienda (id_npc, tipo) VALUES (7, 'pociones');
+INSERT INTO Tienda (id_npc, tipo) VALUES (15, 'pociones');
+INSERT INTO Tienda (id_npc, tipo) VALUES (12, 'pociones');
+INSERT INTO Tienda (id_npc, tipo) VALUES (6, 'flecha');
+INSERT INTO Tienda (id_npc, tipo) VALUES (24, 'pociones');
+INSERT INTO Tienda (id_npc, tipo) VALUES (26, 'pociones');
+INSERT INTO Tienda (id_npc, tipo) VALUES (15, 'pociones');
+INSERT INTO Tienda (id_npc, tipo) VALUES (10, 'pociones');
+INSERT INTO Tienda (id_npc, tipo) VALUES (21, 'flecha');
+INSERT INTO Tienda (id_npc, tipo) VALUES (20, 'bomba');
+INSERT INTO Producto_Tienda (id_tienda, id_objeto, precio, cantidad, stock_infinito) VALUES (5, 21, 18, 1, 0);
+INSERT INTO Producto_Tienda (id_tienda, id_objeto, precio, cantidad, stock_infinito) VALUES (24, 30, 31, 10, 0);
+INSERT INTO Producto_Tienda (id_tienda, id_objeto, precio, cantidad, stock_infinito) VALUES (28, 30, 51, 7, 0);
+INSERT INTO Producto_Tienda (id_tienda, id_objeto, precio, cantidad, stock_infinito) VALUES (4, 16, 13, 9, 0);
+INSERT INTO Producto_Tienda (id_tienda, id_objeto, precio, cantidad, stock_infinito) VALUES (25, 28, 66, 5, 0);
+INSERT INTO Producto_Tienda (id_tienda, id_objeto, precio, cantidad, stock_infinito) VALUES (10, 24, 10, 1, 0);
+INSERT INTO Producto_Tienda (id_tienda, id_objeto, precio, cantidad, stock_infinito) VALUES (10, 11, 13, 7, 0);
+INSERT INTO Producto_Tienda (id_tienda, id_objeto, precio, cantidad, stock_infinito) VALUES (8, 11, 45, 10, 0);
+INSERT INTO Producto_Tienda (id_tienda, id_objeto, precio, cantidad, stock_infinito) VALUES (2, 13, 72, 2, 1);
+INSERT INTO Producto_Tienda (id_tienda, id_objeto, precio, cantidad, stock_infinito) VALUES (8, 1, 75, 4, 1);
+INSERT INTO Producto_Tienda (id_tienda, id_objeto, precio, cantidad, stock_infinito) VALUES (28, 3, 12, 7, 0);
+INSERT INTO Producto_Tienda (id_tienda, id_objeto, precio, cantidad, stock_infinito) VALUES (21, 3, 31, 1, 1);
+INSERT INTO Producto_Tienda (id_tienda, id_objeto, precio, cantidad, stock_infinito) VALUES (25, 9, 34, 4, 0);
+INSERT INTO Producto_Tienda (id_tienda, id_objeto, precio, cantidad, stock_infinito) VALUES (24, 17, 21, 5, 0);
+INSERT INTO Producto_Tienda (id_tienda, id_objeto, precio, cantidad, stock_infinito) VALUES (27, 17, 75, 8, 0);
+INSERT INTO Producto_Tienda (id_tienda, id_objeto, precio, cantidad, stock_infinito) VALUES (21, 8, 5, 5, 1);
+INSERT INTO Producto_Tienda (id_tienda, id_objeto, precio, cantidad, stock_infinito) VALUES (24, 12, 51, 4, 1);
+INSERT INTO Producto_Tienda (id_tienda, id_objeto, precio, cantidad, stock_infinito) VALUES (1, 25, 90, 6, 1);
+INSERT INTO Producto_Tienda (id_tienda, id_objeto, precio, cantidad, stock_infinito) VALUES (9, 29, 90, 2, 1);
+INSERT INTO Producto_Tienda (id_tienda, id_objeto, precio, cantidad, stock_infinito) VALUES (16, 27, 75, 3, 0);
+INSERT INTO Producto_Tienda (id_tienda, id_objeto, precio, cantidad, stock_infinito) VALUES (2, 12, 78, 9, 0);
+INSERT INTO Producto_Tienda (id_tienda, id_objeto, precio, cantidad, stock_infinito) VALUES (11, 14, 1, 5, 0);
+INSERT INTO Producto_Tienda (id_tienda, id_objeto, precio, cantidad, stock_infinito) VALUES (21, 27, 66, 5, 0);
+INSERT INTO Producto_Tienda (id_tienda, id_objeto, precio, cantidad, stock_infinito) VALUES (24, 10, 69, 2, 1);
+INSERT INTO Producto_Tienda (id_tienda, id_objeto, precio, cantidad, stock_infinito) VALUES (6, 28, 84, 3, 1);
+INSERT INTO Producto_Tienda (id_tienda, id_objeto, precio, cantidad, stock_infinito) VALUES (27, 27, 4, 3, 1);
+INSERT INTO Producto_Tienda (id_tienda, id_objeto, precio, cantidad, stock_infinito) VALUES (15, 20, 42, 9, 0);
+INSERT INTO Producto_Tienda (id_tienda, id_objeto, precio, cantidad, stock_infinito) VALUES (8, 14, 49, 3, 0);
+INSERT INTO Producto_Tienda (id_tienda, id_objeto, precio, cantidad, stock_infinito) VALUES (29, 17, 31, 9, 0);
+INSERT INTO Producto_Tienda (id_tienda, id_objeto, precio, cantidad, stock_infinito) VALUES (3, 13, 70, 7, 0);
+INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (18, 'npc');
+INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (15, 'enemigo');
+INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (17, 'jefe');
+INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (7, 'npc');
+INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (30, 'tesoro');
+INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (24, 'npc');
+INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (6, 'jefe');
+INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (25, 'tesoro');
+INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (19, 'npc');
+INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (11, 'tesoro');
+INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (10, 'jefe');
+INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (21, 'npc');
+INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (13, 'enemigo');
 INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (4, 'enemigo');
-INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (5, 'npc');
-INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (6, 'enemigo');
-INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (7, 'enemigo');
+INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (28, 'jefe');
+INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (14, 'jefe');
+INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (5, 'enemigo');
+INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (25, 'tesoro');
+INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (28, 'enemigo');
+INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (22, 'jefe');
 INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (8, 'enemigo');
-INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (9, 'npc');
-INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (10, 'enemigo');
-INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (11, 'jefe');
-
--- 17. Accion (acciones disponibles)
-INSERT INTO Accion (nombre, descripcion)
-VALUES ('atacar_espada', 'Ataque cuerpo a cuerpo con espada.');
-INSERT INTO Accion (nombre, descripcion)
-VALUES ('disparar_flecha', 'Ataque a distancia con arco.');
-INSERT INTO Accion (nombre, descripcion)
-VALUES ('dejar_bomba', 'Colocar una bomba para explotar en área.');
-
--- 18. Jugador_Accion (registro de acciones de los jugadores)
-INSERT INTO Jugador_Accion (id_jugador, id_accion, id_objeto, id_enemigo, id_npc, descripcion)
-VALUES (1, 1, 1, 1, NULL, 'Ataque de espada exitoso contra Enemigo_A.');
-INSERT INTO Jugador_Accion (id_jugador, id_accion, id_objeto, id_enemigo, id_npc, descripcion)
-VALUES (2, 2, 2, 2, 1, 'Disparo de flecha certero.');
+INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (28, 'enemigo');
+INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (20, 'jefe');
+INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (25, 'npc');
+INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (2, 'jefe');
+INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (8, 'tesoro');
+INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (2, 'enemigo');
+INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (30, 'npc');
+INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (26, 'npc');
+INSERT INTO Elemento_Cuarto (id_cuarto, tipo) VALUES (8, 'jefe');
+INSERT INTO Enemigo (id_cuarto, nombre, vida_max, vida_actual, velocidad, dano, drop_monedas) VALUES (17, 'enemigo_1', 144, 63, 6, 46, 17);
+INSERT INTO Enemigo (id_cuarto, nombre, vida_max, vida_actual, velocidad, dano, drop_monedas) VALUES (1, 'enemigo_2', 148, 118, 8, 22, 16);
+INSERT INTO Enemigo (id_cuarto, nombre, vida_max, vida_actual, velocidad, dano, drop_monedas) VALUES (3, 'enemigo_3', 154, 72, 1, 20, 14);
+INSERT INTO Enemigo (id_cuarto, nombre, vida_max, vida_actual, velocidad, dano, drop_monedas) VALUES (19, 'enemigo_4', 161, 192, 7, 24, 20);
+INSERT INTO Enemigo (id_cuarto, nombre, vida_max, vida_actual, velocidad, dano, drop_monedas) VALUES (14, 'enemigo_5', 74, 94, 10, 39, 16);
+INSERT INTO Enemigo (id_cuarto, nombre, vida_max, vida_actual, velocidad, dano, drop_monedas) VALUES (24, 'enemigo_6', 54, 191, 4, 35, 3);
+INSERT INTO Enemigo (id_cuarto, nombre, vida_max, vida_actual, velocidad, dano, drop_monedas) VALUES (12, 'enemigo_7', 117, 129, 9, 44, 14);
+INSERT INTO Enemigo (id_cuarto, nombre, vida_max, vida_actual, velocidad, dano, drop_monedas) VALUES (1, 'enemigo_8', 121, 174, 5, 46, 14);
+INSERT INTO Enemigo (id_cuarto, nombre, vida_max, vida_actual, velocidad, dano, drop_monedas) VALUES (1, 'enemigo_9', 144, 131, 10, 13, 8);
+INSERT INTO Enemigo (id_cuarto, nombre, vida_max, vida_actual, velocidad, dano, drop_monedas) VALUES (28, 'enemigo_10', 95, 162, 10, 39, 5);
+INSERT INTO Enemigo (id_cuarto, nombre, vida_max, vida_actual, velocidad, dano, drop_monedas) VALUES (28, 'enemigo_11', 69, 114, 3, 39, 7);
+INSERT INTO Enemigo (id_cuarto, nombre, vida_max, vida_actual, velocidad, dano, drop_monedas) VALUES (11, 'enemigo_12', 182, 137, 1, 41, 3);
+INSERT INTO Enemigo (id_cuarto, nombre, vida_max, vida_actual, velocidad, dano, drop_monedas) VALUES (28, 'enemigo_13', 61, 163, 5, 13, 1);
+INSERT INTO Enemigo (id_cuarto, nombre, vida_max, vida_actual, velocidad, dano, drop_monedas) VALUES (6, 'enemigo_14', 187, 153, 4, 24, 18);
+INSERT INTO Enemigo (id_cuarto, nombre, vida_max, vida_actual, velocidad, dano, drop_monedas) VALUES (30, 'enemigo_15', 144, 126, 8, 15, 3);
+INSERT INTO Enemigo (id_cuarto, nombre, vida_max, vida_actual, velocidad, dano, drop_monedas) VALUES (7, 'enemigo_16', 197, 132, 3, 22, 7);
+INSERT INTO Enemigo (id_cuarto, nombre, vida_max, vida_actual, velocidad, dano, drop_monedas) VALUES (8, 'enemigo_17', 160, 128, 10, 24, 5);
+INSERT INTO Enemigo (id_cuarto, nombre, vida_max, vida_actual, velocidad, dano, drop_monedas) VALUES (2, 'enemigo_18', 142, 150, 1, 23, 9);
+INSERT INTO Enemigo (id_cuarto, nombre, vida_max, vida_actual, velocidad, dano, drop_monedas) VALUES (10, 'enemigo_19', 168, 157, 10, 47, 7);
+INSERT INTO Enemigo (id_cuarto, nombre, vida_max, vida_actual, velocidad, dano, drop_monedas) VALUES (15, 'enemigo_20', 191, 148, 2, 21, 7);
+INSERT INTO Enemigo (id_cuarto, nombre, vida_max, vida_actual, velocidad, dano, drop_monedas) VALUES (23, 'enemigo_21', 182, 125, 9, 15, 14);
+INSERT INTO Enemigo (id_cuarto, nombre, vida_max, vida_actual, velocidad, dano, drop_monedas) VALUES (10, 'enemigo_22', 68, 138, 10, 41, 17);
+INSERT INTO Enemigo (id_cuarto, nombre, vida_max, vida_actual, velocidad, dano, drop_monedas) VALUES (11, 'enemigo_23', 169, 131, 10, 35, 14);
+INSERT INTO Enemigo (id_cuarto, nombre, vida_max, vida_actual, velocidad, dano, drop_monedas) VALUES (15, 'enemigo_24', 151, 194, 2, 32, 12);
+INSERT INTO Enemigo (id_cuarto, nombre, vida_max, vida_actual, velocidad, dano, drop_monedas) VALUES (25, 'enemigo_25', 168, 125, 1, 26, 15);
+INSERT INTO Enemigo (id_cuarto, nombre, vida_max, vida_actual, velocidad, dano, drop_monedas) VALUES (24, 'enemigo_26', 51, 74, 2, 20, 6);
+INSERT INTO Enemigo (id_cuarto, nombre, vida_max, vida_actual, velocidad, dano, drop_monedas) VALUES (12, 'enemigo_27', 53, 110, 6, 10, 2);
+INSERT INTO Enemigo (id_cuarto, nombre, vida_max, vida_actual, velocidad, dano, drop_monedas) VALUES (14, 'enemigo_28', 83, 139, 2, 29, 14);
+INSERT INTO Enemigo (id_cuarto, nombre, vida_max, vida_actual, velocidad, dano, drop_monedas) VALUES (27, 'enemigo_29', 132, 131, 6, 15, 15);
+INSERT INTO Enemigo (id_cuarto, nombre, vida_max, vida_actual, velocidad, dano, drop_monedas) VALUES (18, 'enemigo_30', 200, 155, 2, 44, 12);
+INSERT INTO Jefe (id_enemigo, id_cuarto, nombre, vida, dano, velocidad) VALUES (11, 26, 'jefe_1', 207, 48, 9);
+INSERT INTO Jefe (id_enemigo, id_cuarto, nombre, vida, dano, velocidad) VALUES (2, 25, 'jefe_2', 269, 30, 10);
+INSERT INTO Jefe (id_enemigo, id_cuarto, nombre, vida, dano, velocidad) VALUES (11, 13, 'jefe_3', 198, 46, 3);
+INSERT INTO Jefe (id_enemigo, id_cuarto, nombre, vida, dano, velocidad) VALUES (26, 13, 'jefe_4', 233, 49, 3);
+INSERT INTO Jefe (id_enemigo, id_cuarto, nombre, vida, dano, velocidad) VALUES (10, 11, 'jefe_5', 265, 20, 5);
+INSERT INTO Jefe (id_enemigo, id_cuarto, nombre, vida, dano, velocidad) VALUES (26, 6, 'jefe_6', 300, 26, 3);
+INSERT INTO Jefe (id_enemigo, id_cuarto, nombre, vida, dano, velocidad) VALUES (25, 10, 'jefe_7', 239, 33, 3);
+INSERT INTO Jefe (id_enemigo, id_cuarto, nombre, vida, dano, velocidad) VALUES (18, 9, 'jefe_8', 299, 23, 4);
+INSERT INTO Jefe (id_enemigo, id_cuarto, nombre, vida, dano, velocidad) VALUES (11, 21, 'jefe_9', 176, 44, 1);
+INSERT INTO Jefe (id_enemigo, id_cuarto, nombre, vida, dano, velocidad) VALUES (12, 8, 'jefe_10', 228, 46, 10);
+INSERT INTO Jefe (id_enemigo, id_cuarto, nombre, vida, dano, velocidad) VALUES (16, 30, 'jefe_11', 238, 21, 3);
+INSERT INTO Jefe (id_enemigo, id_cuarto, nombre, vida, dano, velocidad) VALUES (8, 3, 'jefe_12', 207, 22, 6);
+INSERT INTO Jefe (id_enemigo, id_cuarto, nombre, vida, dano, velocidad) VALUES (19, 14, 'jefe_13', 275, 48, 1);
+INSERT INTO Jefe (id_enemigo, id_cuarto, nombre, vida, dano, velocidad) VALUES (21, 20, 'jefe_14', 120, 39, 7);
+INSERT INTO Jefe (id_enemigo, id_cuarto, nombre, vida, dano, velocidad) VALUES (20, 2, 'jefe_15', 189, 27, 2);
+INSERT INTO Jefe (id_enemigo, id_cuarto, nombre, vida, dano, velocidad) VALUES (21, 11, 'jefe_16', 281, 24, 9);
+INSERT INTO Jefe (id_enemigo, id_cuarto, nombre, vida, dano, velocidad) VALUES (20, 28, 'jefe_17', 111, 49, 5);
+INSERT INTO Jefe (id_enemigo, id_cuarto, nombre, vida, dano, velocidad) VALUES (15, 9, 'jefe_18', 207, 46, 2);
+INSERT INTO Jefe (id_enemigo, id_cuarto, nombre, vida, dano, velocidad) VALUES (27, 21, 'jefe_19', 114, 24, 6);
+INSERT INTO Jefe (id_enemigo, id_cuarto, nombre, vida, dano, velocidad) VALUES (3, 23, 'jefe_20', 233, 38, 10);
+INSERT INTO Jefe (id_enemigo, id_cuarto, nombre, vida, dano, velocidad) VALUES (12, 15, 'jefe_21', 295, 23, 10);
+INSERT INTO Jefe (id_enemigo, id_cuarto, nombre, vida, dano, velocidad) VALUES (11, 22, 'jefe_22', 257, 31, 2);
+INSERT INTO Jefe (id_enemigo, id_cuarto, nombre, vida, dano, velocidad) VALUES (18, 18, 'jefe_23', 191, 45, 5);
+INSERT INTO Jefe (id_enemigo, id_cuarto, nombre, vida, dano, velocidad) VALUES (25, 19, 'jefe_24', 296, 47, 6);
+INSERT INTO Jefe (id_enemigo, id_cuarto, nombre, vida, dano, velocidad) VALUES (11, 17, 'jefe_25', 255, 48, 3);
+INSERT INTO Jefe (id_enemigo, id_cuarto, nombre, vida, dano, velocidad) VALUES (2, 9, 'jefe_26', 258, 21, 4);
+INSERT INTO Jefe (id_enemigo, id_cuarto, nombre, vida, dano, velocidad) VALUES (12, 11, 'jefe_27', 193, 32, 6);
+INSERT INTO Jefe (id_enemigo, id_cuarto, nombre, vida, dano, velocidad) VALUES (29, 22, 'jefe_28', 212, 43, 7);
+INSERT INTO Jefe (id_enemigo, id_cuarto, nombre, vida, dano, velocidad) VALUES (20, 10, 'jefe_29', 183, 28, 4);
+INSERT INTO Jefe (id_enemigo, id_cuarto, nombre, vida, dano, velocidad) VALUES (23, 20, 'jefe_30', 254, 41, 6);
+INSERT INTO Accion (nombre, descripcion) VALUES ('dejar_bomba', 'Descripción de acción 1');
+INSERT INTO Accion (nombre, descripcion) VALUES ('dejar_bomba', 'Descripción de acción 2');
+INSERT INTO Accion (nombre, descripcion) VALUES ('dejar_bomba', 'Descripción de acción 3');
+INSERT INTO Accion (nombre, descripcion) VALUES ('atacar_espada', 'Descripción de acción 4');
+INSERT INTO Accion (nombre, descripcion) VALUES ('disparar_flecha', 'Descripción de acción 5');
+INSERT INTO Accion (nombre, descripcion) VALUES ('atacar_espada', 'Descripción de acción 6');
+INSERT INTO Accion (nombre, descripcion) VALUES ('disparar_flecha', 'Descripción de acción 7');
+INSERT INTO Accion (nombre, descripcion) VALUES ('dejar_bomba', 'Descripción de acción 8');
+INSERT INTO Accion (nombre, descripcion) VALUES ('disparar_flecha', 'Descripción de acción 9');
+INSERT INTO Accion (nombre, descripcion) VALUES ('disparar_flecha', 'Descripción de acción 10');
+INSERT INTO Accion (nombre, descripcion) VALUES ('disparar_flecha', 'Descripción de acción 11');
+INSERT INTO Accion (nombre, descripcion) VALUES ('dejar_bomba', 'Descripción de acción 12');
+INSERT INTO Accion (nombre, descripcion) VALUES ('dejar_bomba', 'Descripción de acción 13');
+INSERT INTO Accion (nombre, descripcion) VALUES ('disparar_flecha', 'Descripción de acción 14');
+INSERT INTO Accion (nombre, descripcion) VALUES ('dejar_bomba', 'Descripción de acción 15');
+INSERT INTO Accion (nombre, descripcion) VALUES ('disparar_flecha', 'Descripción de acción 16');
+INSERT INTO Accion (nombre, descripcion) VALUES ('disparar_flecha', 'Descripción de acción 17');
+INSERT INTO Accion (nombre, descripcion) VALUES ('disparar_flecha', 'Descripción de acción 18');
+INSERT INTO Accion (nombre, descripcion) VALUES ('disparar_flecha', 'Descripción de acción 19');
+INSERT INTO Accion (nombre, descripcion) VALUES ('dejar_bomba', 'Descripción de acción 20');
+INSERT INTO Accion (nombre, descripcion) VALUES ('atacar_espada', 'Descripción de acción 21');
+INSERT INTO Accion (nombre, descripcion) VALUES ('atacar_espada', 'Descripción de acción 22');
+INSERT INTO Accion (nombre, descripcion) VALUES ('disparar_flecha', 'Descripción de acción 23');
+INSERT INTO Accion (nombre, descripcion) VALUES ('disparar_flecha', 'Descripción de acción 24');
+INSERT INTO Accion (nombre, descripcion) VALUES ('atacar_espada', 'Descripción de acción 25');
+INSERT INTO Accion (nombre, descripcion) VALUES ('atacar_espada', 'Descripción de acción 26');
+INSERT INTO Accion (nombre, descripcion) VALUES ('atacar_espada', 'Descripción de acción 27');
+INSERT INTO Accion (nombre, descripcion) VALUES ('disparar_flecha', 'Descripción de acción 28');
+INSERT INTO Accion (nombre, descripcion) VALUES ('atacar_espada', 'Descripción de acción 29');
+INSERT INTO Accion (nombre, descripcion) VALUES ('atacar_espada', 'Descripción de acción 30');
+INSERT INTO Jugador_Accion (id_jugador, id_accion, id_objeto, id_enemigo, id_npc, descripcion) VALUES (30, 24, 13, 10, 3, 'Acción realizada 1');
+INSERT INTO Jugador_Accion (id_jugador, id_accion, id_objeto, id_enemigo, id_npc, descripcion) VALUES (21, 29, 4, 7, 28, 'Acción realizada 2');
+INSERT INTO Jugador_Accion (id_jugador, id_accion, id_objeto, id_enemigo, id_npc, descripcion) VALUES (9, 2, 11, 15, 21, 'Acción realizada 3');
+INSERT INTO Jugador_Accion (id_jugador, id_accion, id_objeto, id_enemigo, id_npc, descripcion) VALUES (6, 21, 5, 20, 26, 'Acción realizada 4');
+INSERT INTO Jugador_Accion (id_jugador, id_accion, id_objeto, id_enemigo, id_npc, descripcion) VALUES (28, 10, 4, 24, 24, 'Acción realizada 5');
+INSERT INTO Jugador_Accion (id_jugador, id_accion, id_objeto, id_enemigo, id_npc, descripcion) VALUES (19, 10, 26, 4, 23, 'Acción realizada 6');
+INSERT INTO Jugador_Accion (id_jugador, id_accion, id_objeto, id_enemigo, id_npc, descripcion) VALUES (17, 3, 29, 11, 7, 'Acción realizada 7');
+INSERT INTO Jugador_Accion (id_jugador, id_accion, id_objeto, id_enemigo, id_npc, descripcion) VALUES (27, 4, 28, 5, 23, 'Acción realizada 8');
+INSERT INTO Jugador_Accion (id_jugador, id_accion, id_objeto, id_enemigo, id_npc, descripcion) VALUES (17, 20, 29, 10, 22, 'Acción realizada 9');
+INSERT INTO Jugador_Accion (id_jugador, id_accion, id_objeto, id_enemigo, id_npc, descripcion) VALUES (14, 26, 27, 17, 27, 'Acción realizada 10');
+INSERT INTO Jugador_Accion (id_jugador, id_accion, id_objeto, id_enemigo, id_npc, descripcion) VALUES (29, 21, 25, 22, 3, 'Acción realizada 11');
+INSERT INTO Jugador_Accion (id_jugador, id_accion, id_objeto, id_enemigo, id_npc, descripcion) VALUES (22, 21, 22, 15, 20, 'Acción realizada 12');
+INSERT INTO Jugador_Accion (id_jugador, id_accion, id_objeto, id_enemigo, id_npc, descripcion) VALUES (12, 27, 9, 10, 9, 'Acción realizada 13');
+INSERT INTO Jugador_Accion (id_jugador, id_accion, id_objeto, id_enemigo, id_npc, descripcion) VALUES (7, 17, 22, 24, 6, 'Acción realizada 14');
+INSERT INTO Jugador_Accion (id_jugador, id_accion, id_objeto, id_enemigo, id_npc, descripcion) VALUES (5, 13, 14, 28, 26, 'Acción realizada 15');
+INSERT INTO Jugador_Accion (id_jugador, id_accion, id_objeto, id_enemigo, id_npc, descripcion) VALUES (9, 6, 4, 18, 16, 'Acción realizada 16');
+INSERT INTO Jugador_Accion (id_jugador, id_accion, id_objeto, id_enemigo, id_npc, descripcion) VALUES (22, 11, 19, 17, 5, 'Acción realizada 17');
+INSERT INTO Jugador_Accion (id_jugador, id_accion, id_objeto, id_enemigo, id_npc, descripcion) VALUES (7, 25, 14, 7, 8, 'Acción realizada 18');
+INSERT INTO Jugador_Accion (id_jugador, id_accion, id_objeto, id_enemigo, id_npc, descripcion) VALUES (9, 22, 10, 3, 2, 'Acción realizada 19');
+INSERT INTO Jugador_Accion (id_jugador, id_accion, id_objeto, id_enemigo, id_npc, descripcion) VALUES (2, 18, 11, 12, 19, 'Acción realizada 20');
+INSERT INTO Jugador_Accion (id_jugador, id_accion, id_objeto, id_enemigo, id_npc, descripcion) VALUES (28, 3, 27, 29, 14, 'Acción realizada 21');
+INSERT INTO Jugador_Accion (id_jugador, id_accion, id_objeto, id_enemigo, id_npc, descripcion) VALUES (23, 20, 30, 14, 2, 'Acción realizada 22');
+INSERT INTO Jugador_Accion (id_jugador, id_accion, id_objeto, id_enemigo, id_npc, descripcion) VALUES (21, 28, 26, 5, 13, 'Acción realizada 23');
+INSERT INTO Jugador_Accion (id_jugador, id_accion, id_objeto, id_enemigo, id_npc, descripcion) VALUES (16, 24, 18, 27, 30, 'Acción realizada 24');
+INSERT INTO Jugador_Accion (id_jugador, id_accion, id_objeto, id_enemigo, id_npc, descripcion) VALUES (25, 9, 12, 17, 10, 'Acción realizada 25');
+INSERT INTO Jugador_Accion (id_jugador, id_accion, id_objeto, id_enemigo, id_npc, descripcion) VALUES (25, 1, 18, 25, 19, 'Acción realizada 26');
+INSERT INTO Jugador_Accion (id_jugador, id_accion, id_objeto, id_enemigo, id_npc, descripcion) VALUES (15, 9, 9, 23, 19, 'Acción realizada 27');
+INSERT INTO Jugador_Accion (id_jugador, id_accion, id_objeto, id_enemigo, id_npc, descripcion) VALUES (23, 2, 20, 20, 9, 'Acción realizada 28');
+INSERT INTO Jugador_Accion (id_jugador, id_accion, id_objeto, id_enemigo, id_npc, descripcion) VALUES (17, 6, 10, 24, 11, 'Acción realizada 29');
+INSERT INTO Jugador_Accion (id_jugador, id_accion, id_objeto, id_enemigo, id_npc, descripcion) VALUES (24, 10, 23, 3, 20, 'Acción realizada 30');
 
 SELECT * FROM Mapa;
 SELECT * FROM Cuarto;
