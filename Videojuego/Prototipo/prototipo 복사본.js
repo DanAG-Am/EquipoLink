@@ -1727,3 +1727,4 @@ function drawRupees(ctx, player) {
         }
     }
 }
+
