@@ -15,7 +15,7 @@ CREATE TABLE Cuarto(
 	id_cuarto INT AUTO_INCREMENT,
 	id_mapa INT,
 	descripcion TEXT,
-	tipo ENUM('normal','con_npc','con_enemigo','tienda','reino_hada','tesoro','con_jefe'),
+	tipo ENUM('normal','con_npc','con_enemigo','con_tesoro','con_jefe'),
 	acceso_bloqueado BOOLEAN DEFAULT FALSE,
 	PRIMARY KEY (id_cuarto),
 	FOREIGN KEY (id_mapa) REFERENCES Mapa(id_mapa)
@@ -39,14 +39,26 @@ CREATE TABLE Jugador(
 	FOREIGN KEY (id_cuarto) REFERENCES Cuarto(id_cuarto)
 );
 
+CREATE TABLE Estadisticas(
+	id_jugador INT,
+	enemigos_derrotados INT,
+	cofres_abiertos INT,
+	objetos_usados INT,
+	muertes INT,
+	tiempo_jugado TIME,
+	PRIMARY KEY (id_jugador),
+	FOREIGN KEY (id_jugador) REFERENCES Jugador(id_jugador)
+);
+
 CREATE TABLE Objeto(
 	id_objeto INT AUTO_INCREMENT,
 	nombre VARCHAR(50),
-	tipo ENUM('bomba','tech','pocion','moneda'),
+	tipo ENUM('bomba','flecha','pocion','moneda'),
 	efecto TEXT,
 	stackable BOOLEAN,
 	precio INT,
-	PRIMARY KEY (id_objeto)
+	PRIMARY KEY (id_objeto),
+	UNIQUE KEY (nombre)
 );
 
 CREATE TABLE Arma(
@@ -74,9 +86,10 @@ CREATE TABLE Cofre(
 	id_cofre INT AUTO_INCREMENT,
 	id_cuarto INT,
 	id_objeto INT,
-	requiere_llave BOOLEAN DEFAULT TRUE,
+	enemigos_derrotados BOOLEAN,
 	abierto BOOLEAN DEFAULT FALSE,
 	PRIMARY KEY (id_cofre),
+	UNIQUE KEY (id_cofre),
 	FOREIGN KEY (id_cuarto) REFERENCES Cuarto(id_cuarto),
 	FOREIGN KEY (id_objeto) REFERENCES Objeto(id_objeto)
 );
@@ -97,8 +110,6 @@ CREATE TABLE NPC(
 	nombre VARCHAR(50),
 	role ENUM('viejo','hada','mercantil'),
 	dialogo TEXT,
-	activo BOOLEAN,
-	intercambiable BOOLEAN,
 	PRIMARY KEY (id_npc),
 	UNIQUE KEY (nombre),
 	FOREIGN KEY (id_cuarto) REFERENCES Cuarto(id_cuarto)
@@ -107,6 +118,7 @@ CREATE TABLE NPC(
 CREATE TABLE Tienda(
 	id_shop INT AUTO_INCREMENT,
 	id_npc INT,
+	tipo ENUM('bomba','flecha','pociones'),
 	PRIMARY KEY (id_shop),
 	FOREIGN KEY (id_npc) REFERENCES NPC(id_npc)
 );
@@ -138,7 +150,7 @@ CREATE TABLE Enemigo(
 	vida_max INT,
 	vida_actual INT,
 	velocidad INT,
-	daño INT,
+	dano INT,
 	drop_monedas INT,
 	PRIMARY KEY (id_enemigo),
 	UNIQUE KEY (nombre),
@@ -151,7 +163,7 @@ CREATE TABLE Jefe(
 	id_cuarto INT,
 	nombre VARCHAR(50),
 	vida INT,
-	daño INT,
+	dano INT,
 	velocidad INT,
 	PRIMARY KEY (id_jefe),
 	UNIQUE KEY (nombre),
@@ -173,6 +185,7 @@ CREATE TABLE Jugador_Accion(
 	id_objeto INT,
 	id_enemigo INT,
 	id_npc INT,
+	descripcion TEXT,
 	fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY (id_jugador_accion),
 	FOREIGN KEY (id_jugador) REFERENCES Jugador(id_jugador),
