@@ -1,0 +1,192 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    width: 100%;
+    padding: 20px 40px;
+    display: flex;
+    background: #3B3F42;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.titulo-juego {
+    font-size: 4em;
+    color: #fff700;
+    text-shadow: 2px 2px 4px #000;
+}
+
+nav {
+    display: flex;
+    gap: 20px;
+}
+
+.boton-header {
+    padding: 10px 20px;
+    font-size: 2em;
+    background-color: #6C767D;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, background-color 0.3s;
+}
+
+.boton-header:hover {
+    background-color: #4F4F4F;
+    transform: scale(1.05);
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: black;
+    background-size: 400% 400%;
+    font-family: 'Pixelify Sans', sans-serif;
+    color: #ffffff;
+    text-align: center;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 5em;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px #000;
+}
+
+#introduccion {
+    font-size: 3em;
+    margin-bottom: 5px;
+}
+
+.texto-intro {
+    font-size: 1.5em;
+    line-height: 1.5;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+a.boton {
+    display: inline-block;
+    padding: 15px 40px;
+    margin-bottom: -60px;
+    font-size: 2em;
+    background-color: #ff4757;
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, box-shadow 0.3s, background-color 0.3s;
+}
+
+a.boton:hover {
+    background-color: #e84118;
+    transform: scale(1.05);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+}
+
+.logo {
+    width: 800px;
+    max-width: 90%;
+    margin-top: 35%;
+    margin-bottom: -250px;
+}
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    margin-top: 40px;
+    margin-bottom: -40px;
+    justify-items: center;
+}
+
+.boton-grid {
+    padding: 40px 40px;
+    font-size: 3em;
+    background-color: #D0B245;
+    color: white;
+    text-decoration: none;
+    border-radius: 12px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, background-color 0.3s;
+    text-align: center;
+    width: 600px;
+}
+
+.boton-grid:hover {
+    background-color: #E2C65F;
+    transform: scale(1.05);
+}
+
+.contenido-creditos {
+    margin-top: 420px;
+    max-width: 1000px;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
+}
+
+.seccion-titulo {
+    font-size: 2.5em;
+    margin-bottom: 15px;
+    color: #fff700;
+    text-shadow: 1px 1px 3px #000;
+}
+
+.seccion-texto {
+    font-size: 1.5em;
+    line-height: 1.6;
+    max-width: 800px;
+}
+
+.lista-creditos {
+    list-style: none;
+    padding-left: 0;
+    font-size: 1.5em;
+    line-height: 1.8;
+    max-width: 800px;
+    text-align: left;
+}
+
+.lista-creditos li::before {
+    content: "🎮 ";
+    margin-right: 5px;
+}
+
+.lista-profesor {
+    list-style: none;
+    padding-left: 0;
+    font-size: 1.5em;
+    line-height: 1.8;
+    max-width: 800px;
+    text-align: left;
+}
+
+.lista-profesor li::before {
+    content: "👨‍🏫 ";
+    margin-right: 5px;
+}
+
+.link-github {
+    color: #1e90ff;
+    text-decoration: underline;
+}
+
+footer {
+    margin-top: 60px;
+    padding: 20px 0;
+    font-size: 1.2em;
+}
