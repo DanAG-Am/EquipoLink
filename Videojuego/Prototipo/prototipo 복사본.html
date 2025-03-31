@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Sprites</title>
+        <link rel="stylesheet" href="styles.css">
+        <script src="game_classes.js"></script>
+        <script src="background.js"></script>
+        <script src="prototipo 복사본.js"></script>
+    </head>
+    <body>
+        <header>EQUIPOLINK VIDEOGAMES</header>
+        <div class="container">
+            <canvas id="canvas"></canvas>
+            <canvas id="uiCanvas"></canvas>
+        </div>
+        <div id="loginForm" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+            <h2 style="color: white;">Login</h2>
+            <label style="color: white;">Usuario:</label>
+            <input type="text" id="usernameInput"><br><br>
+            <label style="color: white;">Contrasena:</label>
+            <input type="password" id="passwordInput"><br><br>
+            <div id="loginError" style="color: white; margin: 10px 0;"></div>
+            <button id="loginButton">Continuar</button>
+            <button id="registerButton">Registrar</button>
+        </div>
+        <div id="registerForm" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; background: rgb(0, 0, 0); padding: 40px; border: 2px solid white; color: white;">
+            <h2>Registrar</h2>
+            <label>Usuario:</label>
+            <input type="text" id="registerUsername"><br><br>
+            <label>Contrasena:</label>
+            <input type="password" id="registerPassword"><br><br>
+            <label>Confirma Contrasena:</label>
+            <input type="password" id="confirmRegisterPassword"><br><br>
+            <div id="registerError" style="color: white; margin: 10px 0;"></div>
+            <button id="returnLoginButton">Regresar</button>
+            <button id="confirmRegisterButton">Confirmar</button>
+        </div>
+        <div id="purchaseDialog" style="display: none; position: absolute; top: 200px; left: 50%; transform: translateX(-50%); width: 300px; background: black; border: 2px solid white; padding: 10px; color: white; z-index: 1000;">
+            <p id="purchaseMessage">¿Cuántas deseas comprar?</p>
+            <input type="number" id="purchaseQuantity" min="1" max="20" value="1" step="1" style="width: 100%; padding: 5px; font-size: 16px;" />
+            <div style="text-align: center; margin-top: 10px;">
+               <button id="purchaseButton" style="padding: 5px 10px; font-size: 16px;">Comprar</button>
+               <button id="cancelButton" style="padding: 5px 10px; font-size: 16px;">Cancelar</button>
+            </div>
+        </div>
+        <div id="errorDialog" style="display: none; position: absolute; top: 300px; left: 50%; transform: translateX(-50%); width: 300px; background: black; border: 2px solid white; padding: 10px; color: white; z-index: 1000;">
+            <p id="errorMessage"></p>
+            <div style="text-align: center; margin-top: 10px;">
+               <button id="errorOkButton" style="padding: 5px 10px; font-size: 16px;">OK</button>
+            </div>
+        </div>
+        <script> main(); </script>
+        <footer>
+            <p>EquipoLink &copy; 2025</p>
+        </footer>
+    </body>
+</html>
