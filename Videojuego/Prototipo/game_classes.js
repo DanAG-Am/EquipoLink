@@ -23,12 +23,28 @@ class Vec {
         return new Vec(this.x * scalar, this.y * scalar);
     }
 
+    magnitude() {
+        return Math.sqrt(this.x ** 2 + this.y ** 2);
+    }
+
     length() {
         return Math.sqrt(this.x * this.x + this.y * this.y);
     }
 
-    magnitude() {
-        return Math.sqrt(this.x ** 2 + this.y ** 2);
+    normalize() {
+        const len = this.length();
+        if (len > 0) {
+            this.x /= len;
+            this.y /= len;
+        }
+    }
+
+    scale(scalar) {
+        return new Vec(this.x * scalar, this.y * scalar);
+    }
+
+    distance(other) {
+        return Math.sqrt(Math.pow(this.x-other.x, 2) + Math.pow(this.y-other.y, 2));
     }
 }
 
@@ -171,3 +187,4 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
         ctx.fillText(lines[i], x, y + i * lineHeight);
     }
 }
+
