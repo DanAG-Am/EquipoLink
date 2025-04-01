@@ -140,8 +140,8 @@ class Bat extends AnimatedObject {
         this.image.src = this.sprites[this.currentDirection][this.frameIndex];
         this.animationSpeed = 150;
         this.lastFrameChange = 250;
-        this.chaseRange = 200;  
-        this.chaseSpeed = 0.1;  
+        this.chaseRange = 100;  
+        this.chaseSpeed = 0.15;  
     }
 
     // Update method now takes playerPosition as a parameter
@@ -204,7 +204,7 @@ class Knight extends AnimatedObject{
         this.image.src = this.sprites[this.currentDirection][this.frameIndex];
         this.animationSpeed = 150;
         this.lastFrameChange = 250;
-        this.chaseRange = 80;
+        this.chaseRange = 300;
         this.chaseSpeed = 0.1;
     }
 
@@ -260,8 +260,8 @@ class Mage extends AnimatedObject{
         this.image.src = this.sprites[this.currentDirection][this.frameIndex];
         this.animationSpeed = 150;
         this.lastFrameChange = 250;
-        this.chaseRange = 100;
-        this.chaseSpeed = 0.2;
+        this.chaseRange = 1000;
+        this.chaseSpeed = 0.05;
     }
 
     update(deltaTime,playerPosition) {
@@ -372,8 +372,8 @@ class Slime extends AnimatedObject{
         this.image.src = this.sprites[this.currentDirection][this.frameIndex];
         this.animationSpeed = 150;
         this.lastFrameChange = 250;
-        this.chaseRange = 110;
-        this.chaseSpeed = 0.2;
+        this.chaseRange = 100;
+        this.chaseSpeed = 0.05;
     }
 
     update(deltaTime, playerPosition) {
