@@ -85,30 +85,37 @@ class Boss extends AnimatedObject{
         this.image.src = this.sprites[this.currentDirection][this.frameIndex];
         this.animationSpeed = 150;
         this.lastFrameChange = 250;
+        this.chaseRange = 100;
+        this.chaseSpeed = 0.2;
     }
 
-    update(deltaTime) {
+    update(deltaTime,playerPosition) {
         if (gamePaused) return;
 
-        this.velocity = new Vec(1, 1);
+        const distanceToPlayer = this.position.distance(playerPosition);
 
-        // Update bat position
-        let nextPosition = this.position.plus(this.velocity.times(deltaTime));
-        this.position = nextPosition;
-
-        // Update bat animation
-        this.lastFrameChange += deltaTime;
-        if (this.lastFrameChange > this.animationSpeed) {
-            this.frameIndex = (this.frameIndex + 1) % 2;
-            this.image.src = this.sprites[this.currentDirection][this.frameIndex];
-            this.lastFrameChange = 0;
+        if (distanceToPlayer < this.chaseRange) {
+            let directionToPlayer = playerPosition.minus(this.position);  // Vector from bat to player
+            directionToPlayer.normalize();  // Normalize the vector to get direction
+            this.velocity = directionToPlayer.scale(this.chaseSpeed); 
+        } else {
+            this.velocity = new Vec(0, 0);
         }
-
+    
         if (this.position.x + this.width > canvasWidth || this.position.x < 0) {
             this.velocity.x = -this.velocity.x;
         }
         if (this.position.y + this.height > canvasHeight || this.position.y < 0) {
             this.velocity.y = -this.velocity.y;
+        }
+
+        let nextPosition = this.position.plus(this.velocity.times(deltaTime));
+        this.position = nextPosition;
+        this.lastFrameChange += deltaTime;
+        if (this.lastFrameChange > this.animationSpeed) {
+            this.frameIndex = (this.frameIndex + 1) % 2;
+            this.image.src = this.sprites[this.currentDirection][this.frameIndex];
+            this.lastFrameChange = 0;
         }
     }
 
@@ -125,7 +132,7 @@ class Bat extends AnimatedObject {
         this.position = new Vec(position.x, position.y);
         this.velocity = new Vec(0, 0);
         this.sprites = {
-            "fly": ["../Videojuego/Assets/GameAssets/Enemies/enemy_Bat/Bat-1.png","../Videojuego/Assets/GameAssets/Enemies/enemy_Bat/Bat-2.png"],
+            "fly": ["../Videojuego/Assets/GameAssets/Enemies/enemy_Bat/Bat-1.png", "../Videojuego/Assets/GameAssets/Enemies/enemy_Bat/Bat-2.png"],
         };
         this.currentDirection = "fly";
         this.frameIndex = 0;
@@ -133,18 +140,40 @@ class Bat extends AnimatedObject {
         this.image.src = this.sprites[this.currentDirection][this.frameIndex];
         this.animationSpeed = 150;
         this.lastFrameChange = 250;
+        this.chaseRange = 200;  
+        this.chaseSpeed = 0.1;  
     }
 
-    update(deltaTime) {
+    // Update method now takes playerPosition as a parameter
+    update(deltaTime, playerPosition) {
         if (gamePaused) return;
 
-        this.velocity = new Vec(0, 0);
-
-        // Update bat position
+        const distanceToPlayer = this.position.distance(playerPosition);
+    
+        // If within chase range, start chasing the player
+        if (distanceToPlayer < this.chaseRange) {
+            // Calculate the direction from the bat to the player
+            let directionToPlayer = playerPosition.minus(this.position);  // Vector from bat to player
+            directionToPlayer.normalize();  // Normalize the vector to get direction
+            this.velocity = directionToPlayer.scale(this.chaseSpeed); 
+        } else {
+            // If outside chase range, stop moving
+            this.velocity = new Vec(0, 0);
+        }
+    
+        // Boundary checks to prevent the bat from going off-screen
+        if (this.position.x + this.width > canvasWidth || this.position.x < 0) {
+            this.velocity.x = -this.velocity.x;
+        }
+        if (this.position.y + this.height > canvasHeight || this.position.y < 0) {
+            this.velocity.y = -this.velocity.y;
+        }
+    
+        // Update the bat's position based on the velocity
         let nextPosition = this.position.plus(this.velocity.times(deltaTime));
         this.position = nextPosition;
-
-        // Update bat animation
+    
+        // Update animation
         this.lastFrameChange += deltaTime;
         if (this.lastFrameChange > this.animationSpeed) {
             this.frameIndex = (this.frameIndex + 1) % 2;
@@ -152,12 +181,6 @@ class Bat extends AnimatedObject {
             this.lastFrameChange = 0;
         }
 
-        if (this.position.x + this.width > canvasWidth || this.position.x < 0) {
-            this.velocity.x = -this.velocity.x;
-        }
-        if (this.position.y + this.height > canvasHeight || this.position.y < 0) {
-            this.velocity.y = -this.velocity.y;
-        }
     }
 
     draw(ctx) {
@@ -181,30 +204,38 @@ class Knight extends AnimatedObject{
         this.image.src = this.sprites[this.currentDirection][this.frameIndex];
         this.animationSpeed = 150;
         this.lastFrameChange = 250;
+        this.chaseRange = 80;
+        this.chaseSpeed = 0.1;
     }
 
-    update(deltaTime) {
+    update(deltaTime, playerPosition) {
         if (gamePaused) return;
 
-        this.velocity = new Vec(0, 0);
-
-        // Update bat position
-        let nextPosition = this.position.plus(this.velocity.times(deltaTime));
-        this.position = nextPosition;
-
-        // Update bat animation
-        this.lastFrameChange += deltaTime;
-        if (this.lastFrameChange > this.animationSpeed) {
-            this.frameIndex = (this.frameIndex + 1) % 2;
-            this.image.src = this.sprites[this.currentDirection][this.frameIndex];
-            this.lastFrameChange = 0;
+        const distanceToPlayer = this.position.distance(playerPosition);
+    
+        if (distanceToPlayer < this.chaseRange) {
+            let directionToPlayer = playerPosition.minus(this.position);  // Vector from bat to player
+            directionToPlayer.normalize();  // Normalize the vector to get direction
+            this.velocity = directionToPlayer.scale(this.chaseSpeed); 
+        } else {
+            this.velocity = new Vec(0, 0);
         }
-
+    
         if (this.position.x + this.width > canvasWidth || this.position.x < 0) {
             this.velocity.x = -this.velocity.x;
         }
         if (this.position.y + this.height > canvasHeight || this.position.y < 0) {
             this.velocity.y = -this.velocity.y;
+        }
+    
+        let nextPosition = this.position.plus(this.velocity.times(deltaTime));
+        this.position = nextPosition;
+
+        this.lastFrameChange += deltaTime;
+        if (this.lastFrameChange > this.animationSpeed) {
+            this.frameIndex = (this.frameIndex + 1) % 2;
+            this.image.src = this.sprites[this.currentDirection][this.frameIndex];
+            this.lastFrameChange = 0;
         }
     }
 
@@ -229,30 +260,38 @@ class Mage extends AnimatedObject{
         this.image.src = this.sprites[this.currentDirection][this.frameIndex];
         this.animationSpeed = 150;
         this.lastFrameChange = 250;
+        this.chaseRange = 100;
+        this.chaseSpeed = 0.2;
     }
 
-    update(deltaTime) {
+    update(deltaTime,playerPosition) {
         if (gamePaused) return;
 
-        this.velocity = new Vec(0, 0);
-
-        // Update bat position
-        let nextPosition = this.position.plus(this.velocity.times(deltaTime));
-        this.position = nextPosition;
-
-        // Update bat animation
-        this.lastFrameChange += deltaTime;
-        if (this.lastFrameChange > this.animationSpeed) {
-            this.frameIndex = (this.frameIndex + 1) % 2;
-            this.image.src = this.sprites[this.currentDirection][this.frameIndex];
-            this.lastFrameChange = 0;
+        const distanceToPlayer = this.position.distance(playerPosition);
+    
+        if (distanceToPlayer < this.chaseRange) {
+            let directionToPlayer = playerPosition.minus(this.position);  // Vector from bat to player
+            directionToPlayer.normalize();  // Normalize the vector to get direction
+            this.velocity = directionToPlayer.scale(this.chaseSpeed); 
+        } else {
+            this.velocity = new Vec(0, 0);
         }
-
+    
         if (this.position.x + this.width > canvasWidth || this.position.x < 0) {
             this.velocity.x = -this.velocity.x;
         }
         if (this.position.y + this.height > canvasHeight || this.position.y < 0) {
             this.velocity.y = -this.velocity.y;
+        }
+    
+        let nextPosition = this.position.plus(this.velocity.times(deltaTime));
+        this.position = nextPosition;
+    
+        this.lastFrameChange += deltaTime;
+        if (this.lastFrameChange > this.animationSpeed) {
+            this.frameIndex = (this.frameIndex + 1) % 2;
+            this.image.src = this.sprites[this.currentDirection][this.frameIndex];
+            this.lastFrameChange = 0;
         }
     }
 
@@ -277,30 +316,38 @@ class Skull extends AnimatedObject{
         this.image.src = this.sprites[this.currentDirection][this.frameIndex];
         this.animationSpeed = 150;
         this.lastFrameChange = 250;
+        this.chaseRange = 80;
+        this.chaseSpeed = 0.1;
     }
 
-    update(deltaTime) {
+    update(deltaTime, playerPosition) {
         if (gamePaused) return;
 
-        this.velocity = new Vec(0, 0);
-
-        // Update bat position
-        let nextPosition = this.position.plus(this.velocity.times(deltaTime));
-        this.position = nextPosition;
-
-        // Update bat animation
-        this.lastFrameChange += deltaTime;
-        if (this.lastFrameChange > this.animationSpeed) {
-            this.frameIndex = (this.frameIndex + 1) % 2;
-            this.image.src = this.sprites[this.currentDirection][this.frameIndex];
-            this.lastFrameChange = 0;
+        const distanceToPlayer = this.position.distance(playerPosition);
+    
+        if (distanceToPlayer < this.chaseRange) {
+            let directionToPlayer = playerPosition.minus(this.position);  // Vector from bat to player
+            directionToPlayer.normalize();  // Normalize the vector to get direction
+            this.velocity = directionToPlayer.scale(this.chaseSpeed); 
+        } else {
+            this.velocity = new Vec(0, 0);
         }
-
+    
         if (this.position.x + this.width > canvasWidth || this.position.x < 0) {
             this.velocity.x = -this.velocity.x;
         }
         if (this.position.y + this.height > canvasHeight || this.position.y < 0) {
             this.velocity.y = -this.velocity.y;
+        }
+    
+        let nextPosition = this.position.plus(this.velocity.times(deltaTime));
+        this.position = nextPosition;
+
+        this.lastFrameChange += deltaTime;
+        if (this.lastFrameChange > this.animationSpeed) {
+            this.frameIndex = (this.frameIndex + 1) % 2;
+            this.image.src = this.sprites[this.currentDirection][this.frameIndex];
+            this.lastFrameChange = 0;
         }
     }
 
@@ -325,30 +372,37 @@ class Slime extends AnimatedObject{
         this.image.src = this.sprites[this.currentDirection][this.frameIndex];
         this.animationSpeed = 150;
         this.lastFrameChange = 250;
+        this.chaseRange = 110;
+        this.chaseSpeed = 0.2;
     }
 
-    update(deltaTime) {
+    update(deltaTime, playerPosition) {
         if (gamePaused) return;
 
-        this.velocity = new Vec(0, 0);
+        const distanceToPlayer = this.position.distance(playerPosition);
 
-        // Update bat position
-        let nextPosition = this.position.plus(this.velocity.times(deltaTime));
-        this.position = nextPosition;
-
-        // Update bat animation
-        this.lastFrameChange += deltaTime;
-        if (this.lastFrameChange > this.animationSpeed) {
-            this.frameIndex = (this.frameIndex + 1) % 2;
-            this.image.src = this.sprites[this.currentDirection][this.frameIndex];
-            this.lastFrameChange = 0;
+        if (distanceToPlayer < this.chaseRange) {
+            let directionToPlayer = playerPosition.minus(this.position);  // Vector from bat to player
+            directionToPlayer.normalize();  // Normalize the vector to get direction
+            this.velocity = directionToPlayer.scale(this.chaseSpeed); 
+        } else {
+            this.velocity = new Vec(0, 0);
         }
-
+    
         if (this.position.x + this.width > canvasWidth || this.position.x < 0) {
             this.velocity.x = -this.velocity.x;
         }
         if (this.position.y + this.height > canvasHeight || this.position.y < 0) {
             this.velocity.y = -this.velocity.y;
+        }
+
+        let nextPosition = this.position.plus(this.velocity.times(deltaTime));
+        this.position = nextPosition;
+        this.lastFrameChange += deltaTime;
+        if (this.lastFrameChange > this.animationSpeed) {
+            this.frameIndex = (this.frameIndex + 1) % 2;
+            this.image.src = this.sprites[this.currentDirection][this.frameIndex];
+            this.lastFrameChange = 0;
         }
     }
 
@@ -358,6 +412,7 @@ class Slime extends AnimatedObject{
         ctx.restore();
     }
 }
+
 // Clases de proyectiles
 class Bomb {
     constructor(position) {
@@ -997,9 +1052,9 @@ class Game{
     update(deltaTime){
         if (!this.showMainMenu && !this.showPrologue) {
             if (this.level) {
-                this.levelEnemies.forEach(enemy => enemy.update(deltaTime));
+                this.levelEnemies.forEach(enemy => enemy.update(deltaTime, this.player.position));
             } else {
-                this.actors.forEach(actor => actor.update(deltaTime));
+                this.actors.forEach(actor => actor.update(deltaTime, this.player.position));
             }
             this.player.update(deltaTime);
             this.arrows.forEach(a => a.update(deltaTime));
@@ -1489,6 +1544,7 @@ function drawUI() {
 
     uiCtx.fillText(`LEVEL - ${playerStats.level}`, 100, 40);
 }
+
 function drawPauseMenu(ctx) {
     ctx.save();
     ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
@@ -1505,20 +1561,20 @@ function drawPauseMenu(ctx) {
 }
 
 function drawNPCTutorial(ctx) {
-    ctx.save();
-    ctx.fillStyle = "rgba(146, 74, 39, 0.8)"; // light gray background
-    ctx.fillRect(canvasWidth / 2 - 150, canvasHeight - 100, 300, 200); // narrower and taller box
-    ctx.strokeStyle = "black"; // border color
-    ctx.lineWidth = 2; // border width
-    ctx.fillStyle = "black";
-    ctx.strokeRect(canvasWidth / 2 - 150, canvasHeight - 100, 300, 200); // draw border
-    ctx.fillStyle = "black";
-    ctx.font = "16px Arial"; // smaller font  size
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
     const boxY = canvasHeight - 100;
     const boxHeight = 200;
     const textY = boxY + boxHeight - 170;
+
+    ctx.save();
+    ctx.fillStyle = "black";
+    ctx.fillRect(canvasWidth / 2 - 150, canvasHeight - 100, 300, 200);
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(canvasWidth / 2 - 150, canvasHeight - 100, 300, 200); // draw border
+    
+    ctx.fillStyle = "white";
+    ctx.font = "16px Arial";
+    ctx.textAlign = "center";
     ctx.fillText("Corre, Sentinel. Una aventura te espera.", canvasWidth / 2, textY); // centered text inside the box
     ctx.fillText("(presione space para cerrar)", canvasWidth / 2, textY + 40); // centered text inside the box
     ctx.restore();
@@ -1675,12 +1731,14 @@ Game.prototype.spawnEnemies = function() {
         const newEnemy = new EnemyClass(new Vec(xPos, yPos), 32, 32);
         this.levelEnemies.push(newEnemy);
     }
+    
 };
 Game.prototype.drawEnemies = function(ctx) {
     this.levelEnemies.forEach(enemy => {
         enemy.draw(ctx);
     });
 };
+
 
 let rupees = [];  // Store rupee positions
 let rupeesInitialized = false; // Flag to track initialization
