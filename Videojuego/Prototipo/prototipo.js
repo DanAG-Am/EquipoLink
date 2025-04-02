@@ -148,7 +148,7 @@ class Boss extends AnimatedObject{
             const currentTime = Date.now(); 
 
             if (currentTime - this.lastAttackTime > this.attackInterval && playerStats.life > 0) {
-                playerStats.life -= this.attack;
+                playerStats.life = Math.max(0, playerStats.life - this.attack);
                 this.lastAttackTime = currentTime; 
             }
         }
@@ -176,11 +176,11 @@ class Bat extends AnimatedObject {
         this.animationSpeed = 150;
         this.lastFrameChange = 250;
         this.chaseRange = 100;  
-        this.chaseSpeed = 0.15;  
+        this.chaseSpeed = 0.1;  
         this.life = 20;
         this.attack = 5;
         this.lastAttackTime = 0;  
-        this.attackInterval = 5000; 
+        this.attackInterval = 500; 
         getHitbox()
 
     }
@@ -229,7 +229,7 @@ class Bat extends AnimatedObject {
             const currentTime = Date.now(); 
 
             if (currentTime - this.lastAttackTime > this.attackInterval && playerStats.life > 0) {
-                playerStats.life -= this.attack;
+                playerStats.life = Math.max(0, playerStats.life - this.attack);
                 this.lastAttackTime = currentTime; 
             }
         }
@@ -261,7 +261,7 @@ class Knight extends AnimatedObject{
         this.life = 70;
         this.attack = 15;
         this.lastAttackTime = 0;
-        this.attackInterval = 10000;
+        this.attackInterval = 1000;
         getHitbox()
     }
 
@@ -302,7 +302,7 @@ class Knight extends AnimatedObject{
             const currentTime = Date.now(); 
 
             if (currentTime - this.lastAttackTime > this.attackInterval && playerStats.life >0) {
-                playerStats.life -= this.attack;
+                playerStats.life = Math.max(0, playerStats.life - this.attack);
                 this.lastAttackTime = currentTime; 
             }
         }
@@ -335,7 +335,7 @@ class Mage extends AnimatedObject{
         this.magicAttack = 10;
         this.attack = 5;
         this.lastAttackTime = 0;
-        this.attackInterval = 15000;
+        this.attackInterval = 3000;
         getHitbox()
     }
 
@@ -376,7 +376,7 @@ class Mage extends AnimatedObject{
             const currentTime = Date.now(); 
 
             if (currentTime - this.lastAttackTime > this.attackInterval && playerStats.life > 0) {
-                playerStats.life -= this.attack;
+                playerStats.life = Math.max(0, playerStats.life - this.attack);
                 this.lastAttackTime = currentTime; 
             }
         }
@@ -408,7 +408,7 @@ class Skull extends AnimatedObject{
         this.life = 30;
         this.attack = 15;
         this.lastAttackTime = 0;
-        this.attackInterval = 15000;
+        this.attackInterval = 1000;
         getHitbox()
     }
 
@@ -449,7 +449,7 @@ class Skull extends AnimatedObject{
             const currentTime = Date.now(); 
 
             if (currentTime - this.lastAttackTime > this.attackInterval && playerStats.life > 0) {
-                playerStats.life -= this.attack;
+                playerStats.life = Math.max(0, playerStats.life - this.attack);
                 this.lastAttackTime = currentTime; 
             }
         }
@@ -481,7 +481,7 @@ class Slime extends AnimatedObject{
         this.life = 20;
         this.attack = 5;
         this.lastAttackTime = 0;
-        this.attackInterval = 7000;
+        this.attackInterval = 5000;
         getHitbox()
     }
 
@@ -521,7 +521,7 @@ class Slime extends AnimatedObject{
             const currentTime = Date.now(); 
 
             if (currentTime - this.lastAttackTime > this.attackInterval && playerStats.life > 0) {
-                playerStats.life -= this.attack;
+                playerStats.life = Math.max(0, playerStats.life - this.attack);
                 this.lastAttackTime = currentTime; 
             }
         }
@@ -753,47 +753,6 @@ class Player extends AnimatedObject{
         if (game.mainMap) {
           collidesWithFairy = boxOverlap(futureBox, game.fairy.getHitbox());
         }
-
-        for (let enemy of game.levelEnemies) {
-            if (enemy.getHitbox && boxOverlap(futureBox, enemy.getHitbox())) {
-              // Calcula el centro de la caja del jugador y del enemigo
-              let playerCenterX = futureBox.position.x + futureBox.width / 2;
-              let playerCenterY = futureBox.position.y + futureBox.height / 2;
-              let enemyBox = enemy.getHitbox();
-              let enemyCenterX = enemyBox.position.x + enemyBox.width / 2;
-              let enemyCenterY = enemyBox.position.y + enemyBox.height / 2;
-              
-              // Diferencia entre centros
-              let dx = playerCenterX - enemyCenterX;
-              let dy = playerCenterY - enemyCenterY;
-              
-              // Calcula las mitades combinadas
-              let combinedHalfWidths = (futureBox.width + enemyBox.width) / 2;
-              let combinedHalfHeights = (futureBox.height + enemyBox.height) / 2;
-              
-              // Superposición en cada eje
-              let overlapX = combinedHalfWidths - Math.abs(dx);
-              let overlapY = combinedHalfHeights - Math.abs(dy);
-              
-              // Ajusta la posición en la dirección del menor empuje
-              if (overlapX < overlapY) {
-                if (dx > 0) {
-                  nextPosition.x += overlapX;
-                } else {
-                  nextPosition.x -= overlapX;
-                }
-              } else {
-                if (dy > 0) {
-                  nextPosition.y += overlapY;
-                } else {
-                  nextPosition.y -= overlapY;
-                }
-              }
-              
-              // Actualiza futureBox tras el ajuste para considerar colisiones múltiples
-              futureBox.position = nextPosition;
-            }
-          }
 
         if (!collidesWithWall && !collidesWithOldMan && !collidesWithMerchant && !collidesWithChest && !collidesWithFairy) {
             this.position = nextPosition;
@@ -1553,8 +1512,6 @@ class Game{
 
     resetGame() {
         this.showMainMenu = true;
-        this.showPrologue = false;
-        this.showLoginScreen = false;
         this.mainMap = false;
         this.dialogueStage = 0;
         this.tutorialWasShown = false;
@@ -2041,4 +1998,3 @@ class Fairy {
       }, this.effectDuration);
     }
   }
-
