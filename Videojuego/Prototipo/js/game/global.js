@@ -1,0 +1,48 @@
+"use strict";
+
+const canvasWidth = 800;
+const canvasHeight = 608;
+let ctx, uiCtx, game;
+let oldTime;
+let playerSpeed = 0.15;
+let gamePaused = false;
+let interactingNPC = false;
+let chestIsOpen = false; 
+let interactingMerchant = false;
+let interactingFairy = false;
+let fairyEnemyBuffActive = false;
+let fairyEnemyBuffMultiplier = 1.0;
+let currentItemType = "";
+//tiles
+const tileSize = 32;
+const processedFloors = {};
+const floorTile1 = new Image();
+floorTile1.src = "../../Videojuego/Assets/GameAssets/Map/Floor/floor_Tile.png";
+const floorTile2 = new Image();
+floorTile2.src = "../../Videojuego/Assets/GameAssets/Map/Floor/floor_Tile2.png";
+const floorDoor = new Image();
+floorDoor.src = "../../Videojuego/Assets/GameAssets/Map/Floor/floor_Void.png";
+const wallTile = new Image();
+wallTile.src = "../../Videojuego/Assets/GameAssets/Map/Floor/floor_Block.png";
+//ui Images
+const rupeeImg = new Image();
+rupeeImg.src = "../../Videojuego/Assets/GameAssets/Pickup/pickup_Rupee1.png";
+const heartImg = new Image();
+heartImg.src = "../../Videojuego/Assets/GameAssets/Pickup/pickup_HealthUpgrade.png";
+const potionImg = new Image();
+potionImg.src = "../../Videojuego/Assets/GameAssets/Pickup/pickup_PotionHealth.png";
+const arrowImg = new Image();
+arrowImg.src = "../../Videojuego/Assets/GameAssets/Weapons/Arrow_2.png";
+const bombIcon = new Image();
+bombIcon.src = "../../Videojuego/Assets/GameAssets/Weapons/Bomb_1.png";
+
+let playerStats = {
+    level: 0,
+    life: 100,
+    mana: 100,
+    rupees: 0,
+    potions: 0,
+    arrows: 0,
+    bombs: 0,
+    damage: 10,
+};
