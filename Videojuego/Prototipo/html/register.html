@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Registro</title>
+  <link rel="stylesheet" href="pagina_web.css">
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="login-register">
+    <header>
+        <div class="titulo">THE LOST SENTINEL</div>
+        <nav>
+            <a href="creditos.html" class="boton-header">Créditos</a>
+        </nav>
+    </header>
+
+    <h1>Registro</h1>
+
+    <form id="registerForm">
+        <label for="usuario">Usuario:</label>
+        <input type="text" id="usuario" placeholder="Escribe el nuevo usuario">
+
+        <div class="password-container">
+            <div class="campo">
+                <label for="contrasena">Contraseña:</label>
+                <input type="password" id="contrasena" placeholder="Crea una contraseña">
+            </div>
+            <div class="campo">
+                <label for="confirmar">Confirma contraseña:</label>
+                <input type="password" id="confirmar" placeholder="Confirma la contraseña">
+            </div>
+        </div>
+
+        <p id="mensajeError" class="error-texto"></p>
+
+        <div class="botones-register">
+            <button type="submit" class="boton-register">Registrar</button>
+        </div>
+
+        <div class="boton-regresar">
+            <a href="login.html" class="botonRegresar">Regresar</a>
+        </div>
+    </form>
+
+    <script>
+        const form = document.getElementById("registerForm");
+        form.addEventListener("submit", function(e) {
+        e.preventDefault();
+        const usuario = document.getElementById("usuario").value.trim();
+        const contrasena = document.getElementById("contrasena").value.trim();
+        const confirmaContrasena = document.getElementById("confirmar").value.trim();
+        const error = document.getElementById("mensajeError");
+
+        if (!usuario || !contrasena || !confirmaContrasena) {
+            error.textContent = "Por favor llena todos los campos";
+        } else if (contrasena !== confirmaContrasena) {
+            error.textContent = "Las contraseñas son diferentes";
+        } else {
+            window.location.href = "login.html";
+        }
+        });
+    </script>
+    <footer>
+        <p>EquipoLink &copy; 2025</p>
+    </footer>
+</body>
+</html>
