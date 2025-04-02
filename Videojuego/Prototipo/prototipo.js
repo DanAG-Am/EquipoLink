@@ -12,7 +12,6 @@ const canvasHeight = 608;
 let ctx, uiCtx, game;
 let oldTime;
 let playerSpeed = 0.15;
-let showUI = false;
 let gamePaused = false;
 let interactingNPC = false;
 let chestIsOpen = false; 
@@ -915,8 +914,6 @@ class Game{
         this.initObjects();
         this.showMainMenu = true;
         this.showPrologue = false;
-        this.showLoginScreen = false;
-        this.showRegisterScreen = false;
         this.mainMap = false;
         this.level = false;
         this.enteredLevel = false;
@@ -970,34 +967,11 @@ class Game{
         if (this.showMainMenu) {
             // Dibujar el logo
             ctx.drawImage(this.logo, canvasWidth / 2 - 228, 80, 450, 450);
-            showUI = false;
             // Dibujar el mensaje
             ctx.fillStyle = "white";
             ctx.font = "20px Arial";
             ctx.textAlign = "center";
             ctx.fillText("Presiona Enter para empezar el juego", canvasWidth / 2, 570);
-        } else if (this.showLoginScreen){
-            // Dibujar el logo
-            ctx.drawImage(this.logo, canvasWidth / 2 - 228, 80, 450, 450);
-            // Dibujar el cuadro del login
-            ctx.fillStyle = "black";
-            ctx.fillRect(canvasWidth / 2 - 200, canvasHeight / 2 - 100, 400, 350);
-            ctx.strokeStyle = "white";
-            ctx.lineWidth = 2;
-            ctx.strokeRect(canvasWidth / 2 - 200, canvasHeight / 2 - 100, 400, 350);
-            // Dibujar el formulario
-            document.getElementById("loginForm").style.display = "block";
-        } else if (this.showRegisterScreen){
-            // Dibujar el logo
-            ctx.drawImage(this.logo, canvasWidth / 2 - 228, 80, 450, 450);
-            // Dibujar el cuadro del register
-            ctx.fillStyle = "black";
-            ctx.fillRect(canvasWidth / 2 - 200, canvasHeight / 2, 400, 200);
-            ctx.strokeStyle = "white";
-            ctx.lineWidth = 2;
-            ctx.strokeRect(canvasWidth / 2 - 200, canvasHeight / 2, 400, 200);
-            // Dibujar el formulario
-            document.getElementById("registerForm").style.display = "block";
         } else if (this.showPrologue){
             drawBackground("prologue", ctx);
             // Dibujar el cuadro del prólogo
@@ -1250,8 +1224,7 @@ class Game{
         window.addEventListener('keydown', (event) =>{
             if (this.showMainMenu && event.key === 'Enter') {
                 this.showMainMenu = false;
-                this.showLoginScreen = true;
-                this.mainMap = false;
+                this.showPrologue = true;
                 return;
             }    
             if (this.showPrologue && event.key === 'Enter') {
@@ -1464,56 +1437,6 @@ class Game{
                     this.player.toggleBow(false);  // Disable shield
                 }
             }
-        });
-
-        document.getElementById("loginButton").addEventListener("click", () => {
-            let username = document.getElementById("usernameInput").value;
-            let password = document.getElementById("passwordInput").value;
-            let errorDiv = document.getElementById("loginError");
-
-            if (username && password) {
-                document.getElementById("loginForm").style.display = "none";
-                this.showLoginScreen = false;
-                this.showPrologue = true;
-            } else {
-                errorDiv.innerText = "Por favor, llena todos los campos";
-                return;
-            }
-            errorDiv.innerText = "";
-        });
-
-        document.getElementById("registerButton").addEventListener("click", () => {
-            document.getElementById("loginForm").style.display = "none";
-            this.showLoginScreen = false;
-            this.showRegisterScreen = true;
-            document.getElementById("registerForm").style.display = "block";
-        });
-
-        document.getElementById("confirmRegisterButton").addEventListener("click", () => {
-            let regUsername = document.getElementById("registerUsername").value;
-            let regPassword = document.getElementById("registerPassword").value;
-            let confirmRegPassword = document.getElementById("confirmRegisterPassword").value;
-            let errorDiv = document.getElementById("registerError");
-            if (!regUsername || !regPassword || !confirmRegPassword) {
-                errorDiv.innerText = "Por favor, llena todos los campos";
-                return;
-            }
-            if (regPassword !== confirmRegPassword) {
-                errorDiv.innerText = "Las contrasenas no coinciden";
-                return;
-            }
-            errorDiv.innerText = "";
-            document.getElementById("registerForm").style.display = "none";
-            this.showRegisterScreen = false;
-            this.showLoginScreen = true;
-            document.getElementById("loginForm").style.display = "block";
-        });
-
-        document.getElementById("returnLoginButton").addEventListener("click", () => {
-            document.getElementById("registerForm").style.display = "none";
-            this.showRegisterScreen = false;
-            this.showLoginScreen = true;
-            document.getElementById("loginForm").style.display = "block";
         });
 
         let currentItemType = "";
