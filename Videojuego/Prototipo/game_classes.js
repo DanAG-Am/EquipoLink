@@ -160,6 +160,15 @@ class TextLabel {
     }
 }
 
+function createBox(position, width, height) {
+    return {
+        x: position.x,
+        y: position.y,
+        width: width,
+        height: height
+    };
+}
+
 // Detect a collision of two box objects
 function boxOverlap(obj1, obj2) {
     return obj1.position.x < obj2.position.x + obj2.width &&

@@ -87,6 +87,11 @@ class Boss extends AnimatedObject{
         this.lastFrameChange = 250;
         this.chaseRange = 100;
         this.chaseSpeed = 0.2;
+        this.life = 150;
+        this.attackFire = 20;
+        this.attack = 10; 
+        this.isDead = false;
+
     }
 
     update(deltaTime,playerPosition) {
@@ -140,8 +145,11 @@ class Bat extends AnimatedObject {
         this.image.src = this.sprites[this.currentDirection][this.frameIndex];
         this.animationSpeed = 150;
         this.lastFrameChange = 250;
-        this.chaseRange = 200;  
-        this.chaseSpeed = 0.1;  
+        this.chaseRange = 100;  
+        this.chaseSpeed = 0.15;  
+        this.life = 20;
+        this.attack = 5;
+
     }
 
     // Update method now takes playerPosition as a parameter
@@ -172,7 +180,7 @@ class Bat extends AnimatedObject {
         // Update the bat's position based on the velocity
         let nextPosition = this.position.plus(this.velocity.times(deltaTime));
         this.position = nextPosition;
-    
+
         // Update animation
         this.lastFrameChange += deltaTime;
         if (this.lastFrameChange > this.animationSpeed) {
@@ -181,7 +189,10 @@ class Bat extends AnimatedObject {
             this.lastFrameChange = 0;
         }
 
-    }
+        if (boxOverlap(playerPosition, this.position)){
+            playerLife -=1;
+        }
+}
 
     draw(ctx) {
         ctx.save();
@@ -204,8 +215,10 @@ class Knight extends AnimatedObject{
         this.image.src = this.sprites[this.currentDirection][this.frameIndex];
         this.animationSpeed = 150;
         this.lastFrameChange = 250;
-        this.chaseRange = 80;
+        this.chaseRange = 300;
         this.chaseSpeed = 0.1;
+        this.life = 70;
+        this.attack = 15;
     }
 
     update(deltaTime, playerPosition) {
@@ -260,8 +273,11 @@ class Mage extends AnimatedObject{
         this.image.src = this.sprites[this.currentDirection][this.frameIndex];
         this.animationSpeed = 150;
         this.lastFrameChange = 250;
-        this.chaseRange = 100;
-        this.chaseSpeed = 0.2;
+        this.chaseRange = 1000;
+        this.chaseSpeed = 0.05;
+        this.life = 40;
+        this.magicAttack = 10;
+        this.attack = 5;
     }
 
     update(deltaTime,playerPosition) {
@@ -318,6 +334,8 @@ class Skull extends AnimatedObject{
         this.lastFrameChange = 250;
         this.chaseRange = 80;
         this.chaseSpeed = 0.1;
+        this.life = 30;
+        this.attack = 15;
     }
 
     update(deltaTime, playerPosition) {
@@ -372,8 +390,10 @@ class Slime extends AnimatedObject{
         this.image.src = this.sprites[this.currentDirection][this.frameIndex];
         this.animationSpeed = 150;
         this.lastFrameChange = 250;
-        this.chaseRange = 110;
-        this.chaseSpeed = 0.2;
+        this.chaseRange = 100;
+        this.chaseSpeed = 0.05;
+        this.life = 20;
+        this.attack = 5;
     }
 
     update(deltaTime, playerPosition) {
@@ -427,7 +447,7 @@ class Bomb {
         this.image = new Image();
         this.image.src = this.frames[this.frameIndex];
         this.alive = true;
-
+        this.attack = 20;
         // Programar cambios de frame
         setTimeout(() => this.setFrame(1), 2000);
         setTimeout(() => this.setFrame(2), 2200);
@@ -460,6 +480,7 @@ class Arrow {
         this.maxDistance = tileSize * 10;
         this.width = 32;
         this.height = 32;
+        this.attack = 5;
 
         this.image = new Image();
         if (direction === "up" || direction === "down") {
@@ -502,6 +523,8 @@ class Arrow {
         ctx.restore();
     }
 }
+
+
 class Magic {
     constructor(position, direction) {
         this.alive = true;
@@ -512,6 +535,7 @@ class Magic {
         this.maxDistance = tileSize * 5;
         this.width = 32;
         this.height = 32;
+        this.attack = 15;
 
         this.image = new Image();
         if (direction === "up" || direction === "down") {
@@ -587,6 +611,7 @@ class Player extends AnimatedObject{
         this.swordActive = false;
         this.magicActive = false; 
         this.bowActive = false;
+        this.life = 100
     }   
 
     update(deltaTime) {
@@ -618,10 +643,12 @@ class Player extends AnimatedObject{
         if (game.mainMap) {
             collidesWithMerchant = boxOverlap(futureBox, game.tienda.getHitbox());
         }
+
         let collidesWithChest = false;
         if (game.mainMap) {
             collidesWithChest = boxOverlap(futureBox, game.chestBox);
         }
+
         if (!collidesWithWall && !collidesWithOldMan && !collidesWithMerchant && !collidesWithChest) {
             this.position = nextPosition;
         }
@@ -733,7 +760,6 @@ class Player extends AnimatedObject{
     }
 }
 
-
 // Class to keep track of all the events and objects in the game
 class Game{
     constructor(){
@@ -770,11 +796,13 @@ class Game{
         this.oldManBack = new Image();
         this.oldManBack.src = "../Videojuego/Assets/GameAssets/NPC/Old_man_3.png";
         this.oldManPosition = new Vec(canvasWidth / 2 +100, 200);
+        
         this.oldManBox = {
             position: new Vec(this.oldManPosition.x, this.oldManPosition.y),
             width: 32,
             height: 32
         };
+
         this.bombs = [];
         this.arrows = [];
         this.magics = [];
