@@ -17,6 +17,9 @@ let gamePaused = false;
 let interactingNPC = false;
 let chestIsOpen = false; 
 let interactingMerchant = false;
+let interactingFairy = false;
+let fairyEnemyBuffActive = false;
+let fairyEnemyBuffMultiplier = 1.0;
 let currentItemType = "";
 //tiles
 const tileSize = 32;
@@ -48,7 +51,8 @@ let playerStats = {
     rupees: 0,
     potions: 0,
     arrows: 0,
-    bombs: 0
+    bombs: 0,
+    damage: 10,
 };
 
 function getWallBoxes() {
@@ -87,6 +91,11 @@ class Boss extends AnimatedObject{
         this.lastFrameChange = 250;
         this.chaseRange = 100;
         this.chaseSpeed = 0.2;
+        this.life = 150;
+        this.attackFire = 20;
+        this.attack = 10; 
+        this.isDead = false;
+
     }
 
     update(deltaTime,playerPosition) {
@@ -142,6 +151,10 @@ class Bat extends AnimatedObject {
         this.lastFrameChange = 250;
         this.chaseRange = 100;  
         this.chaseSpeed = 0.15;  
+        this.life = 20;
+        this.attack = 5;
+        getHitbox()
+
     }
 
     // Update method now takes playerPosition as a parameter
@@ -172,7 +185,7 @@ class Bat extends AnimatedObject {
         // Update the bat's position based on the velocity
         let nextPosition = this.position.plus(this.velocity.times(deltaTime));
         this.position = nextPosition;
-    
+
         // Update animation
         this.lastFrameChange += deltaTime;
         if (this.lastFrameChange > this.animationSpeed) {
@@ -181,7 +194,13 @@ class Bat extends AnimatedObject {
             this.lastFrameChange = 0;
         }
 
-    }
+        if (boxOverlap(
+            { position: game.player.position, width: game.player.width, height: game.player.height },
+            { position: this.position, width: this.width, height: this.height }
+        )) {
+            playerStats.life -= 1;
+        }
+}
 
     draw(ctx) {
         ctx.save();
@@ -206,6 +225,9 @@ class Knight extends AnimatedObject{
         this.lastFrameChange = 250;
         this.chaseRange = 300;
         this.chaseSpeed = 0.1;
+        this.life = 70;
+        this.attack = 15;
+        getHitbox()
     }
 
     update(deltaTime, playerPosition) {
@@ -262,6 +284,10 @@ class Mage extends AnimatedObject{
         this.lastFrameChange = 250;
         this.chaseRange = 1000;
         this.chaseSpeed = 0.05;
+        this.life = 40;
+        this.magicAttack = 10;
+        this.attack = 5;
+        getHitbox()
     }
 
     update(deltaTime,playerPosition) {
@@ -318,6 +344,9 @@ class Skull extends AnimatedObject{
         this.lastFrameChange = 250;
         this.chaseRange = 80;
         this.chaseSpeed = 0.1;
+        this.life = 30;
+        this.attack = 15;
+        getHitbox()
     }
 
     update(deltaTime, playerPosition) {
@@ -374,6 +403,9 @@ class Slime extends AnimatedObject{
         this.lastFrameChange = 250;
         this.chaseRange = 100;
         this.chaseSpeed = 0.05;
+        this.life = 20;
+        this.attack = 5;
+        getHitbox()
     }
 
     update(deltaTime, playerPosition) {
@@ -427,7 +459,7 @@ class Bomb {
         this.image = new Image();
         this.image.src = this.frames[this.frameIndex];
         this.alive = true;
-
+        this.attack = 20;
         // Programar cambios de frame
         setTimeout(() => this.setFrame(1), 2000);
         setTimeout(() => this.setFrame(2), 2200);
@@ -460,6 +492,7 @@ class Arrow {
         this.maxDistance = tileSize * 10;
         this.width = 32;
         this.height = 32;
+        this.attack = 5;
 
         this.image = new Image();
         if (direction === "up" || direction === "down") {
@@ -502,6 +535,8 @@ class Arrow {
         ctx.restore();
     }
 }
+
+
 class Magic {
     constructor(position, direction) {
         this.alive = true;
@@ -512,6 +547,7 @@ class Magic {
         this.maxDistance = tileSize * 5;
         this.width = 32;
         this.height = 32;
+        this.attack = 15;
 
         this.image = new Image();
         if (direction === "up" || direction === "down") {
@@ -587,10 +623,11 @@ class Player extends AnimatedObject{
         this.swordActive = false;
         this.magicActive = false; 
         this.bowActive = false;
+        this.life = 100
     }   
 
     update(deltaTime) {
-        if (gamePaused | interactingMerchant) return;
+        if (gamePaused || interactingMerchant || interactingNPC || interactingFairy) return;
         
         if (!(this.position instanceof Vec)) {
             this.position = new Vec(this.position.x, this.position.y);
@@ -618,13 +655,61 @@ class Player extends AnimatedObject{
         if (game.mainMap) {
             collidesWithMerchant = boxOverlap(futureBox, game.tienda.getHitbox());
         }
+
         let collidesWithChest = false;
         if (game.mainMap) {
             collidesWithChest = boxOverlap(futureBox, game.chestBox);
         }
-        if (!collidesWithWall && !collidesWithOldMan && !collidesWithMerchant && !collidesWithChest) {
-            this.position = nextPosition;
+
+        let collidesWithFairy = false;
+        if (game.mainMap) {
+          collidesWithFairy = boxOverlap(futureBox, game.fairy.getHitbox());
         }
+
+        for (let enemy of game.levelEnemies) {
+            if (enemy.getHitbox && boxOverlap(futureBox, enemy.getHitbox())) {
+              // Calcula el centro de la caja del jugador y del enemigo
+              let playerCenterX = futureBox.position.x + futureBox.width / 2;
+              let playerCenterY = futureBox.position.y + futureBox.height / 2;
+              let enemyBox = enemy.getHitbox();
+              let enemyCenterX = enemyBox.position.x + enemyBox.width / 2;
+              let enemyCenterY = enemyBox.position.y + enemyBox.height / 2;
+              
+              // Diferencia entre centros
+              let dx = playerCenterX - enemyCenterX;
+              let dy = playerCenterY - enemyCenterY;
+              
+              // Calcula las mitades combinadas
+              let combinedHalfWidths = (futureBox.width + enemyBox.width) / 2;
+              let combinedHalfHeights = (futureBox.height + enemyBox.height) / 2;
+              
+              // Superposición en cada eje
+              let overlapX = combinedHalfWidths - Math.abs(dx);
+              let overlapY = combinedHalfHeights - Math.abs(dy);
+              
+              // Ajusta la posición en la dirección del menor empuje
+              if (overlapX < overlapY) {
+                if (dx > 0) {
+                  nextPosition.x += overlapX;
+                } else {
+                  nextPosition.x -= overlapX;
+                }
+              } else {
+                if (dy > 0) {
+                  nextPosition.y += overlapY;
+                } else {
+                  nextPosition.y -= overlapY;
+                }
+              }
+              
+              // Actualiza futureBox tras el ajuste para considerar colisiones múltiples
+              futureBox.position = nextPosition;
+            }
+          }
+
+        if (!collidesWithWall && !collidesWithOldMan && !collidesWithMerchant && !collidesWithChest && !collidesWithFairy) {
+            this.position = nextPosition;
+          }
         
 
         this.position.x = Math.max(0, Math.min(canvasWidth - this.width, this.position.x));
@@ -638,6 +723,7 @@ class Player extends AnimatedObject{
                 this.lastFrameChange = 0;
             }
         }
+
     }
 
     draw(ctx) {
@@ -733,7 +819,6 @@ class Player extends AnimatedObject{
     }
 }
 
-
 // Class to keep track of all the events and objects in the game
 class Game{
     constructor(){
@@ -769,17 +854,20 @@ class Game{
         this.oldManRight.src = "../Videojuego/Assets/GameAssets/NPC/Old_man_2.png";
         this.oldManBack = new Image();
         this.oldManBack.src = "../Videojuego/Assets/GameAssets/NPC/Old_man_3.png";
-        this.oldManPosition = new Vec(canvasWidth / 2 +100, 200);
+        this.oldManPosition = new Vec(canvasWidth / 2 - 16, canvasHeight / 2 - 105);
+        
         this.oldManBox = {
             position: new Vec(this.oldManPosition.x, this.oldManPosition.y),
             width: 32,
             height: 32
         };
+
         this.bombs = [];
         this.arrows = [];
         this.magics = [];
         this.levelEnemies = [];
         this.tienda = new Tienda();
+        this.fairy = new Fairy();
     }
 
     initObjects() {
@@ -859,7 +947,9 @@ class Game{
             // Dibuja el hombre viejo
             ctx.drawImage(this.oldMan, this.oldManPosition.x, this.oldManPosition.y, 32, 32);
             //Dibuja el npc de tienda
-            this.tienda.draw(ctx); 
+            this.tienda.draw(ctx);
+            // Dibuja el NPC fairy
+            this.fairy.draw(ctx); 
             if (this.chestIsOpen) {
                 this.chestClosed = null;
                 ctx.drawImage(this.chestOpened, this.chestPosition.x, this.chestPosition.y, 32,32);
@@ -956,6 +1046,9 @@ class Game{
         }
         if (interactingMerchant) {
             this.tienda.drawDialogue(ctx);
+        }
+        if (interactingFairy) {
+            this.fairy.drawDialogue(ctx);
         }
     }
 
@@ -1249,6 +1342,15 @@ class Game{
                             }
                         }
                     }
+
+                    const playerNearFairy = this.player.position.x > game.fairy.position.x - 36 &&
+                          this.player.position.x < game.fairy.position.x + 36 &&
+                          this.player.position.y > game.fairy.position.y - 36 &&
+                          this.player.position.y < game.fairy.position.y + 36;
+
+                    if (playerNearFairy) {
+                      interactingFairy = !interactingFairy;
+                    }
                 }
             }
         });
@@ -1352,6 +1454,21 @@ class Game{
                            clickY >= btn3.y && clickY <= btn3.y + btn3.height) {
                     currentItemType = "bombas";
                     showPurchaseDialog(currentItemType);
+                }
+            }
+
+            if (interactingFairy && game.fairy.button) {
+                let rect = canvas.getBoundingClientRect();
+                let scaleX = canvas.width / rect.width;
+                let scaleY = canvas.height / rect.height;
+                let clickX = (event.clientX - rect.left) * scaleX;
+                let clickY = (event.clientY - rect.top) * scaleY;
+                
+                let btn = game.fairy.button;
+                if (clickX >= btn.x && clickX <= btn.x + btn.width &&
+                    clickY >= btn.y && clickY <= btn.y + btn.height) {
+                  game.fairy.processInteraction();
+                  interactingFairy = false;
                 }
             }
         });
@@ -1561,24 +1678,26 @@ function drawPauseMenu(ctx) {
 }
 
 function drawNPCTutorial(ctx) {
-    const boxY = canvasHeight - 100;
-    const boxHeight = 200;
-    const textY = boxY + boxHeight - 170;
-
+    let boxWidth = 320;
+    let boxHeight = 180;
+    let boxX = game.oldManPosition.x - ((boxWidth - 32) / 2);
+    let boxY = game.oldManPosition.y - boxHeight - 10;
     ctx.save();
     ctx.fillStyle = "black";
-    ctx.fillRect(canvasWidth / 2 - 150, canvasHeight - 100, 300, 200);
+    ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
     ctx.strokeStyle = "white";
     ctx.lineWidth = 2;
-    ctx.strokeRect(canvasWidth / 2 - 150, canvasHeight - 100, 300, 200); // draw border
-    
+    ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
     ctx.fillStyle = "white";
-    ctx.font = "16px Arial";
+    ctx.font = "18px Arial";
     ctx.textAlign = "center";
-    ctx.fillText("Corre, Sentinel. Una aventura te espera.", canvasWidth / 2, textY); // centered text inside the box
-    ctx.fillText("(presione space para cerrar)", canvasWidth / 2, textY + 40); // centered text inside the box
+    let lineHeight = 25;
+    let startY = boxY + 30;
+    ctx.fillText("Corre, Sentinel. Una aventura te espera.", boxX + boxWidth / 2, startY);
+    ctx.font = "14px Arial";
+    ctx.fillText("(presione space para cerrar)", boxX + boxWidth / 2, startY + lineHeight);
     ctx.restore();
-}
+  }
 
 function Tienda() {
     this.image = new Image();
@@ -1785,3 +1904,110 @@ function drawRupees(ctx, player) {
         }
     }
 }
+
+class Fairy {
+    constructor() {
+      this.width = 32;
+      this.height = 32;
+      this.position = new Vec(canvasWidth - 200 - this.width, 200);
+      this.sprite = new Image();
+      this.sprite.src = "../Videojuego/Assets/GameAssets/NPC/Fairy_1.png";
+      this.effectActive = false;
+      this.effectDuration = 10000;
+    }
+  
+    draw(ctx) {
+      ctx.drawImage(this.sprite, this.position.x, this.position.y, this.width, this.height);
+    }
+  
+    getHitbox() {
+      return {
+        position: this.position,
+        width: this.width,
+        height: this.height
+      };
+    }
+  
+    drawDialogue(ctx) {
+        let boxWidth = 320;
+        let boxHeight = 180;
+        let boxX = this.position.x - ((boxWidth - this.width) / 2);
+        let boxY = this.position.y - boxHeight - 10;
+        
+        ctx.save();
+        ctx.fillStyle = "black";
+        ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
+        
+        ctx.fillStyle = "white";
+        ctx.textAlign = "center";
+        
+        if (this.effectActive) {
+          ctx.font = "18px Arial";
+          ctx.fillText("No puedes ver tu futuro en este momento", boxX + boxWidth / 2, boxY + 40);
+        } else {
+          ctx.font = "18px Arial";
+          ctx.fillText("¿Quieres ver qué te espera en el futuro?", boxX + boxWidth / 2, boxY + 40);
+          ctx.fillText("Averigualo por 20 rupias", boxX + boxWidth / 2, boxY + 70);
+          
+          // Botón "Ver futuro"
+          let btnWidth = 120;
+          let btnHeight = 40;
+          // Se posiciona un poco más arriba para dejar espacio al texto adicional
+          let btnX = boxX + (boxWidth - btnWidth) / 2;
+          let btnY = boxY + boxHeight - btnHeight - 30;
+          ctx.fillStyle = "gray";
+          ctx.fillRect(btnX, btnY, btnWidth, btnHeight);
+          ctx.strokeStyle = "white";
+          ctx.strokeRect(btnX, btnY, btnWidth, btnHeight);
+          ctx.fillStyle = "white";
+          ctx.font = "16px Arial";
+          ctx.fillText("Ver futuro", boxX + boxWidth / 2, btnY + btnHeight/2 + 6);
+          // Guarda la posición del botón para la detección del clic
+          this.button = { x: btnX, y: btnY, width: btnWidth, height: btnHeight };
+          
+          // Texto pequeño debajo del botón
+          ctx.font = "12px Arial";
+          ctx.fillText("Presiona Space para cerrar", boxX + boxWidth / 2, btnY + btnHeight + 15);
+        }
+        ctx.restore();
+      }
+  
+    processInteraction() {
+      if (playerStats.rupees < 20) {
+        showSimpleDialog("No tienes suficientes rupias");
+        interactingFairy = false;
+        return;
+      }
+      if (this.effectActive) {
+        showSimpleDialog("No puedes ver tu futuro en este momento");
+        interactingFairy = false;
+        return;
+      }
+      playerStats.rupees -= 20;
+      let outcome = Math.random();
+      if (outcome < 0.5) {
+        showSimpleDialog("Tu espíritu guerrero crece");
+        playerStats.life = Math.round(playerStats.life * 1.1);
+        playerStats.damage = Math.round(playerStats.damage * 1.1);
+      } else {
+        showSimpleDialog("Un mal oscuro crece rápidamente");
+        game.levelEnemies.forEach(enemy => {
+          enemy.life = Math.round(enemy.life * 1.1);
+          if (enemy.attack) {
+            enemy.attack = Math.round(enemy.attack * 1.1);
+          }
+        });
+        fairyEnemyBuffActive = true;
+        fairyEnemyBuffMultiplier = 1.1;
+      }
+      this.effectActive = true;
+      setTimeout(() => {
+        this.effectActive = false;
+        fairyEnemyBuffActive = false;
+        fairyEnemyBuffMultiplier = 1.0;
+      }, this.effectDuration);
+    }
+  }

@@ -143,6 +143,14 @@ class AnimatedObject extends GameObject {
             this.totalTime = 0;
         }
     }
+
+    getHitbox = function() {
+        return {
+          position: this.position,
+          width: this.width,
+          height: this.height
+        };
+      };
 }
 
 class TextLabel {
@@ -159,6 +167,14 @@ class TextLabel {
         ctx.fillText(text, this.x, this.y);
     }
 }
+
+function getHitbox() {
+    return {
+      position: this.position,
+      width: this.width,
+      height: this.height
+    };
+  }
 
 // Detect a collision of two box objects
 function boxOverlap(obj1, obj2) {
@@ -188,3 +204,9 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
     }
 }
 
+function showSimpleDialog(message) {
+    const dialog = document.getElementById("errorDialog");
+    const messageElement = document.getElementById("errorMessage");
+    messageElement.innerText = message;
+    dialog.style.display = "block";
+  }
