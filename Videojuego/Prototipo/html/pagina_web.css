@@ -1,0 +1,297 @@
+/* Reset básico */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+  
+/* Estructura general */
+body {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    min-height: 100vh;
+    background: black;
+    background-size: 400% 400%;
+    font-family: 'Pixelify Sans', sans-serif;
+    color: #ffffff;
+    text-align: center;
+}
+  
+.grid-container {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    min-height: 100vh;
+    width: 100%;
+}
+  
+main {
+    width: 100%;
+    padding: 0 20px 40px 20px;
+}
+  
+footer {
+    margin-top: 60px;
+    padding: 20px 0;
+    font-size: 1.2em;
+}
+  
+/* Header */
+header {
+    width: 100%;
+    padding: 20px 40px;
+    display: flex;
+    background: #3B3F42;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+}
+  
+.titulo {
+    font-size: 4em;
+    color: #fff700;
+    text-shadow: 2px 2px 4px #000;
+}
+  
+nav {
+    display: flex;
+    gap: 20px;
+}
+  
+.boton-header {
+    padding: 10px 20px;
+    font-size: 2em;
+    background-color: #6C767D;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, background-color 0.3s;
+}
+  
+.boton-header:hover {
+    background-color: #4F4F4F;
+    transform: scale(1.05);
+}
+  
+/* Página principal */
+.logo {
+    width: 500px;
+    max-width: 60vw;
+    height: auto;
+    margin: 20px auto;
+}
+  
+h1 {
+    font-size: 5em;
+    margin-top: -60px;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px #000;
+}
+  
+.texto-intro {
+    font-size: 1.5em;
+    line-height: 1.5;
+    text-align: center;
+    margin: 10px 0;
+}
+  
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin: 40px auto 0 auto;
+    max-width: 1000px;
+    justify-items: center;
+}
+  
+.boton-grid {
+    padding: 40px;
+    font-size: 3em;
+    background-color: #D0B245;
+    color: white;
+    text-decoration: none;
+    border-radius: 12px;
+    transition: transform 0.2s, background-color 0.3s;
+    text-align: center;
+    width: 500px;
+    max-width: 90%;
+}
+  
+.boton-grid:hover {
+    background-color: #E2C65F;
+    transform: scale(1.05);
+}
+  
+/* Créditos */
+.contenido-creditos {
+    margin: 60px;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 1000px;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
+}
+  
+.seccion-titulo {
+    font-size: 2.5em;
+    margin-bottom: 15px;
+    color: #fff700;
+    text-shadow: 1px 1px 3px #000;
+}
+  
+.seccion-texto,
+.lista-creditos,
+.lista-profesor {
+    font-size: 1.5em;
+    line-height: 1.6;
+    max-width: 800px;
+    text-align: center;
+}
+  
+.lista-creditos,
+.lista-profesor {
+    list-style: none;
+    padding-left: 0;
+}
+  
+.lista-creditos li::before {
+    content: "🎮 ";
+    margin-right: 5px;
+}
+  
+.lista-profesor li::before {
+    content: "👨‍🏫 ";
+    margin-right: 5px;
+}
+  
+.link-github {
+    color: #1e90ff;
+    text-decoration: underline;
+}
+  
+a.boton {
+    display: inline-block;
+    padding: 15px 40px;
+    font-size: 2em;
+    background-color: #ff4757;
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    transition: transform 0.2s, box-shadow 0.3s, background-color 0.3s;
+}
+  
+a.boton:hover {
+    background-color: #e84118;
+    transform: scale(1.05);
+}
+  
+/* Login y Registro */
+.login-register h1 {
+    font-size: 8em;
+    margin-top: 5%;
+    margin-bottom: 30px;
+    color: yellow;
+}
+  
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+  
+label {
+    font-size: 2em;
+    margin-bottom: 5px;
+    text-align: left;
+    width: 300px;
+}
+  
+input {
+    font-size: 1.5em;
+    padding: 10px;
+    width: 300px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border: none;
+}
+  
+.error-texto {
+    font-size: 1.5em;
+    color: red;
+    margin-top: 15px;
+}
+  
+.botones-login,
+.botones-register {
+    margin: 20px 0;
+    text-align: center;
+}
+  
+.boton-login,
+.boton-register {
+    width: 200px;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+  
+.texto-registro {
+    font-size: 1.2em;
+    margin-top: 10px;
+}
+  
+a.hipervinculo {
+    font-size: 1.2em;
+    color: #1e90ff;
+    text-decoration: underline;
+}
+  
+.boton-regresar {
+    margin-top: 20px;
+}
+  
+a.botonRegresar {
+    display: inline-block;
+    padding: 15px 40px;
+    font-size: 2em;
+    background-color: #ff4757;
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    transition: transform 0.2s, box-shadow 0.3s, background-color 0.3s;
+}
+  
+a.botonRegresar:hover {
+    background-color: #e84118;
+    transform: scale(1.05);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+}
+  
+.password-container {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+  
+.password-container .campo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+  
+.password-container .campo label {
+    width: auto;
+}
+  
+.password-container .campo input {
+    width: 400px;
+}
