@@ -95,7 +95,23 @@ class Boss extends AnimatedObject{
         this.attackFire = 20;
         this.attack = 10; 
         this.isDead = false;
+        this.attack = this.getRandomAttackDamage(); 
+        this.attackInterval = this.getRandomAttackInterval(); 
+        this.lastAttackTime = 0;
+        this.getHitBox();
+    }
 
+    getRandomAttackDamage() {
+        const minDamage = 3; 
+        const maxDamage = 10; 
+        return Math.floor(Math.random() * (maxDamage - minDamage + 1)) + minDamage;
+    }
+
+   
+    getRandomAttackInterval() {
+        const minInterval = 500;  
+        const maxInterval = 10000; 
+        return Math.floor(Math.random() * (maxInterval - minInterval + 1)) + minInterval;
     }
 
     update(deltaTime,playerPosition) {
@@ -126,6 +142,17 @@ class Boss extends AnimatedObject{
             this.image.src = this.sprites[this.currentDirection][this.frameIndex];
             this.lastFrameChange = 0;
         }
+        if (boxOverlap(
+            { position: game.player.position, width: game.player.width, height: game.player.height },
+            { position: this.position, width: this.width, height: this.height }
+        )) {
+            const currentTime = Date.now(); 
+
+            if (currentTime - this.lastAttackTime > this.attackInterval && playerStats.life > 0) {
+                playerStats.life -= this.attack;
+                this.lastAttackTime = currentTime; 
+            }
+        }
     }
 
     draw(ctx) {
@@ -153,6 +180,8 @@ class Bat extends AnimatedObject {
         this.chaseSpeed = 0.15;  
         this.life = 20;
         this.attack = 5;
+        this.lastAttackTime = 0;  
+        this.attackInterval = 5000; 
         getHitbox()
 
     }
@@ -198,7 +227,12 @@ class Bat extends AnimatedObject {
             { position: game.player.position, width: game.player.width, height: game.player.height },
             { position: this.position, width: this.width, height: this.height }
         )) {
-            playerStats.life -= 1;
+            const currentTime = Date.now(); 
+
+            if (currentTime - this.lastAttackTime > this.attackInterval && playerStats.life > 0) {
+                playerStats.life -= this.attack;
+                this.lastAttackTime = currentTime; 
+            }
         }
 }
 
@@ -227,6 +261,8 @@ class Knight extends AnimatedObject{
         this.chaseSpeed = 0.1;
         this.life = 70;
         this.attack = 15;
+        this.lastAttackTime = 0;
+        this.attackInterval = 10000;
         getHitbox()
     }
 
@@ -259,6 +295,18 @@ class Knight extends AnimatedObject{
             this.image.src = this.sprites[this.currentDirection][this.frameIndex];
             this.lastFrameChange = 0;
         }
+
+        if (boxOverlap(
+            { position: game.player.position, width: game.player.width, height: game.player.height },
+            { position: this.position, width: this.width, height: this.height }
+        )) {
+            const currentTime = Date.now(); 
+
+            if (currentTime - this.lastAttackTime > this.attackInterval && playerStats.life >0) {
+                playerStats.life -= this.attack;
+                this.lastAttackTime = currentTime; 
+            }
+        }
     }
 
     draw(ctx) {
@@ -287,6 +335,8 @@ class Mage extends AnimatedObject{
         this.life = 40;
         this.magicAttack = 10;
         this.attack = 5;
+        this.lastAttackTime = 0;
+        this.attackInterval = 15000;
         getHitbox()
     }
 
@@ -319,6 +369,18 @@ class Mage extends AnimatedObject{
             this.image.src = this.sprites[this.currentDirection][this.frameIndex];
             this.lastFrameChange = 0;
         }
+
+        if (boxOverlap(
+            { position: game.player.position, width: game.player.width, height: game.player.height },
+            { position: this.position, width: this.width, height: this.height }
+        )) {
+            const currentTime = Date.now(); 
+
+            if (currentTime - this.lastAttackTime > this.attackInterval && playerStats.life > 0) {
+                playerStats.life -= this.attack;
+                this.lastAttackTime = currentTime; 
+            }
+        }
     }
 
     draw(ctx) {
@@ -346,6 +408,8 @@ class Skull extends AnimatedObject{
         this.chaseSpeed = 0.1;
         this.life = 30;
         this.attack = 15;
+        this.lastAttackTime = 0;
+        this.attackInterval = 15000;
         getHitbox()
     }
 
@@ -377,6 +441,18 @@ class Skull extends AnimatedObject{
             this.frameIndex = (this.frameIndex + 1) % 2;
             this.image.src = this.sprites[this.currentDirection][this.frameIndex];
             this.lastFrameChange = 0;
+        }
+
+        if (boxOverlap(
+            { position: game.player.position, width: game.player.width, height: game.player.height },
+            { position: this.position, width: this.width, height: this.height }
+        )) {
+            const currentTime = Date.now(); 
+
+            if (currentTime - this.lastAttackTime > this.attackInterval && playerStats.life > 0) {
+                playerStats.life -= this.attack;
+                this.lastAttackTime = currentTime; 
+            }
         }
     }
 
@@ -405,6 +481,8 @@ class Slime extends AnimatedObject{
         this.chaseSpeed = 0.05;
         this.life = 20;
         this.attack = 5;
+        this.lastAttackTime = 0;
+        this.attackInterval = 7000;
         getHitbox()
     }
 
@@ -435,6 +513,18 @@ class Slime extends AnimatedObject{
             this.frameIndex = (this.frameIndex + 1) % 2;
             this.image.src = this.sprites[this.currentDirection][this.frameIndex];
             this.lastFrameChange = 0;
+        }
+
+        if (boxOverlap(
+            { position: game.player.position, width: game.player.width, height: game.player.height },
+            { position: this.position, width: this.width, height: this.height }
+        )) {
+            const currentTime = Date.now(); 
+
+            if (currentTime - this.lastAttackTime > this.attackInterval && playerStats.life > 0) {
+                playerStats.life -= this.attack;
+                this.lastAttackTime = currentTime; 
+            }
         }
     }
 
@@ -623,7 +713,6 @@ class Player extends AnimatedObject{
         this.swordActive = false;
         this.magicActive = false; 
         this.bowActive = false;
-        this.life = 100
     }   
 
     update(deltaTime) {
@@ -1677,6 +1766,24 @@ function drawPauseMenu(ctx) {
     ctx.restore();
 }
 
+function displayGameOverScreen(ctx) {
+    ctx.save();
+    ctx.fillStyle = "rgba(0, 0, 0, 0.5)"; 
+    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+    ctx.fillStyle = "white";
+    ctx.font = "50px Arial";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("GAME OVER", canvasWidth / 2, canvasHeight / 2);
+
+    ctx.restore();
+}
+
+function triggerGameOver(){
+    displayGameOverScreen();
+}
+
 function drawNPCTutorial(ctx) {
     let boxWidth = 320;
     let boxHeight = 180;
@@ -2011,3 +2118,4 @@ class Fairy {
       }, this.effectDuration);
     }
   }
+
