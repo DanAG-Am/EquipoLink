@@ -2,9 +2,8 @@
 Game.prototype.spawnEnemies = function() {
     const margin = 40;
     const enemyTypes = [Bat, Knight, Mage, Skull, Slime];
-    const currentLevel = playerStats.level;
 
-    const maxEnemies = this.maxEnemiesPerLevel[currentLevel];
+    const maxEnemies = this.maxEnemiesPerLevel[this.currentLevel];
     if (this.totalSpawnedEnemies >= maxEnemies) return;
 
     const numEnemiesToSpawn = Math.min(1, maxEnemies - this.totalSpawnedEnemies); 

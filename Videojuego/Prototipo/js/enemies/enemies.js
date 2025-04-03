@@ -78,6 +78,19 @@ class Boss extends AnimatedObject{
                 this.lastAttackTime = currentTime; 
             }
         }
+        const wallBoxes = getWallBoxes();
+        for (let wall of wallBoxes) {
+            const enemyBox = {
+                position: this.position,
+                width: this.width,
+                height: this.height
+            };
+            if (boxOverlap(enemyBox, wall)) {
+                this.position = this.position.minus(this.velocity.times(deltaTime));
+                this.velocity = new Vec(0, 0);
+                break;
+            }
+        }
     }
 
     draw(ctx) {
@@ -161,6 +174,19 @@ class Bat extends AnimatedObject {
                 this.lastAttackTime = currentTime; 
             }
         }
+        const wallBoxes = getWallBoxes();
+        for (let wall of wallBoxes) {
+            const enemyBox = {
+                position: this.position,
+                width: this.width,
+                height: this.height
+            };
+            if (boxOverlap(enemyBox, wall)) {
+                this.position = this.position.minus(this.velocity.times(deltaTime));
+                this.velocity = new Vec(0, 0);
+                break;
+            }
+        }
 }
 
     draw(ctx) {
@@ -234,6 +260,19 @@ class Knight extends AnimatedObject{
             if (currentTime - this.lastAttackTime > this.attackInterval && playerStats.life >0) {
                 playerStats.life = Math.max(0, playerStats.life - this.attack);
                 this.lastAttackTime = currentTime; 
+            }
+        }
+        const wallBoxes = getWallBoxes();
+        for (let wall of wallBoxes) {
+            const enemyBox = {
+                position: this.position,
+                width: this.width,
+                height: this.height
+            };
+            if (boxOverlap(enemyBox, wall)) {
+                this.position = this.position.minus(this.velocity.times(deltaTime));
+                this.velocity = new Vec(0, 0);
+                break;
             }
         }
     }
@@ -312,6 +351,19 @@ class Mage extends AnimatedObject{
                 this.lastAttackTime = currentTime; 
             }
         }
+        const wallBoxes = getWallBoxes();
+        for (let wall of wallBoxes) {
+            const enemyBox = {
+                position: this.position,
+                width: this.width,
+                height: this.height
+            };
+            if (boxOverlap(enemyBox, wall)) {
+                this.position = this.position.minus(this.velocity.times(deltaTime));
+                this.velocity = new Vec(0, 0);
+                break;
+            }
+        }
     }
 
     draw(ctx) {
@@ -387,6 +439,19 @@ class Skull extends AnimatedObject{
                 this.lastAttackTime = currentTime; 
             }
         }
+        const wallBoxes = getWallBoxes();
+        for (let wall of wallBoxes) {
+            const enemyBox = {
+                position: this.position,
+                width: this.width,
+                height: this.height
+            };
+            if (boxOverlap(enemyBox, wall)) {
+                this.position = this.position.minus(this.velocity.times(deltaTime));
+                this.velocity = new Vec(0, 0);
+                break;
+            }
+        }
     }
 
     draw(ctx) {
@@ -459,6 +524,19 @@ class Slime extends AnimatedObject{
             if (currentTime - this.lastAttackTime > this.attackInterval && playerStats.life > 0) {
                 playerStats.life = Math.max(0, playerStats.life - this.attack);
                 this.lastAttackTime = currentTime; 
+            }
+        }
+        const wallBoxes = getWallBoxes();
+        for (let wall of wallBoxes) {
+            const enemyBox = {
+                position: this.position,
+                width: this.width,
+                height: this.height
+            };
+            if (boxOverlap(enemyBox, wall)) {
+                this.position = this.position.minus(this.velocity.times(deltaTime));
+                this.velocity = new Vec(0, 0);
+                break;
             }
         }
     }
