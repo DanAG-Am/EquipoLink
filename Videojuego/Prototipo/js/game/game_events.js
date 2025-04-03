@@ -37,7 +37,7 @@ Game.prototype.createEventListeners = function(){
             this.showInventory = true;
             return;
         }
-        if ((this.mainMap || this.level) && this.dialogueStage >= 5 && !this.showTutorial) {
+        if ((this.mainMap || this.level) && this.dialogueStage >= 5 && !this.showTutorial && !isGameOver && !this.showLevelCompleteMessage) {
             if (event.key == 'ArrowUp') {
                 this.player.velocity.y = -playerSpeed;
                 this.player.setDirection("up");
