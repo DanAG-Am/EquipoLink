@@ -8,12 +8,8 @@ class Game {
         this.showPrologue = false;
         this.mainMap = false;
         this.level = false;
-        this.level2LayoutName = null;
+        this.level2 = false;
         this.enteredLevel = false;
-        this.currentLevel = 0;
-        this.hasReachedLevel2 = false;
-        this.mainMapReturnPosition = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize);
-        this.levelReturnPosition = new Vec(canvasWidth / 2 - 16, 16);
         this.dialogueStage = 0;
         this.showTutorial = false;
         this.tutorialWasShown = false;
@@ -37,7 +33,7 @@ class Game {
         this.totalSpawnedEnemies = 0;
         this.maxEnemiesPerLevel = {
             1: 1,
-            2: 1,
+            2: 8,
             3: 11
         };
         

@@ -1,16 +1,5 @@
 function getWallBoxes() {
-    let layoutName = null;
-
-    if (game.mainMap) {
-        layoutName = "mainMap";
-    } else if (game.level) {
-        if (game.currentLevel === 1) {
-            layoutName = "levelClosed";
-        } else if (game.currentLevel === 2) {
-            layoutName = game.level2LayoutName || "level_23_1"; // fallback por seguridad
-        }
-    }
-
+    const layoutName = game.mainMap ? "mainMap" : game.level ? "levelClosed" : null;
     const wallBoxes = [];
     const layout = processedFloors[layoutName];
     if (!layout) return wallBoxes;

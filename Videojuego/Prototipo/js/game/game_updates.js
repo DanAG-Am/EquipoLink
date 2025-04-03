@@ -4,10 +4,14 @@ Game.prototype.update = function(deltaTime) {
     if (!this.showMainMenu && !this.showPrologue) {
         if (this.level) {
             this.levelEnemies.forEach(enemy => enemy.update(deltaTime, this.player.position));
-            if (this.level && !this.levelCompleted && this.levelEnemies.length === 0 && this.totalSpawnedEnemies >= this.maxEnemiesPerLevel[this.currentLevel]) {
+            if (
+                this.level &&
+                this.totalSpawnedEnemies >= (this.maxEnemiesPerLevel[playerStats.level] || 5) &&
+                this.levelEnemies.length === 0 &&
+                !this.levelCompleted
+            ) {
                 this.levelCompleted = true;
                 this.showLevelCompleteMessage = true;
-                this.unlockNextLevel(); // abre puerta
             }
         } else {
             this.actors.forEach(actor => actor.update(deltaTime, this.player.position));
