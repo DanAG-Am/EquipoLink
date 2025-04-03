@@ -8,6 +8,7 @@ class Game {
         this.showPrologue = false;
         this.mainMap = false;
         this.level = false;
+        this.level2 = false;
         this.enteredLevel = false;
         this.dialogueStage = 0;
         this.showTutorial = false;
@@ -25,18 +26,13 @@ class Game {
         this.chestOpened = new Image();
         this.chestOpened.src = "../../Videojuego/Assets/GameAssets/Chest/chest_open.png";
         this.levelChestPosition = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 9);
-        this.levelChestBox = {
-            position: new Vec(this.levelChestPosition.x, this.levelChestPosition.y),
-            width: 32,
-            height: 32
-        };
 
         // Ahora el Old Man se gestiona desde su propia clase:
         this.oldMan = new OldMan(new Vec(canvasWidth / 2 - 16, canvasHeight / 2 - 105));
 
         this.totalSpawnedEnemies = 0;
         this.maxEnemiesPerLevel = {
-            1: 5,
+            1: 1,
             2: 8,
             3: 11
         };

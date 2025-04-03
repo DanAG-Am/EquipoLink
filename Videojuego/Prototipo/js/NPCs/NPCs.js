@@ -166,11 +166,13 @@ class Fairy {
         
         if (this.effectActive) {
           ctx.font = "18px Arial";
-          ctx.fillText("No puedes ver tu futuro en este momento", boxX + boxWidth / 2, boxY + 40);
+          ctx.fillText("No puedes ver tu futuro", boxX + boxWidth / 2, boxY + 70);
+          ctx.fillText("en este momento", boxX + boxWidth / 2, boxY + 110);
         } else {
           ctx.font = "18px Arial";
-          ctx.fillText("¿Quieres ver qué te espera en el futuro?", boxX + boxWidth / 2, boxY + 40);
-          ctx.fillText("Averigualo por 20 rupias", boxX + boxWidth / 2, boxY + 70);
+          ctx.fillText("¿Quieres ver qué te espera", boxX + boxWidth / 2, boxY + 40);
+          ctx.fillText("en el futuro?", boxX + boxWidth / 2, boxY + 60);
+          ctx.fillText("Averigualo por 20 rupias", boxX + boxWidth / 2, boxY + 80);
           
           // Botón "Ver futuro"
           let btnWidth = 120;
@@ -211,7 +213,10 @@ class Fairy {
       if (outcome < 0.5) {
         showSimpleDialog("Tu espíritu guerrero crece");
         playerStats.life = Math.round(playerStats.life * 1.1);
-        playerStats.damage = Math.round(playerStats.damage * 1.1);
+        playerStats.damageSword = Math.round(playerStats.damageSword * 1.1);
+        playerStats.damageArrow = Math.round(playerStats.damageArrow * 1.1);
+        playerStats.damageMagic = Math.round(playerStats.damageMagic * 1.1);
+        playerStats.damageBomb = Math.round(playerStats.damageBomb * 1.1);
       } else {
         showSimpleDialog("Un mal oscuro crece rápidamente");
         game.levelEnemies.forEach(enemy => {
@@ -316,10 +321,12 @@ class Fairy {
     ctx.fillStyle = "white";
     ctx.font = "18px Arial";
     ctx.textAlign = "center";
-    let lineHeight = 25;
-    let startY = boxY + 30;
-    ctx.fillText("Corre, Sentinel. Una aventura te espera.", boxX + boxWidth / 2, startY);
+    let lineHeight = 80;
+    let startY1 = boxY + 60;
+    let startY2 = boxY + 90;
+    ctx.fillText("Corre, Sentinel.", boxX + boxWidth / 2, startY1);
+    ctx.fillText("Una aventura te espera.", boxX + boxWidth / 2, startY2);
     ctx.font = "14px Arial";
-    ctx.fillText("(presione space para cerrar)", boxX + boxWidth / 2, startY + lineHeight);
+    ctx.fillText("Presiona Space para cerrar", boxX + boxWidth / 2, startY2 + lineHeight);
     ctx.restore();
   }
