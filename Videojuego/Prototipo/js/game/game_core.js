@@ -13,16 +13,20 @@ class Game {
         this.showTutorial = false;
         this.tutorialWasShown = false;
         this.showInventory = false;
+        this.chestHasBeenOpened = false;
         this.chestIsOpen = false;
+        this.levelCompleted = false;
+        this.showLevelCompleteMessage = false;
+        this.levelExitUnlocked = false;
         this.logo = new Image();
         this.logo.src = "../../Videojuego/Assets/MDAssets/Three.png";
         this.chestClosed = new Image();
         this.chestClosed.src = "../../Videojuego/Assets/GameAssets/Chest/chest_closed.png";
         this.chestOpened = new Image();
         this.chestOpened.src = "../../Videojuego/Assets/GameAssets/Chest/chest_open.png";
-        this.chestPosition = new Vec(canvasWidth / 2 - 70, 200);
-        this.chestBox = {
-            position: new Vec(this.chestPosition.x, this.chestPosition.y),
+        this.levelChestPosition = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 9);
+        this.levelChestBox = {
+            position: new Vec(this.levelChestPosition.x, this.levelChestPosition.y),
             width: 32,
             height: 32
         };
@@ -30,6 +34,13 @@ class Game {
         // Ahora el Old Man se gestiona desde su propia clase:
         this.oldMan = new OldMan(new Vec(canvasWidth / 2 - 16, canvasHeight / 2 - 105));
 
+        this.totalSpawnedEnemies = 0;
+        this.maxEnemiesPerLevel = {
+            1: 5,
+            2: 8,
+            3: 11
+        };
+        
         this.bombs = [];
         this.arrows = [];
         this.magics = [];
@@ -50,7 +61,17 @@ class Game {
         this.tutorialWasShown = false;
         this.showInventory = false;
         this.initializeRupees = false;
+        this.totalSpawnedEnemies = 0;
+
+        this.actors = [];
+        this.levelEnemies = [];
+        if (this.levelEnemyInterval) {
+            clearInterval(this.levelEnemyInterval);
+            this.levelEnemyInterval = null;
+        }
+
         this.initObjects();
+
         playerStats.level = 0;
         playerStats.life = 100;
         playerStats.mana = 100;

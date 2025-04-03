@@ -38,34 +38,43 @@ function drawUI() {
 }
 
 function drawPauseMenu(ctx) {
+    const boxWidth = 400;
+    const boxHeight = 250;
+    const boxX = canvasWidth / 2 - boxWidth / 2;
+    const boxY = canvasHeight / 2 - boxHeight / 2;
+
     ctx.save();
-    ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
-    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+    ctx.fillStyle = "black";
+    ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
 
-    ctx.fillStyle = "white";
-    ctx.font = "30px Arial";
+    ctx.fillStyle = "white"; // Texto
+    ctx.font = "40px Arial";
     ctx.textAlign = "center";
-    ctx.fillText("PAUSADO", canvasWidth / 2, canvasHeight / 2 - 50);
-    ctx.fillText("Presione SPACE para continuar", canvasWidth / 2, canvasHeight / 2);
-    ctx.fillText("Presione ESC para salir a menu principal", canvasWidth / 2, canvasHeight / 2);
+    ctx.fillText("PAUSA", canvasWidth / 2, boxY + 60);
 
-    ctx.restore();
-}
-
-function displayGameOverScreen(ctx) {
-    ctx.save();
-    ctx.fillStyle = "rgba(0, 0, 0, 0.5)"; 
-    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-
+    const buttonWidth = 200; // Botón para regresar al inicio
+    const buttonHeight = 40;
+    const buttonX = canvasWidth / 2 - buttonWidth / 2;
+    const buttonY = boxY + 110;
+    ctx.fillStyle = "#333";
+    ctx.fillRect(buttonX, buttonY, buttonWidth, buttonHeight);
+    ctx.strokeStyle = "white";
+    ctx.strokeRect(buttonX, buttonY, buttonWidth, buttonHeight);
     ctx.fillStyle = "white";
-    ctx.font = "50px Arial";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText("GAME OVER", canvasWidth / 2, canvasHeight / 2);
+    ctx.font = "20px Arial";
+    ctx.fillText("Volver al inicio", canvasWidth / 2, buttonY + 26);
 
+    ctx.font = "16px Arial"; // Instrucción para continuar con el juego
+    ctx.fillText("Presiona ESC para regresar al juego", canvasWidth / 2, boxY + boxHeight - 30);
     ctx.restore();
-}
 
-function triggerGameOver(){
-    displayGameOverScreen();
+    game.pauseButton = { // Guardar el posición del botón
+        x: buttonX,
+        y: buttonY,
+        width: buttonWidth,
+        height: buttonHeight
+    };
 }
