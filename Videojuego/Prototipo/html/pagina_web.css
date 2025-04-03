@@ -295,3 +295,219 @@ a.botonRegresar:hover {
 .password-container .campo input {
     width: 400px;
 }
+
+.personajes {
+    margin-top: 100px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+}
+#headerCharacter h1{
+    text-align: center;
+    margin-top: 10px;
+}
+
+.Character {
+    margin-top: 100px;
+    margin-bottom: 50px;
+    background-color: #333;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease;
+}
+
+.Character:hover {
+    transform: scale(1.05); 
+}
+
+.Character img {
+    width: 150px;
+    height: 150px;
+    margin: 0px auto;
+    padding-top: 20px;
+    display: block;
+    border-bottom: 2px solid #ffcc00;
+    align-items: center;
+    justify-content: center;
+}
+
+.Character h3 {
+    text-align: center;
+    color: #ffcc00; 
+    font-size: 1.5rem;
+    margin-top: 10px;
+}
+
+.Character p {
+    padding: 15px;
+    font-size: 1rem;
+    color: #ccc; 
+    text-align: justify;
+}
+
+.return-button {
+    display: inline-block;
+    padding: 10px;
+    margin-bottom: -60px;
+    font-size: 1.5em;
+    background-color: #ff4757;
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, box-shadow 0.3s, background-color 0.3s;
+    justify-content: space-between;
+    position: absolute; /* Position it absolutely within the page */
+    top: 20px; /* Adjust this value to control vertical position */
+    right: 20px; /* Align the button to the right */
+    text-align: center;
+    margin-top: 30px;
+}
+
+.return-button:hover {
+    background-color: #e84118;
+    transform: scale(1.05);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+}
+
+.container {
+    margin-top: 30px;
+    margin-left: 500px;
+    background-color: #4F4F4F;;
+    padding: 50px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(46, 42, 42, 0.1);
+    max-width: 500px;
+    width: 100%;
+    justify-content: center; 
+    align-items: center; 
+}
+
+.control-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.control-item {
+    background-color: #ffffff;
+    border: 3px solid #ffcc00;
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.control-key {
+    font-weight: bold;
+    color: #331f0777;
+}
+
+.control-action {
+    font-style: italic;
+    color: #555;
+}
+
+.control-item:hover {
+    background-color: #fdfacc;
+}
+
+
+#assets {
+    padding: 60px 20px;
+    background-color: #121212;
+    color: white;
+    text-align: center;
+}
+
+#assets h2 {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #f2c81f;
+    margin-bottom: 40px;
+    position: relative;
+    display: inline-block;
+}
+
+#assets h2::after {
+    content: '';
+    display: block;
+    height: 2px;
+    width: 100%;
+    background: #f2c81f;
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    transition: transform 0.3s ease;
+}
+
+#assets h2:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+.assets-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 80px;
+    width: 100%;
+    overflow: hidden; 
+}
+
+.assets-gallery {
+    display: flex;
+    align-items: center;
+    width: max-content; 
+    justify-content: flex-start;
+    animation: scroll-left 40s linear infinite;
+}
+
+.assets-gallery img {
+    width: 150px; 
+    width: 150px; 
+    margin: 0 20px; 
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.assets-gallery img:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes scroll-left {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+.story {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 30px; /* Adds space above the comic image */
+}
+
+.story img {
+    max-width: 90%; /* Adjust image size */
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+footer {
+    margin-top: 60px;
+    padding: 20px 0;
+    font-size: 1.2em;
+}
