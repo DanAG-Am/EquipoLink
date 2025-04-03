@@ -105,24 +105,27 @@ Game.prototype.createEventListeners = function(){
             } 
         }
         if (event.key == "o") {
-            if (this.mainMap) {
-                const playerNearChest = this.player.position.x > this.chestPosition.x - 36 &&
-                    this.player.position.x < this.chestPosition.x + 36 &&
-                    this.player.position.y > this.chestPosition.y - 36 &&
-                    this.player.position.y < this.chestPosition.y + 36;
-                if (playerNearChest && !this.chestHasBeenOpened) { 
-                    this.chestIsOpen = !this.chestIsOpen;
-                    if (this.chestIsOpen) {
-                        let item = Math.random();
-                        if (item <= 0.33) {
-                            playerStats.bombs += 1;
-                        } else if (item <= 0.66) {
-                            playerStats.arrows += 1;
-                        } else {
-                            playerStats.potions += 1;
-                        }
-                        this.chestHasBeenOpened = true;
+            if (this.level && this.levelCompleted) {
+                const px = this.player.position.x;
+                const py = this.player.position.y;
+                const cx = this.levelChestPosition.x;
+                const cy = this.levelChestPosition.y;
+        
+                const nearLevelChest = px > cx - 36 && px < cx + 36 && py > cy - 36 && py < cy + 36;
+        
+                if (nearLevelChest && !this.chestHasBeenOpened) {
+                    this.chestIsOpen = true;
+        
+                    let item = Math.random();
+                    if (item <= 0.33) {
+                        playerStats.bombs += 1;
+                    } else if (item <= 0.66) {
+                        playerStats.arrows += 1;
+                    } else {
+                        playerStats.potions += 1;
                     }
+        
+                    this.chestHasBeenOpened = true;
                 }
             }
         }
@@ -178,6 +181,10 @@ Game.prototype.createEventListeners = function(){
                 }
             }
         }
+        if (this.showLevelCompleteMessage && event.key === "Enter") {
+            this.showLevelCompleteMessage = false;
+            this.unlockNextLevel();
+        }
     });
 
     window.addEventListener('keyup', (event) => {
@@ -222,6 +229,38 @@ Game.prototype.createEventListeners = function(){
                        clickY >= btn3.y && clickY <= btn3.y + btn3.height) {
                 currentItemType = "bombas";
                 showPurchaseDialog(currentItemType);
+            }
+        }
+        if (gamePaused && game.pauseButton) {
+            let rect = canvas.getBoundingClientRect();
+            let scaleX = canvas.width / rect.width;
+            let scaleY = canvas.height / rect.height;
+            let clickX = (event.clientX - rect.left) * scaleX;
+            let clickY = (event.clientY - rect.top) * scaleY;
+        
+            let btn = game.pauseButton;
+            if (
+                clickX >= btn.x && clickX <= btn.x + btn.width &&
+                clickY >= btn.y && clickY <= btn.y + btn.height
+            ) {
+                gamePaused = false;
+                game.resetGame();
+            }
+        }
+        if (isGameOver && game.gameOverButton) {
+            let rect = canvas.getBoundingClientRect();
+            let scaleX = canvas.width / rect.width;
+            let scaleY = canvas.height / rect.height;
+            let clickX = (event.clientX - rect.left) * scaleX;
+            let clickY = (event.clientY - rect.top) * scaleY;
+        
+            let btn = game.gameOverButton;
+            if (
+                clickX >= btn.x && clickX <= btn.x + btn.width &&
+                clickY >= btn.y && clickY <= btn.y + btn.height
+            ) {
+                isGameOver = false;
+                game.resetGame();
             }
         }
         if (interactingFairy && game.fairy.button) {

@@ -62,9 +62,9 @@ class Player extends AnimatedObject{
             collidesWithMerchant = boxOverlap(futureBox, game.tienda.getHitbox());
         }
 
-        let collidesWithChest = false;
-        if (game.mainMap) {
-            collidesWithChest = boxOverlap(futureBox, game.chestBox);
+        let collidesWithLevelChest = false;
+        if (game.level && game.levelCompleted && game.levelChestBox) {
+            collidesWithLevelChest = boxOverlap(futureBox, game.levelChestBox);
         }
 
         let collidesWithFairy = false;
@@ -72,7 +72,7 @@ class Player extends AnimatedObject{
           collidesWithFairy = boxOverlap(futureBox, game.fairy.getHitbox());
         }
 
-        if (!collidesWithWall && !collidesWithOldMan && !collidesWithMerchant && !collidesWithChest && !collidesWithFairy) {
+        if (!collidesWithWall && !collidesWithOldMan && !collidesWithMerchant && !collidesWithLevelChest && !collidesWithFairy) {
             this.position = nextPosition;
         }
         

@@ -21,6 +21,8 @@ class Boss extends AnimatedObject{
         this.attack = this.getRandomAttackDamage(); 
         this.attackInterval = this.getRandomAttackInterval(); 
         this.lastAttackTime = 0;
+        this.lastDamageTime = 0;
+        this.damageCooldown = 500;
         this.getHitBox();
     }
 
@@ -104,7 +106,9 @@ class Bat extends AnimatedObject {
         this.life = 20;
         this.attack = 5;
         this.lastAttackTime = 0;  
-        this.attackInterval = 500; 
+        this.attackInterval = 500;
+        this.lastDamageTime = 0;
+        this.damageCooldown = 500;
         getHitbox()
 
     }
@@ -186,6 +190,8 @@ class Knight extends AnimatedObject{
         this.attack = 15;
         this.lastAttackTime = 0;
         this.attackInterval = 1000;
+        this.lastDamageTime = 0;
+        this.damageCooldown = 500;
         getHitbox()
     }
 
@@ -260,6 +266,8 @@ class Mage extends AnimatedObject{
         this.attack = 5;
         this.lastAttackTime = 0;
         this.attackInterval = 3000;
+        this.lastDamageTime = 0;
+        this.damageCooldown = 500;
         getHitbox()
     }
 
@@ -333,6 +341,8 @@ class Skull extends AnimatedObject{
         this.attack = 15;
         this.lastAttackTime = 0;
         this.attackInterval = 1000;
+        this.lastDamageTime = 0;
+        this.damageCooldown = 500;
         getHitbox()
     }
 
@@ -406,6 +416,8 @@ class Slime extends AnimatedObject{
         this.attack = 5;
         this.lastAttackTime = 0;
         this.attackInterval = 5000;
+        this.lastDamageTime = 0;
+        this.damageCooldown = 500;
         getHitbox()
     }
 

@@ -43,14 +43,7 @@ Game.prototype.draw = function(ctx) {
         this.oldMan.draw(ctx);
         this.tienda.draw(ctx);
         this.fairy.draw(ctx); 
-        
-        if (this.chestIsOpen) {
-            this.chestClosed = null;
-            ctx.drawImage(this.chestOpened, this.chestPosition.x, this.chestPosition.y, 32,32);
-            this.player.draw(ctx);
-        } else {
-            ctx.drawImage(this.chestClosed, this.chestPosition.x, this.chestPosition.y, 32,32);
-        }
+
         this.player.draw(ctx);
         if (!rupeesInitialized) {
             initializeRupees();
@@ -115,6 +108,14 @@ Game.prototype.draw = function(ctx) {
             clearInterval(this.levelEnemyInterval);
             this.levelEnemyInterval = null;
         }
+        if (this.levelCompleted) {
+            if (this.chestIsOpen) {
+                this.chestClosed = null;
+                ctx.drawImage(this.chestOpened, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
+            } else {
+                ctx.drawImage(this.chestClosed, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
+            }
+        }
     } else {
         this.actors.forEach(actor => actor.draw(ctx));
         this.player.draw(ctx);
@@ -130,6 +131,64 @@ Game.prototype.draw = function(ctx) {
     }
     if (interactingFairy) {
         this.fairy.drawDialogue(ctx);
+    }
+    if (this.showLevelCompleteMessage) {
+        const boxWidth = 400;
+        const boxHeight = 180;
+        const boxX = canvasWidth / 2 - boxWidth / 2;
+        const boxY = canvasHeight / 2 - boxHeight / 2;
+    
+        ctx.save();
+        ctx.fillStyle = "black";
+        ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
+    
+        ctx.fillStyle = "white";
+        ctx.font = "32px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText("¡Nivel Completado!", canvasWidth / 2, boxY + 60);
+        ctx.font = "18px Arial";
+        ctx.fillText("Presiona Enter para continuar", canvasWidth / 2, boxY + 110);
+        ctx.restore();
+    }
+    if (isGameOver) {
+        const boxWidth = 400;
+        const boxHeight = 250;
+        const boxX = canvasWidth / 2 - boxWidth / 2;
+        const boxY = canvasHeight / 2 - boxHeight / 2;
+    
+        ctx.save();
+        ctx.fillStyle = "black";
+        ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
+    
+        ctx.fillStyle = "white";
+        ctx.font = "40px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText("GAME OVER!", canvasWidth / 2, boxY + 100);
+
+        const buttonWidth = 220; // Botón del regreso
+        const buttonHeight = 40;
+        const buttonX = canvasWidth / 2 - buttonWidth / 2;
+        const buttonY = boxY + 150;
+        ctx.fillStyle = "#333";
+        ctx.fillRect(buttonX, buttonY, buttonWidth, buttonHeight);
+        ctx.strokeStyle = "white";
+        ctx.strokeRect(buttonX, buttonY, buttonWidth, buttonHeight);
+        ctx.fillStyle = "white";
+        ctx.font = "20px Arial";
+        ctx.fillText("Volver al inicio", canvasWidth / 2, buttonY + 26);
+    
+        game.gameOverButton = { // Guarda la posición del botón
+            x: buttonX,
+            y: buttonY,
+            width: buttonWidth,
+            height: buttonHeight
+        };
     }
 };
 
@@ -211,4 +270,22 @@ Game.prototype.drawInventory = function(ctx) {
     ctx.font = "16px Arial";
     ctx.fillText("Presiona I para cerrar", canvasWidth / 2, canvasHeight / 2 + 250);
     ctx.restore();
+};
+
+Game.prototype.unlockNextLevel = function() {
+    this.levelExitUnlocked = true;
+
+    const layout = processedFloors["levelClosed"];
+    const exitX = Math.floor(canvasWidth / 2 / tileSize);
+    const exitY = Math.floor(canvasHeight / tileSize) - 1;
+
+    if (layout && layout[exitY]) {
+        // Asegurarse de que los 3 tiles existen y están dentro del mapa
+        for (let dx = -1; dx <= 1; dx++) {
+            const x = exitX + dx;
+            if (layout[exitY][x]) {
+                layout[exitY][x] = "door";
+            }
+        }
+    }
 };

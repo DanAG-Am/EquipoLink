@@ -1,6 +1,7 @@
 class Bomb {
     constructor(position) {
         this.position = position;
+        this.exploded = false;
         this.frameIndex = 0;
         this.frames = [
             "../../Videojuego/Assets/GameAssets/Pickup/pickup_Bomb.png",
