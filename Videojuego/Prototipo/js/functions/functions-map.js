@@ -8,6 +8,9 @@ function getWallBoxes() {
     } else if (game.level2) {
         layoutName = "level_2";
     }
+    else if(game.level3){
+        layoutName = "level_3";
+    }
 
     const wallBoxes = [];
     const layout = processedFloors[layoutName];
