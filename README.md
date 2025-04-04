@@ -111,7 +111,9 @@ Cada enemigo cuenta con un rango, donde si percibe al jugador dentro del mismo, 
 El daño y la frecuencia de ataque es diferente para cada tipo de enemigo. Un enemigo como skull que ataque en cantidades pequeñas, compensa a través de ataques más frecuentes. 
 
 El daño del jugador es fijo según el tipo de arma y puede matar a los enemigos según el arma y la cantidad de veces que pegue al enemigo. Funciona como una colisión. 
-Funcionalidades En Progreso
+- - -
+
+## Funcionalidades En Progreso
 
 
 ### Generación de niveles 4 a 10
