@@ -10,6 +10,8 @@ class Game {
         this.level = false;
         this.level2 = false;
         this.level3 = false;
+        this.restStory1 = false;
+        this.restRoom1 = false;
         this.enteredLevel = false;
         this.dialogueStage = 0;
         this.showTutorial = false;
@@ -18,10 +20,10 @@ class Game {
         this.levelChestPosition = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 9);
         this.chestHasBeenOpened = false;
         this.chestIsOpen = false;
-        this.level2ChestPosition = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 14);
+        this.level2ChestPosition = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 9);
         this.level2ChestIsOpen = false;
         this.level2ChestHasBeenOpened = false;
-        this.level3ChestPosition = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 5);
+        this.level3ChestPosition = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 9);
         this.level3ChestIsOpen = false;
         this.level3ChestHasBeenOpened = false;
         this.levelCompleted = false;
@@ -40,8 +42,8 @@ class Game {
         this.totalSpawnedEnemies = 0;
         this.maxEnemiesPerLevel = {
             1: 5,
-            2: 8,
-            3: 12
+            2: 6,
+            3: 9
         };
         
         this.bombs = [];
@@ -65,6 +67,15 @@ class Game {
         this.showInventory = false;
         this.initializeRupees = false;
         this.totalSpawnedEnemies = 0;
+        this.levelCompleted = false;
+        this.chestHasBeenOpened = false;
+        this.chestIsOpen = false;
+        this.level2ChestIsOpen = false;
+        this.level3ChestIsOpen = false;
+        this.levelExitUnlocked = false;
+        ["prologue", "mainMap", "levelClosed", "level_2", "level_3", "restRoom1"].forEach(name => {
+            processBackgroundLayout(name);
+        });
 
         this.actors = [];
         this.levelEnemies = [];
@@ -75,7 +86,7 @@ class Game {
 
         this.initObjects();
 
-        playerStats.level = 0;
+        playerStats.level = "-";
         playerStats.life = 100;
         playerStats.mana = 100;
         playerStats.rupees = 0;

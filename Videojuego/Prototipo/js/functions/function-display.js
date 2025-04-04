@@ -34,7 +34,8 @@ function drawUI() {
     uiCtx.drawImage(potionImg, 230, 80, 16, 32);
     uiCtx.fillText(`x${playerStats.potions}`, 250, 100);
 
-    uiCtx.fillText(`LEVEL - ${playerStats.level}`, 100, 40);
+    const pos = playerStats.uiTextPosition || { x: 100, y: 40 };
+    uiCtx.fillText(`LEVEL - ${playerStats.level}`, pos.x, pos.y);
 }
 
 function drawPauseMenu(ctx) {

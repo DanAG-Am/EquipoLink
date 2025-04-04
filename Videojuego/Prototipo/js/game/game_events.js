@@ -12,6 +12,12 @@ Game.prototype.createEventListeners = function(){
             this.mainMap = true;
             return;
         }
+        if (this.restStory1 && event.key === 'Enter') {
+            this.restStory1 = false;
+            this.restRoom1 = true;
+            game.player.position = new Vec(canvasWidth / 2 - 16, tileSize * 2);
+            return;
+        }
         if (this.mainMap && this.dialogueStage < 5 && event.key === 'Enter') {
             this.dialogueStage++;
             return;
@@ -37,7 +43,7 @@ Game.prototype.createEventListeners = function(){
             this.showInventory = true;
             return;
         }
-        if ((this.mainMap || this.level || this.level2 || this.level3) && this.dialogueStage >= 5 && !this.showTutorial && !isGameOver && !this.showLevelCompleteMessage) {
+        if ((this.mainMap || this.level || this.level2 || this.level3 || this.restRoom1) && this.dialogueStage >= 5 && !this.showTutorial && !isGameOver && !this.showLevelCompleteMessage) {
             if (event.key == 'ArrowUp') {
                 this.player.velocity.y = -playerSpeed;
                 this.player.setDirection("up");
@@ -118,11 +124,14 @@ Game.prototype.createEventListeners = function(){
         
                     let item = Math.random();
                     if (item <= 0.33) {
-                        playerStats.bombs += 1;
+                        const bombsToAdd = Math.floor(Math.random() * 2) + 1;
+                        playerStats.bombs += bombsToAdd;
                     } else if (item <= 0.66) {
-                        playerStats.arrows += 1;
+                        const arrowsToAdd = Math.floor(Math.random() * 3) + 3;
+                        playerStats.arrows += arrowsToAdd;
                     } else {
-                        playerStats.potions += 1;
+                        const potionsToAdd = Math.floor(Math.random() * 2) + 1;
+                        playerStats.potions += potionsToAdd;
                     }
         
                     this.chestHasBeenOpened = true;
@@ -140,11 +149,14 @@ Game.prototype.createEventListeners = function(){
                     this.level2ChestIsOpen = true;
                     let item = Math.random();
                     if (item <= 0.33) {
-                        playerStats.bombs += 1;
+                        const bombsToAdd = Math.floor(Math.random() * 2) + 1;
+                        playerStats.bombs += bombsToAdd;
                     } else if (item <= 0.66) {
-                        playerStats.arrows += 1;
+                        const arrowsToAdd = Math.floor(Math.random() * 3) + 3;
+                        playerStats.arrows += arrowsToAdd;
                     } else {
-                        playerStats.potions += 1;
+                        const potionsToAdd = Math.floor(Math.random() * 2) + 1;
+                        playerStats.potions += potionsToAdd;
                     }
                     this.level2ChestHasBeenOpened = true;
                 }
@@ -161,11 +173,14 @@ Game.prototype.createEventListeners = function(){
                     this.level3ChestIsOpen = true;
                     let item = Math.random();
                     if (item <= 0.33) {
-                        playerStats.bombs += 1;
+                        const bombsToAdd = Math.floor(Math.random() * 2) + 1;
+                        playerStats.bombs += bombsToAdd;
                     } else if (item <= 0.66) {
-                        playerStats.arrows += 1;
+                        const arrowsToAdd = Math.floor(Math.random() * 3) + 3;
+                        playerStats.arrows += arrowsToAdd;
                     } else {
-                        playerStats.potions += 1;
+                        const potionsToAdd = Math.floor(Math.random() * 2) + 1;
+                        playerStats.potions += potionsToAdd;
                     }
                     this.level3ChestHasBeenOpened = true;
                 }
@@ -182,7 +197,7 @@ Game.prototype.createEventListeners = function(){
             gamePaused = !gamePaused;
         }
         if (event.key === " "){
-            if (this.mainMap) {
+            if (this.mainMap || this.restRoom1) {
                 if (
                     document.getElementById("purchaseDialog").style.display !== "none" ||
                     document.getElementById("errorDialog").style.display !== "none" ||
@@ -230,7 +245,7 @@ Game.prototype.createEventListeners = function(){
     });
 
     window.addEventListener('keyup', (event) => {
-        if ((this.mainMap || this.level || this.level2 || this.level3) && !this.showTutorial) {
+        if ((this.mainMap || this.level || this.level2 || this.level3 || this.restRoom1) && !this.showTutorial) {
             if (event.key == 'ArrowUp' || event.key == 'ArrowDown') {
                 this.player.velocity.y = 0;
             } else if (event.key == 'ArrowLeft' || event.key == 'ArrowRight') {
