@@ -18,10 +18,10 @@ class Game {
         this.levelChestPosition = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 9);
         this.chestHasBeenOpened = false;
         this.chestIsOpen = false;
-        this.level2ChestPosition = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 9);
+        this.level2ChestPosition = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 14);
         this.level2ChestIsOpen = false;
         this.level2ChestHasBeenOpened = false;
-        this.level3ChestPosition = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 9);
+        this.level3ChestPosition = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 5);
         this.level3ChestIsOpen = false;
         this.level3ChestHasBeenOpened = false;
         this.levelCompleted = false;

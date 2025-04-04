@@ -190,6 +190,23 @@ Game.prototype.draw = function(ctx) {
         } else if (this.showTutorial) {
             this.drawTutorial(ctx);
         }
+
+        if (this.player.position.y + this.player.height >= canvasHeight &&
+            this.player.position.x >= canvasWidth / 2 - 50 &&
+            this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
+            this.level3 = false;
+            /*falta un this level 4 es true*/
+            this.player.position = new Vec(canvasWidth / 2 - 16, tileSize);
+            this.totalSpawnedEnemies = 0;
+            this.levelEnemies = [];
+            this.levelCompleted = false;
+            this.chestHasBeenOpened = false;
+            this.chestIsOpen = false;
+            this.levelExitUnlocked = false;
+            rupeesInitialized = false;
+            playerStats.level += 1;
+            this.levelEnemyInterval = setInterval(() => { this.spawnEnemies(); }, 5000);
+        }
     }
     
     else {

@@ -5,24 +5,38 @@ Game.prototype.spawnEnemies = function() {
         enemyTypes = [Slime];
     } else if (playerStats.level === 2) {
         enemyTypes = [Slime, Bat];
+    } else if (playerStats.level === 3) {
+        enemyTypes = [Slime, Bat];
     }
-    else if (playerStats.level === 3){
-        enemyTypes = [Slime, Bat, Slime];
-    }
+
     const currentLevel = playerStats.level;
     const maxEnemies = this.maxEnemiesPerLevel[currentLevel];
     if (this.totalSpawnedEnemies >= maxEnemies) return;
     const numEnemiesToSpawn = Math.min(1, maxEnemies - this.totalSpawnedEnemies); 
 
     for (let i = 0; i < numEnemiesToSpawn; i++) {
-        const xPos = Math.floor(Math.random() * (canvasWidth - 2 * margin - 32)) + margin;
-        const yPos = Math.floor(Math.random() * (canvasHeight - 2 * margin - 32)) + margin;
-        const EnemyClass = enemyTypes[Math.floor(Math.random() * enemyTypes.length)];
-        const newEnemy = new EnemyClass(new Vec(xPos, yPos), 32, 32);
-        this.levelEnemies.push(newEnemy);
-        this.totalSpawnedEnemies++;
+        let spawnX, spawnY;
+        let validSpawn = false;
+
+        // Try finding a valid spawn position
+        while (!validSpawn) {
+            spawnX = Math.floor(Math.random() * (canvasWidth - 2 * margin - 32)) + margin;
+            spawnY = Math.floor(Math.random() * (canvasHeight - 2 * margin - 32)) + margin;
+
+            // Create the new enemy at this spawn position
+            const EnemyClass = enemyTypes[Math.floor(Math.random() * enemyTypes.length)];
+            const newEnemy = new EnemyClass(new Vec(spawnX, spawnY), 32, 32);
+
+            // Check if the spawn position is valid (not colliding with walls)
+            if (!this.isEnemyCollidingWithWall(newEnemy)) {
+                validSpawn = true;
+                this.levelEnemies.push(newEnemy);
+                this.totalSpawnedEnemies++;
+            }
+        }
     }
 };
+
 
 Game.prototype.drawEnemies = function(ctx) {
     this.levelEnemies.forEach(enemy => {
