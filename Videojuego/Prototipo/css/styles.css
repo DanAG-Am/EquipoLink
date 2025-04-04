@@ -19,7 +19,7 @@ body {
 /* Header estilo THE LOST SENTINEL */
 header {
   width: 100%;
-  padding: 20px 40px;
+  padding: 0px 40px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -65,7 +65,7 @@ canvas {
   background-color: #134712;
   margin-top: 10px;
   width: 100%;
-  max-width: 900px;
+  max-width: 720px;
   height: auto;
   aspect-ratio: 2.8 / 2;
 }
@@ -73,7 +73,7 @@ canvas {
 #uiCanvas {
   background-color: black;
   width: 100%;
-  max-width: 900px;
+  max-width: 720px;
   height: auto;
   aspect-ratio: 9 / 2;
 }
