@@ -2,10 +2,10 @@
 
 Game.prototype.update = function(deltaTime) {
     if (!this.showMainMenu && !this.showPrologue) {
-        if (this.level) {
+        if (this.level || this.level2) {
             this.levelEnemies.forEach(enemy => enemy.update(deltaTime, this.player.position));
+        
             if (
-                this.level &&
                 this.totalSpawnedEnemies >= (this.maxEnemiesPerLevel[playerStats.level] || 5) &&
                 this.levelEnemies.length === 0 &&
                 !this.levelCompleted
@@ -36,7 +36,7 @@ Game.prototype.update = function(deltaTime) {
             swordBox.width = (this.player.currentDirection === "left" || this.player.currentDirection === "right") ? this.player.width + range : this.player.width;
             swordBox.height = (this.player.currentDirection === "up" || this.player.currentDirection === "down") ? this.player.height + range : this.player.height;
         
-            const enemies = this.level ? this.levelEnemies : this.actors;
+            const enemies = (this.level || this.level2) ? this.levelEnemies : this.actors;
             for (let i = enemies.length - 1; i >= 0; i--) {
                 const enemy = enemies[i];
                 if (!enemy || !enemy.position) continue;
@@ -62,7 +62,7 @@ Game.prototype.update = function(deltaTime) {
         }
         this.arrows.forEach(a => a.update(deltaTime));
         this.arrows.forEach((arrow, i) => {
-            const enemies = this.level ? this.levelEnemies : this.actors;
+            const enemies = (this.level || this.level2) ? this.levelEnemies : this.actors;
             enemies.forEach((enemy, index) => {
                 if (boxOverlap({
                     position: arrow.position,
@@ -86,7 +86,7 @@ Game.prototype.update = function(deltaTime) {
         this.arrows = this.arrows.filter(a => a.alive !== false);
         this.magics.forEach(m => m.update(deltaTime));
         this.magics.forEach((magic, i) => {
-            const enemies = this.level ? this.levelEnemies : this.actors;
+            const enemies = (this.level || this.level2) ? this.levelEnemies : this.actors;
             enemies.forEach((enemy, index) => {
                 
                 const currentTime = Date.now();

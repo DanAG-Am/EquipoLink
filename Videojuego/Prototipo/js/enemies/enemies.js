@@ -60,7 +60,28 @@ class Boss extends AnimatedObject{
         }
 
         let nextPosition = this.position.plus(this.velocity.times(deltaTime));
-        this.position = nextPosition;
+
+        let futureBox = {
+            position: nextPosition,
+            width: this.width,
+            height: this.height
+        };
+        
+        // Detecta colisión con las paredes
+        const wallBoxes = getWallBoxes();
+        let collidesWithWall = false;
+        for (let wall of wallBoxes) {
+            if (boxOverlap(futureBox, wall)) {
+                collidesWithWall = true;
+                break;
+            }
+        }
+        
+        if (!collidesWithWall) {
+            this.position = nextPosition;
+        } else {
+            this.velocity = new Vec(0, 0); // Detener movimiento si choca
+        }
         this.lastFrameChange += deltaTime;
         if (this.lastFrameChange > this.animationSpeed) {
             this.frameIndex = (this.frameIndex + 1) % 2;
@@ -216,7 +237,28 @@ class Knight extends AnimatedObject{
         }
     
         let nextPosition = this.position.plus(this.velocity.times(deltaTime));
-        this.position = nextPosition;
+
+        let futureBox = {
+            position: nextPosition,
+            width: this.width,
+            height: this.height
+        };
+        
+        // Detecta colisión con las paredes
+        const wallBoxes = getWallBoxes();
+        let collidesWithWall = false;
+        for (let wall of wallBoxes) {
+            if (boxOverlap(futureBox, wall)) {
+                collidesWithWall = true;
+                break;
+            }
+        }
+        
+        if (!collidesWithWall) {
+            this.position = nextPosition;
+        } else {
+            this.velocity = new Vec(0, 0); // Detener movimiento si choca
+        }
 
         this.lastFrameChange += deltaTime;
         if (this.lastFrameChange > this.animationSpeed) {
@@ -292,7 +334,28 @@ class Mage extends AnimatedObject{
         }
     
         let nextPosition = this.position.plus(this.velocity.times(deltaTime));
-        this.position = nextPosition;
+
+        let futureBox = {
+            position: nextPosition,
+            width: this.width,
+            height: this.height
+        };
+        
+        // Detecta colisión con las paredes
+        const wallBoxes = getWallBoxes();
+        let collidesWithWall = false;
+        for (let wall of wallBoxes) {
+            if (boxOverlap(futureBox, wall)) {
+                collidesWithWall = true;
+                break;
+            }
+        }
+        
+        if (!collidesWithWall) {
+            this.position = nextPosition;
+        } else {
+            this.velocity = new Vec(0, 0); // Detener movimiento si choca
+        }
     
         this.lastFrameChange += deltaTime;
         if (this.lastFrameChange > this.animationSpeed) {
@@ -367,7 +430,28 @@ class Skull extends AnimatedObject{
         }
     
         let nextPosition = this.position.plus(this.velocity.times(deltaTime));
-        this.position = nextPosition;
+
+        let futureBox = {
+            position: nextPosition,
+            width: this.width,
+            height: this.height
+        };
+        
+        // Detecta colisión con las paredes
+        const wallBoxes = getWallBoxes();
+        let collidesWithWall = false;
+        for (let wall of wallBoxes) {
+            if (boxOverlap(futureBox, wall)) {
+                collidesWithWall = true;
+                break;
+            }
+        }
+        
+        if (!collidesWithWall) {
+            this.position = nextPosition;
+        } else {
+            this.velocity = new Vec(0, 0); // Detener movimiento si choca
+        }
 
         this.lastFrameChange += deltaTime;
         if (this.lastFrameChange > this.animationSpeed) {
@@ -442,7 +526,28 @@ class Slime extends AnimatedObject{
         }
 
         let nextPosition = this.position.plus(this.velocity.times(deltaTime));
-        this.position = nextPosition;
+
+        let futureBox = {
+            position: nextPosition,
+            width: this.width,
+            height: this.height
+        };
+        
+        // Detecta colisión con las paredes
+        const wallBoxes = getWallBoxes();
+        let collidesWithWall = false;
+        for (let wall of wallBoxes) {
+            if (boxOverlap(futureBox, wall)) {
+                collidesWithWall = true;
+                break;
+            }
+        }
+        
+        if (!collidesWithWall) {
+            this.position = nextPosition;
+        } else {
+            this.velocity = new Vec(0, 0); // Detener movimiento si choca
+        }
         this.lastFrameChange += deltaTime;
         if (this.lastFrameChange > this.animationSpeed) {
             this.frameIndex = (this.frameIndex + 1) % 2;
