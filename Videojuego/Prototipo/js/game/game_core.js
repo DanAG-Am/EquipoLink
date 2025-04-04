@@ -9,6 +9,7 @@ class Game {
         this.mainMap = false;
         this.level = false;
         this.level2 = false;
+        this.level3 = false;
         this.enteredLevel = false;
         this.dialogueStage = 0;
         this.showTutorial = false;
@@ -20,6 +21,9 @@ class Game {
         this.level2ChestPosition = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 9);
         this.level2ChestIsOpen = false;
         this.level2ChestHasBeenOpened = false;
+        this.level3ChestPosition = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 9);
+        this.level3ChestIsOpen = false;
+        this.level3ChestHasBeenOpened = false;
         this.levelCompleted = false;
         this.showLevelCompleteMessage = false;
         this.levelExitUnlocked = false;

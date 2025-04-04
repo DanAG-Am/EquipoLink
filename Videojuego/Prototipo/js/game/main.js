@@ -13,6 +13,8 @@ function main() {
     processBackgroundLayout("mainMap");
     processBackgroundLayout("levelClosed");
     processBackgroundLayout("level_2");
+    processBackgroundLayout("levelClosed");
+    processBackgroundLayout("level_3");
 
     // Create the game object
     game = new Game();
