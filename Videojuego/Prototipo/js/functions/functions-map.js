@@ -1,18 +1,12 @@
 function getWallBoxes() {
     let layoutName = null;
-
-    if (game.mainMap) {
-        layoutName = "mainMap";
-    } else if (game.level) {
-        layoutName = "levelClosed";
-    } else if (game.level2) {
-        layoutName = "level_2";
-    }
-    else if(game.level3){
-        layoutName = "level_3";
-    }
-
-    const wallBoxes = [];
+    if (game.mainMap) layoutName = "mainMap";
+    else if (game.level) layoutName = "levelClosed";
+    else if (game.level2) layoutName = "level_2";
+    else if (game.level3) layoutName = "level_3";
+    else if (game.restRoom1) layoutName = "restRoom1";
+    
+    let wallBoxes = layoutName ? getWallBoxes(layoutName) : [];
     const layout = processedFloors[layoutName];
     if (!layout) return wallBoxes;
 
@@ -20,7 +14,8 @@ function getWallBoxes() {
         for (let x = 0; x < layout[y].length; x++) {
             if (layout[y][x] === 'wall') {
                 wallBoxes.push({
-                    position: new Vec(x * tileSize, y * tileSize),
+                    x: x * tileSize,
+                    y: y * tileSize,
                     width: tileSize,
                     height: tileSize
                 });

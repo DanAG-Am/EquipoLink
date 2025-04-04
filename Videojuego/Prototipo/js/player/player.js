@@ -58,7 +58,7 @@ class Player extends AnimatedObject{
         }
 
         let collidesWithMerchant = false;
-        if (game.mainMap) {
+        if (game.mainMap || game.restRoom1) {
             collidesWithMerchant = boxOverlap(futureBox, game.tienda.getHitbox());
         }
 
@@ -68,7 +68,7 @@ class Player extends AnimatedObject{
         }
 
         let collidesWithFairy = false;
-        if (game.mainMap) {
+        if (game.mainMap || game.restRoom1) {
           collidesWithFairy = boxOverlap(futureBox, game.fairy.getHitbox());
         }
 

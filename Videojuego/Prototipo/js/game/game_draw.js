@@ -11,6 +11,8 @@ Game.prototype.draw = function(ctx) {
         ctx.fillText("Presiona Enter para empezar el juego", canvasWidth / 2, 570);
     } else if (this.showPrologue){
         drawBackground("prologue", ctx);
+        playerStats.level = "Cave";
+        playerStats.uiTextPosition = { x: 85, y: 40 };
         ctx.fillStyle = "black";
         ctx.fillRect(canvasWidth / 2 - 300, canvasHeight / 2 - 180, canvasWidth / 4 + 400, canvasHeight / 2 + 70);
         ctx.strokeStyle = "white";
@@ -72,7 +74,8 @@ Game.prototype.draw = function(ctx) {
                 this.mainMap = false;
                 this.level = true;
                 this.player.position = new Vec(canvasWidth / 2 - 16, tileSize);
-                playerStats.level += 1;
+                playerStats.level = 1;
+                playerStats.uiTextPosition = { x: 100, y: 40 };
                 rupeesInitialized = false;
                 this.levelEnemyInterval = setInterval(() => {this.spawnEnemies();}, 5000);
         }
@@ -195,8 +198,7 @@ Game.prototype.draw = function(ctx) {
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
             this.level3 = false;
-            /*falta un this level 4 es true*/
-            this.player.position = new Vec(canvasWidth / 2 - 16, tileSize);
+            this.restStory1 = true;
             this.totalSpawnedEnemies = 0;
             this.levelEnemies = [];
             this.levelCompleted = false;
@@ -204,12 +206,62 @@ Game.prototype.draw = function(ctx) {
             this.chestIsOpen = false;
             this.levelExitUnlocked = false;
             rupeesInitialized = false;
-            playerStats.level += 1;
+            playerStats.level = "Rest";
+            playerStats.uiTextPosition = { x: 85, y: 40 };
+            game.player.velocity = new Vec(0, 0);
             this.levelEnemyInterval = setInterval(() => { this.spawnEnemies(); }, 5000);
         }
-    }
-    
-    else {
+    } else if (this.restStory1){
+        drawBackground("prologue", ctx);
+        ctx.fillStyle = "black";
+        ctx.fillRect(canvasWidth / 2 - 300, canvasHeight / 2 - 180, canvasWidth / 4 + 400, canvasHeight / 2 + 70);
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(canvasWidth / 2 - 300, canvasHeight / 2 - 180, canvasWidth / 4 + 400, canvasHeight / 2 + 70);
+        ctx.fillStyle = "white";
+        ctx.font = "40px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText("Historia 1", canvasWidth / 2, 185);
+        ctx.fillStyle = "white";
+        ctx.font = "18px Arial";
+        ctx.textAlign = "center";
+        const prologueText = [
+            "En una cámara oscura, Sentinel descubre una antigua inscripción en",
+            "la pared cubierta de musgo. Al tocarla, un dolor agudo le atraviesa",
+            "la cabeza. Un recuerdo emerge: Gritos. Llamas devorando su aldea.",
+            "Una sombra oscura, con ojos carmesí, blandiendo una espada negra.",
+            "Sentinel, de rodillas, herido. Una voz femenina susurra en su oído:",
+            "'Corre… eres nuestra última esperanza.'"
+        ];
+        let yPosition = canvasHeight / 4 + 75;
+        prologueText.forEach(line => {
+            ctx.fillText(line, canvasWidth / 2, yPosition);
+            yPosition += 50;
+        });
+        ctx.font = "20px Arial";
+        ctx.fillText("Presiona Enter para continuar", canvasWidth / 2, canvasHeight / 4 + canvasHeight / 2 + 70);
+    } else if (this.restRoom1){ 
+        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+        drawBackground("restRoom1", ctx);
+        // Dibujar NPCs (Merchant y Fairy)
+        this.tienda.draw(ctx);
+        this.fairy.draw(ctx); 
+        this.player.draw(ctx);
+        if (!rupeesInitialized) {
+            initializeRupees();
+            rupeesInitialized = true;
+        }
+        drawRupees(ctx, this.player);
+        this.bombs.forEach(b => b.draw(ctx));
+        this.arrows.forEach(a => a.draw(ctx));
+        this.magics.forEach(m => m.draw(ctx));
+        if (this.showTutorial) {
+            this.drawTutorial(ctx);
+        }
+        if (this.showInventory) {
+            this.drawInventory(ctx);
+        }
+    } else {
         this.actors.forEach(actor => actor.draw(ctx));
         this.player.draw(ctx);
     }

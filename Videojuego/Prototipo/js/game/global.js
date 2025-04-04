@@ -7,7 +7,6 @@ let oldTime;
 let playerSpeed = 0.15;
 let gamePaused = false;
 let interactingNPC = false;
-let chestIsOpen = false; 
 let interactingMerchant = false;
 let interactingFairy = false;
 let fairyEnemyBuffActive = false;
@@ -39,7 +38,7 @@ const bombIcon = new Image();
 bombIcon.src = "../../Videojuego/Assets/GameAssets/Weapons/Bomb_1.png";
 
 let playerStats = {
-    level: 0,
+    level: "-",
     life: 100,
     mana: 100,
     rupees: 0,

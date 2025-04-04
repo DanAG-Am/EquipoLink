@@ -139,31 +139,45 @@ class Bat extends AnimatedObject {
         if (gamePaused) return;
 
         const distanceToPlayer = this.position.distance(playerPosition);
-    
-        // If within chase range, start chasing the player
+
         if (distanceToPlayer < this.chaseRange) {
-            // Calculate the direction from the bat to the player
             let directionToPlayer = playerPosition.minus(this.position);  // Vector from bat to player
             directionToPlayer.normalize();  // Normalize the vector to get direction
             this.velocity = directionToPlayer.scale(this.chaseSpeed); 
         } else {
-            // If outside chase range, stop moving
             this.velocity = new Vec(0, 0);
         }
     
-        // Boundary checks to prevent the bat from going off-screen
         if (this.position.x + this.width > canvasWidth || this.position.x < 0) {
             this.velocity.x = -this.velocity.x;
         }
         if (this.position.y + this.height > canvasHeight || this.position.y < 0) {
             this.velocity.y = -this.velocity.y;
         }
-    
-        // Update the bat's position based on the velocity
-        let nextPosition = this.position.plus(this.velocity.times(deltaTime));
-        this.position = nextPosition;
 
-        // Update animation
+        let nextPosition = this.position.plus(this.velocity.times(deltaTime));
+
+        let futureBox = {
+            position: nextPosition,
+            width: this.width,
+            height: this.height
+        };
+        
+        // Detecta colisión con las paredes
+        const wallBoxes = getWallBoxes();
+        let collidesWithWall = false;
+        for (let wall of wallBoxes) {
+            if (boxOverlap(futureBox, wall)) {
+                collidesWithWall = true;
+                break;
+            }
+        }
+        
+        if (!collidesWithWall) {
+            this.position = nextPosition;
+        } else {
+            this.velocity = new Vec(0, 0); // Detener movimiento si choca
+        }
         this.lastFrameChange += deltaTime;
         if (this.lastFrameChange > this.animationSpeed) {
             this.frameIndex = (this.frameIndex + 1) % 2;
@@ -182,7 +196,7 @@ class Bat extends AnimatedObject {
                 this.lastAttackTime = currentTime; 
             }
         }
-}
+    }
 
     draw(ctx) {
         ctx.save();
