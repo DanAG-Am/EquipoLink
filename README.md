@@ -11,14 +11,13 @@ El diseño del mundo se genera con un estilo tipo ASCII, donde el piso está com
 
 Este prototipo tiene como objetivo sentar las bases de una aventura más grande, con sistemas de combate, exploración, misiones y más.
 
-—
-
-—
+- - -
 ## 🌐 Página Web
 
 El videojuego y los desarrolladores de The Lost Sentinel cuentan con una página web principal, donde los jugadores pueden conocer con ayuda de links de redireccionamiento a otras páginas web los siguientes elementos: Historia y nombre de los personajes involucrados, la historia y el propósito del juego, los elementos que conforman al juego (como armas, cofres y mapas), así como los controles del juego. En la parte superior, se encuentran los botones de créditos y de jugar. Créditos contiene la información de los desarrolladores, profesores que imparten el bloque y la liga al repositorio del equipo. 
 
 El jugador se registra o ingresa al juego después de seleccionar el botón de jugar. Se le pregunta por su nombre de usuario y contraseña. Posteriormente, procede a jugar. 
+- - - 
 
 ## 🗺️ ¿En qué escena comienza el prototipo?
 
@@ -50,7 +49,7 @@ Cuando el jugador se mueve hacia la **puerta dentro de la cueva**, se activa la 
 | **Espacio (Space)**    | Interactúa con NPCs                                 |
 
 ---
-Funcionalidades Terminadas
+## Funcionalidades Terminadas
 
 ### Pantalla de inicio de juego
 
