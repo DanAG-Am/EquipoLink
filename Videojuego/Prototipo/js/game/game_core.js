@@ -14,8 +14,12 @@ class Game {
         this.showTutorial = false;
         this.tutorialWasShown = false;
         this.showInventory = false;
+        this.levelChestPosition = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 9);
         this.chestHasBeenOpened = false;
         this.chestIsOpen = false;
+        this.level2ChestPosition = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 9);
+        this.level2ChestIsOpen = false;
+        this.level2ChestHasBeenOpened = false;
         this.levelCompleted = false;
         this.showLevelCompleteMessage = false;
         this.levelExitUnlocked = false;
@@ -25,16 +29,15 @@ class Game {
         this.chestClosed.src = "../../Videojuego/Assets/GameAssets/Chest/chest_closed.png";
         this.chestOpened = new Image();
         this.chestOpened.src = "../../Videojuego/Assets/GameAssets/Chest/chest_open.png";
-        this.levelChestPosition = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 9);
 
         // Ahora el Old Man se gestiona desde su propia clase:
         this.oldMan = new OldMan(new Vec(canvasWidth / 2 - 16, canvasHeight / 2 - 105));
 
         this.totalSpawnedEnemies = 0;
         this.maxEnemiesPerLevel = {
-            1: 1,
+            1: 5,
             2: 8,
-            3: 11
+            3: 12
         };
         
         this.bombs = [];
