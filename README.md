@@ -115,6 +115,9 @@ El daño del jugador es fijo según el tipo de arma y puede matar a los enemigos
 
 ## Funcionalidades En Progreso
 
+### Reparar Bugs hasta ahora
+Detectar colisiones personaje-pared en el nivel de descanso 
+Detectar colisiones personaje-npc en el nivel de descanso, pero resetearlas junto con el game reset para que no persistan en el resto de los niveles en otros runs.
 
 ### Generación de niveles 4 a 10
 
