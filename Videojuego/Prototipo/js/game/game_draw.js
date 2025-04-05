@@ -1,5 +1,11 @@
+/*
+ * Autor: TeamLink
+ * Fecha: 2025-03-24
+ */
+
 "use strict";
 
+// Dibuja el estado actual del juego
 Game.prototype.draw = function(ctx) {
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     
@@ -40,6 +46,7 @@ Game.prototype.draw = function(ctx) {
         ctx.font = "20px Arial";
         ctx.fillText("Presiona Enter para continuar", canvasWidth / 2, canvasHeight / 4 + canvasHeight / 2 + 70);
     } else if (this.mainMap){ 
+        //dibujar main map
         drawBackground("mainMap", ctx);
         // Dibujar NPCs (Old Man, Merchant y Fairy)
         this.oldMan.draw(ctx);
@@ -82,7 +89,7 @@ Game.prototype.draw = function(ctx) {
         if (this.showInventory) {
             this.drawInventory(ctx);
         }
-    } else if (this.level){
+    } else if (this.level){ //dibujar el primer nivel
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
         drawBackground("levelClosed", ctx);
         this.bombs.forEach(b => b.draw(ctx));
@@ -107,7 +114,7 @@ Game.prototype.draw = function(ctx) {
         } else if (this.showTutorial) {
             this.drawTutorial(ctx);
         }
-        if (this.player.position.y + this.player.height >= canvasHeight &&
+        if (this.player.position.y + this.player.height >= canvasHeight && //transicion entre nivel 1 y 2, se repite la misma estructura en el resto de los niveles
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
             this.level = false;
@@ -123,7 +130,7 @@ Game.prototype.draw = function(ctx) {
             playerStats.level += 1;
             this.levelEnemyInterval = setInterval(() => { this.spawnEnemies(); }, 5000);
         }
-    } else if (this.level2) {
+    } else if (this.level2) { //dibujar el segundo nivel
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
         drawBackground("level_2", ctx);
         this.bombs.forEach(b => b.draw(ctx));
@@ -150,7 +157,7 @@ Game.prototype.draw = function(ctx) {
             this.drawTutorial(ctx);
         }
 
-        if (this.player.position.y + this.player.height >= canvasHeight &&
+        if (this.player.position.y + this.player.height >= canvasHeight && //tranisicion entre nivel 2 y 3
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
             this.level2 = false;
@@ -167,7 +174,7 @@ Game.prototype.draw = function(ctx) {
             this.levelEnemyInterval = setInterval(() => { this.spawnEnemies(); }, 5000);
         }
     } 
-    else if (this.level3) {
+    else if (this.level3) { //dibujar nivel 3
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
         drawBackground("level_3", ctx);
         this.bombs.forEach(b => b.draw(ctx));
@@ -194,7 +201,7 @@ Game.prototype.draw = function(ctx) {
             this.drawTutorial(ctx);
         }
 
-        if (this.player.position.y + this.player.height >= canvasHeight &&
+        if (this.player.position.y + this.player.height >= canvasHeight && //transicion entre nivel 3 y cuarto de descanso y mejoras
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
             this.level3 = false;
@@ -211,7 +218,7 @@ Game.prototype.draw = function(ctx) {
             game.player.velocity = new Vec(0, 0);
             this.levelEnemyInterval = setInterval(() => { this.spawnEnemies(); }, 5000);
         }
-    } else if (this.restStory1){
+    } else if (this.restStory1){ //se le proporciona una parte de la historia al jugador
         drawBackground("prologue", ctx);
         ctx.fillStyle = "black";
         ctx.fillRect(canvasWidth / 2 - 300, canvasHeight / 2 - 180, canvasWidth / 4 + 400, canvasHeight / 2 + 70);
@@ -240,7 +247,7 @@ Game.prototype.draw = function(ctx) {
         });
         ctx.font = "20px Arial";
         ctx.fillText("Presiona Enter para continuar", canvasWidth / 2, canvasHeight / 4 + canvasHeight / 2 + 70);
-    } else if (this.restRoom1){ 
+    } else if (this.restRoom1){ //dibujar el cuarto de descanso
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
         drawBackground("restRoom1", ctx);
         // Dibujar NPCs (Merchant y Fairy)
@@ -285,7 +292,7 @@ Game.prototype.draw = function(ctx) {
     }
 };
 
-Game.prototype.drawDialogue = function(ctx) {
+Game.prototype.drawDialogue = function(ctx) { //dibujar dialogos del viejo
     ctx.fillStyle = "black";
     ctx.fillRect(canvasWidth / 2 - 300, 70, 600, 100);
     ctx.strokeStyle = "white";
@@ -309,7 +316,7 @@ Game.prototype.drawDialogue = function(ctx) {
     });
 };
 
-Game.prototype.drawTutorial = function(ctx) {
+Game.prototype.drawTutorial = function(ctx) { //dibujar el turorial
     ctx.fillStyle = "black";
     ctx.fillRect(canvasWidth / 2 - 300, 100, 600, 400);
     ctx.strokeStyle = "white";
@@ -369,7 +376,7 @@ Game.prototype.drawTutorial = function(ctx) {
     ctx.fillText("Presiona T para continuar", canvasWidth / 2 - 120, 530);
 };
 
-Game.prototype.drawInventory = function(ctx) {
+Game.prototype.drawInventory = function(ctx) { //dibujar inventario
     ctx.save();
     ctx.fillStyle = "black";
     ctx.globalAlpha = 0.9;
@@ -391,7 +398,7 @@ Game.prototype.drawInventory = function(ctx) {
     ctx.restore();
 };
 
-Game.prototype.unlockNextLevel = function() {
+Game.prototype.unlockNextLevel = function() { //desbloquear nivel si se ha completado, aparece la puerta
     this.levelExitUnlocked = true;
 
     let layoutName = null;

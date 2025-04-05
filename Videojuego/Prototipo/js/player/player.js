@@ -1,3 +1,9 @@
+/*
+ * Autor: TeamLink
+ * Fecha: 2025-03-24
+ */
+
+//clase player con los metodos de ataque, dano, direcciones segun su sprite, update, dibujar y checar colisiones para evitar un overlap.
 class Player extends AnimatedObject{
     constructor(position, width, height){
         super("#ff0000", width, height, position.x, position.y, "player");
