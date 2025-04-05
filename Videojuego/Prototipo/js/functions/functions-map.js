@@ -1,14 +1,18 @@
 function getWallBoxes() {
     let layoutName = null;
+    
     if (game.mainMap) layoutName = "mainMap";
     else if (game.level) layoutName = "levelClosed";
     else if (game.level2) layoutName = "level_2";
     else if (game.level3) layoutName = "level_3";
     else if (game.restRoom1) layoutName = "restRoom1";
-    
-    let wallBoxes = layoutName ? getWallBoxes(layoutName) : [];
+
+    if (!layoutName || !processedFloors[layoutName]) {
+        return [];
+    }
+
     const layout = processedFloors[layoutName];
-    if (!layout) return wallBoxes;
+    let wallBoxes = [];
 
     for (let y = 0; y < layout.length; y++) {
         for (let x = 0; x < layout[y].length; x++) {
@@ -67,3 +71,4 @@ function drawBackground(layoutName, ctx) {
         }
     }
 }
+

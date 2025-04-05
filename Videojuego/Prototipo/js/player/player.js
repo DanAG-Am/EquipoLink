@@ -38,6 +38,7 @@ class Player extends AnimatedObject{
         if (!(this.position instanceof Vec)) {
             this.position = new Vec(this.position.x, this.position.y);
         }
+    
         let nextPosition = this.position.plus(this.velocity.times(deltaTime));
         let futureBox = {
             position: nextPosition,
@@ -45,41 +46,50 @@ class Player extends AnimatedObject{
             height: this.height
         };
         let collidesWithWall = false;
-        const wallBoxes = getWallBoxes("mainMap");
+    
+        let layoutName = null;
+        if (game.mainMap) layoutName = "mainMap";
+        else if (game.level) layoutName = "levelClosed";
+        else if (game.level2) layoutName = "level_2";
+        else if (game.level3) layoutName = "level_3";
+        else if (game.restRoom1) layoutName = "restRoom1";
+    
+        const wallBoxes = layoutName ? getWallBoxes(layoutName) : [];
+    
         for (let wall of wallBoxes) {
             if (boxOverlap(futureBox, wall)) {
                 collidesWithWall = true;
                 break;
             }
         }
+    
         let collidesWithOldMan = false;
         if (game.mainMap) {
-          collidesWithOldMan = boxOverlap(futureBox, game.oldMan.getHitbox());
+            collidesWithOldMan = boxOverlap(futureBox, game.oldMan.getHitbox());
         }
-
+    
         let collidesWithMerchant = false;
         if (game.mainMap || game.restRoom1) {
             collidesWithMerchant = boxOverlap(futureBox, game.tienda.getHitbox());
         }
-
+    
         let collidesWithLevelChest = false;
         if (game.level && game.levelCompleted && game.levelChestBox) {
             collidesWithLevelChest = boxOverlap(futureBox, game.levelChestBox);
         }
-
+    
         let collidesWithFairy = false;
         if (game.mainMap || game.restRoom1) {
-          collidesWithFairy = boxOverlap(futureBox, game.fairy.getHitbox());
+            collidesWithFairy = boxOverlap(futureBox, game.fairy.getHitbox());
         }
-
+    
         if (!collidesWithWall && !collidesWithOldMan && !collidesWithMerchant && !collidesWithLevelChest && !collidesWithFairy) {
             this.position = nextPosition;
         }
-        
-
+    
         this.position.x = Math.max(0, Math.min(canvasWidth - this.width, this.position.x));
         this.position.y = Math.max(0, Math.min(canvasHeight - this.height, this.position.y));
-
+    
         if (this.velocity.x !== 0 || this.velocity.y !== 0) {
             this.lastFrameChange += deltaTime;
             if (this.lastFrameChange > this.animationSpeed) {
@@ -88,7 +98,6 @@ class Player extends AnimatedObject{
                 this.lastFrameChange = 0;
             }
         }
-
     }
 
     draw(ctx) {
