@@ -19,6 +19,8 @@ class Game {
         this.restStory1 = false;
         this.restRoom1 = false;
         this.level4 = false;
+        this.level5 = false;
+        this.level6 = false;
         this.enteredLevel = false;
         this.dialogueStage = 0;
         this.showTutorial = false;
@@ -42,10 +44,12 @@ class Game {
 
         this.totalSpawnedEnemies = 0;
         this.maxEnemiesPerLevel = {
-            1: 1,
-            2: 1,
-            3: 1,
-            4: 1
+            1: 5,
+            2: 8,
+            3: 12,
+            4: 12,
+            5: 8,
+            6: 8
         };
         
         this.bombs = [];
@@ -75,7 +79,7 @@ class Game {
         this.chestHasBeenOpened = false;
         this.chestIsOpen = false;
         this.levelExitUnlocked = false;
-        ["prologue", "mainMap", "levelClosed", "level_2", "level_3", "restRoom1", "level_4"].forEach(name => {
+        ["prologue", "mainMap", "levelClosed", "level_2", "level_3", "restRoom1", "level_4", "level_5", "level_6"].forEach(name => {
             processBackgroundLayout(name);
         });
 

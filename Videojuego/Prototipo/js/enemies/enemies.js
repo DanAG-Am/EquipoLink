@@ -340,13 +340,13 @@ class Knight extends AnimatedObject{
     }
 }
 
-class Mage extends AnimatedObject{
+class Mage extends AnimatedObject {
     constructor(position, width, height) {
         super("#000000", width, height, position.x, position.y, "bat");
         this.position = new Vec(position.x, position.y);
         this.velocity = new Vec(0, 0);
         this.sprites = {
-            "attackMage": ["../../Videojuego/Assets/GameAssets/Enemies/enemy_Mage/Mage-1.png","../../Videojuego/Assets/GameAssets/Enemies/enemy_Mage/Mage-2.png"],
+            "attackMage": ["../../Videojuego/Assets/GameAssets/Enemies/enemy_Mage/Mage-1.png", "../../Videojuego/Assets/GameAssets/Enemies/enemy_Mage/Mage-2.png"],
         };
         this.currentDirection = "attackMage";
         this.frameIndex = 0;
@@ -363,17 +363,19 @@ class Mage extends AnimatedObject{
         this.attackInterval = 3000;
         this.lastDamageTime = 0;
         this.damageCooldown = 500;
-        getHitbox()
+        this.magicCooldown = 1000;
+        this.lastMagicCastTime = 0;
+        this.magics = [];
     }
 
-    update(deltaTime,playerPosition) {
+    update(deltaTime, playerPosition) {
         if (gamePaused) return;
 
         const distanceToPlayer = this.position.distance(playerPosition);
     
         if (distanceToPlayer < this.chaseRange) {
-            let directionToPlayer = playerPosition.minus(this.position);  // Vector from bat to player
-            directionToPlayer.normalize();  // Normalize the vector to get direction
+            let directionToPlayer = playerPosition.minus(this.position);  
+            directionToPlayer.normalize();  
             this.velocity = directionToPlayer.scale(this.chaseSpeed); 
         } else {
             this.velocity = new Vec(0, 0);
@@ -393,8 +395,7 @@ class Mage extends AnimatedObject{
             width: this.width,
             height: this.height
         };
-        
-        // Detecta colisión con las paredes
+
         const wallBoxes = getWallBoxes();
         let collidesWithWall = false;
         for (let wall of wallBoxes) {
@@ -403,13 +404,18 @@ class Mage extends AnimatedObject{
                 break;
             }
         }
-        
+
         if (!collidesWithWall) {
             this.position = nextPosition;
         } else {
-            this.velocity = new Vec(0, 0); // Detener movimiento si choca
+            this.velocity = new Vec(0, 0);
         }
-    
+
+        if (distanceToPlayer < this.chaseRange && Date.now() - this.lastMagicCastTime > this.magicCooldown) {
+            this.castMagic(playerPosition);
+            this.lastMagicCastTime = Date.now();
+        }
+
         this.lastFrameChange += deltaTime;
         if (this.lastFrameChange > this.animationSpeed) {
             this.frameIndex = (this.frameIndex + 1) % 2;
@@ -417,23 +423,46 @@ class Mage extends AnimatedObject{
             this.lastFrameChange = 0;
         }
 
-        if (boxOverlap(
-            { position: game.player.position, width: game.player.width, height: game.player.height },
-            { position: this.position, width: this.width, height: this.height }
-        )) {
-            const currentTime = Date.now(); 
+        for (let magic of this.magics) {
+            magic.update(deltaTime);
+        }
 
-            if (currentTime - this.lastAttackTime > this.attackInterval && playerStats.life > 0) {
-                playerStats.life = Math.max(0, playerStats.life - this.attack);
-                this.lastAttackTime = currentTime; 
+        this.checkMagicCollisionWithPlayer();
+    }
+
+    castMagic(playerPosition) {
+        let magicPosition = this.position.plus(new Vec(this.width / 2, this.height / 2));
+        let direction = "right";
+        if (playerPosition.y < this.position.y) direction = "up";
+        if (playerPosition.y > this.position.y) direction = "down";
+        if (playerPosition.x < this.position.x) direction = "left";
+        this.magics.push(new Magic(magicPosition, direction));
+    }
+
+    checkMagicCollisionWithPlayer() {
+        for (let magic of this.magics) {
+            if (boxOverlap(
+                { position: game.player.position, width: game.player.width, height: game.player.height },
+                { position: magic.position, width: magic.width, height: magic.height }
+            )) {
+                if (playerStats.life > 100){
+                playerStats.life -= magic.attack;
+                magic.alive = false;
+                }
             }
         }
+
+        this.magics = this.magics.filter(magic => magic.alive);
     }
 
     draw(ctx) {
         ctx.save();
         ctx.drawImage(this.image, this.position.x, this.position.y, this.width, this.height);
         ctx.restore();
+
+        for (let magic of this.magics) {
+            magic.draw(ctx);
+        }
     }
 }
 

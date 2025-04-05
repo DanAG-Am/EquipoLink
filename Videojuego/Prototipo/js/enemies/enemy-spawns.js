@@ -16,6 +16,10 @@ Game.prototype.spawnEnemies = function() {
         enemyTypes = [Slime, Bat];  // Slime y Bat en nivel 3.
     } else if (playerStats.level === 4) {
         enemyTypes = [Slime, Bat, Skull];  // Slime, Bat y Skull en nivel 4.
+    } else if (playerStats.level === 5){
+        enemyTypes = [Slime, Bat, Skull];  
+    } else if (playerStats.level === 6){
+        enemyTypes = [Slime, Bat, Skull, Mage];  
     }
 
     const currentLevel = playerStats.level; // Nivel actual del jugador.
@@ -79,6 +83,10 @@ function getWallBoxes() {
         layoutName = "restRoom1";
     } else if(game.level4){
         layoutName = "level_4";
+    } else if(game.level5){
+        layoutName = "level_5";
+    } else if (game.level6){
+        layoutName = "level_6";
     }
 
     const wallBoxes = [];

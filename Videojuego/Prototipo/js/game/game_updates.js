@@ -5,7 +5,7 @@
 // Actualiza el estado del juego procesando las acciones del jugador, las interacciones con los enemigos y otras mecánicas del juego
 Game.prototype.update = function(deltaTime) {
     if (!this.showMainMenu && !this.showPrologue) {
-        if (this.level || this.level2 || this.level3 || this.level4) {
+        if (this.level || this.level2 || this.level3 || this.level4 || this.level5 || this.level6) {
             // Actualizar los enemigos en el nivel actual
             this.levelEnemies.forEach(enemy => enemy.update(deltaTime, this.player.position));
         
@@ -51,7 +51,7 @@ Game.prototype.update = function(deltaTime) {
             swordBox.height = (this.player.currentDirection === "up" || this.player.currentDirection === "down") ? this.player.height + rango : this.player.height;
         
             // Obtener los enemigos (dependiendo del nivel actual)
-            const enemigos = (this.level || this.level2 || this.level3 || this.level4) ? this.levelEnemies : this.actors;
+            const enemigos = (this.level || this.level2 || this.level3 || this.level4 || this.level5 || this.level6) ? this.levelEnemies : this.actors;
             for (let i = enemigos.length - 1; i >= 0; i--) {
                 const enemy = enemigos[i];
                 if (!enemy || !enemy.position) continue;
@@ -80,7 +80,7 @@ Game.prototype.update = function(deltaTime) {
         // Actualizar las flechas y verificar colisiones con enemigos
         this.arrows.forEach(a => a.update(deltaTime));
         this.arrows.forEach((arrow, i) => {
-            const enemigos = (this.level || this.level2 || this.level3 || this.level4) ? this.levelEnemies : this.actors;
+            const enemigos = (this.level || this.level2 || this.level3 || this.level4 || this.level5 || this.level6) ? this.levelEnemies : this.actors;
             enemigos.forEach((enemy, index) => {
                 if (boxOverlap({
                     position: arrow.position,
@@ -108,7 +108,7 @@ Game.prototype.update = function(deltaTime) {
         // Actualizar las magias y verificar colisiones con enemigos
         this.magics.forEach(m => m.update(deltaTime));
         this.magics.forEach((magic, i) => {
-            const enemigos = (this.level || this.level2 || this.level3 || this.level4) ? this.levelEnemies : this.actors;
+            const enemigos = (this.level || this.level2 || this.level3 || this.level4 || this.level5 || this.level6) ? this.levelEnemies : this.actors;
             enemigos.forEach((enemy, index) => {
                 
                 const currentTime = Date.now();
@@ -151,7 +151,7 @@ Game.prototype.update = function(deltaTime) {
                     height: explosionRange
                 };
         
-                const enemigos = (this.level || this.level2 || this.level3 || this.level4) ? this.levelEnemies : this.actors;
+                const enemigos = (this.level || this.level2 || this.level3 || this.level4 || this.level5 || this.level6) ? this.levelEnemies : this.actors;
                 enemigos.forEach((enemy, index) => {
                     if (boxOverlap(bombBox, {
                         position: enemy.position,
