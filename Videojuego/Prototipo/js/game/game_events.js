@@ -50,7 +50,7 @@ Game.prototype.createEventListeners = function(){
             this.showInventory = true;
             return;
         }
-        if ((this.mainMap || this.level || this.level2 || this.level3 || this.restRoom1) && this.dialogueStage >= 5 && !this.showTutorial && !isGameOver && !this.showLevelCompleteMessage) {
+        if ((this.mainMap || this.level || this.level2 || this.level3 || this.restRoom1 || this.level4) && this.dialogueStage >= 5 && !this.showTutorial && !isGameOver && !this.showLevelCompleteMessage) {
             if (event.key == 'ArrowUp') {
                 this.player.velocity.y = -playerSpeed;
                 this.player.setDirection("up");
@@ -118,7 +118,7 @@ Game.prototype.createEventListeners = function(){
             } 
         }
         if (event.key == "o") {
-            if (this.level && this.levelCompleted) {
+            if ((this.level || this.level2 || this.level3 || this.level4) && this.levelCompleted) {
                 const px = this.player.position.x;
                 const py = this.player.position.y;
                 const cx = this.levelChestPosition.x;
@@ -142,54 +142,6 @@ Game.prototype.createEventListeners = function(){
                     }
         
                     this.chestHasBeenOpened = true;
-                }
-            }
-            if (this.level2 && this.levelCompleted) {
-                const px = this.player.position.x;
-                const py = this.player.position.y;
-                const cx = this.level2ChestPosition.x;
-                const cy = this.level2ChestPosition.y;
-            
-                const nearLevelChest = px > cx - 36 && px < cx + 36 && py > cy - 36 && py < cy + 36;
-            
-                if (nearLevelChest && !this.level2ChestHasBeenOpened) {
-                    this.level2ChestIsOpen = true;
-                    let item = Math.random();
-                    if (item <= 0.33) {
-                        const bombsToAdd = Math.floor(Math.random() * 2) + 1;
-                        playerStats.bombs += bombsToAdd;
-                    } else if (item <= 0.66) {
-                        const arrowsToAdd = Math.floor(Math.random() * 3) + 3;
-                        playerStats.arrows += arrowsToAdd;
-                    } else {
-                        const potionsToAdd = Math.floor(Math.random() * 2) + 1;
-                        playerStats.potions += potionsToAdd;
-                    }
-                    this.level2ChestHasBeenOpened = true;
-                }
-            }
-            if (this.level3 && this.levelCompleted) {
-                const px = this.player.position.x;
-                const py = this.player.position.y;
-                const cx = this.level3ChestPosition.x;
-                const cy = this.level3ChestPosition.y;
-            
-                const nearLevelChest = px > cx - 36 && px < cx + 36 && py > cy - 36 && py < cy + 36;
-            
-                if (nearLevelChest && !this.level3ChestHasBeenOpened) {
-                    this.level3ChestIsOpen = true;
-                    let item = Math.random();
-                    if (item <= 0.33) {
-                        const bombsToAdd = Math.floor(Math.random() * 2) + 1;
-                        playerStats.bombs += bombsToAdd;
-                    } else if (item <= 0.66) {
-                        const arrowsToAdd = Math.floor(Math.random() * 3) + 3;
-                        playerStats.arrows += arrowsToAdd;
-                    } else {
-                        const potionsToAdd = Math.floor(Math.random() * 2) + 1;
-                        playerStats.potions += potionsToAdd;
-                    }
-                    this.level3ChestHasBeenOpened = true;
                 }
             }
         }
@@ -252,7 +204,7 @@ Game.prototype.createEventListeners = function(){
     });
 
     window.addEventListener('keyup', (event) => { //quitar las armas si no se estan utilizando (no presiona la tecla)
-        if ((this.mainMap || this.level || this.level2 || this.level3 || this.restRoom1) && !this.showTutorial) {
+        if ((this.mainMap || this.level || this.level2 || this.level3 || this.restRoom1 || this.level4) && !this.showTutorial) {
             if (event.key == 'ArrowUp' || event.key == 'ArrowDown') {
                 this.player.velocity.y = 0;
             } else if (event.key == 'ArrowLeft' || event.key == 'ArrowRight') {

@@ -7,7 +7,7 @@ let rupeesInitialized = false;  // Bandera para verificar si las rupees han sido
 
 // Función que inicializa las rupees, colocándolas en posiciones aleatorias dentro del canvas
 function initializeRupees() {
-    const numSprites = Math.floor(Math.random() * 6) + 5;  // Número aleatorio de rupees (entre 5 y 10)
+    const numSprites = Math.floor(Math.random() * 6) + 10;  // Número aleatorio de rupees (entre 10 y 15)
     rupees = [];  // Resetea el arreglo de rupees
     const margin = 40;  // Margen para evitar que las rupees aparezcan demasiado cerca de los bordes
 
