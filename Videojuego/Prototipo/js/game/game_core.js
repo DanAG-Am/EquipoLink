@@ -18,6 +18,7 @@ class Game {
         this.level3 = false;
         this.restStory1 = false;
         this.restRoom1 = false;
+        this.level4 = false;
         this.enteredLevel = false;
         this.dialogueStage = 0;
         this.showTutorial = false;
@@ -26,12 +27,6 @@ class Game {
         this.levelChestPosition = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 9);
         this.chestHasBeenOpened = false;
         this.chestIsOpen = false;
-        this.level2ChestPosition = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 9);
-        this.level2ChestIsOpen = false;
-        this.level2ChestHasBeenOpened = false;
-        this.level3ChestPosition = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 9);
-        this.level3ChestIsOpen = false;
-        this.level3ChestHasBeenOpened = false;
         this.levelCompleted = false;
         this.showLevelCompleteMessage = false;
         this.levelExitUnlocked = false;
@@ -47,9 +42,10 @@ class Game {
 
         this.totalSpawnedEnemies = 0;
         this.maxEnemiesPerLevel = {
-            1: 5,
-            2: 6,
-            3: 9
+            1: 1,
+            2: 1,
+            3: 1,
+            4: 1
         };
         
         this.bombs = [];
@@ -78,10 +74,8 @@ class Game {
         this.levelCompleted = false;
         this.chestHasBeenOpened = false;
         this.chestIsOpen = false;
-        this.level2ChestIsOpen = false;
-        this.level3ChestIsOpen = false;
         this.levelExitUnlocked = false;
-        ["prologue", "mainMap", "levelClosed", "level_2", "level_3", "restRoom1"].forEach(name => {
+        ["prologue", "mainMap", "levelClosed", "level_2", "level_3", "restRoom1", "level_4"].forEach(name => {
             processBackgroundLayout(name);
         });
 

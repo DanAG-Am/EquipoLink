@@ -123,8 +123,8 @@ Game.prototype.draw = function(ctx) {
             this.totalSpawnedEnemies = 0;
             this.levelEnemies = [];
             this.levelCompleted = false;
-            this.level2ChestIsOpen = false;
-            this.level2ChestHasBeenOpened = false;
+            this.chestIsOpen = false;
+            this.chestHasBeenOpened = false;
             this.levelExitUnlocked = false;
             rupeesInitialized = false;
             playerStats.level += 1;
@@ -138,10 +138,10 @@ Game.prototype.draw = function(ctx) {
         this.magics.forEach(m => m.draw(ctx));
         this.drawEnemies(ctx);
         if (this.levelCompleted) {
-            if (this.level2ChestIsOpen) {
-                ctx.drawImage(this.chestOpened, this.level2ChestPosition.x, this.level2ChestPosition.y, 32, 32);
+            if (this.chestIsOpen) {
+                ctx.drawImage(this.chestOpened, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
             } else {
-                ctx.drawImage(this.chestClosed, this.level2ChestPosition.x, this.level2ChestPosition.y, 32, 32);
+                ctx.drawImage(this.chestClosed, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
             }
         }
         this.player.draw(ctx);
@@ -166,8 +166,8 @@ Game.prototype.draw = function(ctx) {
             this.totalSpawnedEnemies = 0;
             this.levelEnemies = [];
             this.levelCompleted = false;
-            this.level3ChestIsOpen = false;
-            this.level3ChestHasBeenOpened = false;
+            this.chestIsOpen = false;
+            this.chestHasBeenOpened = false;
             this.levelExitUnlocked = false;
             rupeesInitialized = false;
             playerStats.level += 1;
@@ -181,10 +181,10 @@ Game.prototype.draw = function(ctx) {
         this.arrows.forEach(a => a.draw(ctx));
         this.magics.forEach(m => m.draw(ctx));
         if (this.levelCompleted) {
-            if (this.level3ChestIsOpen) {
-                ctx.drawImage(this.chestOpened, this.level3ChestPosition.x, this.level3ChestPosition.y, 32, 32);
+            if (this.chestIsOpen) {
+                ctx.drawImage(this.chestOpened, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
             } else {
-                ctx.drawImage(this.chestClosed, this.level3ChestPosition.x, this.level3ChestPosition.y, 32, 32);
+                ctx.drawImage(this.chestClosed, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
             }
         }
         this.player.draw(ctx);
@@ -216,7 +216,6 @@ Game.prototype.draw = function(ctx) {
             playerStats.level = "Rest";
             playerStats.uiTextPosition = { x: 85, y: 40 };
             game.player.velocity = new Vec(0, 0);
-            this.levelEnemyInterval = setInterval(() => { this.spawnEnemies(); }, 5000);
         }
     } else if (this.restStory1){ //se le proporciona una parte de la historia al jugador
         drawBackground("prologue", ctx);
@@ -267,6 +266,42 @@ Game.prototype.draw = function(ctx) {
         }
         if (this.showInventory) {
             this.drawInventory(ctx);
+        }
+        if (this.player.position.y + this.player.height >= canvasHeight && //transicion entre nivel 3 y cuarto de descanso y mejoras
+            this.player.position.x >= canvasWidth / 2 - 50 &&
+            this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
+            this.restRoom1 = false;
+            this.level4 = true;
+            this.player.position = new Vec(canvasWidth / 2 - 16, tileSize);
+            rupeesInitialized = false;
+            playerStats.level = 4;
+            playerStats.uiTextPosition = { x: 100, y: 40 };
+            this.levelEnemyInterval = setInterval(() => { this.spawnEnemies(); }, 5000);
+        }
+    } else if (this.level4){ //dibujar nivel 4
+        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+        drawBackground("level_4", ctx);
+        this.bombs.forEach(b => b.draw(ctx));
+        this.arrows.forEach(a => a.draw(ctx));
+        this.magics.forEach(m => m.draw(ctx));
+        this.drawEnemies(ctx);
+        if (this.levelCompleted) {
+            if (this.chestIsOpen) {
+                ctx.drawImage(this.chestOpened, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
+            } else {
+                ctx.drawImage(this.chestClosed, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
+            }
+        }
+        this.player.draw(ctx);
+        if (!rupeesInitialized) {
+            initializeRupees();
+            rupeesInitialized = true;
+        }
+        drawRupees(ctx, this.player);
+        if (this.showInventory) {
+            this.drawInventory(ctx);
+        } else if (this.showTutorial) {
+            this.drawTutorial(ctx);
         }
     } else {
         this.actors.forEach(actor => actor.draw(ctx));
@@ -405,6 +440,7 @@ Game.prototype.unlockNextLevel = function() { //desbloquear nivel si se ha compl
     if (this.level) layoutName = "levelClosed";
     else if (this.level2) layoutName = "level_2";
     else if (this.level3) layoutName = "level_3";
+    else if (this.level4) layoutName = "level_4";
 
     const layout = processedFloors[layoutName];
     const exitX = Math.floor(canvasWidth / 2 / tileSize);
