@@ -1,3 +1,9 @@
+/*
+ * Autor: TeamLink
+ * Fecha: 2025-03-24
+ */
+
+//clases con los metodos de tienda, hada y viejo. Se llaman sus sprites, update, se dibujan y hacen su evento segun lo acordado por el dialogo
 function Tienda() {
     this.image = new Image();
     this.image.src = "../../Videojuego/Assets/GameAssets/NPC/Merchant_1.png";

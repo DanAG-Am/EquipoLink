@@ -1,3 +1,9 @@
+/*
+ * Autor: TeamLink
+ * Fecha: 2025-03-24
+ */
+
+//dibujar segun el sprite y la duracion, update y ataque sobre los enemigos y jugador que tienen las distintas armas
 class Bomb {
     constructor(position) {
         this.position = position;
@@ -27,15 +33,15 @@ class Bomb {
     }
 
     explode() {
-        this.alive = false; // stop drawing the bomb
+        this.alive = false; //no dibujar bomba
 
-        // Now apply damage to enemies within the explosion radius
+        // aplicar dano en cierto radio
         game.enemies.forEach(enemy => {
             const distance = Math.sqrt(
                 Math.pow(enemy.position.x - this.position.x, 2) + Math.pow(enemy.position.y - this.position.y, 2)
             );
             if (distance <= this.explosionRadius) {
-                enemy.takeDamage(this.attack); // Assuming enemies have a takeDamage method
+                enemy.takeDamage(this.attack); //enemigo recibe dano
             }
         });
     }

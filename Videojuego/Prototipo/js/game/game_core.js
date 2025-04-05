@@ -1,3 +1,9 @@
+/*
+ * Autor: TeamLink
+ * Fecha: 2025-03-24
+ */
+
+//Clade Game inicializa todas las variables y sprites segun sea necesario
 "use strict";
 
 class Game {
@@ -54,11 +60,13 @@ class Game {
         this.fairy = new Fairy();
     }
 
+    //Crear el player y actores
     initObjects() {
         this.player = new Player(new Vec(canvasWidth / 2 - 14, 305), 32, 32);
         this.actors = [];
     }
 
+    //regresar todo a su punto de inicio si se resetea el juego
     resetGame() {
         this.showMainMenu = true;
         this.mainMap = false;

@@ -1,11 +1,15 @@
-// Main loop function to be called once per frame
+/*
+ * Autor: TeamLink
+ * Fecha: 2025-03-24
+ */
+// Main loop una vez por frame, dibujando los elementos segun el cambio en el tiempo
 function drawScene(newTime) {
     if (oldTime == undefined) {
         oldTime = newTime;
     }
     let deltaTime = newTime - oldTime;
 
-    // Clean the canvas so we can draw everything again
+    //Limpiar para volver a dibujar
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
     game.draw(ctx);
@@ -16,13 +20,16 @@ function drawScene(newTime) {
     requestAnimationFrame(drawScene);
 }
 
+//funciones que dibujan pantallas sobre el lienzo
+
+// parte inferior donde se muestra la vida, mana, rupias y pociones
 function drawUI() {
     uiCtx.clearRect(0, 0, canvasWidth, 150);
     uiCtx.fillStyle = "white";
     uiCtx.font = "20px Arial";
     uiCtx.textAlign = "left";
 
-    // Draw stats with icons
+    // icons y stats
     uiCtx.drawImage(rupeeImg, 140, 80, 16, 32);
     uiCtx.fillText(`x${playerStats.rupees}`, 160, 100);
 
@@ -38,6 +45,7 @@ function drawUI() {
     uiCtx.fillText(`LEVEL - ${playerStats.level}`, pos.x, pos.y);
 }
 
+//menu de pausa que le permite al jugador retomar o regresar a la pantalla de inicio
 function drawPauseMenu(ctx) {
     const boxWidth = 400;
     const boxHeight = 250;
@@ -80,6 +88,7 @@ function drawPauseMenu(ctx) {
     };
 }
 
+//menu de gameover
 function drawDeathMenu(ctx) {
     const boxWidth = 400;
     const boxHeight = 250;
@@ -118,6 +127,7 @@ function drawDeathMenu(ctx) {
     };
 }
 
+// Funcion de nivel completado
 function drawCompleteMessage(ctx) {
     const boxWidth = 400;
     const boxHeight = 180;

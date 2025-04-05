@@ -1,3 +1,8 @@
+//variables globales
+/*
+ * Autor: TeamLink
+ * Fecha: 2025-03-24
+ */
 "use strict";
 
 const canvasWidth = 800;

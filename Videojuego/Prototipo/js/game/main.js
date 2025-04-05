@@ -1,11 +1,16 @@
+/*
+ * Autor: TeamLink
+ * Fecha: 2025-03-24
+ */
+//en main, solamente llamamos los mapas y el canvas para dibujarlos
 function main() {
-    // Get a reference to the object with id 'canvas' in the page
+    // Get a reference to the object with id 'canvas' in the page //referencia de objeto a traves de su id
     const canvas = document.getElementById('canvas');
     const uiCanvas = document.getElementById("uiCanvas");
     // Resize the element
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;
-    // Get the context for drawing in 2D
+    // Get the context for drawing in 2D 
     ctx = canvas.getContext('2d')
     uiCtx = uiCanvas.getContext("2d");
 
@@ -16,7 +21,7 @@ function main() {
     processBackgroundLayout("level_3");
     processBackgroundLayout("restRoom1");
 
-    // Create the game object
+    // Create the game object //crear juego para que todo lo que esta en esa clase se dibuje
     game = new Game();
 
     drawScene(0);

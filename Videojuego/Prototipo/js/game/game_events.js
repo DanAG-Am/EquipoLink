@@ -1,3 +1,10 @@
+
+/*
+ * Autor: TeamLink
+ * Fecha: 2025-03-24
+ */
+
+//event listeners, se aplican las teclas que se dibujaron en game draw y se hace su respectivo cambio en lo que se muestra en el lienzo
 "use strict";
 
 Game.prototype.createEventListeners = function(){
@@ -196,7 +203,7 @@ Game.prototype.createEventListeners = function(){
         if (event.key === "Escape") {
             gamePaused = !gamePaused;
         }
-        if (event.key === " "){
+        if (event.key === " "){ //detectar una colision antes de permiter usar space para interactuar con npc
             if (this.mainMap || this.restRoom1) {
                 if (
                     document.getElementById("purchaseDialog").style.display !== "none" ||
@@ -244,7 +251,7 @@ Game.prototype.createEventListeners = function(){
         }
     });
 
-    window.addEventListener('keyup', (event) => {
+    window.addEventListener('keyup', (event) => { //quitar las armas si no se estan utilizando (no presiona la tecla)
         if ((this.mainMap || this.level || this.level2 || this.level3 || this.restRoom1) && !this.showTutorial) {
             if (event.key == 'ArrowUp' || event.key == 'ArrowDown') {
                 this.player.velocity.y = 0;
@@ -264,7 +271,7 @@ Game.prototype.createEventListeners = function(){
 
     let currentItemType = "";
     const canvas = document.getElementById('canvas');
-    canvas.addEventListener('click', (event) => {
+    canvas.addEventListener('click', (event) => { //dibujar la tienda si interactua con el vendedor
         if (interactingMerchant && game.tienda.dialogueStage === 0 && game.tienda.buttonPositions) {
             let rect = canvas.getBoundingClientRect();
             let scaleX = canvas.width / rect.width;
@@ -288,7 +295,7 @@ Game.prototype.createEventListeners = function(){
                 showPurchaseDialog(currentItemType);
             }
         }
-        if (gamePaused && game.pauseButton) {
+        if (gamePaused && game.pauseButton) { //logica de pausar juego
             let rect = canvas.getBoundingClientRect();
             let scaleX = canvas.width / rect.width;
             let scaleY = canvas.height / rect.height;
@@ -304,7 +311,7 @@ Game.prototype.createEventListeners = function(){
                 game.resetGame();
             }
         }
-        if (isGameOver && game.gameOverButton) {
+        if (isGameOver && game.gameOverButton) { //logica de perder
             let rect = canvas.getBoundingClientRect();
             let scaleX = canvas.width / rect.width;
             let scaleY = canvas.height / rect.height;
@@ -320,7 +327,7 @@ Game.prototype.createEventListeners = function(){
                 game.resetGame();
             }
         }
-        if (interactingFairy && game.fairy.button) {
+        if (interactingFairy && game.fairy.button) { //si interactua con el hada, puede recibir un bonus (jugador o enemigo)
             let rect = canvas.getBoundingClientRect();
             let scaleX = canvas.width / rect.width;
             let scaleY = canvas.height / rect.height;
@@ -335,7 +342,7 @@ Game.prototype.createEventListeners = function(){
         }
     });
 
-    document.getElementById("purchaseButton").addEventListener("click", () => {
+    document.getElementById("purchaseButton").addEventListener("click", () => { //boton de compra
         let purchaseInput = document.getElementById("purchaseQuantity");
         let qtyStr = purchaseInput.value.trim();
         if (qtyStr === "" || isNaN(parseInt(qtyStr))) {
@@ -355,7 +362,7 @@ Game.prototype.createEventListeners = function(){
         } else if (currentItemType === "bombas") {
             price = 5;
         }
-        let totalCost = price * qty;
+        let totalCost = price * qty; //calculo sobre las rupias que tiene el jugador y sus stats
         if (playerStats.rupees < totalCost) {
             let errorDialog = document.getElementById("errorDialog");
             let errorMessage = document.getElementById("errorMessage");

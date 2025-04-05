@@ -1,8 +1,9 @@
 /*
- * Background layouts for different scenes
- * Author: TeamLink
- * Date: 2025-03-24
+ * Autor: TeamLink
+ * Fecha: 2025-03-24
  */
+
+///layout o mapas de los niveles 
 
 "use strict";
 
