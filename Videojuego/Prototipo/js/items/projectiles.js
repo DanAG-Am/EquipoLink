@@ -13,6 +13,7 @@ class Bomb {
         this.image.src = this.frames[this.frameIndex];
         this.alive = true;
         this.attack = 20;
+        this.explosionRadius = 50;
         // Programar cambios de frame
         setTimeout(() => this.setFrame(1), 2000);
         setTimeout(() => this.setFrame(2), 2200);
@@ -26,7 +27,17 @@ class Bomb {
     }
 
     explode() {
-        this.alive = false; // dejar de dibujar
+        this.alive = false; // stop drawing the bomb
+
+        // Now apply damage to enemies within the explosion radius
+        game.enemies.forEach(enemy => {
+            const distance = Math.sqrt(
+                Math.pow(enemy.position.x - this.position.x, 2) + Math.pow(enemy.position.y - this.position.y, 2)
+            );
+            if (distance <= this.explosionRadius) {
+                enemy.takeDamage(this.attack); // Assuming enemies have a takeDamage method
+            }
+        });
     }
 
     draw(ctx) {

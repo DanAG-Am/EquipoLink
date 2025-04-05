@@ -124,7 +124,7 @@ Game.prototype.update = function(deltaTime) {
                     height: explosionRange
                 };
         
-                const enemies = this.level ? this.levelEnemies : this.actors;
+                const enemies =(this.level || this.level2 || this.level3) ? this.levelEnemies : this.actors;
                 enemies.forEach((enemy, index) => {
                     if (boxOverlap(bombBox, {
                         position: enemy.position,
