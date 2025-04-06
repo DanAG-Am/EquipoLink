@@ -50,7 +50,7 @@ Game.prototype.createEventListeners = function(){
             this.showInventory = true;
             return;
         }
-        if ((this.mainMap || this.level || this.level2 || this.level3 || this.restRoom1 || this.level4) && this.dialogueStage >= 5 && !this.showTutorial && !isGameOver && !this.showLevelCompleteMessage) {
+        if ((this.mainMap || this.level || this.level2 || this.level3 || this.restRoom1 || this.level4 || this.level5 || this.level6) && this.dialogueStage >= 5 && !this.showTutorial && !isGameOver && !this.showLevelCompleteMessage) {
             if (event.key == 'ArrowUp') {
                 this.player.velocity.y = -playerSpeed;
                 this.player.setDirection("up");
@@ -118,7 +118,7 @@ Game.prototype.createEventListeners = function(){
             } 
         }
         if (event.key == "o") {
-            if ((this.level || this.level2 || this.level3 || this.level4) && this.levelCompleted) {
+            if ((this.level || this.level2 || this.level3 || this.level4 || this.level5 || this.level6) && this.levelCompleted) {
                 const px = this.player.position.x;
                 const py = this.player.position.y;
                 const cx = this.levelChestPosition.x;
@@ -204,7 +204,7 @@ Game.prototype.createEventListeners = function(){
     });
 
     window.addEventListener('keyup', (event) => { //quitar las armas si no se estan utilizando (no presiona la tecla)
-        if ((this.mainMap || this.level || this.level2 || this.level3 || this.restRoom1 || this.level4) && !this.showTutorial) {
+        if ((this.mainMap || this.level || this.level2 || this.level3 || this.restRoom1 || this.level4 || this.level5 || this.level6) && !this.showTutorial) {
             if (event.key == 'ArrowUp' || event.key == 'ArrowDown') {
                 this.player.velocity.y = 0;
             } else if (event.key == 'ArrowLeft' || event.key == 'ArrowRight') {

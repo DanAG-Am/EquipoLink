@@ -60,6 +60,8 @@ class Player extends AnimatedObject{
         else if (game.level3) layoutName = "level_3";
         else if (game.restRoom1) layoutName = "restRoom1";
         else if (game.level4) layoutName = "level_4";
+        else if (game.level5) layoutName = "level_5";
+        else if (game.level6) layoutName = "level_6";
     
         const wallBoxes = layoutName ? getWallBoxes(layoutName) : [];
     

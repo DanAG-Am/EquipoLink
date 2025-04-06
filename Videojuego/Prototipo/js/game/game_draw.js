@@ -89,6 +89,7 @@ Game.prototype.draw = function(ctx) {
         if (this.showInventory) {
             this.drawInventory(ctx);
         }
+        
     } else if (this.level){ //dibujar el primer nivel
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
         drawBackground("levelClosed", ctx);
@@ -303,7 +304,110 @@ Game.prototype.draw = function(ctx) {
         } else if (this.showTutorial) {
             this.drawTutorial(ctx);
         }
-    } else {
+        if (this.player.position.y + this.player.height >= canvasHeight && 
+            this.player.position.x >= canvasWidth / 2 - 50 &&
+            this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
+            this.level4 = false;
+            this.level5 = true;
+            this.player.position = new Vec(canvasWidth / 2 - 16, tileSize);
+            this.totalSpawnedEnemies = 0;
+            this.levelEnemies = [];
+            this.levelCompleted = false;
+            this.chestIsOpen = false;
+            this.chestHasBeenOpened = false;
+            this.levelExitUnlocked = false;
+            rupeesInitialized = false;
+            playerStats.level += 1;
+            this.levelEnemyInterval = setInterval(() => { this.spawnEnemies(); }, 5000);
+        }
+    } else if (this.level5) { //dibujar el segundo nivel
+        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+        drawBackground("level_5", ctx);
+        this.bombs.forEach(b => b.draw(ctx));
+        this.arrows.forEach(a => a.draw(ctx));
+        this.magics.forEach(m => m.draw(ctx));
+        this.drawEnemies(ctx);
+        if (this.levelCompleted) {
+            if (this.chestIsOpen) {
+                ctx.drawImage(this.chestOpened, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
+            } else {
+                ctx.drawImage(this.chestClosed, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
+            }
+        }
+        this.player.draw(ctx);
+        if (!rupeesInitialized) {
+            initializeRupees();
+            rupeesInitialized = true;
+        }
+        drawRupees(ctx, this.player);
+    
+        if (this.showInventory) {
+            this.drawInventory(ctx);
+        } else if (this.showTutorial) {
+            this.drawTutorial(ctx);
+        }
+
+        if (this.player.position.y + this.player.height >= canvasHeight && //tranisicion entre nivel 2 y 3
+            this.player.position.x >= canvasWidth / 2 - 50 &&
+            this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
+            this.level5 = false;
+            this.level6 = true;
+            this.player.position = new Vec(canvasWidth / 2 - 16, tileSize);
+            this.totalSpawnedEnemies = 0;
+            this.levelEnemies = [];
+            this.levelCompleted = false;
+            this.chestIsOpen = false;
+            this.chestHasBeenOpened = false;
+            this.levelExitUnlocked = false;
+            rupeesInitialized = false;
+            playerStats.level += 1;
+            this.levelEnemyInterval = setInterval(() => { this.spawnEnemies(); }, 5000);
+        }
+    } else if (this.level6) { //dibujar el segundo nivel
+        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+        drawBackground("level_6", ctx);
+        this.bombs.forEach(b => b.draw(ctx));
+        this.arrows.forEach(a => a.draw(ctx));
+        this.magics.forEach(m => m.draw(ctx));
+        this.drawEnemies(ctx);
+        if (this.levelCompleted) {
+            if (this.chestIsOpen) {
+                ctx.drawImage(this.chestOpened, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
+            } else {
+                ctx.drawImage(this.chestClosed, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
+            }
+        }
+        this.player.draw(ctx);
+        if (!rupeesInitialized) {
+            initializeRupees();
+            rupeesInitialized = true;
+        }
+        drawRupees(ctx, this.player);
+    
+        if (this.showInventory) {
+            this.drawInventory(ctx);
+        } else if (this.showTutorial) {
+            this.drawTutorial(ctx);
+        }
+
+        if (this.player.position.y + this.player.height >= canvasHeight && //tranisicion entre nivel 2 y 3
+            this.player.position.x >= canvasWidth / 2 - 50 &&
+            this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
+            this.level6 = false;
+            /*should go to restroom 2*/
+            this.player.position = new Vec(canvasWidth / 2 - 16, tileSize);
+            this.totalSpawnedEnemies = 0;
+            this.levelEnemies = [];
+            this.levelCompleted = false;
+            this.chestIsOpen = false;
+            this.chestHasBeenOpened = false;
+            this.levelExitUnlocked = false;
+            rupeesInitialized = false;
+            playerStats.level += 1;
+            this.levelEnemyInterval = setInterval(() => { this.spawnEnemies(); }, 5000);
+        }
+    } 
+    else {
         this.actors.forEach(actor => actor.draw(ctx));
         this.player.draw(ctx);
     }
@@ -325,6 +429,7 @@ Game.prototype.draw = function(ctx) {
     if (isGameOver) {
         drawDeathMenu(ctx);
     }
+    
 };
 
 Game.prototype.drawDialogue = function(ctx) { //dibujar dialogos del viejo
@@ -441,6 +546,8 @@ Game.prototype.unlockNextLevel = function() { //desbloquear nivel si se ha compl
     else if (this.level2) layoutName = "level_2";
     else if (this.level3) layoutName = "level_3";
     else if (this.level4) layoutName = "level_4";
+    else if (this.level5) layoutName = "level_5";
+    else if (this.level6) layoutName = "level_6";
 
     const layout = processedFloors[layoutName];
     const exitX = Math.floor(canvasWidth / 2 / tileSize);
@@ -455,3 +562,5 @@ Game.prototype.unlockNextLevel = function() { //desbloquear nivel si se ha compl
         }
     }
 };
+
+
