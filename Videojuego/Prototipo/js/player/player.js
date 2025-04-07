@@ -54,14 +54,17 @@ class Player extends AnimatedObject{
         let collidesWithWall = false;
     
         let layoutName = null;
-        if (game.mainMap) layoutName = "mainMap";
+        if (game.mainMap || game.restRoom1 || game.restRoom2 || game.restRoom3) layoutName = "mainMap";
         else if (game.level) layoutName = "levelClosed";
         else if (game.level2) layoutName = "level_2";
         else if (game.level3) layoutName = "level_3";
-        else if (game.restRoom1) layoutName = "restRoom1";
         else if (game.level4) layoutName = "level_4";
         else if (game.level5) layoutName = "level_5";
         else if (game.level6) layoutName = "level_6";
+        else if (game.level7) layoutName = "level_7";
+        else if (game.level8) layoutName = "level_8";
+        else if (game.level9) layoutName = "level_9";
+        else if (game.level10) layoutName = "level_10";
     
         const wallBoxes = layoutName ? getWallBoxes(layoutName) : [];
     
@@ -73,12 +76,12 @@ class Player extends AnimatedObject{
         }
     
         let collidesWithOldMan = false;
-        if (game.mainMap) {
+        if (game.mainMap || game.restRoom3) {
             collidesWithOldMan = boxOverlap(futureBox, game.oldMan.getHitbox());
         }
     
         let collidesWithMerchant = false;
-        if (game.mainMap || game.restRoom1) {
+        if (game.mainMap || game.restRoom1 || game.restRoom2 || game.restRoom3) {
             collidesWithMerchant = boxOverlap(futureBox, game.tienda.getHitbox());
         }
     
@@ -88,7 +91,7 @@ class Player extends AnimatedObject{
         }
     
         let collidesWithFairy = false;
-        if (game.mainMap || game.restRoom1) {
+        if (game.mainMap || game.restRoom1 || game.restRoom2 || game.restRoom3) {
             collidesWithFairy = boxOverlap(futureBox, game.fairy.getHitbox());
         }
     

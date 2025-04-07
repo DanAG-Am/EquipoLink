@@ -19,10 +19,13 @@ function main() {
     processBackgroundLayout("levelClosed");
     processBackgroundLayout("level_2");
     processBackgroundLayout("level_3");
-    processBackgroundLayout("restRoom1");
     processBackgroundLayout("level_4");
     processBackgroundLayout("level_5");
     processBackgroundLayout("level_6");
+    processBackgroundLayout("level_7");
+    processBackgroundLayout("level_8");
+    processBackgroundLayout("level_9");
+    processBackgroundLayout("level_10");
 
     // Create the game object //crear juego para que todo lo que esta en esa clase se dibuje
     game = new Game();
