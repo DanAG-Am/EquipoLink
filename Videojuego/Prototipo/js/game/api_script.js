@@ -1,132 +1,95 @@
-function main()
-{
-    document.getElementById('formSelectUser').onsubmit = async (e) =>
-    {
+function main() {
+    // GET: Buscar jugador por ID
+    document.getElementById('formSelectJugador').onsubmit = async (e) => {
         e.preventDefault()
-
-        const data = new FormData(formSelectUser)
+        const data = new FormData(formSelectJugador)
         const dataObj = Object.fromEntries(data.entries())
-
-        let response = await fetch(`http://localhost:5000/api/users/${dataObj['userID']}`,{
+        
+        let response = await fetch(`http://localhost:5000/api/jugadores/${dataObj['jugadorID']}`, {
             method: 'GET'
         })
         
-        if(response.ok)
-        {
+        if (response.ok) {
             let results = await response.json()
-        
-            if(results.length > 0)
-            {
+            if (results.length > 0) {
                 const headers = Object.keys(results[0])
-                const values = Object.values(results)
-    
                 let table = document.createElement("table")
-    
-                let tr = table.insertRow(-1)                  
-    
-                for(const header of headers)
-                {
-                    let th = document.createElement("th")     
+                let tr = table.insertRow(-1)
+                for (const header of headers) {
+                    let th = document.createElement("th")
                     th.innerHTML = header
                     tr.appendChild(th)
                 }
-    
-                for(const row of values)
-                {
+                for (const row of results) {
                     let tr = table.insertRow(-1)
-    
-                    for(const key of Object.keys(row))
-                    {
+                    for (const key in row) {
                         let tabCell = tr.insertCell(-1)
                         tabCell.innerHTML = row[key]
                     }
                 }
-    
                 const container = document.getElementById('getResultsID')
                 container.innerHTML = ''
                 container.appendChild(table)
+            } else {
+                document.getElementById('getResultsID').innerHTML = 'No hay resultados para mostrar.'
             }
-            else
-            {
-                const container = document.getElementById('getResultsID')
-                container.innerHTML = 'No results to show.'
-            }
-        }
-        else{
-            getResults.innerHTML = response.status
+        } else {
+            document.getElementById('getResultsID').innerHTML = response.status
         }
     }
-
-    document.getElementById('formInsert').onsubmit = async(e)=>
-    {
+    
+    document.getElementById('formInsertJugador').onsubmit = async (e) => {
         e.preventDefault()
-
-        const data = new FormData(formInsert)
+        const data = new FormData(formInsertJugador)
         const dataObj = Object.fromEntries(data.entries())
-
-        let response = await fetch('http://localhost:5000/api/users',{
+        
+        let response = await fetch('http://localhost:5000/api/jugadores', {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(dataObj)
         })
         
-        if(response.ok)
-        {
+        if (response.ok) {
             let results = await response.json()
-        
-            console.log(results)
-            postResults.innerHTML = results.message + ' id: ' + results.id
-        }
-        else{
-            postResults.innerHTML = response.status
+            document.getElementById('postResults').innerHTML = results.message + ' ID: ' + results.id
+        } else {
+            document.getElementById('postResults').innerHTML = response.status
         }
     }
-
-    document.getElementById('formUpdate').onsubmit = async(e)=>
-    {
+    
+    document.getElementById('formUpdateJugador').onsubmit = async (e) => {
         e.preventDefault()
-
-        const data = new FormData(formUpdate)
+        const data = new FormData(formUpdateJugador)
         const dataObj = Object.fromEntries(data.entries())
-
-        let response = await fetch('http://localhost:5000/api/users',{
+        
+        let response = await fetch('http://localhost:5000/api/jugadores', {
             method: 'PUT',
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(dataObj)
         })
         
-        if(response.ok)
-        {
+        if (response.ok) {
             let results = await response.json()
-        
-            console.log(results)
-            putResults.innerHTML = results.message
-        }
-        else{
-            putResults.innerHTML = response.status
+            document.getElementById('putResults').innerHTML = results.message
+        } else {
+            document.getElementById('putResults').innerHTML = response.status
         }
     }
-
-    document.getElementById('formDelete').onsubmit = async(e)=>
-    {
+    
+    document.getElementById('formDeleteJugador').onsubmit = async (e) => {
         e.preventDefault()
-
-        const data = new FormData(formDelete)
+        const data = new FormData(formDeleteJugador)
         const dataObj = Object.fromEntries(data.entries())
-
-        let response = await fetch(`http://localhost:5000/api/users/${dataObj['userID']}`,{
+        
+        let response = await fetch(`http://localhost:5000/api/jugadores/${dataObj['jugadorID']}`, {
             method: 'DELETE'
         })
         
-        if(response.ok)
-        {
+        if (response.ok) {
             let results = await response.json()
-        
-            deleteResults.innerHTML = results.message
-        }
-        else
-        {
-            deleteResults.innerHTML = `Error!\nStatus: ${response.status} Message: ${results.message}`
+            document.getElementById('deleteResults').innerHTML = results.message
+        } else {
+            document.getElementById('deleteResults').innerHTML = `Error! Status: ${response.status}`
         }
     }
 }
