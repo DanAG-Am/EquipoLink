@@ -107,22 +107,21 @@
     });
 
     function updateStatsDisplay() {
-        // Correct the ID values based on the HTML elements
-        document.getElementById('life').innerText = `Life: ${playerStats.life}`;
-        document.getElementById('mana').innerText = `Mana: ${playerStats.mana}`;
-        document.getElementById('arrows').innerText = `Arrows: ${playerStats.arrows}`;
-        document.getElementById('potions').innerText = `Potions: ${playerStats.potions}`;
-        document.getElementById('bombs').innerText = `Bombs: ${playerStats.bombs}`;
-        document.getElementById('rupees').innerText = `Rupees: ${playerStats.rupees}`;
-        document.getElementById('damageSword').innerText = `Sword Damage: ${playerStats.damageSword}`;
-        document.getElementById('damageArrow').innerText = `Arrow Damage: ${playerStats.damageArrow}`;
-        document.getElementById('damageMagic').innerText = `Magic Damage: ${playerStats.damageMagic}`;
-        document.getElementById('damageBomb').innerText = `Bomb Damage: ${playerStats.damageBomb}`;
+        document.getElementById('life').innerText = `Life: ${game.playerStats.life}`;
+        document.getElementById('mana').innerText = `Mana: ${game.playerStats.mana}`;
+        document.getElementById('arrows').innerText = `Arrows: ${game.playerStats.arrows}`;
+        document.getElementById('potions').innerText = `Potions: ${game.playerStats.potions}`;
+        document.getElementById('bombs').innerText = `Bombs: ${game.playerStats.bombs}`;
+        document.getElementById('rupees').innerText = `Rupees: ${game.playerStats.rupees}`;
+        document.getElementById('damageSword').innerText = `Sword Damage: ${game.playerStats.damageSword}`;
+        document.getElementById('damageArrow').innerText = `Arrow Damage: ${game.playerStats.damageArrow}`;
+        document.getElementById('damageMagic').innerText = `Magic Damage: ${game.playerStats.damageMagic}`;
+        document.getElementById('damageBomb').innerText = `Bomb Damage: ${game.playerStats.damageBomb}`;
     }
 
     // Wait for the DOM to load and initialize stats
     document.addEventListener("DOMContentLoaded", function() {
-        updateStatsDisplay(); // Display the initial stats
+        updateStatsDisplay();
     });
 </script>
 
