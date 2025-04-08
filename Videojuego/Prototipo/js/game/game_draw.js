@@ -703,6 +703,41 @@ Game.prototype.draw = function(ctx) {
             playerStats.uiTextPosition = { x: 100, y: 40 };
             this.levelEnemyInterval = setInterval(() => { this.spawnEnemies(); }, 5000);
         }
+    } else if (this.levelBoss) {
+        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+        drawBackground("prologue", ctx);
+        this.bombs.forEach(b => b.draw(ctx));
+        this.arrows.forEach(a => a.draw(ctx));
+        this.magics.forEach(m => m.draw(ctx));
+        if (this.dialogueStage3 < 2) {
+            this.drawDialogue3(ctx);
+            ctx.font = "15px Arial";
+            ctx.fillText("Presiona Enter para continuar", canvasWidth / 2, 190, 600, 100);
+        } else {
+            this.drawEnemies(ctx);
+        }
+        this.player.draw(ctx);
+        if (this.showInventory) {
+            this.drawInventory(ctx);
+        } else if (this.showTutorial) {
+            this.drawTutorial(ctx);
+        }
+        if (this.levelCompleted && this.dialogueStage4 < 4) {
+            this.drawDialogue4(ctx);
+            ctx.font = "15px Arial";
+            ctx.fillText("Presiona Enter para continuar", canvasWidth / 2, 190, 600, 100);
+        } 
+        if (this.levelCompleted &&
+            this.player.position.y + this.player.height >= canvasHeight &&
+            this.player.position.x >= canvasWidth / 2 - 50 &&
+            this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
+            this.levelBoss = false;
+            this.endingScene = true;
+            this.player.position = new Vec(canvasWidth / 2 - 16, tileSize);
+            rupeesInitialized = false;
+            playerStats.level = "Outside";
+            playerStats.uiTextPosition = { x: 100, y: 40 };
+        }
     } else {
         this.actors.forEach(actor => actor.draw(ctx));
         this.player.draw(ctx);
@@ -772,6 +807,50 @@ Game.prototype.drawDialogue2 = function(ctx) { //dibujar dialogos 2 del viejo
         ["¡Salva a tu hermano y trae la luz de vuelta a este mundo!"]
     ];
     let lines = dialogueTexts[this.dialogueStage2];
+    let yPosition = 110;
+    lines.forEach(line => {
+        ctx.fillText(line, canvasWidth / 2, yPosition);
+        yPosition += 25;
+    });
+};
+
+Game.prototype.drawDialogue3 = function(ctx) { //dibujar dialogos del jefe final
+    ctx.fillStyle = "black";
+    ctx.fillRect(canvasWidth / 2 - 300, 70, 600, 100);
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(canvasWidth / 2 - 300, 70, 600, 100);
+    ctx.fillStyle = "white";
+    ctx.font = "18px Arial";
+    ctx.textAlign = "center";
+    let dialogueTexts = [
+        ["¡GRAAAAAAAAAAAAAAHHH!"],
+        ["¡Te destruiré, insignificante humano!"]
+    ];
+    let lines = dialogueTexts[this.dialogueStage3];
+    let yPosition = 110;
+    lines.forEach(line => {
+        ctx.fillText(line, canvasWidth / 2, yPosition);
+        yPosition += 25;
+    });
+};
+
+Game.prototype.drawDialogue4 = function(ctx) { //dibujar dialogos del jefe final
+    ctx.fillStyle = "black";
+    ctx.fillRect(canvasWidth / 2 - 300, 70, 600, 100);
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(canvasWidth / 2 - 300, 70, 600, 100);
+    ctx.fillStyle = "white";
+    ctx.font = "18px Arial";
+    ctx.textAlign = "center";
+    let dialogueTexts = [
+        ["¡GRAAAAAAAAAAAAAAHHH!"],
+        ["¡Has derrotado al jefe y salvado a tu hermano!"],
+        ["¡La luz te espera fuera de esta mazmorra!"],
+        ["¡Ve y cumple tu destino!"]
+    ];
+    let lines = dialogueTexts[this.dialogueStage4];
     let yPosition = 110;
     lines.forEach(line => {
         ctx.fillText(line, canvasWidth / 2, yPosition);
@@ -875,6 +954,7 @@ Game.prototype.unlockNextLevel = function() { //desbloquear nivel si se ha compl
     else if (this.level8) layoutName = "level_8";
     else if (this.level9) layoutName = "level_9";
     else if (this.level10) layoutName = "level_10";
+    else if (this.levelBoss) layoutName = "prologue";
 
     const layout = processedFloors[layoutName];
     const exitX = Math.floor(canvasWidth / 2 / tileSize);

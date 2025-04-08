@@ -28,6 +28,8 @@ Game.prototype.spawnEnemies = function() {
         enemyTypes = [Mage, Knight];  // Mage y Knight en nivel 9.
     } else if (playerStats.level === 10){
         enemyTypes = [Knight];  // Knight en nivel 10.
+    } else if (playerStats.level === "Final"){
+        enemyTypes = [Boss];  // Jefe en nivel final.
     }
 
     const currentLevel = playerStats.level; // Nivel actual del jugador.
@@ -52,7 +54,12 @@ Game.prototype.spawnEnemies = function() {
 
             // Escoge un tipo de enemigo aleatorio de la lista de tipos disponibles.
             const EnemyClass = enemyTypes[Math.floor(Math.random() * enemyTypes.length)];
-            const newEnemy = new EnemyClass(new Vec(spawnX, spawnY), 32, 32); // Crea el enemigo en la posición aleatoria.
+            let newEnemy;
+            if (EnemyClass === Boss) {
+                newEnemy = new Boss(new Vec(spawnX, spawnY), 96, 96); // Tamaño especial para el jefe
+            } else {
+                newEnemy = new EnemyClass(new Vec(spawnX, spawnY), 32, 32); // Tamaño normal para enemigos
+            }
 
             // Verifica si la nueva posición del enemigo es válida (no colisiona con las paredes).
             if (!this.isEnemyCollidingWithWall(newEnemy)) {
@@ -101,6 +108,8 @@ function getWallBoxes() {
         layoutName = "level_9";
     } else if (game.level10){
         layoutName = "level_10";
+    } else if (game.levelBoss){
+        layoutName = "prologue";
     }
 
     const wallBoxes = [];
@@ -131,7 +140,7 @@ function processBackgroundLayout(layoutName) {
         console.warn(`⚠️ WARNING: BACKGROUND_LAYOUTS["${layoutName}"] está undefined. Verifica si lo definiste correctamente.`);
         return; // ← Esto previene el error
     }
-    
+
     const result = [];
 
     // Recorre el layout y genera una nueva fila con tipos de tiles.

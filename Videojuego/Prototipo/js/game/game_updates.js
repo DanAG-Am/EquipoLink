@@ -4,19 +4,27 @@
  */
 // Actualiza el estado del juego procesando las acciones del jugador, las interacciones con los enemigos y otras mecánicas del juego
 Game.prototype.update = function(deltaTime) {
+    if (this.levelBoss && this.dialogueStage3 < 2) {
+        return; // No actualizamos jugador ni enemigos mientras hay diálogo
+    } else if (this.levelBoss && this.levelCompleted && this.dialogueStage4 < 4) {
+        return;
+    }
     if (!this.showMainMenu && !this.showPrologue) {
-        if (this.level || this.level2 || this.level3 || this.level4 || this.level5 || this.level6 || this.level7 || this.level8 || this.level9 || this.level10) {
+        if (this.level || this.level2 || this.level3 || this.level4 || this.level5 || this.level6 || this.level7 || this.level8 || this.level9 || this.level10 || this.levelBoss) {
             // Actualizar los enemigos en el nivel actual
             this.levelEnemies.forEach(enemy => enemy.update(deltaTime, this.player.position));
         
             // Verificar si el nivel ha sido completado
             if (
-                this.totalSpawnedEnemies >= (this.maxEnemiesPerLevel[playerStats.level] || 5) &&
+                this.totalSpawnedEnemies >= (this.maxEnemiesPerLevel[playerStats.level]) &&
                 this.levelEnemies.length === 0 &&
                 !this.levelCompleted
             ) {
                 this.levelCompleted = true;
-                this.showLevelCompleteMessage = true;
+                if (!this.levelBoss) {
+                    this.showLevelCompleteMessage = true;
+                }
+                this.unlockNextLevel();
             }
         } else {
             // Actualizar otros actores en el juego (entidades no enemigas)
@@ -51,7 +59,7 @@ Game.prototype.update = function(deltaTime) {
             swordBox.height = (this.player.currentDirection === "up" || this.player.currentDirection === "down") ? this.player.height + rango : this.player.height;
         
             // Obtener los enemigos (dependiendo del nivel actual)
-            const enemigos = (this.level || this.level2 || this.level3 || this.level4 || this.level5 || this.level6 || this.level7 || this.level8 || this.level9 || this.level10) ? this.levelEnemies : this.actors;
+            const enemigos = (this.level || this.level2 || this.level3 || this.level4 || this.level5 || this.level6 || this.level7 || this.level8 || this.level9 || this.level10 || this.levelBoss) ? this.levelEnemies : this.actors;
             for (let i = enemigos.length - 1; i >= 0; i--) {
                 const enemy = enemigos[i];
                 if (!enemy || !enemy.position) continue;
@@ -80,7 +88,7 @@ Game.prototype.update = function(deltaTime) {
         // Actualizar las flechas y verificar colisiones con enemigos
         this.arrows.forEach(a => a.update(deltaTime));
         this.arrows.forEach((arrow, i) => {
-            const enemigos = (this.level || this.level2 || this.level3 || this.level4 || this.level5 || this.level6 || this.level7 || this.level8 || this.level9 || this.level10) ? this.levelEnemies : this.actors;
+            const enemigos = (this.level || this.level2 || this.level3 || this.level4 || this.level5 || this.level6 || this.level7 || this.level8 || this.level9 || this.level10 || this.levelBoss) ? this.levelEnemies : this.actors;
             enemigos.forEach((enemy, index) => {
                 if (boxOverlap({
                     position: arrow.position,
@@ -108,7 +116,7 @@ Game.prototype.update = function(deltaTime) {
         // Actualizar las magias y verificar colisiones con enemigos
         this.magics.forEach(m => m.update(deltaTime));
         this.magics.forEach((magic, i) => {
-            const enemigos = (this.level || this.level2 || this.level3 || this.level4 || this.level5 || this.level6 || this.level7 || this.level8 || this.level9 || this.level10) ? this.levelEnemies : this.actors;
+            const enemigos = (this.level || this.level2 || this.level3 || this.level4 || this.level5 || this.level6 || this.level7 || this.level8 || this.level9 || this.level10 || this.levelBoss) ? this.levelEnemies : this.actors;
             enemigos.forEach((enemy, index) => {
                 
                 const currentTime = Date.now();
@@ -151,7 +159,7 @@ Game.prototype.update = function(deltaTime) {
                     height: explosionRange
                 };
         
-                const enemigos = (this.level || this.level2 || this.level3 || this.level4 || this.level5 || this.level6 || this.level7 || this.level8 || this.level9 || this.level10) ? this.levelEnemies : this.actors;
+                const enemigos = (this.level || this.level2 || this.level3 || this.level4 || this.level5 || this.level6 || this.level7 || this.level8 || this.level9 || this.level10 || this.levelBoss) ? this.levelEnemies : this.actors;
                 enemigos.forEach((enemy, index) => {
                     if (boxOverlap(bombBox, {
                         position: enemy.position,

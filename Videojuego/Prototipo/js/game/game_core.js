@@ -33,6 +33,8 @@ class Game {
         this.enteredLevel = false;
         this.dialogueStage = 0;
         this.dialogueStage2 = 0;
+        this.dialogueStage3 = 0;
+        this.dialogueStage4 = 0;
         this.showTutorial = false;
         this.tutorialWasShown = false;
         this.showInventory = false;
@@ -63,7 +65,8 @@ class Game {
             7: 1,
             8: 1,
             9: 1,
-            10: 1
+            10: 1,
+            "Final": 1
         };
         
         this.bombs = [];
@@ -112,11 +115,15 @@ class Game {
         this.restStory1 = false;
         this.restStory2 = false;
         this.restStory3 = false;
-        
+
+        this.levelBoss = false;
+
         this.showMainMenu = true;
         this.mainMap = false;
         this.dialogueStage = 0;
         this.dialogueStage2 = 0;
+        this.dialogueStage3 = 0;
+        this.dialogueStage4 = 0;
         this.tutorialWasShown = false;
         this.showInventory = false;
         this.initializeRupees = false;

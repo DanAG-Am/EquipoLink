@@ -54,15 +54,19 @@ function drawRupees(ctx, player) {
         // Dibuja la imagen de la rupee en las coordenadas x, y del canvas
         ctx.drawImage(rupeeImg, rupee.x, rupee.y, 16, 16);
 
-        // Verifica si el jugador está cerca de la rupee (si la posición del jugador está dentro de los límites de la rupee)
-        const playerNearRupee =
-            player.position.x > rupee.x - 16 && player.position.x < rupee.x + 16 &&  // Verifica si el jugador está dentro del rango horizontal
-            player.position.y > rupee.y - 16 && player.position.y < rupee.y + 16;  // Verifica si el jugador está dentro del rango vertical
-
-        // Si el jugador está cerca de la rupee
-        if (playerNearRupee) {
-            toRemove.push(i); // Marca esta rupee para ser eliminada en la siguiente fase
-            playerStats.rupees += 1; // Aumenta el contador de rupees del jugador
+        const rupeeBox = { // Verifica si el jugador está cerca de la rupee (si la posición del jugador está dentro de los límites de la rupee)
+            position: new Vec(rupee.x, rupee.y),
+            width: 16,
+            height: 16
+        };
+        const playerBox = {
+            position: player.position,
+            width: player.width,
+            height: player.height
+        };
+        if (boxOverlap(rupeeBox, playerBox)) { // Si el jugador está cerca de la rupee
+            toRemove.push(i);
+            playerStats.rupees += 1;
         }
     }
 

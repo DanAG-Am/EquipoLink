@@ -23,7 +23,7 @@ class Boss extends AnimatedObject{
         };
 
         // Define el estado actual del jefe y la animación que está usando.
-        this.currentDirection = "fly";
+        this.currentDirection = "attackBoss";
         this.frameIndex = 0;
         this.image = new Image();
         this.image.src = this.sprites[this.currentDirection][this.frameIndex];
@@ -33,8 +33,8 @@ class Boss extends AnimatedObject{
         this.lastFrameChange = 250;
 
         // Establece el rango de persecución, la velocidad de persecución y las estadísticas del jefe.
-        this.chaseRange = 100;
-        this.chaseSpeed = 0.2;
+        this.chaseRange = 1000;
+        this.chaseSpeed = 0.025;
         this.life = 150;
         this.attackFire = 20;
         this.attack = 10; 
@@ -46,9 +46,13 @@ class Boss extends AnimatedObject{
         this.lastAttackTime = 0;
         this.lastDamageTime = 0;
         this.damageCooldown = 500;
+        this.fireballs = [];
+        this.fireCooldown = 2500;
+        this.lastFireTime = 0;
+        this.facingLeft = true;
 
         // Calcula el área de colisión (hitbox) del jefe.
-        this.getHitBox();
+        this.getHitbox();
     }
 
     // Método que obtiene un daño de ataque aleatorio dentro de un rango.
@@ -72,10 +76,8 @@ class Boss extends AnimatedObject{
         // Calcula la distancia entre el jefe y el jugador.
         const distanceToPlayer = this.position.distance(playerPosition);
 
-        // Si el jugador está dentro del rango de persecución, el jefe comienza a moverse hacia él.
-        if (distanceToPlayer < this.chaseRange) {
-            let directionToPlayer = playerPosition.minus(this.position);  // Vector hacia el jugador
-            directionToPlayer.normalize();  // Normaliza el vector para obtener solo la dirección
+        if (distanceToPlayer < this.chaseRange) { // Si el jugador está dentro del rango de persecución, el jefe comienza a moverse hacia él
+            let directionToPlayer = playerPosition.minus(this.position).normalize();   // Vector hacia el jugador
             this.velocity = directionToPlayer.scale(this.chaseSpeed); // Establece la velocidad del jefe
         } else {
             this.velocity = new Vec(0, 0); // Detiene el movimiento si el jugador está fuera de rango.
@@ -87,6 +89,13 @@ class Boss extends AnimatedObject{
         }
         if (this.position.y + this.height > canvasHeight || this.position.y < 0) {
             this.velocity.y = -this.velocity.y;
+        }
+
+        // Se voltea según donde está ubicado el jugador
+        if (playerPosition.x > this.position.x) {
+            this.facingLeft = false; // el jugador está a la derecha
+        } else {
+            this.facingLeft = true;  // el jugador está a la izquierda
         }
 
         // Calcula la nueva posición del jefe basada en su velocidad y el tiempo transcurrido.
@@ -137,13 +146,59 @@ class Boss extends AnimatedObject{
                 this.lastAttackTime = currentTime; // Actualiza el tiempo del último ataque.
             }
         }
+
+        // Actualizar los fireballs
+        if (Date.now() - this.lastFireTime > this.fireCooldown) {
+            this.castFire(playerPosition);
+            this.lastFireTime = Date.now();
+        }
+        this.fireballs.forEach(fire => fire.update(deltaTime));
+        this.fireballs = this.fireballs.filter(fire => fire.alive);
+    }
+
+    castFire(playerPosition) {
+        const fireWidth = 32;
+        const fireHeight = 32;
+        
+        // Posición base del centro del jefe
+        let baseX = this.position.x + (this.width / 2) - (fireWidth / 2);
+        let baseY = this.position.y + (this.height / 2) - (fireHeight / 2);
+    
+        // Ajustar salida según la dirección (boca del dragón)
+        if (this.facingLeft) {
+            baseX = this.position.x; // boca lado izquierdo
+            baseY = this.position.y + this.height / 2 - fireHeight / 2 - 5;
+        } else {
+            baseX = this.position.x + this.width - fireWidth; // boca lado derecho
+            baseY = this.position.y + this.height / 2 - fireHeight / 2 - 5;
+        }
+    
+        const fireStart = new Vec(baseX, baseY);
+    
+        const directionToPlayer = playerPosition.minus(this.position);
+        const normalizedDirection = directionToPlayer.normalize();
+    
+        this.fireballs.push(new Fireball(fireStart, normalizedDirection));
     }
 
     // Método que dibuja al jefe en el lienzo usando su imagen.
     draw(ctx) {
         ctx.save();
-        ctx.drawImage(this.image, this.position.x, this.position.y, this.width, this.height);
+
+        let drawX = this.position.x;
+        let drawY = this.position.y;
+    
+        if (!this.facingLeft) {
+            ctx.translate(drawX + this.width, drawY); // mueve el contexto
+            ctx.scale(-1, 1); // voltea horizontalmente
+            drawX = 0;
+            drawY = 0;
+        }
+    
+        ctx.drawImage(this.image, drawX, drawY, this.width, this.height);
         ctx.restore();
+
+        this.fireballs.forEach(fb => fb.draw(ctx));
     }
 }
 
@@ -177,14 +232,14 @@ class Bat extends AnimatedObject {
     update(deltaTime, playerPosition) {
         if (gamePaused) return;
 
+        // Calcula la distancia entre el bat y el jugador.
         const distanceToPlayer = this.position.distance(playerPosition);
 
-        if (distanceToPlayer < this.chaseRange) {
-            let directionToPlayer = playerPosition.minus(this.position);  // Vector from bat to player
-            directionToPlayer.normalize();  // Normalize the vector to get direction
-            this.velocity = directionToPlayer.scale(this.chaseSpeed); 
+        if (distanceToPlayer < this.chaseRange) { // Si el jugador está dentro del rango de persecución, el bat comienza a moverse hacia él
+            let directionToPlayer = playerPosition.minus(this.position).normalize();   // Vector hacia el jugador
+            this.velocity = directionToPlayer.scale(this.chaseSpeed); // Establece la velocidad del bat
         } else {
-            this.velocity = new Vec(0, 0);
+            this.velocity = new Vec(0, 0); // Detiene el movimiento si el jugador está fuera de rango.
         }
     
         if (this.position.x + this.width > canvasWidth || this.position.x < 0) {
@@ -272,14 +327,14 @@ class Knight extends AnimatedObject{
     update(deltaTime, playerPosition) {
         if (gamePaused) return;
 
+        // Calcula la distancia entre el knight y el jugador.
         const distanceToPlayer = this.position.distance(playerPosition);
-    
-        if (distanceToPlayer < this.chaseRange) {
-            let directionToPlayer = playerPosition.minus(this.position);  // Vector from bat to player
-            directionToPlayer.normalize();  // Normalize the vector to get direction
-            this.velocity = directionToPlayer.scale(this.chaseSpeed); 
+
+        if (distanceToPlayer < this.chaseRange) { // Si el jugador está dentro del rango de persecución, el knight comienza a moverse hacia él
+            let directionToPlayer = playerPosition.minus(this.position).normalize();   // Vector hacia el jugador
+            this.velocity = directionToPlayer.scale(this.chaseSpeed); // Establece la velocidad del knight
         } else {
-            this.velocity = new Vec(0, 0);
+            this.velocity = new Vec(0, 0); // Detiene el movimiento si el jugador está fuera de rango.
         }
     
         if (this.position.x + this.width > canvasWidth || this.position.x < 0) {
@@ -346,7 +401,10 @@ class Mage extends AnimatedObject {
         this.position = new Vec(position.x, position.y);
         this.velocity = new Vec(0, 0);
         this.sprites = {
-            "attackMage": ["../../Videojuego/Assets/GameAssets/Enemies/enemy_Mage/Mage-1.png", "../../Videojuego/Assets/GameAssets/Enemies/enemy_Mage/Mage-2.png"],
+            "attackMage": [
+                "../../Videojuego/Assets/GameAssets/Enemies/enemy_Mage/Mage-1.png",
+                "../../Videojuego/Assets/GameAssets/Enemies/enemy_Mage/Mage-2.png"
+            ]
         };
         this.currentDirection = "attackMage";
         this.frameIndex = 0;
@@ -363,7 +421,7 @@ class Mage extends AnimatedObject {
         this.attackInterval = 3000;
         this.lastDamageTime = 0;
         this.damageCooldown = 500;
-        this.magicCooldown = 1000;
+        this.magicCooldown = 2000;
         this.lastMagicCastTime = 0;
         this.magics = [];
     }
@@ -371,23 +429,23 @@ class Mage extends AnimatedObject {
     update(deltaTime, playerPosition) {
         if (gamePaused) return;
 
+        // Calcula la distancia entre el mago y el jugador.
         const distanceToPlayer = this.position.distance(playerPosition);
-    
-        if (distanceToPlayer < this.chaseRange) {
-            let directionToPlayer = playerPosition.minus(this.position);  
-            directionToPlayer.normalize();  
-            this.velocity = directionToPlayer.scale(this.chaseSpeed); 
+
+        if (distanceToPlayer < this.chaseRange) { // Si el jugador está dentro del rango de persecución, el mago comienza a moverse hacia él
+            let directionToPlayer = playerPosition.minus(this.position).normalize();   // Vector hacia el jugador
+            this.velocity = directionToPlayer.scale(this.chaseSpeed); // Establece la velocidad del mago
         } else {
-            this.velocity = new Vec(0, 0);
+            this.velocity = new Vec(0, 0); // Detiene el movimiento si el jugador está fuera de rango.
         }
-    
+
         if (this.position.x + this.width > canvasWidth || this.position.x < 0) {
             this.velocity.x = -this.velocity.x;
         }
         if (this.position.y + this.height > canvasHeight || this.position.y < 0) {
             this.velocity.y = -this.velocity.y;
         }
-    
+
         let nextPosition = this.position.plus(this.velocity.times(deltaTime));
 
         let futureBox = {
@@ -411,7 +469,11 @@ class Mage extends AnimatedObject {
             this.velocity = new Vec(0, 0);
         }
 
-        if (distanceToPlayer < this.chaseRange && Date.now() - this.lastMagicCastTime > this.magicCooldown) {
+        if (
+            distanceToPlayer < this.chaseRange &&
+            distanceToPlayer > 100 &&
+            Date.now() - this.lastMagicCastTime > this.magicCooldown
+        ) {
             this.castMagic(playerPosition);
             this.lastMagicCastTime = Date.now();
         }
@@ -431,12 +493,16 @@ class Mage extends AnimatedObject {
     }
 
     castMagic(playerPosition) {
-        let magicPosition = this.position.plus(new Vec(this.width / 2, this.height / 2));
-        let direction = "right";
-        if (playerPosition.y < this.position.y) direction = "up";
-        if (playerPosition.y > this.position.y) direction = "down";
-        if (playerPosition.x < this.position.x) direction = "left";
-        this.magics.push(new Magic(magicPosition, direction));
+        const magicWidth = 32;
+        const magicHeight = 32;
+        const centerX = this.position.x + (this.width / 2) - (magicWidth / 2);
+        const centerY = this.position.y + (this.height / 2) - (magicHeight / 2);
+        const magicPosition = new Vec(centerX, centerY);
+    
+        const directionToPlayer = playerPosition.minus(this.position);
+        const normalizedDirection = directionToPlayer.normalize();
+    
+        this.magics.push(new Magic(magicPosition, normalizedDirection));
     }
 
     checkMagicCollisionWithPlayer() {
@@ -494,14 +560,14 @@ class Skull extends AnimatedObject{
     update(deltaTime, playerPosition) {
         if (gamePaused) return;
 
+        // Calcula la distancia entre el skull y el jugador.
         const distanceToPlayer = this.position.distance(playerPosition);
-    
-        if (distanceToPlayer < this.chaseRange) {
-            let directionToPlayer = playerPosition.minus(this.position);  // Vector from bat to player
-            directionToPlayer.normalize();  // Normalize the vector to get direction
-            this.velocity = directionToPlayer.scale(this.chaseSpeed); 
+
+        if (distanceToPlayer < this.chaseRange) { // Si el jugador está dentro del rango de persecución, el skull comienza a moverse hacia él
+            let directionToPlayer = playerPosition.minus(this.position).normalize();   // Vector hacia el jugador
+            this.velocity = directionToPlayer.scale(this.chaseSpeed); // Establece la velocidad del skull
         } else {
-            this.velocity = new Vec(0, 0);
+            this.velocity = new Vec(0, 0); // Detiene el movimiento si el jugador está fuera de rango.
         }
     
         if (this.position.x + this.width > canvasWidth || this.position.x < 0) {
@@ -590,14 +656,14 @@ class Slime extends AnimatedObject{
     update(deltaTime, playerPosition) {
         if (gamePaused) return;
 
+        // Calcula la distancia entre el slime y el jugador.
         const distanceToPlayer = this.position.distance(playerPosition);
 
-        if (distanceToPlayer < this.chaseRange) {
-            let directionToPlayer = playerPosition.minus(this.position);  // Vector from bat to player
-            directionToPlayer.normalize();  // Normalize the vector to get direction
-            this.velocity = directionToPlayer.scale(this.chaseSpeed); 
+        if (distanceToPlayer < this.chaseRange) { // Si el jugador está dentro del rango de persecución, el slime comienza a moverse hacia él
+            let directionToPlayer = playerPosition.minus(this.position).normalize();   // Vector hacia el jugador
+            this.velocity = directionToPlayer.scale(this.chaseSpeed); // Establece la velocidad del slime
         } else {
-            this.velocity = new Vec(0, 0);
+            this.velocity = new Vec(0, 0); // Detiene el movimiento si el jugador está fuera de rango.
         }
     
         if (this.position.x + this.width > canvasWidth || this.position.x < 0) {
