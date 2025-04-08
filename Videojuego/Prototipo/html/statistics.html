@@ -1,69 +1,73 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/mysqlUseCases.css">
-    <script type="module" defer src="../js/mysqlUseCases.js"></script>
-    <title>Document</title>
+    <link rel="stylesheet" href="../html/pagina_web.css">
+    <script type="module" defer src="../js/api_script.js"></script>
+    <title>Gestión de Jugadores</title>
 </head>
 <body>
     <div class="section">
-        <div class="formInput">
-            <h1>Show users</h1>
-            <form id="formSelectUser">
-                <input type="text" name="userID" placeholder="Type your user id, or nothing to show all users">
-
-                <input type="submit" value="Show users">
-            </form>
+        <div class="playerStats">
+            <h1>Buscar Jugador</h1>
         </div>
         <div class="resultDisplay">
-            <h1>Result</h1>
-            <p>When the request ends, the result will be displayed here.</p>
+            <h1>Resultado</h1>
+            <p>Al finalizar la petición, se mostrará el resultado.</p>
             <div id="getResultsID"></div>
         </div>
     </div>
     <div class="section">
         <div class="formInput">
-            <h1>Add user</h1>
-            <form id="formInsert">
-                <input type="text" name="name" placeholder="Type your first name">
-                <input type="text" name="surname" placeholder="Type your last name">
-                <input type="submit" value="Add User">
+            <h1>Agregar Jugador</h1>
+            <form id="formInsertJugador">
+                <input type="text" name="id_cuarto" placeholder="ID de Cuarto">
+                <input type="text" name="usuario" placeholder="Usuario">
+                <input type="password" name="contrasena" placeholder="Contraseña">
+                <input type="number" name="hp_actual" placeholder="HP Actual">
+                <input type="number" name="mp_actual" placeholder="MP Actual">
+                <input type="number" name="monedas" placeholder="Monedas">
+                <input type="number" name="pociones" placeholder="Pociones">
+                <input type="number" name="bombas" placeholder="Bombas">
+                <input type="number" name="flechas" placeholder="Flechas">
+                <input type="submit" value="Agregar Jugador">
             </form>
         </div>
         <div class="resultDisplay">
-            <h1>Result</h1>
-            <p id="postResults">When the request ends, the result will be displayed here.</p>
+            <h1>Resultado</h1>
+            <p id="postResults">Al finalizar la petición, se mostrará el resultado.</p>
         </div>
     </div>
+
     <div class="section">
         <div class="formInput">
-            <h1>Update user</h1>
-            <form id="formUpdate">
-                <input type="text" name="userID" placeholder="Type your userID">
-                <input type="text" name="name" placeholder="Type your first new name">
-                <input type="text" name="surname" placeholder="Type your last new name">
-                <input type="submit" value="Update User">
+            <h1>Actualizar Jugador</h1>
+            <form id="formUpdateJugador">
+                <input type="text" name="id_jugador" placeholder="ID de Jugador">
+                <input type="text" name="usuario" placeholder="Nuevo Usuario">
+                <input type="password" name="contrasena" placeholder="Nueva Contraseña">
+                <input type="submit" value="Actualizar Jugador">
             </form>
         </div>
         <div class="resultDisplay">
-            <h1>Result</h1>
-            <p id="putResults">When the request ends, the result will be displayed here.</p>
+            <h1>Resultado</h1>
+            <p id="putResults">Al finalizar la petición, se mostrará el resultado.</p>
         </div>
     </div>
+
     <div class="section">
         <div class="formInput">
-            <h1>Delete user</h1>
-            <form id="formDelete" method="delete">
-                <input type="text" name="userID" placeholder="Type your userID">
-                <input type="submit" value="Delete User">
+            <h1>Eliminar Jugador</h1>
+            <form id="formDeleteJugador" method="delete">
+                <input type="text" name="jugadorID" placeholder="ID de Jugador">
+                <input type="submit" value="Eliminar Jugador">
             </form>
         </div>
         <div class="resultDisplay">
-            <h1>Result</h1>
-            <p id="deleteResults">When the request ends, the result will be displayed here.</p>
+            <h1>Resultado</h1>
+            <p id="deleteResults">Al finalizar la petición, se mostrará el resultado.</p>
         </div>
     </div>
 </body>
