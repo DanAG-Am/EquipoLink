@@ -30,6 +30,8 @@ const floorDoor = new Image();
 floorDoor.src = "../../Videojuego/Assets/GameAssets/Map/Floor/floor_Void.png";
 const wallTile = new Image();
 wallTile.src = "../../Videojuego/Assets/GameAssets/Map/Floor/floor_Block.png";
+const grassTile = new Image();
+grassTile.src = "../../Videojuego/Assets/GameAssets/Map/Floor/Grass.png";
 //ui Images
 const rupeeImg = new Image();
 rupeeImg.src = "../../Videojuego/Assets/GameAssets/Pickup/pickup_Rupee1.png";

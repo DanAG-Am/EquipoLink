@@ -22,7 +22,7 @@ class Player extends AnimatedObject{
             "attackMagicRight": "../../Videojuego/Assets/GameAssets/Magical_rod/Magical_rod_8.png",
             "attackMagicUp": "../../Videojuego/Assets/GameAssets/Magical_rod/Magical_rod_12.png",
             "attackBowDown": "../../Videojuego/Assets/GameAssets/Bow/bow_down.png",
-            "attackBowLeft": "../../Videojuego/Assets/GameAssets/Bow/bow_left.png",
+            "attackBowLeft": "../../Videojuego/Assets/GameAssets/Bow/bow_right.png",
             "attackBowUp": "../../Videojuego/Assets/GameAssets/Bow/bow_up.png"
         };
         this.currentDirection = "up";
@@ -65,6 +65,7 @@ class Player extends AnimatedObject{
         else if (game.level8) layoutName = "level_8";
         else if (game.level9) layoutName = "level_9";
         else if (game.level10) layoutName = "level_10";
+        else if (game.levelBoss) layoutName = "prologue";
     
         const wallBoxes = layoutName ? getWallBoxes(layoutName) : [];
     

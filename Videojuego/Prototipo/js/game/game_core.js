@@ -33,6 +33,8 @@ class Game {
         this.enteredLevel = false;
         this.dialogueStage = 0;
         this.dialogueStage2 = 0;
+        this.dialogueStage3 = 0;
+        this.dialogueStage4 = 0;
         this.showTutorial = false;
         this.tutorialWasShown = false;
         this.showInventory = false;
@@ -48,6 +50,12 @@ class Game {
         this.chestClosed.src = "../../Videojuego/Assets/GameAssets/Chest/chest_closed.png";
         this.chestOpened = new Image();
         this.chestOpened.src = "../../Videojuego/Assets/GameAssets/Chest/chest_open.png";
+        this.endingScene = false;
+        this.endingDialogueStage = 0;
+        this.showEndingLogo = false;
+        this.playerReachedCenter = false;
+        this.player.velocity = new Vec(0, 0); // por si estaba en movimiento
+        this.player.position = new Vec(canvasWidth / 2 - this.player.width / 2, 0); // arriba
 
         // Ahora el Old Man se gestiona desde su propia clase:
         this.oldMan = new OldMan(new Vec(canvasWidth / 2 - 16, canvasHeight / 2 - 105));
@@ -63,7 +71,8 @@ class Game {
             7: 1,
             8: 1,
             9: 1,
-            10: 1
+            10: 1,
+            "Final": 1
         };
         
         this.bombs = [];
@@ -112,11 +121,20 @@ class Game {
         this.restStory1 = false;
         this.restStory2 = false;
         this.restStory3 = false;
-        
+
+        this.levelBoss = false;
+
+        this.endingScene = false;
+        this.playerReachedCenter = false;
+        this.showEndingLogo = false;
+        this.endingDialogueStage = 0;
+
         this.showMainMenu = true;
         this.mainMap = false;
         this.dialogueStage = 0;
         this.dialogueStage2 = 0;
+        this.dialogueStage3 = 0;
+        this.dialogueStage4 = 0;
         this.tutorialWasShown = false;
         this.showInventory = false;
         this.initializeRupees = false;

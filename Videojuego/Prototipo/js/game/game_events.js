@@ -50,6 +50,14 @@ Game.prototype.createEventListeners = function(){
             this.dialogueStage2++;
             return;
         }
+        if (this.levelBoss && this.dialogueStage3 < 2 && event.key === 'Enter') {
+            this.dialogueStage3++;
+            return;
+        }
+        if (this.levelBoss && this.levelCompleted && this.dialogueStage4 < 4 && event.key === 'Enter') {
+            this.dialogueStage4++;
+            return;
+        }
         if (this.showTutorial && event.key === 't') {
             this.showTutorial = false;
             return;
@@ -66,7 +74,7 @@ Game.prototype.createEventListeners = function(){
             this.showInventory = true;
             return;
         }
-        if ((this.mainMap || this.level || this.level2 || this.level3 || this.restRoom1 || this.level4 || this.level5 || this.level6 || this.level7 || this.restRoom2 || this.level8 || this.level9 || this.level10 || (this.restRoom3 && this.dialogueStage2 >= 8)) && this.dialogueStage >= 5 && !this.showTutorial && !isGameOver && !this.showLevelCompleteMessage) {
+        if ((this.mainMap || this.level || this.level2 || this.level3 || this.restRoom1 || this.level4 || this.level5 || this.level6 || this.level7 || this.restRoom2 || this.level8 || this.level9 || this.level10 || (this.restRoom3 && this.dialogueStage2 >= 8) || (this.levelBoss && this.dialogueStage3 >= 2)) && this.dialogueStage >= 5 && !this.showTutorial && !isGameOver && !this.showLevelCompleteMessage) {
             if (event.key == 'ArrowUp') {
                 this.player.velocity.y = -playerSpeed;
                 this.player.setDirection("up");
@@ -217,10 +225,22 @@ Game.prototype.createEventListeners = function(){
             this.showLevelCompleteMessage = false;
             this.unlockNextLevel();
         }
+        if (this.endingScene && event.key === "Enter") {
+            if (!game.showEndingLogo) {
+                game.endingDialogueStage++;
+                if (game.endingDialogueStage >= 3) {
+                    game.showEndingLogo = true;
+                }
+            } else {
+                game.endingScene = false;
+                game.showMainMenu = true;
+                game.resetGame();
+            }
+        }
     });
 
     window.addEventListener('keyup', (event) => { //quitar las armas si no se estan utilizando (no presiona la tecla)
-        if ((this.mainMap || this.level || this.level2 || this.level3 || this.restRoom1 || this.level4 || this.level5 || this.level6 || this.level7 || this.restRoom2 || this.level8 || this.level9 || this.level10 || this.restRoom3) && !this.showTutorial) {
+        if ((this.mainMap || this.level || this.level2 || this.level3 || this.restRoom1 || this.level4 || this.level5 || this.level6 || this.level7 || this.restRoom2 || this.level8 || this.level9 || this.level10 || this.restRoom3 || this.levelBoss) && !this.showTutorial) {
             if (event.key == 'ArrowUp' || event.key == 'ArrowDown') {
                 this.player.velocity.y = 0;
             } else if (event.key == 'ArrowLeft' || event.key == 'ArrowRight') {

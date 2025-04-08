@@ -28,6 +28,8 @@ Game.prototype.spawnEnemies = function() {
         enemyTypes = [Mage, Knight];  // Mage y Knight en nivel 9.
     } else if (playerStats.level === 10){
         enemyTypes = [Knight];  // Knight en nivel 10.
+    } else if (playerStats.level === "Final"){
+        enemyTypes = [Boss];  // Jefe en nivel final.
     }
 
     const currentLevel = playerStats.level; // Nivel actual del jugador.
@@ -52,7 +54,12 @@ Game.prototype.spawnEnemies = function() {
 
             // Escoge un tipo de enemigo aleatorio de la lista de tipos disponibles.
             const EnemyClass = enemyTypes[Math.floor(Math.random() * enemyTypes.length)];
-            const newEnemy = new EnemyClass(new Vec(spawnX, spawnY), 32, 32); // Crea el enemigo en la posición aleatoria.
+            let newEnemy;
+            if (EnemyClass === Boss) {
+                newEnemy = new Boss(new Vec(spawnX, spawnY), 96, 96); // Tamaño especial para el jefe
+            } else {
+                newEnemy = new EnemyClass(new Vec(spawnX, spawnY), 32, 32); // Tamaño normal para enemigos
+            }
 
             // Verifica si la nueva posición del enemigo es válida (no colisiona con las paredes).
             if (!this.isEnemyCollidingWithWall(newEnemy)) {
@@ -101,6 +108,8 @@ function getWallBoxes() {
         layoutName = "level_9";
     } else if (game.level10){
         layoutName = "level_10";
+    } else if (game.levelBoss){
+        layoutName = "prologue";
     }
 
     const wallBoxes = [];
@@ -128,10 +137,9 @@ function processBackgroundLayout(layoutName) {
     const layout = BACKGROUND_LAYOUTS[layoutName]; // Obtiene el layout de fondo.
 
     if (!layout) {
-        console.warn(`⚠️ WARNING: BACKGROUND_LAYOUTS["${layoutName}"] está undefined. Verifica si lo definiste correctamente.`);
-        return; // ← Esto previene el error
+        return;
     }
-    
+
     const result = [];
 
     // Recorre el layout y genera una nueva fila con tipos de tiles.
@@ -140,11 +148,12 @@ function processBackgroundLayout(layoutName) {
         for (let x = 0; x < layout[y].length; x++) {
             const char = layout[y][x]; // Obtiene el carácter en la posición (x, y).
             if (char === '#') {
-                row.push('wall'); // Si es una pared, se marca como 'wall'.
+                row.push('wall');
             } else if (char === '-') {
-                row.push('door'); // Si es una puerta, se marca como 'door'.
+                row.push('door');
+            } else if (char === '@') {
+                row.push('grass');
             } else {
-                // Si es un espacio vacío, se asigna aleatoriamente un tipo de suelo.
                 const rand = Math.random();
                 row.push(rand < 0.1 ? 'floor1' : 'floor2');
             }
@@ -177,6 +186,8 @@ function drawBackground(layoutName, ctx) {
                 ctx.drawImage(floorTile2, posX, posY, tileSize, tileSize); // Dibuja otro tipo de suelo.
             } else if (type === 'door') {
                 ctx.drawImage(floorDoor, posX, posY, tileSize, tileSize); // Dibuja una puerta.
+            } else if (type === 'grass') {
+                ctx.drawImage(grassTile, posX, posY, tileSize, tileSize);
             }
         }
     }

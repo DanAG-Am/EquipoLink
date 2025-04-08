@@ -33,10 +33,8 @@ class Vec {
 
     normalize() {
         const len = this.length();
-        if (len > 0) {
-            this.x /= len;
-            this.y /= len;
-        }
+        if (len === 0) return new Vec(0, 0);
+        return new Vec(this.x / len, this.y / len);
     }
 
     scale(scalar) {
