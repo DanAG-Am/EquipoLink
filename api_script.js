@@ -5,16 +5,17 @@ function main()
         e.preventDefault()
 
         const data = new FormData(formSelectUser)
+        console.log(data)
         const dataObj = Object.fromEntries(data.entries())
-
-        let response = await fetch(`http://localhost:5000/api/users/${dataObj['userID']}`,{
+        console.log(dataObj);
+        let response = await fetch(`http://localhost:5000/api/Jugador/${dataObj['id_jugador']}`,{
             method: 'GET'
         })
-        
+        console.log(response);
         if(response.ok)
         {
             let results = await response.json()
-        
+            
             if(results.length > 0)
             {
                 const headers = Object.keys(results[0])
@@ -64,7 +65,7 @@ function main()
         const data = new FormData(formInsert)
         const dataObj = Object.fromEntries(data.entries())
 
-        let response = await fetch('http://localhost:5000/api/users',{
+        let response = await fetch('http://localhost:5000/api/Jugador',{
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(dataObj)
@@ -89,7 +90,7 @@ function main()
         const data = new FormData(formUpdate)
         const dataObj = Object.fromEntries(data.entries())
 
-        let response = await fetch('http://localhost:5000/api/users',{
+        let response = await fetch('http://localhost:5000/api/Jugador',{
             method: 'PUT',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(dataObj)
@@ -114,7 +115,7 @@ function main()
         const data = new FormData(formDelete)
         const dataObj = Object.fromEntries(data.entries())
 
-        let response = await fetch(`http://localhost:5000/api/users/${dataObj['userID']}`,{
+        let response = await fetch(`http://localhost:5000/api/Jugador/${dataObj['id_jugador']}`,{
             method: 'DELETE'
         })
         

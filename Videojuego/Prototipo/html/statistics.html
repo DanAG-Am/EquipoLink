@@ -1,65 +1,88 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="EquipoLink\Videojuego\Prototipo\html\pagina_web.css">
-    <script type="module" defer src="EquipoLink\Videojuego\Prototipo\js\game\api_script.js"></script>
+    <link rel="stylesheet" href="pagina_web.css">
+    <script type="module" defer src="../../../api_script.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&display=swap" rel="stylesheet">
     <title>Statistics</title>
 </head>
-<body>
-    <div class="section">
-        <div class="playerStats">
-            <h1>Show rupees</h1>
-        </div>
-        <div class="resultDisplay">
-            <h1>Result</h1>
-            <p>When the request ends, the result will be displayed here.</p>
-            <div id="getResultsID"></div>
-        </div>
-    </div>
-    <div class="section">
-        <div class="formInput">
-            <h1>Add user</h1>
-            <form id="formInsert">
-                <input type="text" name="name" placeholder="Type your first name">
-                <input type="text" name="surname" placeholder="Type your last name">
-                <input type="submit" value="Add User">
-            </form>
-        </div>
-        <div class="resultDisplay">
-            <h1>Result</h1>
-            <p id="postResults">When the request ends, the result will be displayed here.</p>
-        </div>
-    </div>
-    <div class="section">
-        <div class="formInput">
-            <h1>Update user</h1>
-            <form id="formUpdate">
-                <input type="text" name="userID" placeholder="Type your userID">
-                <input type="text" name="name" placeholder="Type your first new name">
-                <input type="text" name="surname" placeholder="Type your last new name">
-                <input type="submit" value="Update User">
-            </form>
-        </div>
-        <div class="resultDisplay">
-            <h1>Result</h1>
-            <p id="putResults">When the request ends, the result will be displayed here.</p>
-        </div>
-    </div>
-    <div class="section">
-        <div class="formInput">
-            <h1>Delete user</h1>
-            <form id="formDelete" method="delete">
-                <input type="text" name="userID" placeholder="Type your userID">
-                <input type="submit" value="Delete User">
-            </form>
-        </div>
-        <div class="resultDisplay">
-            <h1>Result</h1>
-            <p id="deleteResults">When the request ends, the result will be displayed here.</p>
+<body id = "leaderboardBody">
+    <div class ="leaderboardContainer">
+        <header id="grid-item-L-1">
+        </header>
+        <nav id="grid-item-L-2">
+            <div class="linkContainer">
+                <a href="home.html">Home</a>
+            </div>
+            <div class="linkContainer">
+                <a href="credits.html">Credits</a>
+            </div>
+            <div class="linkContainer">
+                <a href="tutorial.html">Tutorial</a>
+            </div>
+        </nav>
+        <div id = "grid-item-L">
+            <div class="leaderboard-section">
+                <div class="formInput">
+                    <h1>Show users</h1>
+                    <form id="formSelectUser">
+                        <input type="text" name="id_jugador" placeholder="Type your player id, or nothing to show all players">
+                        <input type="submit" value="Show players">
+                    </form>
+                </div>
+                <div class="resultDisplay">
+                    <h1>Result</h1>
+                    <p>When the request ends, the result will be displayed here.</p>
+                    <div id="getResultsID"></div>
+                </div>
+            </div>
+            <div class="leaderboard-section">
+                <div class="formInput">
+                    <h1>Add user</h1>
+                    <form id="formInsert">
+                        <input type="text" name="username" placeholder="Type in username">
+                        <input type="text" name="email" placeholder="Type in email">
+                        <input type="submit" value="Add User">
+                    </form>
+                </div>
+                <div class="resultDisplay">
+                    <h1>Result</h1>
+                    <p id="postResults">When the request ends, the result will be displayed here.</p>
+                </div>
+            </div>
+            <div class="leaderboard-section">
+                <div class="formInput">
+                    <h1>Update user</h1>
+                    <form id="formUpdate">
+                        <input type="text" name="userID" placeholder="Type your userID">
+                        <input type="text" name="name" placeholder="Type your first new name">
+                        <input type="text" name="surname" placeholder="Type your last new name">
+                        <input type="submit" value="Update User">
+                    </form>
+                </div>
+                <div class="resultDisplay">
+                    <h1>Result</h1>
+                    <p id="putResults">When the request ends, the result will be displayed here.</p>
+                </div>
+            </div>
+            <div class="leaderboard-section">
+                <div class="formInput">
+                    <h1>Delete user</h1>
+                    <form id="formDelete" method="delete">
+                        <input type="text" name="userID" placeholder="Type your userID">
+                        <input type="submit" value="Delete User">
+                    </form>
+                </div>
+                <div class="resultDisplay">
+                    <h1>Result</h1>
+                    <p id="deleteResults">When the request ends, the result will be displayed here.</p>
+                </div>
+            </div>
         </div>
     </div>
 </body>
 </html>
+

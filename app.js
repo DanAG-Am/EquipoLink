@@ -11,7 +11,7 @@ const app = express()
 const port = 5000
 
 app.use(express.json())
-app.use(express.static('./public'))
+app.use(express.static('./'))
 
 // Function to connect to the MySQL database
 async function connectToDB()
@@ -25,8 +25,8 @@ async function connectToDB()
 }
 
 // Routes definition and handling
-app.get('/', (request,response)=>{
-    fs.readFile('./public/html/statistics.html', 'utf8', (err, html)=>{
+app.get('/statistics', (request,response)=>{
+    fs.readFile("./Videojuego/Prototipo/html/statistics.html", 'utf8', (err, html)=>{
         if(err) response.status(500).send('There was an error: ' + err)
         console.log('Loading page...')
         response.send(html)
@@ -34,14 +34,15 @@ app.get('/', (request,response)=>{
 })
 
 // Get all users from the database and return them as a JSON object
-app.get('/api/users', async (request, response)=>{
+app.get('/api/Jugador', async (request, response)=>{
     let connection = null
 
     try
     {
         connection = await connectToDB()
-        const [results, fields] = await connection.execute('select * from users')
-
+        console.log(connection)
+        const [results, fields] = await connection.execute('select * from Jugador')
+        console.log(results);
         console.log(`${results.length} rows returned`)
         console.log(results)
         response.json(results)
@@ -63,7 +64,7 @@ app.get('/api/users', async (request, response)=>{
 })
 
 // Get a specific user from the database and return it as a JSON object
-app.get('/api/users/:id', async (request, response)=>
+app.get('/api/Jugador/:id_jugador', async (request, response)=>
 {
     let connection = null
 
@@ -71,7 +72,7 @@ app.get('/api/users/:id', async (request, response)=>
     {
         connection = await connectToDB()
 
-        const [results_user, _] = await connection.query('select * from users where id_users= ?', [request.params.id])
+        const [results_user, _] = await connection.query('select * from Jugador where id_jugador= ?', [request.params.id_jugador])
         
         console.log(`${results_user.length} rows returned`)
         response.json(results_user)
@@ -93,7 +94,7 @@ app.get('/api/users/:id', async (request, response)=>
 })
 
 // Insert a new user into the database and return a JSON object with the id of the new user
-app.post('/api/users', async (request, response)=>{
+app.post('/api/Jugador', async (request, response)=>{
 
     let connection = null
 
@@ -101,10 +102,10 @@ app.post('/api/users', async (request, response)=>{
     {    
         connection = await connectToDB()
 
-        const [results, fields] = await connection.query('insert into users set ?', request.body)
+        const [results, fields] = await connection.query('insert into Jugador set ?', request.body)
         
         console.log(`${results.affectedRows} row inserted`)
-        response.status(201).json({'message': "Data inserted correctly.", "id": results.insertId})
+        response.status(201).json({'message': "Data inserted correctly.", "id_jugador": results.insertId})
     }
     catch(error)
     {
@@ -123,14 +124,14 @@ app.post('/api/users', async (request, response)=>{
 })
 
 // Update a user in the database and return a JSON object with the number of rows updated
-app.put('/api/users', async (request, response)=>{
+app.put('/api/Jugador', async (request, response)=>{
 
     let connection = null
 
     try{
         connection = await connectToDB()
 
-        const [results, fields] = await connection.query('update users set name = ?, surname = ? where id_users= ?', [request.body['name'], request.body['surname'], request.body['userID']])
+        const [results, fields] = await connection.query('update jugador set name = ?, surname = ? where id_jugador= ?', [request.body['name'], request.body['surname'], request.body['userID']])
         
         console.log(`${results.affectedRows} rows updated`)
         response.json({'message': `Data updated correctly: ${results.affectedRows} rows updated.`})
@@ -152,7 +153,7 @@ app.put('/api/users', async (request, response)=>{
 })
 
 // Delete a user from the database and return a JSON object with the number of rows deleted
-app.delete('/api/users/:id', async (request, response)=>{
+app.delete('/api/Jugador/:id_jugador', async (request, response)=>{
 
     let connection = null
 
