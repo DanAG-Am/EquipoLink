@@ -1,74 +1,93 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../html/pagina_web.css">
-    <script type="module" defer src="../js/api_script.js"></script>
-    <title>Gestión de Jugadores</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Se usa la ruta absoluta para que el archivo CSS se encuentre correctamente -->
+  <link rel="stylesheet" href="/Videojuego/Prototipo/html/pagina_web.css">
+  <!-- Se usa la ruta absoluta para el script -->
+  <script type="module" defer src="/api_script.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <title>Statistics</title>
 </head>
-<body>
-    <div class="section">
-        <div class="playerStats">
-            <h1>Buscar Jugador</h1>
-        </div>
-        <div class="resultDisplay">
-            <h1>Resultado</h1>
-            <p>Al finalizar la petición, se mostrará el resultado.</p>
-            <div id="getResultsID"></div>
-        </div>
-    </div>
-    <div class="section">
+<body id="leaderboardBody">
+  <div class="leaderboardContainer">
+    <header id="grid-item-L-1">
+    </header>
+    <nav id="grid-item-L-2">
+      <div class="linkContainer">
+        <a href="home.html">Home</a>
+      </div>
+      <div class="linkContainer">
+        <a href="credits.html">Credits</a>
+      </div>
+      <div class="linkContainer">
+        <a href="tutorial.html">Tutorial</a>
+      </div>
+    </nav>
+    <div id="grid-item-L">
+      <div class="leaderboard-section">
         <div class="formInput">
-            <h1>Agregar Jugador</h1>
-            <form id="formInsertJugador">
-                <input type="text" name="id_cuarto" placeholder="ID de Cuarto">
-                <input type="text" name="usuario" placeholder="Usuario">
-                <input type="password" name="contrasena" placeholder="Contraseña">
-                <input type="number" name="hp_actual" placeholder="HP Actual">
-                <input type="number" name="mp_actual" placeholder="MP Actual">
-                <input type="number" name="monedas" placeholder="Monedas">
-                <input type="number" name="pociones" placeholder="Pociones">
-                <input type="number" name="bombas" placeholder="Bombas">
-                <input type="number" name="flechas" placeholder="Flechas">
-                <input type="submit" value="Agregar Jugador">
-            </form>
+          <h1>Show users</h1>
+          <!-- ID actualizado para que coincida con el JS -->
+          <form id="formSelectUser">
+            <input type="text" name="id_jugador" placeholder="Type your player id, or nothing to show all players">
+            <input type="submit" value="Show players">
+          </form>
         </div>
         <div class="resultDisplay">
-            <h1>Resultado</h1>
-            <p id="postResults">Al finalizar la petición, se mostrará el resultado.</p>
+          <h1>Result</h1>
+          <p>When the request ends, the result will be displayed here.</p>
+          <div id="getResultsID"></div>
         </div>
-    </div>
-
-    <div class="section">
+      </div>
+      <div class="leaderboard-section">
         <div class="formInput">
-            <h1>Actualizar Jugador</h1>
-            <form id="formUpdateJugador">
-                <input type="text" name="id_jugador" placeholder="ID de Jugador">
-                <input type="text" name="usuario" placeholder="Nuevo Usuario">
-                <input type="password" name="contrasena" placeholder="Nueva Contraseña">
-                <input type="submit" value="Actualizar Jugador">
-            </form>
+          <h1>Add user</h1>
+          <!-- ID actualizado -->
+          <form id="formInsert">
+            <input type="text" name="username" placeholder="Type in username">
+            <input type="text" name="email" placeholder="Type in email">
+            <input type="submit" value="Add User">
+          </form>
         </div>
         <div class="resultDisplay">
-            <h1>Resultado</h1>
-            <p id="putResults">Al finalizar la petición, se mostrará el resultado.</p>
+          <h1>Result</h1>
+          <p id="postResults">When the request ends, the result will be displayed here.</p>
         </div>
-    </div>
-
-    <div class="section">
+      </div>
+      <div class="leaderboard-section">
         <div class="formInput">
-            <h1>Eliminar Jugador</h1>
-            <form id="formDeleteJugador" method="delete">
-                <input type="text" name="jugadorID" placeholder="ID de Jugador">
-                <input type="submit" value="Eliminar Jugador">
-            </form>
+          <h1>Update user</h1>
+          <!-- ID actualizado -->
+          <form id="formUpdate">
+            <input type="text" name="userID" placeholder="Type your userID">
+            <input type="text" name="name" placeholder="Type your first new name">
+            <input type="text" name="surname" placeholder="Type your last new name">
+            <input type="submit" value="Update User">
+          </form>
         </div>
         <div class="resultDisplay">
-            <h1>Resultado</h1>
-            <p id="deleteResults">Al finalizar la petición, se mostrará el resultado.</p>
+          <h1>Result</h1>
+          <p id="putResults">When the request ends, the result will be displayed here.</p>
         </div>
+      </div>
+      <div class="leaderboard-section">
+        <div class="formInput">
+          <h1>Delete user</h1>
+          <!-- ID actualizado -->
+          <form id="formDelete" method="delete">
+            <input type="text" name="userID" placeholder="Type your userID">
+            <input type="submit" value="Delete User">
+          </form>
+        </div>
+        <div class="resultDisplay">
+          <h1>Result</h1>
+          <p id="deleteResults">When the request ends, the result will be displayed here.</p>
+        </div>
+      </div>
     </div>
+  </div>
 </body>
 </html>
