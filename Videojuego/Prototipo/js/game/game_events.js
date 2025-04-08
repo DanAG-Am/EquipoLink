@@ -225,6 +225,18 @@ Game.prototype.createEventListeners = function(){
             this.showLevelCompleteMessage = false;
             this.unlockNextLevel();
         }
+        if (this.endingScene && event.key === "Enter") {
+            if (!game.showEndingLogo) {
+                game.endingDialogueStage++;
+                if (game.endingDialogueStage >= 3) {
+                    game.showEndingLogo = true;
+                }
+            } else {
+                game.endingScene = false;
+                game.showMainMenu = true;
+                game.resetGame();
+            }
+        }
     });
 
     window.addEventListener('keyup', (event) => { //quitar las armas si no se estan utilizando (no presiona la tecla)

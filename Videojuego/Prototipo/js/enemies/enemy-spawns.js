@@ -137,8 +137,7 @@ function processBackgroundLayout(layoutName) {
     const layout = BACKGROUND_LAYOUTS[layoutName]; // Obtiene el layout de fondo.
 
     if (!layout) {
-        console.warn(`⚠️ WARNING: BACKGROUND_LAYOUTS["${layoutName}"] está undefined. Verifica si lo definiste correctamente.`);
-        return; // ← Esto previene el error
+        return;
     }
 
     const result = [];
@@ -149,11 +148,12 @@ function processBackgroundLayout(layoutName) {
         for (let x = 0; x < layout[y].length; x++) {
             const char = layout[y][x]; // Obtiene el carácter en la posición (x, y).
             if (char === '#') {
-                row.push('wall'); // Si es una pared, se marca como 'wall'.
+                row.push('wall');
             } else if (char === '-') {
-                row.push('door'); // Si es una puerta, se marca como 'door'.
+                row.push('door');
+            } else if (char === '@') {
+                row.push('grass');
             } else {
-                // Si es un espacio vacío, se asigna aleatoriamente un tipo de suelo.
                 const rand = Math.random();
                 row.push(rand < 0.1 ? 'floor1' : 'floor2');
             }
@@ -186,6 +186,8 @@ function drawBackground(layoutName, ctx) {
                 ctx.drawImage(floorTile2, posX, posY, tileSize, tileSize); // Dibuja otro tipo de suelo.
             } else if (type === 'door') {
                 ctx.drawImage(floorDoor, posX, posY, tileSize, tileSize); // Dibuja una puerta.
+            } else if (type === 'grass') {
+                ctx.drawImage(grassTile, posX, posY, tileSize, tileSize);
             }
         }
     }

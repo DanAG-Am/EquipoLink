@@ -733,10 +733,40 @@ Game.prototype.draw = function(ctx) {
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
             this.levelBoss = false;
             this.endingScene = true;
-            this.player.position = new Vec(canvasWidth / 2 - 16, tileSize);
+            this.playerReachedCenter = false;
+            this.endingDialogueStage = 0;
+            this.showEndingLogo = false;
+            this.player.position = new Vec(canvasWidth / 2 - this.player.width / 2, canvasHeight / 2 - this.player.height / 2);
             rupeesInitialized = false;
             playerStats.level = "Outside";
             playerStats.uiTextPosition = { x: 100, y: 40 };
+        }
+    } else if (this.endingScene) {
+        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+        drawBackground("ending", ctx);
+        this.player.draw(ctx);
+        if (this.endingScene && !this.playerReachedCenter) {
+            const targetY = canvasHeight / 2 - this.player.height / 2;
+        
+            if (this.player.position.y < targetY) {
+                this.player.position.y += 0.5;
+            } else {
+                this.playerReachedCenter = true;
+            }
+        }
+        if (this.playerReachedCenter && !this.showEndingLogo) {
+            this.drawEndingDialogue(ctx);
+            ctx.font = "16px Arial";
+            ctx.fillText("Presiona Enter para continuar", canvasWidth / 2, 500);
+        }
+        if (this.showEndingLogo) {
+            ctx.drawImage(this.logo, canvasWidth / 2 - 200, 100, 400, 400);
+            ctx.fillStyle = "white";
+            ctx.font = "36px Arial";
+            ctx.textAlign = "center";
+            ctx.fillText("Thank you for playing!!", canvasWidth / 2, 550);
+            ctx.font = "18px Arial";
+            ctx.fillText("Presiona Enter para regresar al menú principal", canvasWidth / 2, 580);
         }
     } else {
         this.actors.forEach(actor => actor.draw(ctx));
@@ -855,6 +885,28 @@ Game.prototype.drawDialogue4 = function(ctx) { //dibujar dialogos del jefe final
     lines.forEach(line => {
         ctx.fillText(line, canvasWidth / 2, yPosition);
         yPosition += 25;
+    });
+};
+
+Game.prototype.drawEndingDialogue = function(ctx) {
+    ctx.fillStyle = "black";
+    ctx.fillRect(canvasWidth / 2 - 300, 70, 600, 100);
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(canvasWidth / 2 - 300, 70, 600, 100);
+    ctx.fillStyle = "white";
+    ctx.font = "18px Arial";
+    ctx.textAlign = "center";
+    const texts = [
+        ["Por fin he logrado completar la mazmorra."],
+        ["Ya vamos a volver a nuestra casa."],
+        ["Un buen hecho, como así."]
+    ];
+    const lines = texts[this.endingDialogueStage];
+    let y = 110;
+    lines.forEach(line => {
+        ctx.fillText(line, canvasWidth / 2, y);
+        y += 25;
     });
 };
 

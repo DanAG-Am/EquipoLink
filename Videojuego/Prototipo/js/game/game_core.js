@@ -50,6 +50,12 @@ class Game {
         this.chestClosed.src = "../../Videojuego/Assets/GameAssets/Chest/chest_closed.png";
         this.chestOpened = new Image();
         this.chestOpened.src = "../../Videojuego/Assets/GameAssets/Chest/chest_open.png";
+        this.endingScene = false;
+        this.endingDialogueStage = 0;
+        this.showEndingLogo = false;
+        this.playerReachedCenter = false;
+        this.player.velocity = new Vec(0, 0); // por si estaba en movimiento
+        this.player.position = new Vec(canvasWidth / 2 - this.player.width / 2, 0); // arriba
 
         // Ahora el Old Man se gestiona desde su propia clase:
         this.oldMan = new OldMan(new Vec(canvasWidth / 2 - 16, canvasHeight / 2 - 105));
@@ -117,6 +123,11 @@ class Game {
         this.restStory3 = false;
 
         this.levelBoss = false;
+
+        this.endingScene = false;
+        this.playerReachedCenter = false;
+        this.showEndingLogo = false;
+        this.endingDialogueStage = 0;
 
         this.showMainMenu = true;
         this.mainMap = false;
