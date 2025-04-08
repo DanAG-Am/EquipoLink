@@ -45,6 +45,12 @@ class Game {
         this.levelCompleted = false;
         this.showLevelCompleteMessage = false;
         this.levelExitUnlocked = false;
+        this.titleVideo = document.createElement('video');
+        this.titleVideo.src = '../../Videojuego/Assets/GameAssets/GameIntro/Title_Screen.mp4';
+        this.titleVideo.muted = true;
+        this.titleVideo.loop = true;
+        this.titleVideo.playsInline = true;
+        this.titleVideo.play();
         this.logo = new Image();
         this.logo.src = "../../Videojuego/Assets/HTMLAssets/logo.png";
         this.chestClosed = new Image();
