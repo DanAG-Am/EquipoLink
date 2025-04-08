@@ -79,7 +79,7 @@ Game.prototype.draw = function(ctx) {
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
                 this.mainMap = false;
-                this.level = true;
+                this.endingScene = true;
                 this.player.position = new Vec(canvasWidth / 2 - 16, tileSize);
                 playerStats.level = 1;
                 playerStats.uiTextPosition = { x: 100, y: 40 };
@@ -733,10 +733,42 @@ Game.prototype.draw = function(ctx) {
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
             this.levelBoss = false;
             this.endingScene = true;
-            this.playerReachedCenter = false;
-            this.endingDialogueStage = 0;
-            this.showEndingLogo = false;
-            this.player.position = new Vec(canvasWidth / 2 - this.player.width / 2, canvasHeight / 2 - this.player.height / 2);
+            this.player.position = new Vec(canvasWidth / 2 - 16, tileSize);
+            rupeesInitialized = false;
+            playerStats.level = "Outside";
+            playerStats.uiTextPosition = { x: 100, y: 40 };
+        }
+    } else if (this.levelBoss) {
+        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+        drawBackground("prologue", ctx);
+        this.bombs.forEach(b => b.draw(ctx));
+        this.arrows.forEach(a => a.draw(ctx));
+        this.magics.forEach(m => m.draw(ctx));
+        if (this.dialogueStage3 < 2) {
+            this.drawDialogue3(ctx);
+            ctx.font = "15px Arial";
+            ctx.fillText("Presiona Enter para continuar", canvasWidth / 2, 190, 600, 100);
+        } else {
+            this.drawEnemies(ctx);
+        }
+        this.player.draw(ctx);
+        if (this.showInventory) {
+            this.drawInventory(ctx);
+        } else if (this.showTutorial) {
+            this.drawTutorial(ctx);
+        }
+        if (this.levelCompleted && this.dialogueStage4 < 4) {
+            this.drawDialogue4(ctx);
+            ctx.font = "15px Arial";
+            ctx.fillText("Presiona Enter para continuar", canvasWidth / 2, 190, 600, 100);
+        } 
+        if (this.levelCompleted &&
+            this.player.position.y + this.player.height >= canvasHeight &&
+            this.player.position.x >= canvasWidth / 2 - 50 &&
+            this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
+            this.levelBoss = false;
+            this.endingScene = true;
+            this.player.position = new Vec(canvasWidth / 2 - 16, tileSize);
             rupeesInitialized = false;
             playerStats.level = "Outside";
             playerStats.uiTextPosition = { x: 100, y: 40 };
@@ -744,29 +776,36 @@ Game.prototype.draw = function(ctx) {
     } else if (this.endingScene) {
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
         drawBackground("ending", ctx);
-        this.player.draw(ctx);
-        if (this.endingScene && !this.playerReachedCenter) {
-            const targetY = canvasHeight / 2 - this.player.height / 2;
-        
-            if (this.player.position.y < targetY) {
-                this.player.position.y += 0.5;
+    
+        // Movimiento hacia el centro
+        const centerY = canvasHeight / 2 - this.player.height / 2;
+        if (!this.playerReachedCenter) {
+            if (this.player.position.y < centerY) {
+                this.player.position.y += 0.5; // velocidad lenta
             } else {
                 this.playerReachedCenter = true;
+                this.player.velocity = new Vec(0, 0);
             }
         }
-        if (this.playerReachedCenter && !this.showEndingLogo) {
+    
+        this.player.draw(ctx);
+    
+        // Mostrar diálogos
+        if (this.playerReachedCenter && this.endingDialogueStage < 3 && !this.showEndingLogo) {
             this.drawEndingDialogue(ctx);
-            ctx.font = "16px Arial";
-            ctx.fillText("Presiona Enter para continuar", canvasWidth / 2, 500);
+            ctx.font = "15px Arial";
+            ctx.fillText("Presiona Enter para continuar", canvasWidth / 2, 190);
         }
+    
+        // Mostrar logo final
         if (this.showEndingLogo) {
-            ctx.drawImage(this.logo, canvasWidth / 2 - 200, 100, 400, 400);
+            ctx.drawImage(this.logo, canvasWidth / 2 - 200, canvasHeight / 2 - 180, 400, 400);
+            ctx.font = "28px Arial";
             ctx.fillStyle = "white";
-            ctx.font = "36px Arial";
             ctx.textAlign = "center";
-            ctx.fillText("Thank you for playing!!", canvasWidth / 2, 550);
-            ctx.font = "18px Arial";
-            ctx.fillText("Presiona Enter para regresar al menú principal", canvasWidth / 2, 580);
+            ctx.fillText("Thank you for playing!!", canvasWidth / 2, 450);
+            ctx.font = "20px Arial";
+            ctx.fillText("Presiona Enter para regresar al menú principal", canvasWidth / 2, 500);
         }
     } else {
         this.actors.forEach(actor => actor.draw(ctx));

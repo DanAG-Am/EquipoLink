@@ -225,15 +225,13 @@ Game.prototype.createEventListeners = function(){
             this.showLevelCompleteMessage = false;
             this.unlockNextLevel();
         }
-        if (this.endingScene && event.key === "Enter") {
-            if (!game.showEndingLogo) {
+        if (game.endingScene && game.playerReachedCenter && event.key === "Enter") {
+            if (game.endingDialogueStage < 2) {
                 game.endingDialogueStage++;
-                if (game.endingDialogueStage >= 3) {
-                    game.showEndingLogo = true;
-                }
+            } else if (!game.showEndingLogo) {
+                game.showEndingLogo = true;
             } else {
                 game.endingScene = false;
-                game.showMainMenu = true;
                 game.resetGame();
             }
         }
