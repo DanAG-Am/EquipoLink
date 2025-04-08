@@ -25,6 +25,18 @@ Game.prototype.createEventListeners = function(){
             game.player.position = new Vec(canvasWidth / 2 - 16, tileSize * 2);
             return;
         }
+        if (this.restStory2 && event.key === 'Enter') {
+            this.restStory2 = false;
+            this.restRoom2 = true;
+            game.player.position = new Vec(canvasWidth / 2 - 16, tileSize * 2);
+            return;
+        }
+        if (this.restStory3 && event.key === 'Enter') {
+            this.restStory3 = false;
+            this.restRoom3 = true;
+            game.player.position = new Vec(canvasWidth / 2 - 16, tileSize * 2);
+            return;
+        }
         if (this.mainMap && this.dialogueStage < 5 && event.key === 'Enter') {
             this.dialogueStage++;
             return;
@@ -32,6 +44,10 @@ Game.prototype.createEventListeners = function(){
         if (this.mainMap && this.dialogueStage === 5 && !this.showTutorial && !this.tutorialWasShown) {
             this.showTutorial = true;
             this.tutorialWasShown = true;
+            return;
+        }
+        if (this.restRoom3 && this.dialogueStage2 < 8 && event.key === 'Enter') {
+            this.dialogueStage2++;
             return;
         }
         if (this.showTutorial && event.key === 't') {
@@ -50,7 +66,7 @@ Game.prototype.createEventListeners = function(){
             this.showInventory = true;
             return;
         }
-        if ((this.mainMap || this.level || this.level2 || this.level3 || this.restRoom1 || this.level4 || this.level5 || this.level6) && this.dialogueStage >= 5 && !this.showTutorial && !isGameOver && !this.showLevelCompleteMessage) {
+        if ((this.mainMap || this.level || this.level2 || this.level3 || this.restRoom1 || this.level4 || this.level5 || this.level6 || this.level7 || this.restRoom2 || this.level8 || this.level9 || this.level10 || (this.restRoom3 && this.dialogueStage2 >= 8)) && this.dialogueStage >= 5 && !this.showTutorial && !isGameOver && !this.showLevelCompleteMessage) {
             if (event.key == 'ArrowUp') {
                 this.player.velocity.y = -playerSpeed;
                 this.player.setDirection("up");
@@ -118,7 +134,7 @@ Game.prototype.createEventListeners = function(){
             } 
         }
         if (event.key == "o") {
-            if ((this.level || this.level2 || this.level3 || this.level4 || this.level5 || this.level6) && this.levelCompleted) {
+            if ((this.level || this.level2 || this.level3 || this.level4 || this.level5 || this.level6 || this.level7 || this.level8 || this.level9 || this.level10) && this.levelCompleted) {
                 const px = this.player.position.x;
                 const py = this.player.position.y;
                 const cx = this.levelChestPosition.x;
@@ -156,7 +172,7 @@ Game.prototype.createEventListeners = function(){
             gamePaused = !gamePaused;
         }
         if (event.key === " "){ //detectar una colision antes de permiter usar space para interactuar con npc
-            if (this.mainMap || this.restRoom1) {
+            if (this.mainMap || this.restRoom1 || this.restRoom2 || this.restRoom3) {
                 if (
                     document.getElementById("purchaseDialog").style.display !== "none" ||
                     document.getElementById("errorDialog").style.display !== "none" ||
@@ -204,7 +220,7 @@ Game.prototype.createEventListeners = function(){
     });
 
     window.addEventListener('keyup', (event) => { //quitar las armas si no se estan utilizando (no presiona la tecla)
-        if ((this.mainMap || this.level || this.level2 || this.level3 || this.restRoom1 || this.level4 || this.level5 || this.level6) && !this.showTutorial) {
+        if ((this.mainMap || this.level || this.level2 || this.level3 || this.restRoom1 || this.level4 || this.level5 || this.level6 || this.level7 || this.restRoom2 || this.level8 || this.level9 || this.level10 || this.restRoom3) && !this.showTutorial) {
             if (event.key == 'ArrowUp' || event.key == 'ArrowDown') {
                 this.player.velocity.y = 0;
             } else if (event.key == 'ArrowLeft' || event.key == 'ArrowRight') {

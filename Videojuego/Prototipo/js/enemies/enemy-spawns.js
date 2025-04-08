@@ -15,11 +15,19 @@ Game.prototype.spawnEnemies = function() {
     } else if (playerStats.level === 3) {
         enemyTypes = [Slime, Bat];  // Slime y Bat en nivel 3.
     } else if (playerStats.level === 4) {
-        enemyTypes = [Slime, Bat, Skull];  // Slime, Bat y Skull en nivel 4.
+        enemyTypes = [Slime, Bat, Skull]; // Slime, Bat y Skull en nivel 4.
     } else if (playerStats.level === 5){
-        enemyTypes = [Slime, Bat, Skull];  
+        enemyTypes = [Bat, Skull];  // Bat y Skull en nivel 5.
     } else if (playerStats.level === 6){
-        enemyTypes = [Slime, Bat, Skull, Mage];  
+        enemyTypes = [Bat, Skull, Mage];  // Bat, Skull y Mage en nivel 6.
+    } else if (playerStats.level === 7){
+        enemyTypes = [Skull, Mage];  // Skull y Mage en nivel 7.
+    } else if (playerStats.level === 8){
+        enemyTypes = [Skull, Mage, Knight];  // Skull, Mage y Knight en nivel 8.
+    } else if (playerStats.level === 9){
+        enemyTypes = [Mage, Knight];  // Mage y Knight en nivel 9.
+    } else if (playerStats.level === 10){
+        enemyTypes = [Knight];  // Knight en nivel 10.
     }
 
     const currentLevel = playerStats.level; // Nivel actual del jugador.
@@ -71,7 +79,7 @@ function getWallBoxes() {
     let layoutName = null;
 
     // Determina qué mapa utilizar (dependiendo del nivel actual del juego).
-    if (game.mainMap) {
+    if (game.mainMap || game.restRoom1 || game.restRoom2 || game.restRoom3) {
         layoutName = "mainMap";
     } else if (game.level) {
         layoutName = "levelClosed";
@@ -79,14 +87,20 @@ function getWallBoxes() {
         layoutName = "level_2";
     } else if(game.level3){
         layoutName = "level_3";
-    } else if(game.restRoom1){
-        layoutName = "restRoom1";
     } else if(game.level4){
         layoutName = "level_4";
     } else if(game.level5){
         layoutName = "level_5";
     } else if (game.level6){
         layoutName = "level_6";
+    } else if (game.level7){
+        layoutName = "level_7";
+    } else if (game.level8){
+        layoutName = "level_8";
+    } else if (game.level9){
+        layoutName = "level_9";
+    } else if (game.level10){
+        layoutName = "level_10";
     }
 
     const wallBoxes = [];
@@ -112,6 +126,12 @@ function getWallBoxes() {
 // Función para procesar el layout de fondo del mapa, generando diferentes tipos de tiles.
 function processBackgroundLayout(layoutName) {
     const layout = BACKGROUND_LAYOUTS[layoutName]; // Obtiene el layout de fondo.
+
+    if (!layout) {
+        console.warn(`⚠️ WARNING: BACKGROUND_LAYOUTS["${layoutName}"] está undefined. Verifica si lo definiste correctamente.`);
+        return; // ← Esto previene el error
+    }
+    
     const result = [];
 
     // Recorre el layout y genera una nueva fila con tipos de tiles.

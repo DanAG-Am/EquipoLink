@@ -445,9 +445,9 @@ class Mage extends AnimatedObject {
                 { position: game.player.position, width: game.player.width, height: game.player.height },
                 { position: magic.position, width: magic.width, height: magic.height }
             )) {
-                if (playerStats.life > 100){
-                playerStats.life -= magic.attack;
-                magic.alive = false;
+                if (playerStats.life > 0) {
+                    playerStats.life = Math.max(0, playerStats.life - magic.attack);
+                    magic.alive = false;
                 }
             }
         }

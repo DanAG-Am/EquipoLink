@@ -249,7 +249,7 @@ Game.prototype.draw = function(ctx) {
         ctx.fillText("Presiona Enter para continuar", canvasWidth / 2, canvasHeight / 4 + canvasHeight / 2 + 70);
     } else if (this.restRoom1){ //dibujar el cuarto de descanso
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-        drawBackground("restRoom1", ctx);
+        drawBackground("mainMap", ctx);
         // Dibujar NPCs (Merchant y Fairy)
         this.tienda.draw(ctx);
         this.fairy.draw(ctx); 
@@ -320,7 +320,7 @@ Game.prototype.draw = function(ctx) {
             playerStats.level += 1;
             this.levelEnemyInterval = setInterval(() => { this.spawnEnemies(); }, 5000);
         }
-    } else if (this.level5) { //dibujar el segundo nivel
+    } else if (this.level5) { //dibujar el quinto nivel
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
         drawBackground("level_5", ctx);
         this.bombs.forEach(b => b.draw(ctx));
@@ -363,7 +363,7 @@ Game.prototype.draw = function(ctx) {
             playerStats.level += 1;
             this.levelEnemyInterval = setInterval(() => { this.spawnEnemies(); }, 5000);
         }
-    } else if (this.level6) { //dibujar el segundo nivel
+    } else if (this.level6) { //dibujar el sexto nivel
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
         drawBackground("level_6", ctx);
         this.bombs.forEach(b => b.draw(ctx));
@@ -394,7 +394,7 @@ Game.prototype.draw = function(ctx) {
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
             this.level6 = false;
-            /*should go to restroom 2*/
+            this.level7 = true;
             this.player.position = new Vec(canvasWidth / 2 - 16, tileSize);
             this.totalSpawnedEnemies = 0;
             this.levelEnemies = [];
@@ -406,8 +406,304 @@ Game.prototype.draw = function(ctx) {
             playerStats.level += 1;
             this.levelEnemyInterval = setInterval(() => { this.spawnEnemies(); }, 5000);
         }
-    } 
-    else {
+    } else if (this.level7) { //dibujar el septimo nivel
+        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+        drawBackground("level_7", ctx);
+        this.bombs.forEach(b => b.draw(ctx));
+        this.arrows.forEach(a => a.draw(ctx));
+        this.magics.forEach(m => m.draw(ctx));
+        this.drawEnemies(ctx);
+        if (this.levelCompleted) {
+            if (this.chestIsOpen) {
+                ctx.drawImage(this.chestOpened, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
+            } else {
+                ctx.drawImage(this.chestClosed, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
+            }
+        }
+        this.player.draw(ctx);
+        if (!rupeesInitialized) {
+            initializeRupees();
+            rupeesInitialized = true;
+        }
+        drawRupees(ctx, this.player);
+    
+        if (this.showInventory) {
+            this.drawInventory(ctx);
+        } else if (this.showTutorial) {
+            this.drawTutorial(ctx);
+        }
+
+        if (this.player.position.y + this.player.height >= canvasHeight && //tranisicion entre nivel 2 y 3
+            this.player.position.x >= canvasWidth / 2 - 50 &&
+            this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
+            this.level7 = false;
+            this.restStory2 = true;
+            this.totalSpawnedEnemies = 0;
+            this.levelEnemies = [];
+            this.levelCompleted = false;
+            this.chestHasBeenOpened = false;
+            this.chestIsOpen = false;
+            this.levelExitUnlocked = false;
+            rupeesInitialized = false;
+            playerStats.level = "Rest";
+            playerStats.uiTextPosition = { x: 85, y: 40 };
+            game.player.velocity = new Vec(0, 0);
+        }
+    } else if (this.restStory2){ //se le proporciona una parte de la historia al jugador
+        drawBackground("prologue", ctx);
+        ctx.fillStyle = "black";
+        ctx.fillRect(canvasWidth / 2 - 300, canvasHeight / 2 - 180, canvasWidth / 4 + 400, canvasHeight / 2 + 70);
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(canvasWidth / 2 - 300, canvasHeight / 2 - 180, canvasWidth / 4 + 400, canvasHeight / 2 + 70);
+        ctx.fillStyle = "white";
+        ctx.font = "40px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText("Historia 2", canvasWidth / 2, 185);
+        ctx.fillStyle = "white";
+        ctx.font = "18px Arial";
+        ctx.textAlign = "center";
+        const prologueText = [
+            "Un guardián espectral bloquea su paso. Con una voz que retumba",
+            "como trueno entre ruinas, declara:",
+            "'Tú… y el Rey Aquamentus… son hermanos'",
+            "Sentinel se congela. El aire se vuelve denso. Las piezas comienzan",
+            "a encajar. El espectro desvanece tras el mensaje. Sentinel cae de",
+            "rodillas, sus manos temblando. Seltinel sigue su camino."
+        ];
+        let yPosition = canvasHeight / 4 + 75;
+        prologueText.forEach(line => {
+            ctx.fillText(line, canvasWidth / 2, yPosition);
+            yPosition += 50;
+        });
+        ctx.font = "20px Arial";
+        ctx.fillText("Presiona Enter para continuar", canvasWidth / 2, canvasHeight / 4 + canvasHeight / 2 + 70);
+    } else if (this.restRoom2){ //dibujar el cuarto de descanso 2
+        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+        drawBackground("mainMap", ctx);
+        // Dibujar NPCs (Merchant y Fairy)
+        this.tienda.draw(ctx);
+        this.fairy.draw(ctx); 
+        this.player.draw(ctx);
+        if (!rupeesInitialized) {
+            initializeRupees();
+            rupeesInitialized = true;
+        }
+        drawRupees(ctx, this.player);
+        this.bombs.forEach(b => b.draw(ctx));
+        this.arrows.forEach(a => a.draw(ctx));
+        this.magics.forEach(m => m.draw(ctx));
+        if (this.showTutorial) {
+            this.drawTutorial(ctx);
+        }
+        if (this.showInventory) {
+            this.drawInventory(ctx);
+        }
+        if (this.player.position.y + this.player.height >= canvasHeight && //transicion entre nivel 3 y cuarto de descanso y mejoras
+            this.player.position.x >= canvasWidth / 2 - 50 &&
+            this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
+            this.restRoom2 = false;
+            this.level8 = true;
+            this.player.position = new Vec(canvasWidth / 2 - 16, tileSize);
+            rupeesInitialized = false;
+            playerStats.level = 8;
+            playerStats.uiTextPosition = { x: 100, y: 40 };
+            this.levelEnemyInterval = setInterval(() => { this.spawnEnemies(); }, 5000);
+        }
+    } else if (this.level8){ //dibujar nivel 8
+        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+        drawBackground("level_8", ctx);
+        this.bombs.forEach(b => b.draw(ctx));
+        this.arrows.forEach(a => a.draw(ctx));
+        this.magics.forEach(m => m.draw(ctx));
+        this.drawEnemies(ctx);
+        if (this.levelCompleted) {
+            if (this.chestIsOpen) {
+                ctx.drawImage(this.chestOpened, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
+            } else {
+                ctx.drawImage(this.chestClosed, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
+            }
+        }
+        this.player.draw(ctx);
+        if (!rupeesInitialized) {
+            initializeRupees();
+            rupeesInitialized = true;
+        }
+        drawRupees(ctx, this.player);
+        if (this.showInventory) {
+            this.drawInventory(ctx);
+        } else if (this.showTutorial) {
+            this.drawTutorial(ctx);
+        }
+
+        if (this.player.position.y + this.player.height >= canvasHeight && //tranisicion entre nivel 2 y 3
+            this.player.position.x >= canvasWidth / 2 - 50 &&
+            this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
+            this.level8 = false;
+            this.level9 = true;
+            this.player.position = new Vec(canvasWidth / 2 - 16, tileSize);
+            this.totalSpawnedEnemies = 0;
+            this.levelEnemies = [];
+            this.levelCompleted = false;
+            this.chestIsOpen = false;
+            this.chestHasBeenOpened = false;
+            this.levelExitUnlocked = false;
+            rupeesInitialized = false;
+            playerStats.level += 1;
+            this.levelEnemyInterval = setInterval(() => { this.spawnEnemies(); }, 5000);
+        }
+    } else if (this.level9){ //dibujar nivel 9
+        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+        drawBackground("level_9", ctx);
+        this.bombs.forEach(b => b.draw(ctx));
+        this.arrows.forEach(a => a.draw(ctx));
+        this.magics.forEach(m => m.draw(ctx));
+        this.drawEnemies(ctx);
+        if (this.levelCompleted) {
+            if (this.chestIsOpen) {
+                ctx.drawImage(this.chestOpened, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
+            } else {
+                ctx.drawImage(this.chestClosed, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
+            }
+        }
+        this.player.draw(ctx);
+        if (!rupeesInitialized) {
+            initializeRupees();
+            rupeesInitialized = true;
+        }
+        drawRupees(ctx, this.player);
+        if (this.showInventory) {
+            this.drawInventory(ctx);
+        } else if (this.showTutorial) {
+            this.drawTutorial(ctx);
+        }
+
+        if (this.player.position.y + this.player.height >= canvasHeight && //tranisicion entre nivel 2 y 3
+            this.player.position.x >= canvasWidth / 2 - 50 &&
+            this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
+            this.level9 = false;
+            this.level10 = true;
+            this.player.position = new Vec(canvasWidth / 2 - 16, tileSize);
+            this.totalSpawnedEnemies = 0;
+            this.levelEnemies = [];
+            this.levelCompleted = false;
+            this.chestIsOpen = false;
+            this.chestHasBeenOpened = false;
+            this.levelExitUnlocked = false;
+            rupeesInitialized = false;
+            playerStats.level += 1;
+            this.levelEnemyInterval = setInterval(() => { this.spawnEnemies(); }, 5000);
+        }
+    } else if (this.level10){ //dibujar nivel 10
+        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+        drawBackground("level_10", ctx);
+        this.bombs.forEach(b => b.draw(ctx));
+        this.arrows.forEach(a => a.draw(ctx));
+        this.magics.forEach(m => m.draw(ctx));
+        this.drawEnemies(ctx);
+        if (this.levelCompleted) {
+            if (this.chestIsOpen) {
+                ctx.drawImage(this.chestOpened, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
+            } else {
+                ctx.drawImage(this.chestClosed, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
+            }
+        }
+        this.player.draw(ctx);
+        if (!rupeesInitialized) {
+            initializeRupees();
+            rupeesInitialized = true;
+        }
+        drawRupees(ctx, this.player);
+        if (this.showInventory) {
+            this.drawInventory(ctx);
+        } else if (this.showTutorial) {
+            this.drawTutorial(ctx);
+        }
+
+        if (this.player.position.y + this.player.height >= canvasHeight && //tranisicion entre nivel 2 y 3
+            this.player.position.x >= canvasWidth / 2 - 50 &&
+            this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
+            this.level10 = false;
+            this.restStory3 = true;
+            this.totalSpawnedEnemies = 0;
+            this.levelEnemies = [];
+            this.levelCompleted = false;
+            this.chestHasBeenOpened = false;
+            this.chestIsOpen = false;
+            this.levelExitUnlocked = false;
+            rupeesInitialized = false;
+            playerStats.level = "Rest";
+            playerStats.uiTextPosition = { x: 85, y: 40 };
+            game.player.velocity = new Vec(0, 0);
+        }
+    } else if (this.restStory3){ //se le proporciona una parte de la historia al jugador
+        drawBackground("prologue", ctx);
+        ctx.fillStyle = "black";
+        ctx.fillRect(canvasWidth / 2 - 300, canvasHeight / 2 - 180, canvasWidth / 4 + 400, canvasHeight / 2 + 70);
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(canvasWidth / 2 - 300, canvasHeight / 2 - 180, canvasWidth / 4 + 400, canvasHeight / 2 + 70);
+        ctx.fillStyle = "white";
+        ctx.font = "40px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText("Historia 3", canvasWidth / 2, 185);
+        ctx.fillStyle = "white";
+        ctx.font = "18px Arial";
+        ctx.textAlign = "center";
+        const prologueText = [
+            "En el corazón de un templo olvidado, Sentinel halla una espada negra",
+            "clavada en un altar de obsidiana. La toca, y una visión brutal lo invade:",
+            "'Su hermano, con el rostro cubierto de lágrimas y sangre,",
+            "Acepta un pacto prohibido para salvar a su gente.",
+            "Su alma se corrompe, su poder se multiplica. El Rey Aquamentus nace.'",
+            "Sentinel cae al suelo, convulsionando."
+        ];
+        let yPosition = canvasHeight / 4 + 75;
+        prologueText.forEach(line => {
+            ctx.fillText(line, canvasWidth / 2, yPosition);
+            yPosition += 50;
+        });
+        ctx.font = "20px Arial";
+        ctx.fillText("Presiona Enter para continuar", canvasWidth / 2, canvasHeight / 4 + canvasHeight / 2 + 70);
+    } else if (this.restRoom3){ //dibujar el cuarto de descanso 3
+        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+        drawBackground("mainMap", ctx);
+        // Dibujar NPCs (Old Man, Merchant y Fairy)
+        this.oldMan.draw(ctx);
+        this.tienda.draw(ctx);
+        this.fairy.draw(ctx); 
+        this.player.draw(ctx);
+        if (!rupeesInitialized) {
+            initializeRupees();
+            rupeesInitialized = true;
+        }
+        drawRupees(ctx, this.player);
+        this.bombs.forEach(b => b.draw(ctx));
+        this.arrows.forEach(a => a.draw(ctx));
+        this.magics.forEach(m => m.draw(ctx));
+        if (this.dialogueStage2 < 8) {
+            this.drawDialogue2(ctx);
+            ctx.font = "15px Arial";
+            ctx.fillText("Presiona Enter para continuar", canvasWidth / 2, 190, 600, 100);
+        }
+        if (this.showTutorial) {
+            this.drawTutorial(ctx);
+        }
+        if (this.showInventory) {
+            this.drawInventory(ctx);
+        }
+        if (this.player.position.y + this.player.height >= canvasHeight && //transicion entre nivel 3 y cuarto de descanso y mejoras
+            this.player.position.x >= canvasWidth / 2 - 50 &&
+            this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
+            this.restRoom3 = false;
+            this.levelBoss = true;
+            this.player.position = new Vec(canvasWidth / 2 - 16, tileSize);
+            rupeesInitialized = false;
+            playerStats.level = "Final";
+            playerStats.uiTextPosition = { x: 100, y: 40 };
+            this.levelEnemyInterval = setInterval(() => { this.spawnEnemies(); }, 5000);
+        }
+    } else {
         this.actors.forEach(actor => actor.draw(ctx));
         this.player.draw(ctx);
     }
@@ -449,6 +745,33 @@ Game.prototype.drawDialogue = function(ctx) { //dibujar dialogos del viejo
         ["Te doy unas armas para empezar tu exploracion.", "Intenta visitar a la tienda para mejorar tus habilidades."]
     ];
     let lines = dialogueTexts[this.dialogueStage];
+    let yPosition = 110;
+    lines.forEach(line => {
+        ctx.fillText(line, canvasWidth / 2, yPosition);
+        yPosition += 25;
+    });
+};
+
+Game.prototype.drawDialogue2 = function(ctx) { //dibujar dialogos 2 del viejo
+    ctx.fillStyle = "black";
+    ctx.fillRect(canvasWidth / 2 - 300, 70, 600, 100);
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(canvasWidth / 2 - 300, 70, 600, 100);
+    ctx.fillStyle = "white";
+    ctx.font = "18px Arial";
+    ctx.textAlign = "center";
+    let dialogueTexts = [
+        ["¡Por fin has llegado hasta aquí, joven héroe!"],
+        ["Has superado pruebas que pocos podrían enfrentar."],
+        ["Más allá de esta sala... vive el temido Rey Aquamentus."],
+        ["Él es quien corrompió a tu hermano con la Oscuridad."],
+        ["Este es tu destino. Tu momento."],
+        ["No puedo acompañarte, pero tienes mi bendición."],
+        ["Ten cuidado... y buena suerte."],
+        ["¡Salva a tu hermano y trae la luz de vuelta a este mundo!"]
+    ];
+    let lines = dialogueTexts[this.dialogueStage2];
     let yPosition = 110;
     lines.forEach(line => {
         ctx.fillText(line, canvasWidth / 2, yPosition);
@@ -548,6 +871,10 @@ Game.prototype.unlockNextLevel = function() { //desbloquear nivel si se ha compl
     else if (this.level4) layoutName = "level_4";
     else if (this.level5) layoutName = "level_5";
     else if (this.level6) layoutName = "level_6";
+    else if (this.level7) layoutName = "level_7";
+    else if (this.level8) layoutName = "level_8";
+    else if (this.level9) layoutName = "level_9";
+    else if (this.level10) layoutName = "level_10";
 
     const layout = processedFloors[layoutName];
     const exitX = Math.floor(canvasWidth / 2 / tileSize);
@@ -562,5 +889,3 @@ Game.prototype.unlockNextLevel = function() { //desbloquear nivel si se ha compl
         }
     }
 };
-
-
