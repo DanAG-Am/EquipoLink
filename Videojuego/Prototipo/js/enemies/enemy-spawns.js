@@ -110,6 +110,8 @@ function getWallBoxes() {
         layoutName = "level_10";
     } else if (game.levelBoss){
         layoutName = "prologue";
+    } else if (game.endingScene){
+        layoutName = "ending";
     }
 
     const wallBoxes = [];

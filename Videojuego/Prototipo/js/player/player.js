@@ -66,6 +66,7 @@ class Player extends AnimatedObject{
         else if (game.level9) layoutName = "level_9";
         else if (game.level10) layoutName = "level_10";
         else if (game.levelBoss) layoutName = "prologue";
+        else if (game.endingScene) layoutName = "ending";
     
         const wallBoxes = layoutName ? getWallBoxes(layoutName) : [];
     

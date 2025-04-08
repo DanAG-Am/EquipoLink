@@ -30,6 +30,7 @@ class Game {
         this.restStory3 = false;
         this.restRoom3 = false;
         this.levelBoss = false;
+        this.endingScene = false;
         this.enteredLevel = false;
         this.dialogueStage = 0;
         this.dialogueStage2 = 0;
@@ -45,7 +46,7 @@ class Game {
         this.showLevelCompleteMessage = false;
         this.levelExitUnlocked = false;
         this.logo = new Image();
-        this.logo.src = "../../Videojuego/Assets/MDAssets/Three.png";
+        this.logo.src = "../../Videojuego/Assets/HTMLAssets/logo.png";
         this.chestClosed = new Image();
         this.chestClosed.src = "../../Videojuego/Assets/GameAssets/Chest/chest_closed.png";
         this.chestOpened = new Image();
@@ -54,8 +55,7 @@ class Game {
         this.endingDialogueStage = 0;
         this.showEndingLogo = false;
         this.playerReachedCenter = false;
-        this.player.velocity = new Vec(0, 0); // por si estaba en movimiento
-        this.player.position = new Vec(canvasWidth / 2 - this.player.width / 2, 0); // arriba
+        this.endingTextFinished = false;
 
         // Ahora el Old Man se gestiona desde su propia clase:
         this.oldMan = new OldMan(new Vec(canvasWidth / 2 - 16, canvasHeight / 2 - 105));
@@ -123,11 +123,10 @@ class Game {
         this.restStory3 = false;
 
         this.levelBoss = false;
-
         this.endingScene = false;
         this.playerReachedCenter = false;
-        this.showEndingLogo = false;
         this.endingDialogueStage = 0;
+        this.showEndingLogo = false;
 
         this.showMainMenu = true;
         this.mainMap = false;
@@ -143,7 +142,7 @@ class Game {
         this.chestHasBeenOpened = false;
         this.chestIsOpen = false;
         this.levelExitUnlocked = false;
-        ["prologue", "mainMap", "levelClosed", "level_2", "level_3", "level_4", "level_5", "level_6", "level_7", "level_8", "level_9", "level_10"].forEach(name => {
+        ["prologue", "mainMap", "levelClosed", "level_2", "level_3", "level_4", "level_5", "level_6", "level_7", "level_8", "level_9", "level_10", "ending"].forEach(name => {
             processBackgroundLayout(name);
         });
 
