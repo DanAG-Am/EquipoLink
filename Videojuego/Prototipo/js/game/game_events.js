@@ -178,6 +178,11 @@ Game.prototype.createEventListeners = function(){
         }
         if (event.key === "Escape") {
             gamePaused = !gamePaused;
+            if (gamePaused) {
+                game.stopTimer();
+            } else {
+                game.startTimer();
+            }
         }
         if (event.key === " "){ //detectar una colision antes de permiter usar space para interactuar con npc
             if (this.mainMap || this.restRoom1 || this.restRoom2 || this.restRoom3) {
