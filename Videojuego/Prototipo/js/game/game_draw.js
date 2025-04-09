@@ -836,6 +836,7 @@ Game.prototype.draw = function(ctx) {
     }
     if (isGameOver) {
         drawDeathMenu(ctx);
+        game.stopTimer();
     }
 
     // ───── INICIAR si acaba de entrar al prólogo ─────
