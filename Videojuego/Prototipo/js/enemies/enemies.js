@@ -485,6 +485,18 @@ class Mage extends AnimatedObject {
             this.lastFrameChange = 0;
         }
 
+        if (boxOverlap(
+            { position: game.player.position, width: game.player.width, height: game.player.height },
+            { position: this.position, width: this.width, height: this.height }
+        )) {
+            const currentTime = Date.now(); 
+
+            if (currentTime - this.lastAttackTime > this.attackInterval && playerStats.life >0) {
+                playerStats.life = Math.max(0, playerStats.life - this.attack);
+                this.lastAttackTime = currentTime; 
+            }
+        }
+
         for (let magic of this.magics) {
             magic.update(deltaTime);
         }

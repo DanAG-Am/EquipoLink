@@ -87,6 +87,48 @@ class Game {
         this.levelEnemies = [];
         this.tienda = new Tienda();
         this.fairy = new Fairy();
+
+        this.startTime = null; // Constructor para el temporizador
+        this.elapsedTime = 0;
+        this.timerInterval = null;
+        this.isTimerRunning = false;
+        this.initializeRupees = false;
+        this._wasPaused = false;
+        this._wasInPrologue = false;
+        this._wasInEnding = false;
+        this._wasDead = false;
+    }
+
+    startTimer() {
+        if (!this.isTimerRunning) {
+            this.startTime = Date.now() - this.elapsedTime;
+            this.timerInterval = setInterval(() => {
+                this.elapsedTime = Date.now() - this.startTime;
+                this.updateTimerDisplay();
+            }, 1000); // actualiza cada segundo
+            this.isTimerRunning = true;
+        }
+    }
+    stopTimer() {
+        if (this.timerInterval) {
+            clearInterval(this.timerInterval);
+            this.timerInterval = null;
+        }
+        this.isTimerRunning = false;
+    }
+    resetTimer() {
+        this.stopTimer();
+        this.elapsedTime = 0;
+        this.startTime = null;
+        this.updateTimerDisplay();
+    }
+    updateTimerDisplay() {
+        const totalSeconds = Math.floor(this.elapsedTime / 1000);
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        const formattedTime = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        const timerDiv = document.getElementById("gameTimer");
+        if (timerDiv) timerDiv.textContent = `Tiempo - ${formattedTime}`;
     }
 
     //Crear el player y actores
@@ -162,5 +204,6 @@ class Game {
         this.initObjects();
         this.player.velocity = new Vec(0, 0);
         this.player.setDirection("up");
+        this.resetTimer();
     }
 }
