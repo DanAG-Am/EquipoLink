@@ -837,7 +837,22 @@ Game.prototype.draw = function(ctx) {
     if (isGameOver) {
         drawDeathMenu(ctx);
     }
-    
+
+    // ───── INICIAR si acaba de entrar al prólogo ─────
+    if (this.showPrologue && !this._wasInPrologue) this.startTimer();
+    this._wasInPrologue = this.showPrologue;
+    // ───── DETENER si acaba de morir ─────
+    const isDead = this.player.hp <= 0;
+    if (isDead && !this._wasDead) this.stopTimer();
+    this._wasDead = isDead;
+    // ───── DETENER si acaba de entrar a endingScene ─────
+    if (this.endingScene && !this._wasInEnding) this.stopTimer();
+    this._wasInEnding = this.endingScene;
+    // ───── DETENER si acaba de pausar ─────
+    if (this.gamePaused && this.isTimerRunning) this.stopTimer();
+    // ───── REANUDAR si acaba de quitar la pausa ─────
+    if (!this.gamePaused && this._wasPaused && !this.endingScene && !isDead && this.showPrologue) this.startTimer();
+    this._wasPaused = this.paused;
 };
 
 Game.prototype.drawDialogue = function(ctx) { //dibujar dialogos del viejo

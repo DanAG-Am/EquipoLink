@@ -49,10 +49,11 @@ header .botonRegresar:hover {
 }
 
 .container {
-  margin-top: 10px;
+  position: relative;
   display: flex;
+  align-items: flex-start;
+  margin-top: 10px;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
 }
 
@@ -68,6 +69,7 @@ canvas {
   max-width: 720px;
   height: auto;
   aspect-ratio: 2.8 / 2;
+  display: block;
 }
 
 #uiCanvas {
@@ -76,6 +78,7 @@ canvas {
   max-width: 720px;
   height: auto;
   aspect-ratio: 9 / 2;
+  display: block;
 }
 
 #registerForm h2,
@@ -120,4 +123,23 @@ input {
   color: #fff;
   border: solid #ffcc00;
   font-size: 14px;
+}
+
+#gameTimer {
+  position: absolute;
+  top: 10px;
+  left: 750px;
+  margin-left: 10px;
+  background-color: black;
+  color: white;
+  font-family: 'Pixelify Sans', Arial, sans-serif;
+  font-size: 16px;
+  border: 2px solid white;
+  border-radius: 10px;
+  padding: 10px 20px;
+  height: fit-content;
+  display: inline-block;
+  white-space: nowrap;
+  transition: width 0.2s ease, padding 0.2s ease;
+  text-align: left;
 }
