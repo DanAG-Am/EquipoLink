@@ -10,11 +10,19 @@ Game.prototype.draw = function(ctx) {
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     
     if (this.showMainMenu) {
-        ctx.drawImage(this.logo, canvasWidth / 2 - 228, 80, 450, 450);
+        // Dibuja el video como fondo (si ya está cargado)
+        if (this.titleVideo && this.titleVideo.readyState >= 2) {
+            ctx.drawImage(this.titleVideo, 0, 0, canvasWidth, canvasHeight);
+        }
+        // Cuadro negro para tapar el texto original del video
+        ctx.fillStyle = "rgba(0, 0, 0, 1)";
+        ctx.fillRect(canvasWidth / 2 - 200, 530, 400, 52);
+
+        // Texto personalizado en español
         ctx.fillStyle = "white";
         ctx.font = "20px Arial";
         ctx.textAlign = "center";
-        ctx.fillText("Presiona Enter para empezar el juego", canvasWidth / 2, 570);
+        ctx.fillText("Presiona Enter para jugar", canvasWidth / 2, 562);
     } else if (this.showPrologue){
         drawBackground("prologue", ctx);
         playerStats.level = "Cave";
@@ -79,7 +87,7 @@ Game.prototype.draw = function(ctx) {
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
                 this.mainMap = false;
-                this.endingScene = true;
+                this.level = true;
                 this.player.position = new Vec(canvasWidth / 2 - 16, tileSize);
                 playerStats.level = 1;
                 playerStats.uiTextPosition = { x: 100, y: 40 };
