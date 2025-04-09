@@ -4,83 +4,213 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Se usa la ruta absoluta para que el archivo CSS se encuentre correctamente -->
   <link rel="stylesheet" href="/Videojuego/Prototipo/html/pagina_web.css">
-  <!-- Se usa la ruta absoluta para el script -->
   <script type="module" defer src="/api_script.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&display=swap" rel="stylesheet">
-  <title>Statistics</title>
+  <title>CRUD de Usuarios, Estadísticas, Enemigos y Jefes</title>
 </head>
 <body id="leaderboardBody">
   <div class="leaderboardContainer">
     <header id="grid-item-L-1">
+      <!-- Optional header content -->
     </header>
-    <nav id="grid-item-L-2">
-      <div class="linkContainer">
-      </div>
-    </nav>
+
     <div id="grid-item-L">
+      <!-- Usuarios CRUD Section -->
       <div class="leaderboard-section">
         <div class="formInput">
-          <h1>Show users</h1>
-          <!-- ID actualizado para que coincida con el JS -->
+          <h1>Mostrar usuarios</h1>
           <form id="formSelectUser">
-            <input type="text" name="id_jugador" placeholder="Type your player id, or nothing to show all players">
-            <input type="submit" value="Show players">
+            <input type="text" name="id_jugador" placeholder="Escribe el ID del jugador, o déjalo vacío para ver todos los usuarios">
+            <input type="submit" value="Mostrar usuarios">
           </form>
         </div>
         <div class="resultDisplay">
-          <h1>Result</h1>
-          <p>When the request ends, the result will be displayed here.</p>
+          <h1>Resultado</h1>
+          <p>Cuando la solicitud termine, los resultados se mostrarán aquí.</p>
           <div id="getResultsID"></div>
         </div>
       </div>
+
       <div class="leaderboard-section">
         <div class="formInput">
-          <h1>Add user</h1>
-          <!-- ID actualizado -->
+          <h1>Agregar usuario</h1>
           <form id="formInsert">
-            <input type="text" name="username" placeholder="Type in username">
-            <input type="text" name="email" placeholder="Type in email">
-            <input type="submit" value="Add User">
+            <input type="text" name="username" placeholder="Escribe el nombre de usuario">
+            <input type="text" name="contrasena" placeholder="Escribe la contrasena">
+            <input type="submit" value="Agregar usuario">
           </form>
         </div>
         <div class="resultDisplay">
-          <h1>Result</h1>
-          <p id="postResults">When the request ends, the result will be displayed here.</p>
+          <h1>Resultado</h1>
+          <p id="postResults">Cuando la solicitud termine, el resultado se mostrará aquí.</p>
         </div>
       </div>
+
       <div class="leaderboard-section">
         <div class="formInput">
-          <h1>Update user</h1>
-          <!-- ID actualizado -->
+          <h1>Actualizar usuario</h1>
           <form id="formUpdate">
-            <input type="text" name="userID" placeholder="Type your userID">
-            <input type="text" name="name" placeholder="Type your first new name">
-            <input type="text" name="surname" placeholder="Type your last new name">
-            <input type="submit" value="Update User">
+            <input type="text" name="userID" placeholder="Escribe el ID del usuario">
+            <input type="text" name="name" placeholder="Nuevo nombre">
+            <input type="text" name="surname" placeholder="Nuevo apellido">
+            <input type="submit" value="Actualizar usuario">
           </form>
         </div>
         <div class="resultDisplay">
-          <h1>Result</h1>
-          <p id="putResults">When the request ends, the result will be displayed here.</p>
+          <h1>Resultado</h1>
+          <p id="putResults">Cuando la solicitud termine, el resultado se mostrará aquí.</p>
         </div>
       </div>
+
+      <!-- Estadísticas CRUD Section -->
+      <div class="leaderboard-section">
+        <h1>CRUD de Estadísticas</h1>
+
+        <!-- Show Estadísticas Section -->
+        <div class="leaderboard-section">
+          <div class="formInput">
+            <h1>Mostrar estadísticas</h1>
+            <form id="formSelectEstadisticas">
+              <input type="text" name="id_jugador" placeholder="Escribe el ID del jugador, o déjalo vacío para ver todas las estadísticas">
+              <input type="submit" value="Mostrar estadísticas">
+            </form>
+          </div>
+          <div class="resultDisplay">
+            <h1>Resultado</h1>
+            <p>Cuando la solicitud termine, los resultados se mostrarán aquí.</p>
+            <div id="getEstadisticasResults"></div>
+          </div>
+        </div>
+
+        <!-- Add Estadísticas Section -->
+        <div class="leaderboard-section">
+          <div class="formInput">
+            <h1>Agregar estadísticas</h1>
+            <form id="formInsertEstadisticas">
+              <input type="text" name="id_jugador" placeholder="Escribe el ID del jugador">
+              <input type="number" name="partidas_jugadas" placeholder="Número de partidas jugadas">
+              <input type="number" name="victorias" placeholder="Número de victorias">
+              <input type="number" name="derrotas" placeholder="Número de derrotas">
+              <input type="number" name="puntaje" placeholder="Puntaje total">
+              <input type="submit" value="Agregar estadísticas">
+            </form>
+          </div>
+          <div class="resultDisplay">
+            <h1>Resultado</h1>
+            <p id="postEstadisticasResults">Cuando la solicitud termine, el resultado se mostrará aquí.</p>
+          </div>
+        </div>
+
+        <!-- Update Estadísticas Section -->
+        <div class="leaderboard-section">
+          <div class="formInput">
+            <h1>Actualizar estadísticas</h1>
+            <form id="formUpdateEstadisticas">
+              <input type="text" name="id_jugador" placeholder="Escribe el ID del jugador">
+              <input type="number" name="partidas_jugadas" placeholder="Nuevo número de partidas jugadas">
+              <input type="number" name="victorias" placeholder="Nuevo número de victorias">
+              <input type="number" name="derrotas" placeholder="Nuevo número de derrotas">
+              <input type="number" name="puntaje" placeholder="Nuevo puntaje total">
+              <input type="submit" value="Actualizar estadísticas">
+            </form>
+          </div>
+          <div class="resultDisplay">
+            <h1>Resultado</h1>
+            <p id="putEstadisticasResults">Cuando la solicitud termine, el resultado se mostrará aquí.</p>
+          </div>
+        </div>
+
+        <!-- Delete Estadísticas Section -->
+        <div class="leaderboard-section">
+          <div class="formInput">
+            <h1>Eliminar estadísticas</h1>
+            <form id="formDeleteEstadisticas" method="delete">
+              <input type="text" name="id_jugador" placeholder="Escribe el ID del jugador">
+              <input type="submit" value="Eliminar estadísticas">
+            </form>
+          </div>
+          <div class="resultDisplay">
+            <h1>Resultado</h1>
+            <p id="deleteEstadisticasResults">Cuando la solicitud termine, el resultado se mostrará aquí.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Enemigos CRUD Section -->
       <div class="leaderboard-section">
         <div class="formInput">
-          <h1>Delete user</h1>
-          <!-- ID actualizado -->
-          <form id="formDelete" method="delete">
-            <input type="text" name="userID" placeholder="Type your userID">
-            <input type="submit" value="Delete User">
+          <h1>Mostrar enemigos</h1>
+          <form id="formSelectEnemigo">
+            <input type="text" name="id_enemigo" placeholder="Escribe el ID del enemigo, o déjalo vacío para ver todos los enemigos">
+            <input type="submit" value="Mostrar enemigos">
           </form>
         </div>
         <div class="resultDisplay">
-          <h1>Result</h1>
-          <p id="deleteResults">When the request ends, the result will be displayed here.</p>
+          <h1>Resultado</h1>
+          <p>Cuando la solicitud termine, los resultados se mostrarán aquí.</p>
+          <div id="getEnemigosResults"></div>
         </div>
       </div>
-    </div>
+
+      <!-- Add Enemigo Section -->
+      <div class="leaderboard-section">
+        <div class="formInput">
+          <h1>Agregar enemigo</h1>
+          <form id="formInsertEnemigo">
+            <input type="number" name="id_cuarto" placeholder="ID del cuarto" required>
+            <input type="text" name="nombre" placeholder="Nombre del enemigo" required>
+            <input type="number" name="vida_max" placeholder="Vida máxima" required>
+            <input type="number" name="vida_actual" placeholder="Vida actual" required>
+            <input type="number" name="velocidad" placeholder="Velocidad" required>
+            <input type="number" name="dano" placeholder="Daño" required>
+            <input type="number" name="drop_monedas" placeholder="Monedas al ser derrotado" required>
+            <input type="submit" value="Agregar enemigo">
+            <input type="submit" value="Agregar enemigo">
+          </form>
+        </div>
+        <div class="resultDisplay">
+          <h1>Resultado</h1>
+          <p id="postEnemigosResults">Cuando la solicitud termine, el resultado se mostrará aquí.</p>
+        </div>
+      </div>
+
+      <!-- Update Enemigo Section -->
+      <div class="leaderboard-section">
+        <div class="formInput">
+          <h1>Actualizar enemigo</h1>
+          <form id="formUpdateEnemigo">
+            <input type="text" name="id_enemigo" placeholder="Escribe el ID del enemigo">
+            <input type="text" name="id_cuarto" placeholder="Escribe el nuevo ID del cuarto">
+            <input type="text" name="nombre" placeholder="Escribe el nuevo nombre">
+            <input type="number" name="vida_max" placeholder="Nueva vida máxima">
+            <input type="number" name="vida_actual" placeholder="Nueva vida actual">
+            <input type="number" name="velocidad" placeholder="Nueva velocidad">
+            <input type="number" name="dano" placeholder="Nuevo daño">
+            <input type="number" name="drop_monedas" placeholder="Nuevo valor de monedas">
+            <input type="submit" value="Actualizar enemigo">
+          </form>
+        </div>
+        <div class="resultDisplay">
+          <h1>Resultado</h1>
+          <p id="putEnemigosResults">Cuando la solicitud termine, el resultado se mostrará aquí.</p>
+        </div>
+      </div>
+
+      <!-- Delete Enemigo Section -->
+      <div class="leaderboard-section">
+        <div class="formInput">
+          <h1>Eliminar enemigo</h1>
+          <form id="formDeleteEnemigo" method="delete">
+            <input type="text" name="id_enemigo" placeholder="Escribe el ID del enemigo">
+            <input type="submit" value="Eliminar enemigo">
+          </form>
+        </div>
+        <div class="resultDisplay">
+          <h1>Resultado</h1>
+          <p id="deleteEnemigosResults">Cuando la solicitud termine, el resultado se mostrará aquí.</p>
+        </div>
+      </div>
   </div>
 </body>
 </html>
