@@ -136,19 +136,16 @@ function getWallBoxes() {
 
 // Función para procesar el layout de fondo del mapa, generando diferentes tipos de tiles.
 function processBackgroundLayout(layoutName) {
-    const layout = BACKGROUND_LAYOUTS[layoutName]; // Obtiene el layout de fondo.
-
-    if (!layout) {
-        return;
-    }
+    const layout = BACKGROUND_LAYOUTS[layoutName];
+    if (!layout) return;
 
     const result = [];
 
-    // Recorre el layout y genera una nueva fila con tipos de tiles.
     for (let y = 0; y < layout.length; y++) {
         const row = [];
         for (let x = 0; x < layout[y].length; x++) {
-            const char = layout[y][x]; // Obtiene el carácter en la posición (x, y).
+            const char = layout[y][x];
+
             if (char === '#') {
                 row.push('wall');
             } else if (char === '-') {
@@ -157,37 +154,43 @@ function processBackgroundLayout(layoutName) {
                 row.push('grass');
             } else {
                 const rand = Math.random();
-                row.push(rand < 0.1 ? 'floor1' : 'floor2');
+                if (rand < 0.333) {
+                    row.push('floorA'); // Tile2
+                } else if (rand < 0.666) {
+                    row.push('floorB'); // Tile3
+                } else {
+                    row.push('floorC'); // Tile4
+                }
             }
         }
-        result.push(row); // Agrega la fila procesada al resultado.
+        result.push(row);
     }
-    processedFloors[layoutName] = result; // Guarda el layout procesado.
+
+    processedFloors[layoutName] = result;
 }
 
 // Función que dibuja el fondo del mapa, usando las imágenes de los tiles.
 function drawBackground(layoutName, ctx) {
-    const layout = BACKGROUND_LAYOUTS[layoutName]; // Obtiene el layout de fondo.
-    const floorData = processedFloors[layoutName]; // Obtiene los datos procesados del fondo.
+    const layout = BACKGROUND_LAYOUTS[layoutName];
+    const floorData = processedFloors[layoutName];
+    if (!layout || !floorData) return;
 
-    if (!layout || !floorData) return; // Si no hay datos válidos, no hace nada.
-
-    // Recorre el layout y dibuja cada tile en la posición correspondiente.
     for (let y = 0; y < layout.length; y++) {
         for (let x = 0; x < layout[y].length; x++) {
-            const type = floorData[y][x]; // Tipo de tile en la posición (x, y).
-            const posX = x * tileSize; // Calcula la posición X del tile.
-            const posY = y * tileSize; // Calcula la posición Y del tile.
+            const type = floorData[y][x];
+            const posX = x * tileSize;
+            const posY = y * tileSize;
 
-            // Dependiendo del tipo de tile, se dibuja una imagen diferente.
             if (type === 'wall') {
-                ctx.drawImage(wallTile, posX, posY, tileSize, tileSize); // Dibuja una pared.
-            } else if (type === 'floor1') {
-                ctx.drawImage(floorTile1, posX, posY, tileSize, tileSize); // Dibuja un tipo de suelo.
-            } else if (type === 'floor2') {
-                ctx.drawImage(floorTile2, posX, posY, tileSize, tileSize); // Dibuja otro tipo de suelo.
+                ctx.drawImage(wallTile, posX, posY, tileSize, tileSize);
+            } else if (type === 'floorA') {
+                ctx.drawImage(floorTile, posX, posY, tileSize, tileSize);
+            } else if (type === 'floorB') {
+                ctx.drawImage(floorTile2, posX, posY, tileSize, tileSize);
+            } else if (type === 'floorC') {
+                ctx.drawImage(floorTile3, posX, posY, tileSize, tileSize);
             } else if (type === 'door') {
-                ctx.drawImage(floorDoor, posX, posY, tileSize, tileSize); // Dibuja una puerta.
+                ctx.drawImage(floorDoor, posX, posY, tileSize, tileSize);
             } else if (type === 'grass') {
                 ctx.drawImage(grassTile, posX, posY, tileSize, tileSize);
             }
