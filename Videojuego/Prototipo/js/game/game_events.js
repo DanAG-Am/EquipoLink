@@ -155,25 +155,33 @@ Game.prototype.createEventListeners = function(){
         
                     let item = Math.random();
                     if (item <= 0.33) {
-                        const bombsToAdd = Math.floor(Math.random() * 2) + 1;
-                        playerStats.bombs += bombsToAdd;
+                        const amount = Math.floor(Math.random() * 2) + 1;
+                        playerStats.bombs += amount;
+                        this.chestReward = { type: "bombs", amount };
                     } else if (item <= 0.66) {
-                        const arrowsToAdd = Math.floor(Math.random() * 3) + 3;
-                        playerStats.arrows += arrowsToAdd;
+                        const amount = Math.floor(Math.random() * 3) + 3;
+                        playerStats.arrows += amount;
+                        this.chestReward = { type: "arrows", amount };
                     } else {
-                        const potionsToAdd = Math.floor(Math.random() * 2) + 1;
-                        playerStats.potions += potionsToAdd;
+                        const amount = Math.floor(Math.random() * 2) + 1;
+                        playerStats.potions += amount;
+                        this.chestReward = { type: "potions", amount };
                     }
         
                     this.chestHasBeenOpened = true;
+                    this.chestRewardActive = true;
                 }
             }
+        }
+        if (game.chestRewardActive && event.key === "Enter") {
+            game.chestRewardActive = false;
+            game.chestReward = null;
         }
         if (event.key == "d") {
             if (playerStats.potions > 0 && playerStats.life < 100){
                 playerStats.potions--;
                 let lifeRegen = Math.floor(Math.random() * 20) + 10;
-                playerStats.life += lifeRegen;
+                playerStats.life = Math.min(playerStats.life + lifeRegen, 100);
             }
         }
         if (event.key === "Escape") {

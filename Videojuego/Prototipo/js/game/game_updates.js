@@ -4,6 +4,7 @@
  */
 // Actualiza el estado del juego procesando las acciones del jugador, las interacciones con los enemigos y otras mecánicas del juego
 Game.prototype.update = function(deltaTime) {
+    if (this.chestRewardActive) return;
     if (this.levelBoss && this.dialogueStage3 < 2) {
         return; // No actualizamos jugador ni enemigos mientras hay diálogo
     } else if (this.levelBoss && this.levelCompleted && this.dialogueStage4 < 4) {
@@ -77,7 +78,25 @@ Game.prototype.update = function(deltaTime) {
                         enemy.lastDamageTime = currentTime;
                         if (enemy.life <= 0) {
                             enemigos.splice(i, 1);
-                            playerStats.rupees += 1;
+                            let rupeesEarned = 1; // 1 rupee por defecto
+                            switch (enemy.name) { // Determina la recompensa según el tipo de enemigo
+                                case "slime":
+                                    rupeesEarned = Math.floor(Math.random() * 2) + 1; // 1 a 2
+                                    break;
+                                case "bat":
+                                    rupeesEarned = Math.floor(Math.random() * 2) + 2; // 2 a 3
+                                    break;
+                                case "skull":
+                                    rupeesEarned = Math.floor(Math.random() * 3) + 2; // 2 a 3
+                                    break;
+                                case "mage":
+                                    rupeesEarned = Math.floor(Math.random() * 3) + 6; // 6 a 8
+                                    break;    
+                                case "knight":
+                                    rupeesEarned = Math.floor(Math.random() * 3) + 17; // 17 a 19
+                                    break;
+                            }
+                            playerStats.rupees += rupeesEarned;
                             playerStats.mana = Math.min(100, playerStats.mana + 10);
                         }
                     }
@@ -102,8 +121,26 @@ Game.prototype.update = function(deltaTime) {
                     enemy.life -= playerStats.damageArrow;
                     arrow.alive = false;
                     if (enemy.life <= 0) {
-                        enemigos.splice(index, 1);
-                        playerStats.rupees += 1;
+                        enemigos.splice(i, 1);
+                        let rupeesEarned = 1; // 1 rupee por defecto
+                        switch (enemy.name) { // Determina la recompensa según el tipo de enemigo
+                            case "slime":
+                                rupeesEarned = Math.floor(Math.random() * 2) + 1; // 1 a 2
+                                break;
+                            case "bat":
+                                rupeesEarned = Math.floor(Math.random() * 2) + 2; // 2 a 3
+                                break;
+                            case "skull":
+                                rupeesEarned = Math.floor(Math.random() * 3) + 2; // 2 a 3
+                                break;
+                            case "mage":
+                                rupeesEarned = Math.floor(Math.random() * 3) + 6; // 6 a 8
+                                break;    
+                            case "knight":
+                                rupeesEarned = Math.floor(Math.random() * 3) + 17; // 17 a 19
+                                break;
+                        }
+                        playerStats.rupees += rupeesEarned;
                         playerStats.mana = Math.min(100, playerStats.mana + 10);
                     }
                 }
@@ -135,8 +172,26 @@ Game.prototype.update = function(deltaTime) {
                         enemy.life -= playerStats.damageSword;
                         enemy.lastDamageTime = currentTime;
                         if (enemy.life <= 0) {
-                            enemigos.splice(index, 1);
-                            playerStats.rupees += 1;
+                            enemigos.splice(i, 1);
+                            let rupeesEarned = 1; // 1 rupee por defecto
+                            switch (enemy.name) { // Determina la recompensa según el tipo de enemigo
+                                case "slime":
+                                    rupeesEarned = Math.floor(Math.random() * 2) + 1; // 1 a 2
+                                    break;
+                                case "bat":
+                                    rupeesEarned = Math.floor(Math.random() * 2) + 2; // 2 a 3
+                                    break;
+                                case "skull":
+                                    rupeesEarned = Math.floor(Math.random() * 3) + 2; // 2 a 3
+                                    break;
+                                case "mage":
+                                    rupeesEarned = Math.floor(Math.random() * 3) + 6; // 6 a 8
+                                    break;    
+                                case "knight":
+                                    rupeesEarned = Math.floor(Math.random() * 3) + 17; // 17 a 19
+                                    break;
+                            }
+                            playerStats.rupees += rupeesEarned;
                             playerStats.mana = Math.min(100, playerStats.mana + 10);
                         }
                     }
@@ -168,8 +223,26 @@ Game.prototype.update = function(deltaTime) {
                     })) {
                         enemy.life -= playerStats.damageBomb;
                         if (enemy.life <= 0) {
-                            enemigos.splice(index, 1);
-                            playerStats.rupees += 1;
+                            enemigos.splice(i, 1);
+                            let rupeesEarned = 1; // 1 rupee por defecto
+                            switch (enemy.name) { // Determina la recompensa según el tipo de enemigo
+                                case "slime":
+                                    rupeesEarned = Math.floor(Math.random() * 2) + 1; // 1 a 2
+                                    break;
+                                case "bat":
+                                    rupeesEarned = Math.floor(Math.random() * 2) + 2; // 2 a 3
+                                    break;
+                                case "skull":
+                                    rupeesEarned = Math.floor(Math.random() * 3) + 2; // 2 a 3
+                                    break;
+                                case "mage":
+                                    rupeesEarned = Math.floor(Math.random() * 3) + 6; // 6 a 8
+                                    break;    
+                                case "knight":
+                                    rupeesEarned = Math.floor(Math.random() * 3) + 17; // 17 a 19
+                                    break;
+                            }
+                            playerStats.rupees += rupeesEarned;
                             playerStats.mana = Math.min(100, playerStats.mana + 10);
                         }
                     }
@@ -191,6 +264,11 @@ Game.prototype.update = function(deltaTime) {
         // Si la vida del jugador llega a cero, termina el juego
         if (playerStats.life <= 0 && !isGameOver) {
             isGameOver = true;
+            if (isGameOver === true) {
+                game.stopTimer();
+            } else {
+                game.startTimer();
+            }
         }
     }
 };

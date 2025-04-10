@@ -30,19 +30,79 @@ function drawUI() {
     uiCtx.textAlign = "left";
 
     // icons y stats
-    uiCtx.drawImage(rupeeImg, 140, 80, 16, 32);
-    uiCtx.fillText(`x${playerStats.rupees}`, 160, 100);
+    uiCtx.drawImage(rupeeImg, 170, 80, 16, 32);
+    uiCtx.fillText(`x${playerStats.rupees}`, 190, 100);
 
-    uiCtx.fillText(`HP`, 20, 80);
-    uiCtx.fillText(`x ${playerStats.life}`, 60, 80);
-    uiCtx.fillText(`MP`, 20, 120);
-    uiCtx.fillText(`x ${playerStats.mana}`, 60, 120);
+    uiCtx.drawImage(potionImg, 240, 80, 16, 32);
+    uiCtx.fillText(`x${playerStats.potions}`, 260, 100);
 
-    uiCtx.drawImage(potionImg, 230, 80, 16, 32);
-    uiCtx.fillText(`x${playerStats.potions}`, 250, 100);
-
-    const pos = playerStats.uiTextPosition || { x: 100, y: 40 };
+    const pos = playerStats.uiTextPosition || { x: 90, y: 30 };
     uiCtx.fillText(`LEVEL - ${playerStats.level}`, pos.x, pos.y);
+
+    const maxBarWidth = 100;
+    const barHeight = 14;
+    uiCtx.fillText(`HP`, 20, 80);
+    uiCtx.fillText(`MP`, 20, 120);
+
+    const hp = Math.max(0, Math.min(playerStats.life, 100)); // clamp entre 0-100
+    const hpBarWidth = (hp / 100) * maxBarWidth;
+    uiCtx.fillStyle = "gray";
+    uiCtx.fillRect(55, 72, maxBarWidth, barHeight);
+    uiCtx.fillStyle = "red";
+    uiCtx.fillRect(55, 72, hpBarWidth, barHeight);
+    uiCtx.font = "7px Game";
+    uiCtx.textAlign = "right";
+    uiCtx.fillStyle = "white";
+    uiCtx.fillText(`${playerStats.life}/100`, 130, 64);
+
+    const mp = Math.max(0, Math.min(playerStats.mana, 100));
+    const mpBarWidth = (mp / 100) * maxBarWidth;
+    uiCtx.fillStyle = "gray";
+    uiCtx.fillRect(55, 112, maxBarWidth, barHeight);
+    uiCtx.fillStyle = "lightblue";
+    uiCtx.fillRect(55, 112, mpBarWidth, barHeight);
+    uiCtx.font = "7px Game";
+    uiCtx.textAlign = "right";
+    uiCtx.fillStyle = "white";
+    uiCtx.fillText(`${playerStats.mana}/100`, 130, 105);
+}
+
+function drawChestReward(ctx) {
+    if (game.chestRewardActive && game.chestReward) {
+        const { type, amount } = game.chestReward;
+        const boxWidth = 400;
+        const boxHeight = 250;
+        const boxX = canvasWidth / 2 - boxWidth / 2;
+        const boxY = canvasHeight / 2 - boxHeight / 2;
+
+        // Cuadro de fondo
+        ctx.fillStyle = "black";
+        ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
+
+        // Texto principal
+        ctx.fillStyle = "white";
+        ctx.font = "24px Game";
+        ctx.textAlign = "center";
+        ctx.fillText("Conseguiste:", canvasWidth / 2, canvasHeight / 2 - 75);
+
+        // Sprite del objeto
+        let sprite;
+        if (type === "bombs") sprite = bombIcon;
+        else if (type === "arrows") sprite = arrowImg;
+        else if (type === "potions") sprite = potionImg;
+
+        if (sprite) {
+            ctx.drawImage(sprite, canvasWidth / 2 - 100, canvasHeight / 2 - 2, 48, 48);
+            ctx.fillText(`  x  ${amount}`, canvasWidth / 2 + 20, canvasHeight / 2 + 20);
+        }
+
+        // Texto continuar
+        ctx.font = "10px Game";
+        ctx.fillText("Presiona Enter para continuar", canvasWidth / 2, canvasHeight / 2 + 100);
+    }
 }
 
 //menu de pausa que le permite al jugador retomar o regresar a la pantalla de inicio
@@ -73,10 +133,10 @@ function drawPauseMenu(ctx) {
     ctx.strokeStyle = "white";
     ctx.strokeRect(buttonX, buttonY, buttonWidth, buttonHeight);
     ctx.fillStyle = "white";
-    ctx.font = "20px Arial";
+    ctx.font = "10px Game";
     ctx.fillText("Volver al inicio", canvasWidth / 2, buttonY + 26);
 
-    ctx.font = "16px Arial"; // Instrucción para continuar con el juego
+    ctx.font = "10px Game"; // Instrucción para continuar con el juego
     ctx.fillText("Presiona ESC para regresar al juego", canvasWidth / 2, boxY + boxHeight - 30);
     ctx.restore();
 
@@ -103,9 +163,10 @@ function drawDeathMenu(ctx) {
     ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
     
     ctx.fillStyle = "white";
-    ctx.font = "40px Arial";
+    ctx.font = "40px Game";
     ctx.textAlign = "center";
-    ctx.fillText("GAME OVER!", canvasWidth / 2, boxY + 100);
+    ctx.fillText("GAME", canvasWidth / 2, boxY + 80);
+    ctx.fillText("OVER", canvasWidth / 2, boxY + 120);
 
     const buttonWidth = 220; // Botón del regreso
     const buttonHeight = 40;
@@ -116,7 +177,7 @@ function drawDeathMenu(ctx) {
     ctx.strokeStyle = "white";
     ctx.strokeRect(buttonX, buttonY, buttonWidth, buttonHeight);
     ctx.fillStyle = "white";
-    ctx.font = "20px Arial";
+    ctx.font = "10px Game";
     ctx.fillText("Volver al inicio", canvasWidth / 2, buttonY + 26);
     
     game.gameOverButton = { // Guarda la posición del botón
@@ -142,10 +203,11 @@ function drawCompleteMessage(ctx) {
     ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
 
     ctx.fillStyle = "white";
-    ctx.font = "32px Arial";
+    ctx.font = "32px Game";
     ctx.textAlign = "center";
-    ctx.fillText("¡Nivel Completado!", canvasWidth / 2, canvasHeight / 2);
-    ctx.font = "18px Arial";
+    ctx.fillText("¡Nivel", canvasWidth / 2, canvasHeight / 2 - 40);
+    ctx.fillText("Completado!", canvasWidth / 2, canvasHeight / 2);
+    ctx.font = "10px Game";
     ctx.fillText("Presiona Enter para continuar", canvasWidth / 2, boxY + 160);
     ctx.restore();
 }

@@ -205,6 +205,7 @@ class Boss extends AnimatedObject{
 class Bat extends AnimatedObject {
     constructor(position, width, height) {
         super("#000000", width, height, position.x, position.y, "bat");
+        this.name = "bat";
         this.position = new Vec(position.x, position.y);
         this.velocity = new Vec(0, 0);
         this.sprites = {
@@ -225,7 +226,6 @@ class Bat extends AnimatedObject {
         this.lastDamageTime = 0;
         this.damageCooldown = 500;
         getHitbox()
-
     }
 
     // Update method now takes playerPosition as a parameter
@@ -302,6 +302,7 @@ class Bat extends AnimatedObject {
 class Knight extends AnimatedObject{
     constructor(position, width, height) {
         super("#000000", width, height, position.x, position.y, "bat");
+        this.name = "knight";
         this.position = new Vec(position.x, position.y);
         this.velocity = new Vec(0, 0);
         this.sprites = {
@@ -398,6 +399,7 @@ class Knight extends AnimatedObject{
 class Mage extends AnimatedObject {
     constructor(position, width, height) {
         super("#000000", width, height, position.x, position.y, "bat");
+        this.name = "mage";
         this.position = new Vec(position.x, position.y);
         this.velocity = new Vec(0, 0);
         this.sprites = {
@@ -547,6 +549,7 @@ class Mage extends AnimatedObject {
 class Skull extends AnimatedObject{
     constructor(position, width, height) {
         super("#000000", width, height, position.x, position.y, "bat");
+        this.name = "skull";
         this.position = new Vec(position.x, position.y);
         this.velocity = new Vec(0, 0);
         this.sprites = {
@@ -643,6 +646,7 @@ class Skull extends AnimatedObject{
 class Slime extends AnimatedObject{
     constructor(position, width, height) {
         super("#000000", width, height, position.x, position.y, "bat");
+        this.name = "slime";
         this.position = new Vec(position.x, position.y);
         this.velocity = new Vec(0, 0);
         this.sprites = {
