@@ -26,16 +26,16 @@ function drawScene(newTime) {
 function drawUI() {
     uiCtx.clearRect(0, 0, canvasWidth, 150);
     uiCtx.fillStyle = "white";
-    uiCtx.font = "20px Arial";
+    uiCtx.font = "13px Game";
     uiCtx.textAlign = "left";
 
     // icons y stats
     uiCtx.drawImage(rupeeImg, 140, 80, 16, 32);
     uiCtx.fillText(`x${playerStats.rupees}`, 160, 100);
 
-    uiCtx.fillText(`H P`, 20, 80);
+    uiCtx.fillText(`HP`, 20, 80);
     uiCtx.fillText(`x ${playerStats.life}`, 60, 80);
-    uiCtx.fillText(`M P`, 20, 120);
+    uiCtx.fillText(`MP`, 20, 120);
     uiCtx.fillText(`x ${playerStats.mana}`, 60, 120);
 
     uiCtx.drawImage(potionImg, 230, 80, 16, 32);
@@ -60,7 +60,7 @@ function drawPauseMenu(ctx) {
     ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
 
     ctx.fillStyle = "white"; // Texto
-    ctx.font = "40px Arial";
+    ctx.font = "35px Game";
     ctx.textAlign = "center";
     ctx.fillText("PAUSA", canvasWidth / 2, boxY + 60);
 

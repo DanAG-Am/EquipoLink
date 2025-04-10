@@ -4,6 +4,7 @@
  */
 
 //clases con los metodos de tienda, hada y viejo. Se llaman sus sprites, update, se dibujan y hacen su evento segun lo acordado por el dialogo
+document.fonts.load("12px Game",).then((loadedFonts) => {});
 function Tienda() {
     this.image = new Image();
     this.image.src = "../../Videojuego/Assets/GameAssets/NPC/Merchant_1.png";
@@ -41,7 +42,7 @@ Tienda.prototype.drawDialogue = function(ctx) {
     ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
 
     ctx.fillStyle = "white";
-    ctx.font = "18px Arial";
+    ctx.font = "12px Game";
     ctx.textAlign = "center";
 
     let texts = this.dialogueTexts[this.dialogueStage];
@@ -55,7 +56,7 @@ Tienda.prototype.drawDialogue = function(ctx) {
     let scaledWidth = boxWidth - 10;
     let scaledHeight = 120;
     let imgX = boxX + 5;
-    let imgY = boxY + 25;
+    let imgY = boxY + 30;
     ctx.drawImage(this.shopItemsImage, imgX, imgY, scaledWidth, scaledHeight);
     let itemButtonWidth = 80;
     let itemButtonHeight = 24;
@@ -88,7 +89,7 @@ Tienda.prototype.drawDialogue = function(ctx) {
 
     ctx.save();
     ctx.fillStyle = "white";
-    ctx.font = "14px Arial";
+    ctx.font = "10px Game";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillText("COMPRAR", firstButtonX + itemButtonWidth / 2, buttonY + itemButtonHeight / 2);
@@ -96,7 +97,7 @@ Tienda.prototype.drawDialogue = function(ctx) {
     ctx.fillText("COMPRAR", thirdButtonX + itemButtonWidth / 2, buttonY + itemButtonHeight / 2);
     ctx.restore();   
 
-    ctx.font = "14px Arial";
+    ctx.font = "8px Game";
     ctx.fillStyle = "white";
     let instruction;
     if (this.dialogueStage < this.dialogueTexts.length - 1) {
@@ -171,11 +172,11 @@ class Fairy {
         ctx.textAlign = "center";
         
         if (this.effectActive) {
-          ctx.font = "18px Arial";
+          ctx.font = "12px Game";
           ctx.fillText("No puedes ver tu futuro", boxX + boxWidth / 2, boxY + 70);
           ctx.fillText("en este momento", boxX + boxWidth / 2, boxY + 110);
         } else {
-          ctx.font = "18px Arial";
+          ctx.font = "12px Game";
           ctx.fillText("¿Quieres ver qué te espera", boxX + boxWidth / 2, boxY + 40);
           ctx.fillText("en el futuro?", boxX + boxWidth / 2, boxY + 60);
           ctx.fillText("Averigualo por 20 rupias", boxX + boxWidth / 2, boxY + 80);
@@ -191,13 +192,13 @@ class Fairy {
           ctx.strokeStyle = "white";
           ctx.strokeRect(btnX, btnY, btnWidth, btnHeight);
           ctx.fillStyle = "white";
-          ctx.font = "16px Arial";
+          ctx.font = "10px Game";
           ctx.fillText("Ver futuro", boxX + boxWidth / 2, btnY + btnHeight/2 + 6);
           // Guarda la posición del botón para la detección del clic
           this.button = { x: btnX, y: btnY, width: btnWidth, height: btnHeight };
           
           // Texto pequeño debajo del botón
-          ctx.font = "12px Arial";
+          ctx.font = "8px Game";
           ctx.fillText("Presiona Space para cerrar", boxX + boxWidth / 2, btnY + btnHeight + 15);
         }
         ctx.restore();
@@ -292,7 +293,7 @@ class Fairy {
       ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
       
       ctx.fillStyle = "white";
-      ctx.font = "18px Arial";
+      ctx.font = "12px Game";
       ctx.textAlign = "center";
       
       let lines = this.dialogueTexts[this.dialogueStage] || ["..."];
@@ -302,7 +303,7 @@ class Fairy {
         ctx.fillText(line, boxX + boxWidth / 2, startY + i * lineHeight);
       });
       
-      ctx.font = "14px Arial";
+      ctx.font = "10px Game";
       let instruction = (this.dialogueStage < this.dialogueTexts.length - 1) ?
                         "Presiona Enter para continuar" : "Presiona Enter para cerrar";
       ctx.fillText(instruction, boxX + boxWidth / 2, boxY + boxHeight - 10);
@@ -325,14 +326,14 @@ class Fairy {
     ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
     
     ctx.fillStyle = "white";
-    ctx.font = "18px Arial";
+    ctx.font = "12px Game";
     ctx.textAlign = "center";
     let lineHeight = 80;
     let startY1 = boxY + 60;
     let startY2 = boxY + 90;
     ctx.fillText("Corre, Sentinel.", boxX + boxWidth / 2, startY1);
     ctx.fillText("Una aventura te espera.", boxX + boxWidth / 2, startY2);
-    ctx.font = "14px Arial";
+    ctx.font = "10px Game";
     ctx.fillText("Presiona Space para cerrar", boxX + boxWidth / 2, startY2 + lineHeight);
     ctx.restore();
   }
