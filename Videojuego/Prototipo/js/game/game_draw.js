@@ -20,7 +20,7 @@ Game.prototype.draw = function(ctx) {
 
         // Texto personalizado en español
         ctx.fillStyle = "white";
-        ctx.font = "20px Arial";
+        ctx.font = "15px Game";
         ctx.textAlign = "center";
         ctx.fillText("Presiona Enter para jugar", canvasWidth / 2, 562);
     } else if (this.showPrologue){
@@ -33,14 +33,14 @@ Game.prototype.draw = function(ctx) {
         ctx.lineWidth = 2;
         ctx.strokeRect(canvasWidth / 2 - 300, canvasHeight / 2 - 180, canvasWidth / 4 + 400, canvasHeight / 2 + 70);
         ctx.fillStyle = "white";
-        ctx.font = "40px Arial";
+        ctx.font = "30px Game";
         ctx.textAlign = "center";
         ctx.fillText("Prologo", canvasWidth / 2, 185);
         ctx.fillStyle = "white";
-        ctx.font = "18px Arial";
+        ctx.font = "11.5px Game";
         ctx.textAlign = "center";
         const prologueText = [
-            "La oscuridad se disipa. Sentinel despierta en un frio suelo de piedra,",
+            "La oscuridad se disipa.", "Sentinel despierta en un frio suelo de piedra,",
             "con el eco de gotas cayendo a su alrededor.",
             "La tenue luz de una antorcha ilumina la cueva.",
             "Se siente debil, sin recuerdos de como llego alli.",
@@ -51,7 +51,7 @@ Game.prototype.draw = function(ctx) {
             ctx.fillText(line, canvasWidth / 2, yPosition);
             yPosition += 50;
         });
-        ctx.font = "20px Arial";
+        ctx.font = "15px Game";
         ctx.fillText("Presiona Enter para continuar", canvasWidth / 2, canvasHeight / 4 + canvasHeight / 2 + 70);
     } else if (this.mainMap){ 
         //dibujar main map
@@ -73,7 +73,7 @@ Game.prototype.draw = function(ctx) {
         this.player.draw(ctx);
         if (this.dialogueStage < 5) {
             this.drawDialogue(ctx);
-            ctx.font = "15px Arial";
+            ctx.font = "10px Game";
             ctx.fillText("Presiona Enter para continuar", canvasWidth / 2, 190, 600, 100);
         } else if (this.dialogueStage === 5 && !this.tutorialWasShown) {
             this.showTutorial = true;
@@ -234,18 +234,18 @@ Game.prototype.draw = function(ctx) {
         ctx.lineWidth = 2;
         ctx.strokeRect(canvasWidth / 2 - 300, canvasHeight / 2 - 180, canvasWidth / 4 + 400, canvasHeight / 2 + 70);
         ctx.fillStyle = "white";
-        ctx.font = "40px Arial";
+        ctx.font = "30px Game";
         ctx.textAlign = "center";
         ctx.fillText("Historia 1", canvasWidth / 2, 185);
         ctx.fillStyle = "white";
-        ctx.font = "18px Arial";
+        ctx.font = "11.5px Game";
         ctx.textAlign = "center";
         const prologueText = [
-            "En una cámara oscura, Sentinel descubre una antigua inscripción en",
-            "la pared cubierta de musgo. Al tocarla, un dolor agudo le atraviesa",
-            "la cabeza. Un recuerdo emerge: Gritos. Llamas devorando su aldea.",
-            "Una sombra oscura, con ojos carmesí, blandiendo una espada negra.",
-            "Sentinel, de rodillas, herido. Una voz femenina susurra en su oído:",
+            "En una cámara oscura, Sentinel", "descubre una antigua inscripción en",
+            "la pared cubierta de musgo."," Al tocarla, un dolor agudo le atraviesa",
+            "la cabeza. Un recuerdo emerge:"," Gritos. Llamas devorando su aldea.",
+            "Una sombra oscura, con ojos carmesí,"," blandiendo una espada negra.",
+            "Sentinel, de rodillas, herido."," Una voz femenina susurra en su oído:",
             "'Corre… eres nuestra última esperanza.'"
         ];
         let yPosition = canvasHeight / 4 + 75;
@@ -253,7 +253,7 @@ Game.prototype.draw = function(ctx) {
             ctx.fillText(line, canvasWidth / 2, yPosition);
             yPosition += 50;
         });
-        ctx.font = "20px Arial";
+        ctx.font = "15px Game";
         ctx.fillText("Presiona Enter para continuar", canvasWidth / 2, canvasHeight / 4 + canvasHeight / 2 + 70);
     } else if (this.restRoom1){ //dibujar el cuarto de descanso
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
@@ -465,11 +465,11 @@ Game.prototype.draw = function(ctx) {
         ctx.lineWidth = 2;
         ctx.strokeRect(canvasWidth / 2 - 300, canvasHeight / 2 - 180, canvasWidth / 4 + 400, canvasHeight / 2 + 70);
         ctx.fillStyle = "white";
-        ctx.font = "40px Arial";
+        ctx.font = "30px Game";
         ctx.textAlign = "center";
         ctx.fillText("Historia 2", canvasWidth / 2, 185);
         ctx.fillStyle = "white";
-        ctx.font = "18px Arial";
+        ctx.font = "12px Game";
         ctx.textAlign = "center";
         const prologueText = [
             "Un guardián espectral bloquea su paso. Con una voz que retumba",
@@ -484,7 +484,7 @@ Game.prototype.draw = function(ctx) {
             ctx.fillText(line, canvasWidth / 2, yPosition);
             yPosition += 50;
         });
-        ctx.font = "20px Arial";
+        ctx.font = "15px Game";
         ctx.fillText("Presiona Enter para continuar", canvasWidth / 2, canvasHeight / 4 + canvasHeight / 2 + 70);
     } else if (this.restRoom2){ //dibujar el cuarto de descanso 2
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
@@ -652,18 +652,18 @@ Game.prototype.draw = function(ctx) {
         ctx.lineWidth = 2;
         ctx.strokeRect(canvasWidth / 2 - 300, canvasHeight / 2 - 180, canvasWidth / 4 + 400, canvasHeight / 2 + 70);
         ctx.fillStyle = "white";
-        ctx.font = "40px Arial";
+        ctx.font = "30px Game";
         ctx.textAlign = "center";
         ctx.fillText("Historia 3", canvasWidth / 2, 185);
         ctx.fillStyle = "white";
-        ctx.font = "18px Arial";
+        ctx.font = "14px Game";
         ctx.textAlign = "center";
         const prologueText = [
-            "En el corazón de un templo olvidado, Sentinel halla una espada negra",
-            "clavada en un altar de obsidiana. La toca, y una visión brutal lo invade:",
+            "En el corazón de un templo olvidado,", "Sentinel halla una espada negra",
+            "clavada en un altar de obsidiana.","La toca, y una visión brutal lo invade:",
             "'Su hermano, con el rostro cubierto de lágrimas y sangre,",
             "Acepta un pacto prohibido para salvar a su gente.",
-            "Su alma se corrompe, su poder se multiplica. El Rey Aquamentus nace.'",
+            "Su alma se corrompe, su poder se multiplica.","El Rey Aquamentus nace.'",
             "Sentinel cae al suelo, convulsionando."
         ];
         let yPosition = canvasHeight / 4 + 75;
@@ -671,7 +671,7 @@ Game.prototype.draw = function(ctx) {
             ctx.fillText(line, canvasWidth / 2, yPosition);
             yPosition += 50;
         });
-        ctx.font = "20px Arial";
+        ctx.font = "15px Game";
         ctx.fillText("Presiona Enter para continuar", canvasWidth / 2, canvasHeight / 4 + canvasHeight / 2 + 70);
     } else if (this.restRoom3){ //dibujar el cuarto de descanso 3
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
@@ -691,7 +691,7 @@ Game.prototype.draw = function(ctx) {
         this.magics.forEach(m => m.draw(ctx));
         if (this.dialogueStage2 < 8) {
             this.drawDialogue2(ctx);
-            ctx.font = "15px Arial";
+            ctx.font = "10px Game";
             ctx.fillText("Presiona Enter para continuar", canvasWidth / 2, 190, 600, 100);
         }
         if (this.showTutorial) {
@@ -719,7 +719,7 @@ Game.prototype.draw = function(ctx) {
         this.magics.forEach(m => m.draw(ctx));
         if (this.dialogueStage3 < 2) {
             this.drawDialogue3(ctx);
-            ctx.font = "15px Arial";
+            ctx.font = "10px Game";
             ctx.fillText("Presiona Enter para continuar", canvasWidth / 2, 190, 600, 100);
         } else {
             this.drawEnemies(ctx);
@@ -732,7 +732,7 @@ Game.prototype.draw = function(ctx) {
         }
         if (this.levelCompleted && this.dialogueStage4 < 4) {
             this.drawDialogue4(ctx);
-            ctx.font = "15px Arial";
+            ctx.font = "10px Game";
             ctx.fillText("Presiona Enter para continuar", canvasWidth / 2, 190, 600, 100);
         } 
         if (this.levelCompleted &&
@@ -754,7 +754,7 @@ Game.prototype.draw = function(ctx) {
         this.magics.forEach(m => m.draw(ctx));
         if (this.dialogueStage3 < 2) {
             this.drawDialogue3(ctx);
-            ctx.font = "15px Arial";
+            ctx.font = "10px Game";
             ctx.fillText("Presiona Enter para continuar", canvasWidth / 2, 190, 600, 100);
         } else {
             this.drawEnemies(ctx);
@@ -767,7 +767,7 @@ Game.prototype.draw = function(ctx) {
         }
         if (this.levelCompleted && this.dialogueStage4 < 4) {
             this.drawDialogue4(ctx);
-            ctx.font = "15px Arial";
+            ctx.font = "10px Game";
             ctx.fillText("Presiona Enter para continuar", canvasWidth / 2, 190, 600, 100);
         } 
         if (this.levelCompleted &&
@@ -801,18 +801,18 @@ Game.prototype.draw = function(ctx) {
         // Mostrar diálogos
         if (this.playerReachedCenter && this.endingDialogueStage < 3 && !this.showEndingLogo) {
             this.drawEndingDialogue(ctx);
-            ctx.font = "15px Arial";
+            ctx.font = "10px Game";
             ctx.fillText("Presiona Enter para continuar", canvasWidth / 2, 190);
         }
     
         // Mostrar logo final
         if (this.showEndingLogo) {
             ctx.drawImage(this.logo, canvasWidth / 2 - 200, canvasHeight / 2 - 180, 400, 400);
-            ctx.font = "28px Arial";
+            ctx.font = "25px Game";
             ctx.fillStyle = "white";
             ctx.textAlign = "center";
             ctx.fillText("Thank you for playing!!", canvasWidth / 2, 450);
-            ctx.font = "20px Arial";
+            ctx.font = "15px Game";
             ctx.fillText("Presiona Enter para regresar al menú principal", canvasWidth / 2, 500);
         }
     } else {
@@ -836,7 +836,6 @@ Game.prototype.draw = function(ctx) {
     }
     if (isGameOver) {
         drawDeathMenu(ctx);
-        game.stopTimer();
     }
 
     // ───── INICIAR si acaba de entrar al prólogo ─────
@@ -863,14 +862,14 @@ Game.prototype.drawDialogue = function(ctx) { //dibujar dialogos del viejo
     ctx.lineWidth = 2;
     ctx.strokeRect(canvasWidth / 2 - 300, 70, 600, 100);
     ctx.fillStyle = "white";
-    ctx.font = "18px Arial";
+    ctx.font = "12px Game";
     ctx.textAlign = "center";
     let dialogueTexts = [
         ["Por fin has despertado, joven heroe!"],
         ["Tu hermano ha sido capturado", "por el Ejercito de la Oscuridad!"],
-        ["Ha sido llevado a su fortaleza en los ultimos cuartos de esta mazmorra,", "donde su lider..."],
+        ["Ha sido llevado a su fortaleza", "en los ultimos cuartos de esta mazmorra,", "donde su lider..."],
         ["El Rey Aquamentus!"],
-        ["Te doy unas armas para empezar tu exploracion.", "Intenta visitar a la tienda para mejorar tus habilidades."]
+        ["Te doy unas armas para empezar tu exploracion.", "Intenta visitar a la tienda", "para mejorar tus habilidades."]
     ];
     let lines = dialogueTexts[this.dialogueStage];
     let yPosition = 110;
@@ -887,7 +886,7 @@ Game.prototype.drawDialogue2 = function(ctx) { //dibujar dialogos 2 del viejo
     ctx.lineWidth = 2;
     ctx.strokeRect(canvasWidth / 2 - 300, 70, 600, 100);
     ctx.fillStyle = "white";
-    ctx.font = "18px Arial";
+    ctx.font = "14px Game";
     ctx.textAlign = "center";
     let dialogueTexts = [
         ["¡Por fin has llegado hasta aquí, joven héroe!"],
@@ -914,7 +913,7 @@ Game.prototype.drawDialogue3 = function(ctx) { //dibujar dialogos del jefe final
     ctx.lineWidth = 2;
     ctx.strokeRect(canvasWidth / 2 - 300, 70, 600, 100);
     ctx.fillStyle = "white";
-    ctx.font = "18px Arial";
+    ctx.font = "14px Game";
     ctx.textAlign = "center";
     let dialogueTexts = [
         ["¡GRAAAAAAAAAAAAAAHHH!"],
@@ -935,7 +934,7 @@ Game.prototype.drawDialogue4 = function(ctx) { //dibujar dialogos del jefe final
     ctx.lineWidth = 2;
     ctx.strokeRect(canvasWidth / 2 - 300, 70, 600, 100);
     ctx.fillStyle = "white";
-    ctx.font = "18px Arial";
+    ctx.font = "15px Game";
     ctx.textAlign = "center";
     let dialogueTexts = [
         ["¡GRAAAAAAAAAAAAAAHHH!"],
@@ -958,7 +957,7 @@ Game.prototype.drawEndingDialogue = function(ctx) {
     ctx.lineWidth = 2;
     ctx.strokeRect(canvasWidth / 2 - 300, 70, 600, 100);
     ctx.fillStyle = "white";
-    ctx.font = "18px Arial";
+    ctx.font = "14px Game";
     ctx.textAlign = "center";
     const texts = [
         ["Por fin he logrado completar la mazmorra."],
@@ -980,7 +979,7 @@ Game.prototype.drawTutorial = function(ctx) { //dibujar el turorial
     ctx.lineWidth = 2;
     ctx.strokeRect(canvasWidth / 2 - 300, 100, 600, 400);
     ctx.fillStyle = "white";
-    ctx.font = "22px Arial";
+    ctx.font = "18px Game";
     ctx.textAlign = "center";
     ctx.fillText("Tutorial de Controles", canvasWidth / 2, 150);
     const controlName = [
@@ -1017,7 +1016,7 @@ Game.prototype.drawTutorial = function(ctx) { //dibujar el turorial
         
         "ESC"
     ];
-    ctx.font = "14px Arial";
+    ctx.font = "12px Game";
     let yPosition = 180;
     ctx.textAlign = "left";
     controlName.forEach(line => {
@@ -1029,7 +1028,7 @@ Game.prototype.drawTutorial = function(ctx) { //dibujar el turorial
         ctx.fillText(line, canvasWidth / 2 + 100, yPosition);
         yPosition += 30;
     });
-    ctx.font = "20px Arial";
+    ctx.font = "15px Game";
     ctx.fillText("Presiona T para continuar", canvasWidth / 2 - 120, 530);
 };
 
@@ -1043,14 +1042,14 @@ Game.prototype.drawInventory = function(ctx) { //dibujar inventario
     ctx.lineWidth = 2;
     ctx.strokeRect(canvasWidth / 2 - 150, canvasHeight / 2 + 80, 300, 180);
     ctx.fillStyle = "white";
-    ctx.font = "20px Arial";
+    ctx.font = "15px Game";
     ctx.textAlign = "center";
     ctx.fillText("Inventario", canvasWidth / 2, canvasHeight / 2 + 110);
     ctx.drawImage(arrowImg, canvasWidth / 2 - 40, canvasHeight / 2 + 120, 24, 48);
     ctx.fillText(`x${playerStats.arrows}`, canvasWidth / 2 + 20, canvasHeight / 2 + 150);
     ctx.drawImage(bombIcon, canvasWidth / 2 - 40, canvasHeight / 2 + 160, 24, 48);
     ctx.fillText(`x${playerStats.bombs}`, canvasWidth / 2 + 20, canvasHeight / 2 + 200);
-    ctx.font = "16px Arial";
+    ctx.font = "12px Game";
     ctx.fillText("Presiona I para cerrar", canvasWidth / 2, canvasHeight / 2 + 250);
     ctx.restore();
 };

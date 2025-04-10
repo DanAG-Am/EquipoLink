@@ -5,6 +5,13 @@
     padding: 0;
 }
   
+@font-face {
+    font-family: 'Game';
+    src: url('../../Videojuego/Assets/GameAssets/Font/game_font.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 /* Estructura general */
 body {
     display: grid;
@@ -12,11 +19,11 @@ body {
     min-height: 100vh;
     background: black;
     background-size: 400% 400%;
-    font-family: 'Pixelify Sans', sans-serif;
+    font-family: 'Game', sans-serif;
     color: #ffffff;
     text-align: center;
 }
-  
+
 .grid-container {
     display: grid;
     grid-template-rows: auto 1fr auto;
@@ -48,7 +55,7 @@ header {
 }
   
 .titulo {
-    font-size: 4em;
+    font-size: 1.5em;
     color: #fff700;
     text-shadow: 2px 2px 4px #000;
 }
@@ -60,7 +67,7 @@ nav {
   
 .boton-header {
     padding: 10px 20px;
-    font-size: 2em;
+    font-size: 1.5em;
     background-color: #6C767D;
     color: white;
     text-decoration: none;
@@ -83,14 +90,14 @@ nav {
 }
   
 h1 {
-    font-size: 5em;
+    font-size: 2.5em;
     margin-top: -60px;
     margin-bottom: 20px;
     text-shadow: 2px 2px 4px #000;
 }
   
 .texto-intro {
-    font-size: 1.5em;
+    font-size: 1em;
     line-height: 1.5;
     text-align: center;
     margin: 10px 0;
@@ -107,7 +114,7 @@ h1 {
   
 .boton-grid {
     padding: 40px;
-    font-size: 3em;
+    font-size: 2.5em;
     background-color: #D0B245;
     color: white;
     text-decoration: none;
@@ -137,7 +144,7 @@ h1 {
 }
   
 .seccion-titulo {
-    font-size: 2.5em;
+    font-size: 2em;
     margin-bottom: 15px;
     color: #fff700;
     text-shadow: 1px 1px 3px #000;
@@ -146,7 +153,7 @@ h1 {
 .seccion-texto,
 .lista-creditos,
 .lista-profesor {
-    font-size: 1.5em;
+    font-size: 1em;
     line-height: 1.6;
     max-width: 800px;
     text-align: center;
@@ -176,7 +183,7 @@ h1 {
 a.boton {
     display: inline-block;
     padding: 15px 40px;
-    font-size: 2em;
+    font-size: 1.5em;
     background-color: #ff4757;
     color: white;
     text-decoration: none;
@@ -191,7 +198,7 @@ a.boton:hover {
   
 /* Login y Registro */
 .login-register h1 {
-    font-size: 8em;
+    font-size: 6em;
     margin-top: 5%;
     margin-bottom: 30px;
     color: yellow;
@@ -204,14 +211,14 @@ form {
 }
   
 label {
-    font-size: 2em;
+    font-size: 1.5em;
     margin-bottom: 5px;
     text-align: left;
     width: 300px;
 }
   
 input {
-    font-size: 1.5em;
+    font-size: 1em;
     padding: 10px;
     width: 300px;
     margin-bottom: 20px;
@@ -220,7 +227,7 @@ input {
 }
   
 .error-texto {
-    font-size: 1.5em;
+    font-size: 1em;
     color: red;
     margin-top: 15px;
 }
@@ -235,7 +242,7 @@ input {
 .boton-register {
     width: 200px;
     padding: 10px;
-    font-size: 16px;
+    font-size: 14px;
     background-color: #333;
     color: white;
     border: none;
@@ -244,12 +251,12 @@ input {
 }
   
 .texto-registro {
-    font-size: 1.2em;
+    font-size: 0.8em;
     margin-top: 10px;
 }
   
 a.hipervinculo {
-    font-size: 1.2em;
+    font-size: 1em;
     color: #1e90ff;
     text-decoration: underline;
 }
@@ -261,7 +268,7 @@ a.hipervinculo {
 a.botonRegresar {
     display: inline-block;
     padding: 15px 40px;
-    font-size: 2em;
+    font-size: 1.5em;
     background-color: #ff4757;
     color: white;
     text-decoration: none;
@@ -337,22 +344,22 @@ a.botonRegresar:hover {
 .Character h3 {
     text-align: center;
     color: #ffcc00; 
-    font-size: 1.5rem;
+    font-size: 1rem;
     margin-top: 10px;
 }
 
 .Character p {
     padding: 15px;
-    font-size: 1rem;
+    font-size: 0.5rem;
     color: #ccc; 
-    text-align: justify;
+    text-align: center;
 }
 
 .return-button {
     display: inline-block;
     padding: 10px;
     margin-bottom: -60px;
-    font-size: 1.5em;
+    font-size: 1em;
     background-color: #ff4757;
     color: white;
     text-decoration: none;
@@ -397,7 +404,7 @@ a.botonRegresar:hover {
     margin: 5px 0;
     padding: 10px;
     border-radius: 5px;
-    font-size: 16px;
+    font-size: 12px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -426,7 +433,7 @@ a.botonRegresar:hover {
 }
 
 #assets h2 {
-    font-size: 32px;
+    font-size: 26px;
     font-weight: 700;
     letter-spacing: 1px;
     color: #f2c81f;
@@ -509,7 +516,7 @@ a.botonRegresar:hover {
 footer {
     margin-top: 60px;
     padding: 20px 0;
-    font-size: 1.2em;
+    font-size: 0.8em;
 }
 /* General Styling for the Leaderboard Sections */
 .leaderboard-section {
@@ -521,18 +528,18 @@ footer {
 }
 
 .leaderboard-section h1 {
-    font-size: 2.5em;
+    font-size: 2em;
     margin-bottom: 15px;
 }
 
 .leaderboard-section p {
-    font-size: 1.5em;
+    font-size: 1em;
     color: #ccc;
 }
 
 /* Form Inputs and Buttons Styling */
 input[type="text"], input[type="submit"] {
-    font-size: 1.5em;
+    font-size: 1em;
     padding: 10px;
     width: 300px;
     margin-bottom: 20px;
@@ -561,12 +568,12 @@ input[type="submit"]:hover {
 }
 
 .resultDisplay p {
-    font-size: 1.2em;
+    font-size: 0.8em;
     color: #ccc;
 }
 
 .resultDisplay h1 {
-    font-size: 2em;
+    font-size: 1.5em;
     color: #fff;
     margin-bottom: 10px;
 }
@@ -574,7 +581,7 @@ input[type="submit"]:hover {
 /* Form Header Styling */
 .formInput h1 {
     padding: 20px;
-    font-size: 2.5em;
+    font-size: 2em;
     color: #ffcc00;
     text-shadow: 1px 1px 3px #000;
 }
