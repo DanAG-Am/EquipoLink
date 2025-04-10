@@ -57,6 +57,8 @@ class Game {
         this.chestClosed.src = "../../Videojuego/Assets/GameAssets/Chest/chest_closed.png";
         this.chestOpened = new Image();
         this.chestOpened.src = "../../Videojuego/Assets/GameAssets/Chest/chest_open.png";
+        this.chestRewardActive = false;
+        this.chestReward = null;
         this.endingScene = false;
         this.endingDialogueStage = 0;
         this.showEndingLogo = false;
@@ -142,7 +144,7 @@ class Game {
     //regresar todo a su punto de inicio si se resetea el juego
     resetGame() {
         playerStats.level = "-";
-        playerStats.uiTextPosition = { x: 100, y: 40 };
+        playerStats.uiTextPosition = { x: 90, y: 30 };
         playerStats.life = 100;
         playerStats.mana = 100;
         playerStats.rupees = 0;
