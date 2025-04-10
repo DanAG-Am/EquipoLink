@@ -22,10 +22,12 @@ this.levelCompleted = false;
 //tiles
 const tileSize = 32;
 const processedFloors = {};
-const floorTile1 = new Image();
-floorTile1.src = "../../Videojuego/Assets/GameAssets/Map/Floor/floor_Tile.png";
+const floorTile = new Image();
+floorTile.src = "../../Videojuego/Assets/GameAssets/Map/Floor/floor_Tile2.png";
 const floorTile2 = new Image();
-floorTile2.src = "../../Videojuego/Assets/GameAssets/Map/Floor/floor_Tile2.png";
+floorTile2.src = "../../Videojuego/Assets/GameAssets/Map/Floor/floor_Tile3.png";
+const floorTile3 = new Image();
+floorTile3.src = "../../Videojuego/Assets/GameAssets/Map/Floor/floor_Tile4.png";
 const floorDoor = new Image();
 floorDoor.src = "../../Videojuego/Assets/GameAssets/Map/Floor/floor_Void.png";
 const wallTile = new Image();
