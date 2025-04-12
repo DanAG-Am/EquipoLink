@@ -5,6 +5,7 @@
   <title>Login</title>
   <link rel="stylesheet" href="pagina_web.css">
   <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <script type="module" defer src="/api_script.js"></script>
 </head>
 <body class="login-register">
     <header>
@@ -16,25 +17,24 @@
 
     <h1>Login</h1>
 
-    <form id="loginForm">
-        <label for="usuario">Usuario:</label>
-        <input type="text" id="usuario" placeholder="Escribe tu usuario">
-        
-        <label for="contrasena">Contraseña:</label>
-        <input type="password" id="contrasena" placeholder="Escribe tu contraseña">
+<form id="loginForm">
+    <label for="usuario">Usuario:</label>
+    <input type="text" id="usuario" name="usuario" placeholder="Escribe tu usuario" required>
+    
+    <label for="contrasena">Contraseña:</label>
+    <input type="password" id="contrasena" name="contrasena" placeholder="Escribe tu contraseña" required>
 
-        <p id="mensajeError" class="error-texto"></p>
-        
-        <div class="botones-login">
-          <button type="button" class="boton-login" onclick="window.location.href='prototipo.html';">Login</button>
-        </div>
+    <p id="mensajeError" class="error-texto"></p>
+    
+    <div class="botones-login">
+        <button type="submit" class="boton-login">Login</button>
+    </div>
 
-        <p class="texto-registro">¿Aún no tienes cuenta? Presiona <a href="register.html" class="hipervinculo">AQUI</a></p>
-        <div class="boton-regresar">
-            <a href="pagina_web.html" class="botonRegresar">Regresar</a>
-        </div>
-    </form>
-
+    <p class="texto-registro">¿Aún no tienes cuenta? Presiona <a href="register.html" class="hipervinculo">AQUI</a></p>
+    <div class="boton-regresar">
+        <a href="pagina_web.html" class="botonRegresar">Regresar</a>
+    </div>
+</form>
     <script>
     document.getElementById("loginForm").addEventListener("submit", function(e) {
       e.preventDefault();
