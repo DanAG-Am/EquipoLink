@@ -35,6 +35,8 @@ wallTile.src = "../../Videojuego/Assets/GameAssets/Map/Floor/floor_Block.png";
 const grassTile = new Image();
 grassTile.src = "../../Videojuego/Assets/GameAssets/Map/Floor/Grass.png";
 //ui Images
+const tutorialImg = new Image();
+tutorialImg.src = "../../Videojuego/Assets/GameAssets/HUD/Tutorial.png";
 const rupeeImg = new Image();
 rupeeImg.src = "../../Videojuego/Assets/GameAssets/Pickup/pickup_Rupee1.png";
 const heartImg = new Image();
@@ -45,6 +47,10 @@ const arrowImg = new Image();
 arrowImg.src = "../../Videojuego/Assets/GameAssets/Weapons/Arrow_2.png";
 const bombIcon = new Image();
 bombIcon.src = "../../Videojuego/Assets/GameAssets/Weapons/Bomb_1.png";
+const dashImg = new Image();
+dashImg.src = "../../Videojuego/Assets/GameAssets/Keys/Dash.png";
+const shieldImg = new Image();
+shieldImg.src = "../../Videojuego/Assets/GameAssets/Keys/Shield.png";
 
 let playerStats = {
     level: "-",

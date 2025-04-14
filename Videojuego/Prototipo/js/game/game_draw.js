@@ -83,12 +83,12 @@ Game.prototype.draw = function(ctx) {
         } else if (this.showTutorial) {
             this.drawTutorial(ctx);
         }
-        if (this.player.position.y + this.player.height >= canvasHeight &&
+        if (this.player.position.y <= 0 &&
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
                 this.mainMap = false;
                 this.level = true;
-                this.player.position = new Vec(canvasWidth / 2 - 16, tileSize);
+                this.player.position = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 2);
                 playerStats.level = 1;
                 playerStats.uiTextPosition = { x: 90, y: 30 };
                 rupeesInitialized = false;
@@ -124,12 +124,12 @@ Game.prototype.draw = function(ctx) {
             this.drawTutorial(ctx);
         }
         drawChestReward(ctx);
-        if (this.player.position.y + this.player.height >= canvasHeight && //transicion entre nivel 1 y 2, se repite la misma estructura en el resto de los niveles
+        if (this.player.position.y <= 0 && //transicion entre nivel 1 y 2, se repite la misma estructura en el resto de los niveles
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
             this.level = false;
             this.level2 = true;
-            this.player.position = new Vec(canvasWidth / 2 - 16, tileSize);
+            this.player.position = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 2);
             this.totalSpawnedEnemies = 0;
             this.levelEnemies = [];
             this.levelCompleted = false;
@@ -167,12 +167,12 @@ Game.prototype.draw = function(ctx) {
             this.drawTutorial(ctx);
         }
         drawChestReward(ctx);
-        if (this.player.position.y + this.player.height >= canvasHeight && //tranisicion entre nivel 2 y 3
+        if (this.player.position.y <= 0 && //tranisicion entre nivel 2 y 3
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
             this.level2 = false;
             this.level3 = true;
-            this.player.position = new Vec(canvasWidth / 2 - 16, tileSize);
+            this.player.position = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 2);
             this.totalSpawnedEnemies = 0;
             this.levelEnemies = [];
             this.levelCompleted = false;
@@ -211,7 +211,7 @@ Game.prototype.draw = function(ctx) {
             this.drawTutorial(ctx);
         }
         drawChestReward(ctx);
-        if (this.player.position.y + this.player.height >= canvasHeight && //transicion entre nivel 3 y cuarto de descanso y mejoras
+        if (this.player.position.y <= 0 && //transicion entre nivel 3 y cuarto de descanso y mejoras
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
             this.level3 = false;
@@ -277,12 +277,12 @@ Game.prototype.draw = function(ctx) {
         if (this.showInventory) {
             this.drawInventory(ctx);
         }
-        if (this.player.position.y + this.player.height >= canvasHeight && //transicion entre nivel 3 y cuarto de descanso y mejoras
+        if (this.player.position.y <= 0 && //transicion entre nivel 3 y cuarto de descanso y mejoras
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
             this.restRoom1 = false;
             this.level4 = true;
-            this.player.position = new Vec(canvasWidth / 2 - 16, tileSize);
+            this.player.position = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 2);
             rupeesInitialized = false;
             playerStats.level = 4;
             playerStats.uiTextPosition = { x: 90, y: 30 };
@@ -314,12 +314,12 @@ Game.prototype.draw = function(ctx) {
             this.drawTutorial(ctx);
         }
         drawChestReward(ctx);
-        if (this.player.position.y + this.player.height >= canvasHeight && 
+        if (this.player.position.y <= 0 && 
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
             this.level4 = false;
             this.level5 = true;
-            this.player.position = new Vec(canvasWidth / 2 - 16, tileSize);
+            this.player.position = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 2);
             this.totalSpawnedEnemies = 0;
             this.levelEnemies = [];
             this.levelCompleted = false;
@@ -357,12 +357,12 @@ Game.prototype.draw = function(ctx) {
             this.drawTutorial(ctx);
         }
         drawChestReward(ctx);
-        if (this.player.position.y + this.player.height >= canvasHeight && //tranisicion entre nivel 2 y 3
+        if (this.player.position.y <= 0 && //tranisicion entre nivel 2 y 3
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
             this.level5 = false;
             this.level6 = true;
-            this.player.position = new Vec(canvasWidth / 2 - 16, tileSize);
+            this.player.position = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 2);
             this.totalSpawnedEnemies = 0;
             this.levelEnemies = [];
             this.levelCompleted = false;
@@ -400,12 +400,12 @@ Game.prototype.draw = function(ctx) {
             this.drawTutorial(ctx);
         }
         drawChestReward(ctx);
-        if (this.player.position.y + this.player.height >= canvasHeight && //tranisicion entre nivel 2 y 3
+        if (this.player.position.y <= 0 && //tranisicion entre nivel 2 y 3
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
             this.level6 = false;
             this.level7 = true;
-            this.player.position = new Vec(canvasWidth / 2 - 16, tileSize);
+            this.player.position = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 2);
             this.totalSpawnedEnemies = 0;
             this.levelEnemies = [];
             this.levelCompleted = false;
@@ -443,7 +443,7 @@ Game.prototype.draw = function(ctx) {
             this.drawTutorial(ctx);
         }
         drawChestReward(ctx);
-        if (this.player.position.y + this.player.height >= canvasHeight && //tranisicion entre nivel 2 y 3
+        if (this.player.position.y <= 0 && //tranisicion entre nivel 2 y 3
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
             this.level7 = false;
@@ -510,12 +510,12 @@ Game.prototype.draw = function(ctx) {
         if (this.showInventory) {
             this.drawInventory(ctx);
         }
-        if (this.player.position.y + this.player.height >= canvasHeight && //transicion entre nivel 3 y cuarto de descanso y mejoras
+        if (this.player.position.y <= 0 && //transicion entre nivel 3 y cuarto de descanso y mejoras
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
             this.restRoom2 = false;
             this.level8 = true;
-            this.player.position = new Vec(canvasWidth / 2 - 16, tileSize);
+            this.player.position = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 2);
             rupeesInitialized = false;
             playerStats.level = 8;
             playerStats.uiTextPosition = { x: 90, y: 30 };
@@ -547,12 +547,12 @@ Game.prototype.draw = function(ctx) {
             this.drawTutorial(ctx);
         }
         drawChestReward(ctx);
-        if (this.player.position.y + this.player.height >= canvasHeight && //tranisicion entre nivel 2 y 3
+        if (this.player.position.y <= 0 && //tranisicion entre nivel 2 y 3
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
             this.level8 = false;
             this.level9 = true;
-            this.player.position = new Vec(canvasWidth / 2 - 16, tileSize);
+            this.player.position = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 2);
             this.totalSpawnedEnemies = 0;
             this.levelEnemies = [];
             this.levelCompleted = false;
@@ -589,12 +589,12 @@ Game.prototype.draw = function(ctx) {
             this.drawTutorial(ctx);
         }
         drawChestReward(ctx);
-        if (this.player.position.y + this.player.height >= canvasHeight && //tranisicion entre nivel 2 y 3
+        if (this.player.position.y <= 0 && //tranisicion entre nivel 2 y 3
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
             this.level9 = false;
             this.level10 = true;
-            this.player.position = new Vec(canvasWidth / 2 - 16, tileSize);
+            this.player.position = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 2);
             this.totalSpawnedEnemies = 0;
             this.levelEnemies = [];
             this.levelCompleted = false;
@@ -632,7 +632,7 @@ Game.prototype.draw = function(ctx) {
             this.drawTutorial(ctx);
         }
         drawChestReward(ctx);
-        if (this.player.position.y + this.player.height >= canvasHeight && //tranisicion entre nivel 2 y 3
+        if (this.player.position.y <= 0 && //tranisicion entre nivel 2 y 3
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
             this.level10 = false;
@@ -704,12 +704,12 @@ Game.prototype.draw = function(ctx) {
         if (this.showInventory) {
             this.drawInventory(ctx);
         }
-        if (this.player.position.y + this.player.height >= canvasHeight && //transicion entre nivel 3 y cuarto de descanso y mejoras
+        if (this.player.position.y <= 0 && //transicion entre nivel 3 y cuarto de descanso y mejoras
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
             this.restRoom3 = false;
             this.levelBoss = true;
-            this.player.position = new Vec(canvasWidth / 2 - 16, tileSize);
+            this.player.position = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 2);
             rupeesInitialized = false;
             playerStats.level = "Final";
             playerStats.uiTextPosition = { x: 70, y: 30 };
@@ -740,12 +740,12 @@ Game.prototype.draw = function(ctx) {
             ctx.fillText("Presiona Enter para continuar", canvasWidth / 2, 190, 600, 100);
         } 
         if (this.levelCompleted &&
-            this.player.position.y + this.player.height >= canvasHeight &&
+            this.player.position.y <= 0 &&
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
             this.levelBoss = false;
             this.endingScene = true;
-            this.player.position = new Vec(canvasWidth / 2 - 16, tileSize);
+            this.player.position = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 1.5);
             rupeesInitialized = false;
             playerStats.level = "Outside";
             playerStats.uiTextPosition = { x: 58, y: 30 };
@@ -757,10 +757,13 @@ Game.prototype.draw = function(ctx) {
         // Movimiento hacia el centro
         const centerY = canvasHeight / 2 - this.player.height / 2;
         if (!this.playerReachedCenter) {
-            if (this.player.position.y < centerY) {
-                this.player.position.y += 0.5; // velocidad lenta
+            if (this.player.position.y > centerY) {
+                this.player.position.y -= 0.5; // se mueve hacia arriba lentamente
             } else {
                 this.playerReachedCenter = true;
+                this.player.currentDirection = "up"; // mira hacia abajo al llegar
+                this.player.frameIndex = 0;
+                this.player.image.src = this.player.sprites["win"];
                 this.player.velocity = new Vec(0, 0);
             }
         }
@@ -950,55 +953,13 @@ Game.prototype.drawTutorial = function(ctx) { //dibujar el turorial
     ctx.fillStyle = "white";
     ctx.font = "25px Game";
     ctx.textAlign = "center";
-    ctx.fillText("Tutorial de Controles", canvasWidth / 2, 140);
-    const controlName = [
-        "Para mover",
-        
-        "Atacar con espada",
-        "Atacar con arco",
-        "Atacar con magia",
-        "Dejar bomba",
-        "Tomar poción",
-        
-        "Interactuar con cofres",
-        "Interactuar con NPCs",
-        
-        "Abrir inventario",
-        "Abrir tutorial",
-        
-        "Menu de pausa"
-    ];
-    const controlKey = [
-        "← ↑ ↓ →",
-        
-        "Z",
-        "X",
-        "C",
-        "A",
-        "D",
-        
-        "O",
-        "SPACE",
-        
-        "I",
-        "T",
-        
-        "ESC"
-    ];
-    ctx.font = "12px Game";
-    let yPosition = 180;
-    ctx.textAlign = "left";
-    controlName.forEach(line => {
-        ctx.fillText(line, canvasWidth / 2 - 220, yPosition);
-        yPosition += 30;
-    });
-    yPosition = 180;
-    controlKey.forEach(line => {
-        ctx.fillText(line, canvasWidth / 2 + 160, yPosition);
-        yPosition += 30;
-    });
+    const imgWidth = 560;
+    const imgHeight = 360;
+    const imgX = canvasWidth / 2 - imgWidth / 2;
+    const imgY = 120;
+    ctx.drawImage(tutorialImg, imgX, imgY, imgWidth, imgHeight);
     ctx.font = "15px Game";
-    ctx.fillText("Presiona T para continuar", canvasWidth / 4, 530);
+    ctx.fillText("Presiona T para continuar", canvasWidth / 2, 530);
 };
 
 Game.prototype.drawInventory = function(ctx) { //dibujar inventario
@@ -1041,7 +1002,7 @@ Game.prototype.unlockNextLevel = function() { //desbloquear nivel si se ha compl
 
     const layout = processedFloors[layoutName];
     const exitX = Math.floor(canvasWidth / 2 / tileSize);
-    const exitY = Math.floor(canvasHeight / tileSize) - 1;
+    const exitY = 0;
 
     if (layout && layout[exitY]) {
         for (let dx = -1; dx <= 1; dx++) {

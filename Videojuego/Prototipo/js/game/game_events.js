@@ -22,19 +22,19 @@ Game.prototype.createEventListeners = function(){
         if (this.restStory1 && event.key === 'Enter') {
             this.restStory1 = false;
             this.restRoom1 = true;
-            game.player.position = new Vec(canvasWidth / 2 - 16, tileSize * 2);
+            game.player.position = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 2);
             return;
         }
         if (this.restStory2 && event.key === 'Enter') {
             this.restStory2 = false;
             this.restRoom2 = true;
-            game.player.position = new Vec(canvasWidth / 2 - 16, tileSize * 2);
+            game.player.position = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 2);
             return;
         }
         if (this.restStory3 && event.key === 'Enter') {
             this.restStory3 = false;
             this.restRoom3 = true;
-            game.player.position = new Vec(canvasWidth / 2 - 16, tileSize * 2);
+            game.player.position = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 2);
             return;
         }
         if (this.mainMap && this.dialogueStage < 5 && event.key === 'Enter') {

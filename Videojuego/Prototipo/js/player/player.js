@@ -15,6 +15,7 @@ class Player extends AnimatedObject{
             "left": ["../../Videojuego/Assets/GameAssets/Basic_Movements/Basic_movement_3.png", "../../Videojuego/Assets/GameAssets/Basic_Movements/Basic_movement_4.png"],
             "up": ["../../Videojuego/Assets/GameAssets/Basic_Movements/Basic_movement_5.png", "../../Videojuego/Assets/GameAssets/Basic_Movements/Basic_movement_6.png"],
             "defend": ["../../Videojuego/Assets/GameAssets/Magical_shield/Magical_shield_3.png", "../../Videojuego/Assets/GameAssets/Magical_shield/Magical_shield_4.png"],
+            "win": ["../../Videojuego/Assets/GameAssets/Pick_up_item/Pick_up_item_2.png"],
             "attackSwordDown": "../../Videojuego/Assets/GameAssets/White_sword/White_sword_4.png",
             "attackSwordRight": "../../Videojuego/Assets/GameAssets/White_sword/White_sword_8.png",
             "attackSwordUp": "../../Videojuego/Assets/GameAssets/White_sword/White_sword_12.png",
