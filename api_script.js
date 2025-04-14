@@ -84,70 +84,55 @@ function main() {
         }
     }
 
-    document.getElementById('formDelete').onsubmit = async (e) => {
-        e.preventDefault()
-        const formDelete = document.getElementById('formDelete')
-        const data = new FormData(formDelete)
-        const dataObj = Object.fromEntries(data.entries())
-
-        // Se asume que se envia userID en el formulario. Si deseas usar otro nombre, ajústalo.
-        let response = await fetch(`http://localhost:3000/api/Jugador/${dataObj['userID']}`,{
-            method: 'DELETE'
-        })
-
-        if (response.ok) {
-            let results = await response.json()
-            document.getElementById('deleteResults').innerHTML = results.message
-        } else {
-            document.getElementById('deleteResults').innerHTML = `Error! Status: ${response.status}`
-        }
-    }
-
     /*CRUD estadisticas de los jugadores */
     document.getElementById('formSelectEstadisticas').onsubmit = async (e) => {
-        e.preventDefault()
-
-        const formSelectUser = document.getElementById('formSelectEstadisticas')
-        const data = new FormData(formSelectUser)
-        console.log(data)
-        const dataObj = Object.fromEntries(data.entries())
-        console.log(dataObj);
-        let response = await fetch(`http://localhost:3000/api/Estadisticas/${dataObj['id_jugador']}`, {
+        e.preventDefault();
+    
+        const form = document.getElementById('formSelectEstadisticas');
+        const data = new FormData(form);
+        const dataObj = Object.fromEntries(data.entries());
+    
+        const id = dataObj['id_jugador'];
+    
+        let response = await fetch(`http://localhost:3000/api/Estadisticas/${id}`, {
             method: 'GET'
-        })
-        console.log(response);
-        if(response.ok)
-        {
-            let results = await response.json()
-
-            if(results.length > 0)
-            {
-                const headers = Object.keys(results[0])
-                let table = document.createElement("table")
-                let tr = table.insertRow(-1)
+        });
+    
+        if (response.ok) {
+            let results = await response.json();
+    
+            const container = document.getElementById('getEstadisticasResults');
+            if (results.length > 0) {
+                const headers = Object.keys(results[0]);
+                let table = document.createElement("table");
+    
+                // Header
+                let tr = table.insertRow(-1);
                 for (const header of headers) {
-                    let th = document.createElement("th")
-                    th.innerHTML = header
-                    tr.appendChild(th)
+                    let th = document.createElement("th");
+                    th.innerHTML = header;
+                    tr.appendChild(th);
                 }
+    
+                // Rows
                 for (const row of results) {
-                    let tr = table.insertRow(-1)
+                    let tr = table.insertRow(-1);
                     for (const key in row) {
-                        let tabCell = tr.insertCell(-1)
-                        tabCell.innerHTML = row[key]
+                        let tabCell = tr.insertCell(-1);
+                        tabCell.innerHTML = row[key];
                     }
                 }
-                const container = document.getElementById('getEstadisticasResults')
-                container.innerHTML = ''
-                container.appendChild(table)
+    
+                container.innerHTML = '';
+                container.appendChild(table);
             } else {
-                document.getElementById('getEstadisticasResults').innerHTML = 'No hay resultados para mostrar.'
+                container.innerHTML = 'No hay resultados para mostrar.';
             }
         } else {
-            document.getElementById('getEstadisticasResults').innerHTML = response.status
+            document.getElementById('getEstadisticasResults').innerHTML = `Error! Status: ${response.status}`;
         }
-    }
-
+    };
+    
     document.getElementById('formInsertEstadisticas').onsubmit = async (e) => {
         e.preventDefault()
         const formInsert = document.getElementById('formInsertEstadisticas')
@@ -170,7 +155,7 @@ function main() {
 
     document.getElementById('formUpdateEstadisticas').onsubmit = async (e) => {
         e.preventDefault()
-        const formUpdate = document.getElementById('formUpdate')
+        const formUpdate = document.getElementById('formUpdateEstadisticas')
         const data = new FormData(formUpdate)
         const dataObj = Object.fromEntries(data.entries())
 
@@ -188,70 +173,68 @@ function main() {
         }
     }
 
-    document.getElementById('formDelete').onsubmit = async (e) => {
+    document.getElementById('formDeleteEstadisticas').onsubmit = async (e) => {
         e.preventDefault()
-        const formDelete = document.getElementById('formDelete')
+        const formDelete = document.getElementById('formDeleteEstadisticas')
         const data = new FormData(formDelete)
         const dataObj = Object.fromEntries(data.entries())
 
         // Se asume que se envia userID en el formulario. Si deseas usar otro nombre, ajústalo.
-        let response = await fetch(`http://localhost:3000/api/Estadisticas/${dataObj['userID']}`,{
+        let response = await fetch(`http://localhost:3000/api/Estadisticas/${dataObj['id_jugador']}`,{
             method: 'DELETE'
         })
 
         if (response.ok) {
             let results = await response.json()
-            document.getElementById('formDeleteEstadisticas').innerHTML = results.message
+            document.getElementById('deleteEstadisticasResults').innerHTML = results.message
         } else {
-            document.getElementById('formDeleteEstadisticas').innerHTML = `Error! Status: ${response.status}`
+            document.getElementById('deleteEstadisticasResults').innerHTML = `Error! Status: ${response.status}`
         }
+    }
+
+document.getElementById('formSelectEnemigo').onsubmit = async (e) => {
+    e.preventDefault()
+
+    const formSelectEnemigo = document.getElementById('formSelectEnemigo')
+    const data = new FormData(formSelectEnemigo)
+    console.log(data)
+    const dataObj = Object.fromEntries(data.entries())
+    console.log(dataObj);
+    let response = await fetch(`http://localhost:3000/api/Enemigo/${dataObj['id_enemigo']}`, {
+        method: 'GET'
+    })
+    console.log(response);
+    if(response.ok)
+    {
+        let results = await response.json()
+
+        if(results.length > 0)
+        {
+            const headers = Object.keys(results[0])
+            let table = document.createElement("table")
+            let tr = table.insertRow(-1)
+            for (const header of headers) {
+                let th = document.createElement("th")
+                th.innerHTML = header
+                tr.appendChild(th)
+            }
+            for (const row of results) {
+                let tr = table.insertRow(-1)
+                for (const key in row) {
+                    let tabCell = tr.insertCell(-1)
+                    tabCell.innerHTML = row[key]
+                }
+            }
+            const container = document.getElementById('getEnemigosResults')
+            container.innerHTML = ''
+            container.appendChild(table)
+        } else {
+            document.getElementById('getEnemigosResults').innerHTML = 'No hay resultados para mostrar.'
+        }
+    } else {
+        document.getElementById('getEnemigosResults').innerHTML = response.status
     }
 }
-
-// CRUD Enemigos 
-    document.getElementById('formSelectEnemigo').onsubmit = async (e) => {
-        e.preventDefault()
-
-        const formSelectUser = document.getElementById('formSelectEnemigo')
-        const data = new FormData(formSelectUser)
-        console.log(data)
-        const dataObj = Object.fromEntries(data.entries())
-        console.log(dataObj);
-        let response = await fetch(`http://localhost:3000/api/Enemigo/${dataObj['id_enemigo']}`, {
-            method: 'GET'
-        })
-        console.log(response);
-        if(response.ok)
-        {
-            let results = await response.json()
-
-            if(results.length > 0)
-            {
-                const headers = Object.keys(results[0])
-                let table = document.createElement("table")
-                let tr = table.insertRow(-1)
-                for (const header of headers) {
-                    let th = document.createElement("th")
-                    th.innerHTML = header
-                    tr.appendChild(th)
-                }
-                for (const row of results) {
-                    let tr = table.insertRow(-1)
-                    for (const key in row) {
-                        let tabCell = tr.insertCell(-1)
-                        tabCell.innerHTML = row[key]
-                    }
-                }
-                const container = document.getElementById('getEnemigosResults')
-                container.innerHTML = ''
-                container.appendChild(table)
-            } else {
-                document.getElementById('getEnemigosResults').innerHTML = 'No hay resultados para mostrar.'
-            }
-        } else {
-            document.getElementById('getEnemigosResults').innerHTML = response.status
-        }
-    }
 
     document.getElementById('formInsertEnemigo').onsubmit = async (e) => {
         e.preventDefault()
@@ -273,43 +256,41 @@ function main() {
         }
     }
 
-    document.getElementById('formUpdateEnemigo').onsubmit = async (e) => {
-        e.preventDefault()
-        const formUpdate = document.getElementById('formUpdate')
-        const data = new FormData(formUpdate)
-        const dataObj = Object.fromEntries(data.entries())
+// Campeones 
+document.getElementById('championForm').addEventListener('click', async (e) => {
+    e.preventDefault();  // Esto previene que el formulario se envíe normalmente
 
-        let response = await fetch('http://localhost:3000/api/Enemigo',{
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(dataObj)
-        })
+    const container = document.getElementById('campeonResults');
+    container.innerHTML = 'Cargando campeones...';
 
-        if (response.ok) {
-            let results = await response.json()
-            document.getElementById('putEnemigosResults').innerHTML = results.message
+    try {
+        const response = await fetch('http://localhost:3000/api/Campeon');
+        if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
+
+        const data = await response.json();
+        console.log('Datos de campeones:', data);  // Aquí imprimimos los datos para inspeccionar su estructura
+
+        // Verifica si los datos tienen la propiedad `menor_tiempo`, `mas_inventario`, `mas_enemigos`
+        if (data && data.menor_tiempo && data.mas_inventario && data.mas_enemigos) {
+            container.innerHTML = `
+            <h3 style="margin: 10px;">🏃‍♂️ Jugador más rápido</h3>
+            <p style="margin-top: 20px;"><strong>${data.menor_tiempo.usuario}</strong> - Tiempo: ${data.menor_tiempo.tiempo_jugado}</p>
+        
+            <h3 style="margin: 10px;">🎒 Inventario más grande</h3>
+            <p style="margin-top: 20px;"><strong>${data.mas_inventario.usuario}</strong> - Objetos: ${data.mas_inventario.total_objetos}</p>
+        
+            <h3 style="margin: 10px;">⚔️ Más enemigos derrotados</h3>
+            <p style="margin-top: 20px;"><strong>${data.mas_enemigos.usuario}</strong> - Enemigos derrotados: ${data.mas_enemigos.enemigos_derrotados}</p>
+        `;        
         } else {
-            document.getElementById('putEnemigosResults').innerHTML = response.status
+            container.innerHTML = 'No se pudieron cargar los datos de campeones.';
         }
+    } catch (err) {
+        console.error("Error al cargar campeones:", err);
+        container.innerHTML = 'No se pudieron cargar los datos de campeones.';
     }
+});
 
-    document.getElementById('formDeleteEnemigo').onsubmit = async (e) => {
-        e.preventDefault()
-        const formDelete = document.getElementById('formDeleteEnemigo')
-        const data = new FormData(formDelete)
-        const dataObj = Object.fromEntries(data.entries())
+}
 
-        // Se asume que se envia userID en el formulario. Si deseas usar otro nombre, ajústalo.
-        let response = await fetch(`http://localhost:3000/api/Enemigo/${dataObj['id_enemigo']}`,{
-            method: 'DELETE'
-        })
-
-        if (response.ok) {
-            let results = await response.json()
-            document.getElementById('deleteEnemigosResults').innerHTML = results.message
-        } else {
-            document.getElementById('deleteEnemigosResults').innerHTML = `Error! Status: ${response.status}`
-        }
-    }
-
-main()
+main();

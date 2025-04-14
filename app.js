@@ -77,41 +77,33 @@ app.get('/api/Jugador/:id_jugador', async (request, response) => {
 
 // POST: Insertar un nuevo jugador
 app.post('/api/Jugador', async (request, response) => {
-    let connection = null
+    console.log('Incoming data:', request.body); // Debug here
+
+    const newUser = {
+        usuario: request.body.usuario,
+        contrasena: request.body.contrasena,
+        id_cuarto: 1,
+        hp_actual: 100,
+        hp_max: 100,
+        mp_actual: 100,
+        mp_max: 100,
+        monedas: 0,
+        pociones: 0,
+        bombas: 0,
+        flechas: 0
+    };
 
     try {
-        connection = await connectToDB()
-
-        // Mapeamos los campos del formulario a los de la tabla
-        const newUser = {
-            usuario: request.body.username,
-            contrasena: request.body.contrasena,
-            id_cuarto: 1,    // valor por defecto (ajústalo según corresponda)
-            hp_actual: 100,
-            hp_max: 100,
-            mp_actual: 100,
-            mp_max: 100,
-            monedas: 0,
-            pociones: 0,
-            bombas: 0,
-            flechas: 0
-        }
-        
-        const [results, fields] = await connection.query('insert into Jugador set ?', newUser)
-        console.log(`${results.affectedRows} row inserted`)
-        response.status(201).json({ 'message': "Data inserted correctly.", "id_jugador": results.insertId })
+        const [results, fields] = await connection.query('INSERT INTO Jugador SET ?', newUser);
+        console.log(`${results.affectedRows} row inserted`);
+        response.status(201).json({ 'message': "Usuario registrado correctamente.", 'id_jugador': results.insertId });
+    } catch (error) {
+        console.error(error);
+        response.status(500).json({ message: "Error al insertar usuario." });
+    } finally {
+        connection.end();
     }
-    catch (error) {
-        response.status(500).json(error)
-        console.log(error)
-    }
-    finally {
-        if (connection !== null) {
-            connection.end()
-            console.log("Connection closed successfully!")
-        }
-    }
-})
+});
 
 // PUT: Actualizar un jugador
 app.put('/api/Jugador', async (request, response) => {
@@ -325,7 +317,7 @@ app.get('/api/Enemigo/:id_enemigo', async (request, response) => {
 
     try {
         connection = await connectToDB()
-        const [results_user, _] = await connection.query('select * from Enemigo where id_enemigo= ?', [request.params.id_jugador])
+        const [results_user, _] = await connection.query('select * from Enemigo where id_enemigo= ?', [request.params.id_enemigo])
         console.log(`${results_user.length} rows returned`)
         response.json(results_user)
     }
@@ -341,90 +333,56 @@ app.get('/api/Enemigo/:id_enemigo', async (request, response) => {
     }
 })
 
-// POST: Insertar un nuevo jugador
-app.post('/api/Enemigo', async (request, response) => {
-    let connection = null
+
+//campeones 
+// Endpoint para obtener los campeones
+app.get('/api/Campeon', async (req, res) => {
+    let connection = null;
 
     try {
-        connection = await connectToDB()
+        connection = await connectToDB();
 
-        // Mapeamos los campos del formulario a los de la tabla
-        const newEnemy = {
-            id_cuarto: request.body.id_cuarto,  // Reference to the 'Cuarto' table
-            nombre: request.body.nombre,        // Name of the enemy
-            vida_max: request.body.vida_max,    // Maximum health
-            vida_actual: request.body.vida_actual,  // Current health
-            velocidad: request.body.velocidad,  // Speed of the enemy
-            dano: request.body.dano,            // Damage dealt by the enemy
-            drop_monedas: request.body.drop_monedas // Money dropped by the enemy
-        };
-        
-        const [results, fields] = await connection.query('INSERT INTO Enemigo SET ?', newEnemy)
-        console.log(`${results.affectedRows} row inserted`)
-        response.status(201).json({ 'message': "Data inserted correctly.", "id_enemigo": results.insertId })
-    }
-    catch (error) {
-        response.status(500).json(error)
-        console.log(error)
-    }
-    finally {
-        if (connection !== null) {
-            connection.end()
-            console.log("Connection closed successfully!")
-        }
-    }
-})
+        // Jugador con menor tiempo jugado
+        const [menorTiempo] = await connection.query(`
+            SELECT j.usuario, e.tiempo_jugado 
+            FROM Estadisticas e 
+            JOIN Jugador j ON e.id_jugador = j.id_jugador 
+            ORDER BY e.tiempo_jugado ASC 
+            LIMIT 1
+        `);
 
-// PUT: Actualizar un jugador
-app.put('/api/Enemigo', async (request, response) => {
-    let connection = null
+        // Jugador con más objetos en el inventario
+        const [masInventario] = await connection.query(`
+            SELECT j.usuario, SUM(i.cantidad) AS total_objetos 
+            FROM Inventario i 
+            JOIN Jugador j ON i.id_jugador = j.id_jugador 
+            GROUP BY i.id_jugador 
+            ORDER BY total_objetos DESC 
+            LIMIT 1
+        `);
 
-    try {
-        connection = await connectToDB()
-        // Se actualizan las columnas 'usuario' y 'contrasena' a partir de 'name' y 'surname'
-        const [results, fields] = await connection.query(
-            'update Enemigo set usuario = ?, contrasena = ? where id_enemigo = ?',
-            [request.body.name, request.body.surname, request.body.userID]
-        )
-        console.log(`${results.affectedRows} rows updated`)
-        response.json({ 'message': `Data updated correctly: ${results.affectedRows} rows updated.` })
-    }
-    catch (error) {
-        response.status(500).json(error)
-        console.log(error)
-    }
-    finally {
-        if (connection !== null) {
-            connection.end()
-            console.log("Connection closed successfully!")
-        }
-    }
-})
+        // Jugador con más enemigos derrotados
+        const [masEnemigos] = await connection.query(`
+            SELECT j.usuario, e.enemigos_derrotados 
+            FROM Estadisticas e 
+            JOIN Jugador j ON e.id_jugador = j.id_jugador 
+            ORDER BY e.enemigos_derrotados DESC 
+            LIMIT 1
+        `);
 
-// DELETE: Eliminar un jugador
-app.delete('/api/Enemigo/:id_enemigo', async (request, response) => {
-    let connection = null
+        res.json({
+            menor_tiempo: menorTiempo[0] || {},
+            mas_inventario: masInventario[0] || {},
+            mas_enemigos: masEnemigos[0] || {}
+        });
 
-    try {
-        connection = await connectToDB()
-        const [results, fields] = await connection.query(
-            'delete from Enemigo where id_enemigo = ?',
-            [request.params.id_enemigo]
-        )
-        console.log(`${results.affectedRows} row deleted`)
-        response.json({ 'message': `Data deleted correctly: ${results.affectedRows} rows deleted.` })
+    } catch (error) {
+        console.error("Error al obtener campeones:", error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    } finally {
+        if (connection) connection.end();
     }
-    catch (error) {
-        response.status(500).json(error)
-        console.log(error)
-    }
-    finally {
-        if (connection !== null) {
-            connection.end()
-            console.log("Connection closed successfully!")
-        }
-    }
-})
+});
 
 
 app.listen(port, () => {
