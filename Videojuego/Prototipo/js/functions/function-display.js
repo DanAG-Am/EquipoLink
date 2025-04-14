@@ -29,6 +29,10 @@ function drawUI() {
     uiCtx.font = "13px Game";
     uiCtx.textAlign = "left";
 
+    // Draw dash and shield Icon
+    uiCtx.drawImage(dashImg, 0, -5, 32, 64);
+    uiCtx.drawImage(shieldImg, 20, -5, 32, 64);
+
     // icons y stats
     uiCtx.drawImage(rupeeImg, 170, 80, 16, 32);
     uiCtx.fillText(`x${playerStats.rupees}`, 190, 100);
