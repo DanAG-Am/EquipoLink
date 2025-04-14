@@ -4,10 +4,14 @@
  */
 /*clases derivadas de los enemigos, se repite la misma estructura de boss en el resto*/
 
-function enemyDeathSFX() {
-    const sfx = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Enemy/enemy_death.wav");
-    sfx.volume = 0.5;
-    sfx.play();
+let playerHurtAudio = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Character/link_hurt.wav");
+playerHurtAudio.volume = 1;
+playerHurtAudio.loop = false;
+
+function playerHurtSFX() {
+    if (!playerHurtAudio.paused) return; // Don't overlap if it's already playing
+    playerHurtAudio.currentTime = 0;
+    playerHurtAudio.play();
 }
 
 function dragonSFX(){
@@ -152,7 +156,6 @@ class Boss extends AnimatedObject{
             { position: this.position, width: this.width, height: this.height }
         )) {
             const currentTime = Date.now(); 
-
             // Si ha pasado suficiente tiempo desde el último ataque, inflige daño al jugador.
             if (currentTime - this.lastAttackTime > this.attackInterval && playerStats.life > 0) {
                 playerStats.life = Math.max(0, playerStats.life - this.attack); // Reduce la vida del jugador.
@@ -737,7 +740,6 @@ class Slime extends AnimatedObject{
             { position: this.position, width: this.width, height: this.height }
         )) {
             const currentTime = Date.now(); 
-
             if (currentTime - this.lastAttackTime > this.attackInterval && playerStats.life > 0) {
                 playerStats.life = Math.max(0, playerStats.life - this.attack);
                 this.lastAttackTime = currentTime; 
