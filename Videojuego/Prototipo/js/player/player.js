@@ -3,6 +3,11 @@
  * Fecha: 2025-03-24
  */
 
+function playerHurtSFX() {
+    const sfx = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Character/link_hurt.wav");
+    sfx.volume = 0.5;
+    sfx.play();
+}
 //clase player con los metodos de ataque, dano, direcciones segun su sprite, update, dibujar y checar colisiones para evitar un overlap.
 class Player extends AnimatedObject{
     constructor(position, width, height){

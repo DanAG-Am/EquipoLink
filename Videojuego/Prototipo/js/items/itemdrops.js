@@ -2,6 +2,13 @@
  * Autor: TeamLink
  * Fecha: 2025-03-24
  */
+
+
+function rupeeSFX() {
+    const sfx = new Audio("../../Videojuego/Assets/GameAssets/Sounds/World/5rupee_pickup.wav");
+    sfx.volume = 0.5;
+    sfx.play();
+}
 let rupees = [];  // Arreglo para almacenar las rupees en el juego
 let rupeesInitialized = false;  // Bandera para verificar si las rupees han sido inicializadas
 
@@ -65,6 +72,7 @@ function drawRupees(ctx, player) {
             height: player.height
         };
         if (boxOverlap(rupeeBox, playerBox)) { // Si el jugador está cerca de la rupee
+            rupeeSFX();
             toRemove.push(i);
             playerStats.rupees += 1;
         }

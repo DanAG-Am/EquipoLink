@@ -4,6 +4,19 @@
  */
 /*clases derivadas de los enemigos, se repite la misma estructura de boss en el resto*/
 
+function enemyDeathSFX() {
+    const sfx = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Enemy/enemy_death.wav");
+    sfx.volume = 0.5;
+    sfx.play();
+}
+
+function dragonSFX(){
+    const sfx = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Enemy/boss_ambientsound.wav");
+    sfx.loop = true;
+    sfx.volume = 0.5;
+    sfx.play();
+}
+
 class Boss extends AnimatedObject{
     // Constructor: Inicializa al jefe con su posición, tamaño y otras propiedades como velocidad, sprites y estadísticas.
     constructor(position, width, height) {
@@ -731,7 +744,7 @@ class Slime extends AnimatedObject{
             }
         }
     }
-
+    
     draw(ctx) {
         ctx.save();
         ctx.drawImage(this.image, this.position.x, this.position.y, this.width, this.height);

@@ -7,6 +7,39 @@
 //event listeners, se aplican las teclas que se dibujaron en game draw y se hace su respectivo cambio en lo que se muestra en el lienzo
 "use strict";
 
+const discover = new Audio("../../Videojuego/Assets/GameAssets/Sounds/World/discovery.wav");
+discover.volume = 1;
+function discoverSFX() {
+    discover.play().catch(err => {
+        console.warn("Playback failed for enter room sound:", err);
+    });
+}
+
+
+function bombAttack() {
+    const sfx = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Combat/bomb_drop.wav");
+    sfx.volume = 0.5;
+    sfx.play();
+}
+
+function arrowShot() {
+    const sfx = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Combat/arrow_shot.wav");
+    sfx.volume = 0.5;
+    sfx.play();
+}
+
+function magicShot(){
+    const sfx = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Combat/magic_rod.wav");
+    sfx.volume = 0.5;
+    sfx.play();
+}
+
+function swordHit(){
+    const sfx = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Combat/sword_swing.wav");
+    sfx.volume = 0.5;
+    sfx.play();
+}
+
 Game.prototype.createEventListeners = function(){
     window.addEventListener('keydown', (event) =>{
         if (this.showMainMenu && event.key === 'Enter') {
@@ -94,10 +127,12 @@ Game.prototype.createEventListeners = function(){
                 this.player.toggleShield(true);
             }
             else if(event.key=="z"){
+                swordHit();
                 this.player.toggleSword(true);
             }
             else if(event.key=="c"){
                 if (playerStats.mana > 0) {
+                    magicShot();
                     playerStats.mana -= 10;
                     this.player.toggleMagic(true);
                     let offset = new Vec(0, 0);
@@ -113,6 +148,7 @@ Game.prototype.createEventListeners = function(){
             }
             else if(event.key == "x"){
                 if (playerStats.arrows > 0) {
+                    arrowShot();
                     playerStats.arrows--;
                     this.player.toggleBow(true);
                     let offset = new Vec(0, 0);
@@ -127,6 +163,7 @@ Game.prototype.createEventListeners = function(){
                 }
             } else if (event.key == "a") {
                 if (playerStats.bombs > 0) {
+                    bombAttack();
                     playerStats.bombs--;
                     this.player.toggleBomb(true);
                     let offset = new Vec(0, 0);
@@ -151,6 +188,7 @@ Game.prototype.createEventListeners = function(){
                 const nearLevelChest = px > cx - 36 && px < cx + 36 && py > cy - 36 && py < cy + 36;
         
                 if (nearLevelChest && !this.chestHasBeenOpened) {
+                    discoverSFX();
                     this.chestIsOpen = true;
         
                     let item = Math.random();

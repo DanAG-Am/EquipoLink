@@ -21,7 +21,12 @@
         <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&display=swap" rel="stylesheet">
         <script type="module" defer src="/api_script.js"></script>
     </head>
-    <body>
+    <body>   
+        <!-- audio to fetch  -->
+        <audio id="enterRoomSFX" preload="auto">
+            <source src="../../Videojuego/Assets/GameAssets/Sounds/Character/enter_room.wav" type="audio/wav">
+            Tu navegador no soporta audio HTML5.
+        </audio>   
         <header>
             EQUIPOLINK VIDEOGAMES
             <a href="pagina_web.html" class="botonRegresar">Regresar</a>
@@ -92,7 +97,6 @@
             return;
         }
     
-        // ✅ Send request to the existing backend
         const userData = {
             usuario: username,
             contrasena: password
@@ -113,7 +117,6 @@
                 errorDiv.style.color = 'lightgreen';
                 errorDiv.textContent = result.message + " ID: " + result.id_jugador;
     
-                // Optionally return to login
                 setTimeout(() => {
                     document.getElementById('registerForm').style.display = 'none';
                     document.getElementById('loginForm').style.display = 'block';

@@ -5,6 +5,45 @@
 
 "use strict";
 
+//fetch de audios
+const backgroundMusic = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Music/dungeon_theme.mp4");
+backgroundMusic.autoplay = true;
+backgroundMusic.loop = true;
+backgroundMusic.preload = 'auto';
+backgroundMusic.volume = 0.3; 
+
+const enterRoomAudio = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Character/enter_room.wav");
+enterRoomAudio.volume = 1;
+function playEnterRoomSFX() {
+    enterRoomAudio.play().catch(err => {
+        console.warn("Playback failed for enter room sound:", err);
+    });
+}
+
+const gameOver = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Music/game_over.wav");
+gameOver.volume = 1;
+function gameOverSFX() {
+    gameOver.play().catch(err => {
+        console.warn("Playback failed for enter room sound:", err);
+    });
+}
+
+const gameWin = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Music/game_win.wav");
+gameWin.volume = 1;
+function gameWinSFX() {
+    gameWin.play().catch(err => {
+        console.warn("Playback failed for enter room sound:", err);
+    });
+}
+
+const talk = new Audio("../../Videojuego/Assets/GameAssets/Sounds/interact/talk_or_meterup_sound.wav");
+talk.volume = 1;
+function talkSFX() {
+    talk.play().catch(err => {
+        console.warn("Playback failed for enter room sound:", err);
+    });
+}
+
 // Dibuja el estado actual del juego
 Game.prototype.draw = function(ctx) {
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
@@ -86,6 +125,7 @@ Game.prototype.draw = function(ctx) {
         if (this.player.position.y <= 0 &&
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
+                playEnterRoomSFX();
                 this.mainMap = false;
                 this.level = true;
                 this.player.position = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 2);
@@ -127,6 +167,7 @@ Game.prototype.draw = function(ctx) {
         if (this.player.position.y <= 0 && //transicion entre nivel 1 y 2, se repite la misma estructura en el resto de los niveles
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
+            playEnterRoomSFX();
             this.level = false;
             this.level2 = true;
             this.player.position = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 2);
@@ -170,6 +211,7 @@ Game.prototype.draw = function(ctx) {
         if (this.player.position.y <= 0 && //tranisicion entre nivel 2 y 3
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
+            playEnterRoomSFX();
             this.level2 = false;
             this.level3 = true;
             this.player.position = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 2);
@@ -214,6 +256,7 @@ Game.prototype.draw = function(ctx) {
         if (this.player.position.y <= 0 && //transicion entre nivel 3 y cuarto de descanso y mejoras
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
+            playEnterRoomSFX();
             this.level3 = false;
             this.restStory1 = true;
             this.totalSpawnedEnemies = 0;
@@ -280,6 +323,7 @@ Game.prototype.draw = function(ctx) {
         if (this.player.position.y <= 0 && //transicion entre nivel 3 y cuarto de descanso y mejoras
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
+            playEnterRoomSFX();
             this.restRoom1 = false;
             this.level4 = true;
             this.player.position = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 2);
@@ -317,6 +361,7 @@ Game.prototype.draw = function(ctx) {
         if (this.player.position.y <= 0 && 
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
+            playEnterRoomSFX();
             this.level4 = false;
             this.level5 = true;
             this.player.position = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 2);
@@ -360,6 +405,7 @@ Game.prototype.draw = function(ctx) {
         if (this.player.position.y <= 0 && //tranisicion entre nivel 2 y 3
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
+            playEnterRoomSFX();
             this.level5 = false;
             this.level6 = true;
             this.player.position = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 2);
@@ -403,6 +449,7 @@ Game.prototype.draw = function(ctx) {
         if (this.player.position.y <= 0 && //tranisicion entre nivel 2 y 3
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
+            playEnterRoomSFX();
             this.level6 = false;
             this.level7 = true;
             this.player.position = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 2);
@@ -446,6 +493,7 @@ Game.prototype.draw = function(ctx) {
         if (this.player.position.y <= 0 && //tranisicion entre nivel 2 y 3
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
+            playEnterRoomSFX();
             this.level7 = false;
             this.restStory2 = true;
             this.totalSpawnedEnemies = 0;
@@ -513,6 +561,7 @@ Game.prototype.draw = function(ctx) {
         if (this.player.position.y <= 0 && //transicion entre nivel 3 y cuarto de descanso y mejoras
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
+            playEnterRoomSFX();
             this.restRoom2 = false;
             this.level8 = true;
             this.player.position = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 2);
@@ -550,6 +599,7 @@ Game.prototype.draw = function(ctx) {
         if (this.player.position.y <= 0 && //tranisicion entre nivel 2 y 3
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
+            playEnterRoomSFX();
             this.level8 = false;
             this.level9 = true;
             this.player.position = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 2);
@@ -592,6 +642,7 @@ Game.prototype.draw = function(ctx) {
         if (this.player.position.y <= 0 && //tranisicion entre nivel 2 y 3
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
+            playEnterRoomSFX();
             this.level9 = false;
             this.level10 = true;
             this.player.position = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 2);
@@ -635,6 +686,7 @@ Game.prototype.draw = function(ctx) {
         if (this.player.position.y <= 0 && //tranisicion entre nivel 2 y 3
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
+            playEnterRoomSFX();
             this.level10 = false;
             this.restStory3 = true;
             this.totalSpawnedEnemies = 0;
@@ -707,6 +759,7 @@ Game.prototype.draw = function(ctx) {
         if (this.player.position.y <= 0 && //transicion entre nivel 3 y cuarto de descanso y mejoras
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
+            playEnterRoomSFX();
             this.restRoom3 = false;
             this.levelBoss = true;
             this.player.position = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 2);
@@ -743,6 +796,7 @@ Game.prototype.draw = function(ctx) {
             this.player.position.y <= 0 &&
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
+            playEnterRoomSFX();
             this.levelBoss = false;
             this.endingScene = true;
             this.player.position = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 1.5);
@@ -795,18 +849,23 @@ Game.prototype.draw = function(ctx) {
         drawPauseMenu(ctx);
     }
     if (interactingNPC) {
+        talkSFX();
         drawNPCTutorial(ctx);
     }
     if (interactingMerchant) {
+        talkSFX();
         this.tienda.drawDialogue(ctx);
     }
     if (interactingFairy) {
+        talkSFX();
         this.fairy.drawDialogue(ctx);
     }
     if (this.showLevelCompleteMessage) {
         drawCompleteMessage(ctx);
+        gameWinSFX();
     }
     if (isGameOver) {
+        gameOverSFX();
         drawDeathMenu(ctx);
     }
 
