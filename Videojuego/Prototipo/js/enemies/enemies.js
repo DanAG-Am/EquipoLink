@@ -53,6 +53,7 @@ class Boss extends AnimatedObject{
         this.chaseRange = 1000;
         this.chaseSpeed = 0.025;
         this.life = 150;
+        this.maxLife = 150;
         this.attackFire = 20;
         this.attack = 10; 
 
@@ -236,6 +237,7 @@ class Bat extends AnimatedObject {
         this.chaseRange = 100;  
         this.chaseSpeed = 0.1;  
         this.life = 20;
+        this.maxLife = 20;
         this.attack = 5;
         this.lastAttackTime = 0;  
         this.attackInterval = 500;
@@ -333,6 +335,7 @@ class Knight extends AnimatedObject{
         this.chaseRange = 300;
         this.chaseSpeed = 0.1;
         this.life = 70;
+        this.maxLife = 70;
         this.attack = 15;
         this.lastAttackTime = 0;
         this.attackInterval = 1000;
@@ -433,6 +436,7 @@ class Mage extends AnimatedObject {
         this.chaseRange = 1000;
         this.chaseSpeed = 0.05;
         this.life = 40;
+        this.maxLife = 40;
         this.magicAttack = 10;
         this.attack = 5;
         this.lastAttackTime = 0;
@@ -580,6 +584,7 @@ class Skull extends AnimatedObject{
         this.chaseRange = 80;
         this.chaseSpeed = 0.1;
         this.life = 30;
+        this.maxLife = 30;
         this.attack = 15;
         this.lastAttackTime = 0;
         this.attackInterval = 1000;
@@ -677,6 +682,7 @@ class Slime extends AnimatedObject{
         this.chaseRange = 100;
         this.chaseSpeed = 0.05;
         this.life = 20;
+        this.maxLife = 20;
         this.attack = 5;
         this.lastAttackTime = 0;
         this.attackInterval = 5000;

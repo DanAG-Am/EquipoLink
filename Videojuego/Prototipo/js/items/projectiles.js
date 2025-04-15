@@ -35,15 +35,18 @@ class Bomb {
     explode() {
         this.alive = false; //no dibujar bomba
 
-        // aplicar dano en cierto radio
-        game.enemies.forEach(enemy => {
-            const distance = Math.sqrt(
-                Math.pow(enemy.position.x - this.position.x, 2) + Math.pow(enemy.position.y - this.position.y, 2)
-            );
-            if (distance <= this.explosionRadius) {
-                enemy.takeDamage(this.attack); //enemigo recibe dano
-            }
-        });
+        // aplicar daño en cierto radio
+        if (game.enemies && Array.isArray(game.enemies)) {
+            game.enemies.forEach(enemy => {
+                const distance = Math.sqrt(
+                    Math.pow(enemy.position.x - this.position.x, 2) +
+                    Math.pow(enemy.position.y - this.position.y, 2)
+                );
+                if (distance <= this.explosionRadius) {
+                    enemy.takeDamage(this.attack); // el enemigo recibe daño
+                }
+            });
+        }
     }
 
     draw(ctx) {

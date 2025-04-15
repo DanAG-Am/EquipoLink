@@ -131,6 +131,10 @@ Game.prototype.createEventListeners = function(){
                 this.player.toggleSword(true);
             }
             else if(event.key=="c"){
+                const now = Date.now();
+                if (now - this.lastMagicTime < 500) return; // cooldown de 0.5s
+                this.lastMagicTime = now;
+
                 if (playerStats.mana > 0) {
                     magicShot();
                     playerStats.mana -= 10;
@@ -147,6 +151,10 @@ Game.prototype.createEventListeners = function(){
                 }
             }
             else if(event.key == "x"){
+                const now = Date.now();
+                if (now - this.lastArrowTime < 500) return; // cooldown de 0.5s
+                this.lastArrowTime = now;
+
                 if (playerStats.arrows > 0) {
                     arrowShot();
                     playerStats.arrows--;
@@ -162,7 +170,11 @@ Game.prototype.createEventListeners = function(){
                     this.player.toggleBow(true);
                 }
             } else if (event.key == "a") {
+                const now = Date.now();
+                if (now - this.lastBombTime < 2000) return; // Cooldown de 2 segundos para dejar bomba
+                
                 if (playerStats.bombs > 0) {
+                    this.lastBombTime = now;
                     bombAttack();
                     playerStats.bombs--;
                     this.player.toggleBomb(true);
@@ -176,7 +188,37 @@ Game.prototype.createEventListeners = function(){
                 } else {
                     this.player.toggleBomb(false);
                 }
-            } 
+            } else if (event.key === "f") {
+                const now = Date.now();
+                if (now - this.lastDashTime < this.dashCooldown) return;
+                this.lastDashTime = now;
+            
+                let dashOffset = new Vec(0, 0);
+                if (this.player.currentDirection === "up") dashOffset = new Vec(0, -this.dashDistance);
+                if (this.player.currentDirection === "down") dashOffset = new Vec(0, this.dashDistance);
+                if (this.player.currentDirection === "left") dashOffset = new Vec(-this.dashDistance, 0);
+                if (this.player.currentDirection === "right") dashOffset = new Vec(this.dashDistance, 0);
+            
+                const futurePosition = this.player.position.plus(dashOffset);
+                const futureBox = {
+                    position: futurePosition,
+                    width: this.player.width,
+                    height: this.player.height
+                };
+            
+                const collidesWithWall = getWallBoxes().some(wall => boxOverlap(futureBox, wall));
+            
+                const npcs = [this.tienda, this.fairy, this.oldMan];
+                const collidesWithNPC = npcs.some(npc => boxOverlap(futureBox, {
+                    position: npc.position,
+                    width: npc.width,
+                    height: npc.height
+                }));
+            
+                if (!collidesWithWall && !collidesWithNPC) {
+                    this.player.position = futurePosition;
+                }
+            }
         }
         if (event.key == "o") {
             if ((this.level || this.level2 || this.level3 || this.level4 || this.level5 || this.level6 || this.level7 || this.level8 || this.level9 || this.level10) && this.levelCompleted) {

@@ -145,6 +145,7 @@ Game.prototype.draw = function(ctx) {
         this.arrows.forEach(a => a.draw(ctx));
         this.magics.forEach(m => m.draw(ctx));
         this.drawEnemies(ctx);
+        this.drawEnemyHealthBars(ctx);
         if (this.levelCompleted) {
             if (this.chestIsOpen) {
                 ctx.drawImage(this.chestOpened, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
@@ -188,6 +189,7 @@ Game.prototype.draw = function(ctx) {
         this.arrows.forEach(a => a.draw(ctx));
         this.magics.forEach(m => m.draw(ctx));
         this.drawEnemies(ctx);
+        this.drawEnemyHealthBars(ctx);
         if (this.levelCompleted) {
             if (this.chestIsOpen) {
                 ctx.drawImage(this.chestOpened, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
@@ -246,6 +248,7 @@ Game.prototype.draw = function(ctx) {
         }
         drawRupees(ctx, this.player);
         this.drawEnemies(ctx);
+        this.drawEnemyHealthBars(ctx);
     
         if (this.showInventory) {
             this.drawInventory(ctx);
@@ -339,6 +342,7 @@ Game.prototype.draw = function(ctx) {
         this.arrows.forEach(a => a.draw(ctx));
         this.magics.forEach(m => m.draw(ctx));
         this.drawEnemies(ctx);
+        this.drawEnemyHealthBars(ctx);
         if (this.levelCompleted) {
             if (this.chestIsOpen) {
                 ctx.drawImage(this.chestOpened, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
@@ -382,6 +386,7 @@ Game.prototype.draw = function(ctx) {
         this.arrows.forEach(a => a.draw(ctx));
         this.magics.forEach(m => m.draw(ctx));
         this.drawEnemies(ctx);
+        this.drawEnemyHealthBars(ctx);
         if (this.levelCompleted) {
             if (this.chestIsOpen) {
                 ctx.drawImage(this.chestOpened, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
@@ -426,6 +431,7 @@ Game.prototype.draw = function(ctx) {
         this.arrows.forEach(a => a.draw(ctx));
         this.magics.forEach(m => m.draw(ctx));
         this.drawEnemies(ctx);
+        this.drawEnemyHealthBars(ctx);
         if (this.levelCompleted) {
             if (this.chestIsOpen) {
                 ctx.drawImage(this.chestOpened, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
@@ -470,6 +476,7 @@ Game.prototype.draw = function(ctx) {
         this.arrows.forEach(a => a.draw(ctx));
         this.magics.forEach(m => m.draw(ctx));
         this.drawEnemies(ctx);
+        this.drawEnemyHealthBars(ctx);
         if (this.levelCompleted) {
             if (this.chestIsOpen) {
                 ctx.drawImage(this.chestOpened, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
@@ -577,6 +584,7 @@ Game.prototype.draw = function(ctx) {
         this.arrows.forEach(a => a.draw(ctx));
         this.magics.forEach(m => m.draw(ctx));
         this.drawEnemies(ctx);
+        this.drawEnemyHealthBars(ctx);
         if (this.levelCompleted) {
             if (this.chestIsOpen) {
                 ctx.drawImage(this.chestOpened, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
@@ -620,6 +628,7 @@ Game.prototype.draw = function(ctx) {
         this.arrows.forEach(a => a.draw(ctx));
         this.magics.forEach(m => m.draw(ctx));
         this.drawEnemies(ctx);
+        this.drawEnemyHealthBars(ctx);
         if (this.levelCompleted) {
             if (this.chestIsOpen) {
                 ctx.drawImage(this.chestOpened, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
@@ -664,6 +673,7 @@ Game.prototype.draw = function(ctx) {
         this.arrows.forEach(a => a.draw(ctx));
         this.magics.forEach(m => m.draw(ctx));
         this.drawEnemies(ctx);
+        this.drawEnemyHealthBars(ctx);
         if (this.levelCompleted) {
             if (this.chestIsOpen) {
                 ctx.drawImage(this.chestOpened, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
@@ -780,6 +790,7 @@ Game.prototype.draw = function(ctx) {
             ctx.fillText("Presiona Enter para continuar", canvasWidth / 2, 190, 600, 100);
         } else {
             this.drawEnemies(ctx);
+            this.drawEnemyHealthBars(ctx);
         }
         this.player.draw(ctx);
         if (this.showInventory) {
