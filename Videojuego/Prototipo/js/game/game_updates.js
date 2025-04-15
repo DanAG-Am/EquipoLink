@@ -49,6 +49,10 @@ Game.prototype.update = function(deltaTime) {
         this.player.update(deltaTime);
         
         if (this.player.swordActive) {
+            const now = Date.now();
+            if (now - this.lastSwordTime < 2000) return; // cooldown 0.5s
+            this.lastSwordTime = now;
+
             // Definir el área de impacto de la espada según la dirección del jugador
             let swordBox = {
                 position: new Vec(this.player.position.x, this.player.position.y),
@@ -231,7 +235,8 @@ Game.prototype.update = function(deltaTime) {
                 };
         
                 const enemigos = (this.level || this.level2 || this.level3 || this.level4 || this.level5 || this.level6 || this.level7 || this.level8 || this.level9 || this.level10 || this.levelBoss) ? this.levelEnemies : this.actors;
-                enemigos.forEach((enemy, index) => {
+                for (let i = enemigos.length - 1; i >= 0; i--) {
+                    const enemy = enemigos[i];
                     if (boxOverlap(bombBox, {
                         position: enemy.position,
                         width: enemy.width,
@@ -263,7 +268,7 @@ Game.prototype.update = function(deltaTime) {
                             playerStats.mana = Math.min(100, playerStats.mana + 10);
                         }
                     }
-                });
+                };
         
                 // Verificar si el jugador está cerca de la bomba
                 const playerBox = {

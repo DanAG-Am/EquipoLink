@@ -30,7 +30,49 @@ function drawUI() {
     uiCtx.textAlign = "left";
 
     // Draw dash and shield Icon
-    uiCtx.drawImage(dashImg, 0, -5, 32, 64);
+
+    // Dash
+    const iconX = 0;
+    const iconY = -5;
+    const iconWidth = 32;
+    const iconHeight = 64;
+    // --- Barra de recarga tipo "barra horizontal"
+    const now = Date.now();
+    const cooldown = game.dashCooldown;
+    const elapsed = now - game.lastDashTime;
+    const percent = Math.min(elapsed / cooldown, 1);
+    if (percent < 1) {
+        uiCtx.save();
+        uiCtx.globalAlpha = 0.4; // oscurecer el ícono
+        uiCtx.drawImage(dashImg, iconX, iconY, iconWidth, iconHeight);
+        uiCtx.restore();
+    } else {
+        uiCtx.drawImage(dashImg, iconX, iconY, iconWidth, iconHeight);
+    }
+    if (percent < 1) {
+        const barWidth = 14;
+        const barHeight = 5;
+        const fillWidth = barWidth * percent;
+    
+        const barX = iconX + iconWidth - barWidth - 12.5;
+        const barY = iconY + iconHeight - 10; // justo debajo del icono
+        
+        uiCtx.save();
+        // Fondo gris
+        uiCtx.fillStyle = "gray";
+        uiCtx.fillRect(barX, barY, barWidth, barHeight);
+    
+        // Relleno de la barra
+        uiCtx.fillStyle = "aqua";
+        uiCtx.fillRect(barX, barY, fillWidth, barHeight);
+    
+        // Borde blanco
+        uiCtx.strokeStyle = "white";
+        uiCtx.strokeRect(barX, barY, barWidth, barHeight);
+        uiCtx.restore();
+    }
+
+    // Shield
     uiCtx.drawImage(shieldImg, 20, -5, 32, 64);
 
     // icons y stats

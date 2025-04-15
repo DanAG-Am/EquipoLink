@@ -76,8 +76,31 @@ Game.prototype.drawEnemies = function(ctx) {
     this.levelEnemies.forEach(enemy => {
         // Solo dibuja el enemigo si no está colisionando con una pared.
         if (!this.isEnemyCollidingWithWall(enemy)) {
-            enemy.draw(ctx); // Dibuja el enemigo en el contexto de dibujo.
+            enemy.draw(ctx);
         }
+    });
+};
+Game.prototype.drawEnemyHealthBars = function(ctx) {
+    this.levelEnemies.forEach(enemy => {
+        const barWidth = 40;
+        const barHeight = 5;
+        const maxHp = enemy.maxLife || 20;
+        const hp = Math.max(0, enemy.life);
+        const hpPercent = hp / maxHp;
+        const hpBarWidth = barWidth * hpPercent;
+
+        const barX = enemy.position.x + enemy.width / 2 - barWidth / 2;
+        const barY = enemy.position.y - 8; // arriba del enemigo
+
+        ctx.fillStyle = "gray";
+        ctx.fillRect(barX, barY, barWidth, barHeight);
+
+        ctx.fillStyle = "red";
+        ctx.fillRect(barX, barY, hpBarWidth, barHeight);
+
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = 1;
+        ctx.strokeRect(barX, barY, barWidth, barHeight);
     });
 };
 

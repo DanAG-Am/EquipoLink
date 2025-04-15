@@ -37,6 +37,8 @@ class Player extends AnimatedObject{
         this.swordActive = false;
         this.magicActive = false; 
         this.bowActive = false;
+        this.lastAttackTime = 0;
+        this.attackCooldown = 500;
     }   
 
     update(deltaTime) {

@@ -10,6 +10,13 @@ class Game {
     constructor(){
         this.createEventListeners();
         this.initObjects();
+        this.lastSwordTime = 0;
+        this.lastArrowTime = 0;
+        this.lastMagicTime = 0;
+        this.lastBombTime = 0;
+        this.dashCooldown = 1000; // tiempo entre dashes (en ms)
+        this.lastDashTime = 0;
+        this.dashDistance = 64; // distancia del dash (2 tiles si tileSize = 32)
         this.showMainMenu = true;
         this.showPrologue = false;
         this.mainMap = false;
