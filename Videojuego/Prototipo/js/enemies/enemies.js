@@ -4,6 +4,23 @@
  */
 /*clases derivadas de los enemigos, se repite la misma estructura de boss en el resto*/
 
+let playerHurtAudio = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Character/link_hurt.wav");
+playerHurtAudio.volume = 1;
+playerHurtAudio.loop = false;
+
+function playerHurtSFX() {
+    if (!playerHurtAudio.paused) return; // Don't overlap if it's already playing
+    playerHurtAudio.currentTime = 0;
+    playerHurtAudio.play();
+}
+
+function dragonSFX(){
+    const sfx = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Enemy/boss_ambientsound.wav");
+    sfx.loop = true;
+    sfx.volume = 0.5;
+    sfx.play();
+}
+
 class Boss extends AnimatedObject{
     // Constructor: Inicializa al jefe con su posición, tamaño y otras propiedades como velocidad, sprites y estadísticas.
     constructor(position, width, height) {
@@ -139,7 +156,6 @@ class Boss extends AnimatedObject{
             { position: this.position, width: this.width, height: this.height }
         )) {
             const currentTime = Date.now(); 
-
             // Si ha pasado suficiente tiempo desde el último ataque, inflige daño al jugador.
             if (currentTime - this.lastAttackTime > this.attackInterval && playerStats.life > 0) {
                 playerStats.life = Math.max(0, playerStats.life - this.attack); // Reduce la vida del jugador.
@@ -724,14 +740,13 @@ class Slime extends AnimatedObject{
             { position: this.position, width: this.width, height: this.height }
         )) {
             const currentTime = Date.now(); 
-
             if (currentTime - this.lastAttackTime > this.attackInterval && playerStats.life > 0) {
                 playerStats.life = Math.max(0, playerStats.life - this.attack);
                 this.lastAttackTime = currentTime; 
             }
         }
     }
-
+    
     draw(ctx) {
         ctx.save();
         ctx.drawImage(this.image, this.position.x, this.position.y, this.width, this.height);

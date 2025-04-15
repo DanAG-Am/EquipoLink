@@ -3,6 +3,19 @@
  * Fecha: 2025-03-24
  */
 // Actualiza el estado del juego procesando las acciones del jugador, las interacciones con los enemigos y otras mecánicas del juego
+
+function playerHurtSFX() {
+    const sfx = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Character/link_hurt.wav");
+    sfx.volume = 0.5;
+    sfx.play();
+}
+
+function enemyDeathSFX() {
+    const sfx = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Enemy/enemy_death.wav");
+    sfx.volume = 0.5;
+    sfx.play();
+}
+
 Game.prototype.update = function(deltaTime) {
     if (this.chestRewardActive) return;
     if (this.levelBoss && this.dialogueStage3 < 2) {
@@ -77,6 +90,7 @@ Game.prototype.update = function(deltaTime) {
                         enemy.life -= playerStats.damageSword;
                         enemy.lastDamageTime = currentTime;
                         if (enemy.life <= 0) {
+                            enemyDeathSFX();
                             enemigos.splice(i, 1);
                             let rupeesEarned = 1; // 1 rupee por defecto
                             switch (enemy.name) { // Determina la recompensa según el tipo de enemigo
@@ -121,6 +135,7 @@ Game.prototype.update = function(deltaTime) {
                     enemy.life -= playerStats.damageArrow;
                     arrow.alive = false;
                     if (enemy.life <= 0) {
+                        enemyDeathSFX();
                         enemigos.splice(i, 1);
                         let rupeesEarned = 1; // 1 rupee por defecto
                         switch (enemy.name) { // Determina la recompensa según el tipo de enemigo
@@ -172,6 +187,7 @@ Game.prototype.update = function(deltaTime) {
                         enemy.life -= playerStats.damageSword;
                         enemy.lastDamageTime = currentTime;
                         if (enemy.life <= 0) {
+                            enemyDeathSFX();
                             enemigos.splice(i, 1);
                             let rupeesEarned = 1; // 1 rupee por defecto
                             switch (enemy.name) { // Determina la recompensa según el tipo de enemigo
@@ -223,6 +239,7 @@ Game.prototype.update = function(deltaTime) {
                     })) {
                         enemy.life -= playerStats.damageBomb;
                         if (enemy.life <= 0) {
+                            enemyDeathSFX();
                             enemigos.splice(i, 1);
                             let rupeesEarned = 1; // 1 rupee por defecto
                             switch (enemy.name) { // Determina la recompensa según el tipo de enemigo
@@ -256,6 +273,7 @@ Game.prototype.update = function(deltaTime) {
                 };
         
                 if (boxOverlap(bombBox, playerBox)) {
+                    playerHurtSFX();
                     playerStats.life = Math.max(0, playerStats.life - playerStats.damageBomb);
                 }
             }
