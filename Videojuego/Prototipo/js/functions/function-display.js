@@ -73,7 +73,43 @@ function drawUI() {
     }
 
     // Shield
-    uiCtx.drawImage(shieldImg, 20, -5, 32, 64);
+    const shieldX = 20;
+    const shieldY = -5;
+    const shieldWidth = 32;
+    const shieldHeight = 64;
+    // --- Barra de recarga tipo "barra horizontal"
+    const nowShield = Date.now();
+    const cooldownShield = game.player.shieldCooldown;
+    const elapsedShield = nowShield - game.player.lastShieldBlockTime;
+    const percentShield = Math.min(elapsedShield / cooldownShield, 1);
+    if (percentShield < 1) {
+        // Oscurecer icono
+        uiCtx.save();
+        uiCtx.globalAlpha = 0.4;
+        uiCtx.drawImage(shieldImg, shieldX, shieldY, shieldWidth, shieldHeight);
+        uiCtx.restore();
+    } else {
+        // Icono normal
+        uiCtx.drawImage(shieldImg, shieldX, shieldY, shieldWidth, shieldHeight);
+    }
+    if (percentShield < 1) {
+        const barWidth = 14;
+        const barHeight = 5;
+        const fillWidth = barWidth * percentShield;
+        const barX = shieldX + shieldWidth - barWidth - 12.5;
+        const barY = shieldY + shieldHeight - 10;
+
+        uiCtx.save();
+        uiCtx.fillStyle = "gray";
+        uiCtx.fillRect(barX, barY, barWidth, barHeight);
+
+        uiCtx.fillStyle = "aqua";
+        uiCtx.fillRect(barX, barY, fillWidth, barHeight);
+
+        uiCtx.strokeStyle = "white";
+        uiCtx.strokeRect(barX, barY, barWidth, barHeight);
+        uiCtx.restore();
+    }
 
     // icons y stats
     uiCtx.drawImage(rupeeImg, 170, 80, 16, 32);

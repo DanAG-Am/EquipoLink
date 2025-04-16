@@ -34,6 +34,8 @@ const wallTile = new Image();
 wallTile.src = "../../Videojuego/Assets/GameAssets/Map/Floor/floor_Block.png";
 const grassTile = new Image();
 grassTile.src = "../../Videojuego/Assets/GameAssets/Map/Floor/Grass.png";
+const magmaTile = new Image();
+magmaTile.src = "../../Videojuego/Assets/GameAssets/Map/Floor/Magma_3.png";
 //ui Images
 const tutorialImg = new Image();
 tutorialImg.src = "../../Videojuego/Assets/GameAssets/HUD/Tutorial.png";

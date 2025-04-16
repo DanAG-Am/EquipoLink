@@ -175,6 +175,8 @@ function processBackgroundLayout(layoutName) {
                 row.push('door');
             } else if (char === '@') {
                 row.push('grass');
+            } else if (char === '$') {
+                row.push('magma');
             } else {
                 const rand = Math.random();
                 if (rand < 0.333) {
@@ -216,6 +218,8 @@ function drawBackground(layoutName, ctx) {
                 ctx.drawImage(floorDoor, posX, posY, tileSize, tileSize);
             } else if (type === 'grass') {
                 ctx.drawImage(grassTile, posX, posY, tileSize, tileSize);
+            } else if (type === 'magma') {
+                ctx.drawImage(magmaTile, posX, posY, tileSize, tileSize);
             }
         }
     }

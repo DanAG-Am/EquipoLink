@@ -17,6 +17,10 @@ class Game {
         this.dashCooldown = 1000; // tiempo entre dashes (en ms)
         this.lastDashTime = 0;
         this.dashDistance = 64; // distancia del dash (2 tiles si tileSize = 32)
+        this.lastShieldTime = 0;
+        this.shieldCooldown = 10000; // 10 segundos
+        this.shieldDuration = 2000;  // 2 segundos
+        this.shieldActiveUntil = 0;  // cuándo termina el escudo    
         this.showMainMenu = true;
         this.showPrologue = false;
         this.mainMap = false;
