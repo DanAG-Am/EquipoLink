@@ -14,7 +14,6 @@ class Player extends AnimatedObject{
             "right": ["../../Videojuego/Assets/GameAssets/Basic_Movements/Basic_movement_3.png", "../../Videojuego/Assets/GameAssets/Basic_Movements/Basic_movement_4.png"],
             "left": ["../../Videojuego/Assets/GameAssets/Basic_Movements/Basic_movement_3.png", "../../Videojuego/Assets/GameAssets/Basic_Movements/Basic_movement_4.png"],
             "up": ["../../Videojuego/Assets/GameAssets/Basic_Movements/Basic_movement_5.png", "../../Videojuego/Assets/GameAssets/Basic_Movements/Basic_movement_6.png"],
-            "defend": ["../../Videojuego/Assets/GameAssets/Magical_shield/Magical_shield_3.png", "../../Videojuego/Assets/GameAssets/Magical_shield/Magical_shield_4.png"],
             "win": ["../../Videojuego/Assets/GameAssets/Pick_up_item/Pick_up_item_2.png"],
             "attackSwordDown": "../../Videojuego/Assets/GameAssets/White_sword/White_sword_4.png",
             "attackSwordRight": "../../Videojuego/Assets/GameAssets/White_sword/White_sword_8.png",
@@ -24,7 +23,10 @@ class Player extends AnimatedObject{
             "attackMagicUp": "../../Videojuego/Assets/GameAssets/Magical_rod/Magical_rod_12.png",
             "attackBowDown": "../../Videojuego/Assets/GameAssets/Bow/bow_down.png",
             "attackBowLeft": "../../Videojuego/Assets/GameAssets/Bow/bow_right.png",
-            "attackBowUp": "../../Videojuego/Assets/GameAssets/Bow/bow_up.png"
+            "attackBowUp": "../../Videojuego/Assets/GameAssets/Bow/bow_up.png",
+            "shieldDown": "../../Videojuego/Assets/GameAssets/Magical_shield/Magical_shield_2.png",
+            "shieldRight": "../../Videojuego/Assets/GameAssets/Magical_shield/Magical_shield_4.png",
+            "shieldUp": "../../Videojuego/Assets/GameAssets/Magical_shield/Magical_shield_5.png"
         };
         this.currentDirection = "up";
         this.facingLeft = false;
@@ -37,8 +39,11 @@ class Player extends AnimatedObject{
         this.swordActive = false;
         this.magicActive = false; 
         this.bowActive = false;
+        this.shieldActive = false;
+        this.shieldCooldown = 10000; // 10 segundos
+        this.lastShieldBlockTime = -Infinity; // tiempo del último bloqueo exitoso
         this.lastAttackTime = 0;
-        this.attackCooldown = 500;
+        this.attackCooldown = 500; // cooldown de ataque
     }   
 
     update(deltaTime) {
@@ -133,6 +138,9 @@ class Player extends AnimatedObject{
         } else if (this.bowActive && this.currentDirection === "left") {
             ctx.scale(-1, 1);
             drawX = -this.position.x - this.width;
+        } else if (this.shieldActive && this.currentDirection === "left") {
+            ctx.scale(-1, 1);
+            drawX = -this.position.x - this.width;
         } else if (flip) {
             ctx.scale(-1, 1);
             drawX = -this.position.x - this.width;
@@ -179,6 +187,19 @@ class Player extends AnimatedObject{
             }
             ctx.drawImage(bowImage, drawX, drawY, this.width, this.height);
         }
+        else if (this.shieldActive) {
+            let shieldImage = new Image();
+            if (this.currentDirection === "down") {
+                shieldImage.src = this.sprites["shieldDown"];
+            } else if (this.currentDirection === "right") {
+                shieldImage.src = this.sprites["shieldRight"];
+            } else if (this.currentDirection === "left") {
+                shieldImage.src = this.sprites["shieldRight"];
+            } else if (this.currentDirection === "up") {
+                shieldImage.src = this.sprites["shieldUp"];
+            }
+            ctx.drawImage(shieldImage, drawX, drawY, this.width, this.height);
+        }
             
         else {
             ctx.drawImage(this.image, drawX, drawY, this.width, this.height);
@@ -194,18 +215,18 @@ class Player extends AnimatedObject{
             this.image.src = this.sprites[direction][this.frameIndex];}
     }
     toggleShield(active) {
-        this.shieldActive = active; // Set whether the shield is active or not
+        this.shieldActive = active;
     }
     toggleSword(active) {
-        this.swordActive = active; // Set whether the sword is active or not
+        this.swordActive = active;
     }
     toggleMagic(active) {
-        this.magicActive = active; // Set whether the magic is active or not
+        this.magicActive = active;
     }
     toggleBomb(active){
-        this.bombActive = active; // Set whether the bomb is active or not
+        this.bombActive = active;
     }
     toggleBow(active){
-        this.bowActive = active; // Set whether the bow is active or not
+        this.bowActive = active;
     }
 }

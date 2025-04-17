@@ -218,6 +218,8 @@ Game.prototype.createEventListeners = function(){
                 if (!collidesWithWall && !collidesWithNPC) {
                     this.player.position = futurePosition;
                 }
+            } else if (event.key === "Shift") {
+                this.player.toggleShield(true); // activar visualmente
             }
         }
         if (event.key == "o") {
@@ -344,6 +346,9 @@ Game.prototype.createEventListeners = function(){
                 this.player.toggleMagic(false);
             } else if(event.key == "x"){
                 this.player.toggleBow(false);
+            }
+            if (event.key === "Shift") {
+                this.player.toggleShield(false); // desactivar cuando sueltas
             }
         }
     });

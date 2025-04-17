@@ -159,8 +159,16 @@ class Boss extends AnimatedObject{
             const currentTime = Date.now(); 
             // Si ha pasado suficiente tiempo desde el último ataque, inflige daño al jugador.
             if (currentTime - this.lastAttackTime > this.attackInterval && playerStats.life > 0) {
-                playerStats.life = Math.max(0, playerStats.life - this.attack); // Reduce la vida del jugador.
-                this.lastAttackTime = currentTime; // Actualiza el tiempo del último ataque.
+                this.lastAttackTime = currentTime;
+
+                // Bloquea el daño si el escudo está activo y no ha sido usado aún
+                if (game.player.shieldActive && currentTime - game.player.lastShieldBlockTime > game.player.shieldCooldown) {
+                    game.player.lastShieldBlockTime = currentTime; // bloquea el daño e inicia cooldown
+                } else {
+                    // recibe daño normalmente
+                    playerStats.life = Math.max(0, playerStats.life - this.attack);
+                    playerHurtSFX();
+                }
             }
         }
 
@@ -304,8 +312,16 @@ class Bat extends AnimatedObject {
             const currentTime = Date.now(); 
 
             if (currentTime - this.lastAttackTime > this.attackInterval && playerStats.life > 0) {
-                playerStats.life = Math.max(0, playerStats.life - this.attack);
-                this.lastAttackTime = currentTime; 
+                this.lastAttackTime = currentTime;
+
+                // Bloquea el daño si el escudo está activo y no ha sido usado aún
+                if (game.player.shieldActive && currentTime - game.player.lastShieldBlockTime > game.player.shieldCooldown) {
+                    game.player.lastShieldBlockTime = currentTime; // bloquea el daño e inicia cooldown
+                } else {
+                    // recibe daño normalmente
+                    playerStats.life = Math.max(0, playerStats.life - this.attack);
+                    playerHurtSFX();
+                }
             }
         }
     }
@@ -401,9 +417,17 @@ class Knight extends AnimatedObject{
         )) {
             const currentTime = Date.now(); 
 
-            if (currentTime - this.lastAttackTime > this.attackInterval && playerStats.life >0) {
-                playerStats.life = Math.max(0, playerStats.life - this.attack);
-                this.lastAttackTime = currentTime; 
+            if (currentTime - this.lastAttackTime > this.attackInterval && playerStats.life > 0) {
+                this.lastAttackTime = currentTime;
+
+                // Bloquea el daño si el escudo está activo y no ha sido usado aún
+                if (game.player.shieldActive && currentTime - game.player.lastShieldBlockTime > game.player.shieldCooldown) {
+                    game.player.lastShieldBlockTime = currentTime; // bloquea el daño e inicia cooldown
+                } else {
+                    // recibe daño normalmente
+                    playerStats.life = Math.max(0, playerStats.life - this.attack);
+                    playerHurtSFX();
+                }
             }
         }
     }
@@ -513,9 +537,17 @@ class Mage extends AnimatedObject {
         )) {
             const currentTime = Date.now(); 
 
-            if (currentTime - this.lastAttackTime > this.attackInterval && playerStats.life >0) {
-                playerStats.life = Math.max(0, playerStats.life - this.attack);
-                this.lastAttackTime = currentTime; 
+            if (currentTime - this.lastAttackTime > this.attackInterval && playerStats.life > 0) {
+                this.lastAttackTime = currentTime;
+
+                // Bloquea el daño si el escudo está activo y no ha sido usado aún
+                if (game.player.shieldActive && currentTime - game.player.lastShieldBlockTime > game.player.shieldCooldown) {
+                    game.player.lastShieldBlockTime = currentTime; // bloquea el daño e inicia cooldown
+                } else {
+                    // recibe daño normalmente
+                    playerStats.life = Math.max(0, playerStats.life - this.attack);
+                    playerHurtSFX();
+                }
             }
         }
 
@@ -651,8 +683,16 @@ class Skull extends AnimatedObject{
             const currentTime = Date.now(); 
 
             if (currentTime - this.lastAttackTime > this.attackInterval && playerStats.life > 0) {
-                playerStats.life = Math.max(0, playerStats.life - this.attack);
-                this.lastAttackTime = currentTime; 
+                this.lastAttackTime = currentTime;
+
+                // Bloquea el daño si el escudo está activo y no ha sido usado aún
+                if (game.player.shieldActive && currentTime - game.player.lastShieldBlockTime > game.player.shieldCooldown) {
+                    game.player.lastShieldBlockTime = currentTime; // bloquea el daño e inicia cooldown
+                } else {
+                    // recibe daño normalmente
+                    playerStats.life = Math.max(0, playerStats.life - this.attack);
+                    playerHurtSFX();
+                }
             }
         }
     }
@@ -745,10 +785,18 @@ class Slime extends AnimatedObject{
             { position: game.player.position, width: game.player.width, height: game.player.height },
             { position: this.position, width: this.width, height: this.height }
         )) {
-            const currentTime = Date.now(); 
+            const currentTime = Date.now();
             if (currentTime - this.lastAttackTime > this.attackInterval && playerStats.life > 0) {
-                playerStats.life = Math.max(0, playerStats.life - this.attack);
-                this.lastAttackTime = currentTime; 
+                this.lastAttackTime = currentTime;
+
+                // Bloquea el daño si el escudo está activo y no ha sido usado aún
+                if (game.player.shieldActive && currentTime - game.player.lastShieldBlockTime > game.player.shieldCooldown) {
+                    game.player.lastShieldBlockTime = currentTime; // bloquea el daño e inicia cooldown
+                } else {
+                    // recibe daño normalmente
+                    playerStats.life = Math.max(0, playerStats.life - this.attack);
+                    playerHurtSFX();
+                }
             }
         }
     }
