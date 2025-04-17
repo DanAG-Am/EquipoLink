@@ -62,6 +62,7 @@ class Game {
         this.titleVideo.loop = true;
         this.titleVideo.playsInline = true;
         this.titleVideo.play();
+        this.lastMagmaDamageTime = 0;
         this.logo = new Image();
         this.logo.src = "../../Videojuego/Assets/HTMLAssets/logo.png";
         this.chestClosed = new Image();
