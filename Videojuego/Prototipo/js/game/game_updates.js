@@ -47,10 +47,50 @@ Game.prototype.update = function(deltaTime) {
         
         // Actualizar la posición y acciones del jugador
         this.player.update(deltaTime);
+
+        // Daño por estar encima de magmaTile
+        const now = Date.now();
+        const tileX = Math.floor(this.player.position.x / tileSize);
+        const tileY = Math.floor(this.player.position.y / tileSize);
+
+        const currentLayoutName = this.level ? "levelClosed" :
+                                  this.level2 ? "level_2" :
+                                  this.level3 ? "level_3" :
+                                  this.level4 ? "level_4" :
+                                  this.level5 ? "level_5" :
+                                  this.level6 ? "level_6" :
+                                  this.level7 ? "level_7" :
+                                  this.level8 ? "level_8" :
+                                  this.level9 ? "level_9" :
+                                  this.level10 ? "level_10" :
+                                  this.levelBoss ? "prologue" : null;
+
+        if (currentLayoutName && processedFloors[currentLayoutName]) {
+            const layout = processedFloors[currentLayoutName];
+            if (layout[tileY] && layout[tileY][tileX] === "magma") {
+                if (now - this.lastMagmaDamageTime >= 500) {
+                    this.lastMagmaDamageTime = now;
+                    playerStats.life = Math.max(0, playerStats.life - 3);
+                    
+                    // Reproducir sonido y cortarlo después de 600 ms
+                    const sfx = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Fire/burning.mp3");
+                    sfx.volume = 0.2;
+                    sfx.play();
+                    sfx.currentTime = 1;
+
+                    sfx.addEventListener("timeupdate", () => {
+                        if (sfx.currentTime > 2) { // solo suena hasta el segundo 0.6
+                            sfx.pause();
+                            sfx.currentTime = 0;
+                        }
+                    });
+                }
+            }
+        }
         
         if (this.player.swordActive) {
             const now = Date.now();
-            if (now - this.lastSwordTime < 2000) return; // cooldown 0.5s
+            if (now - this.lastSwordTime < 200) return; // cooldown 0.5s
             this.lastSwordTime = now;
 
             // Definir el área de impacto de la espada según la dirección del jugador
