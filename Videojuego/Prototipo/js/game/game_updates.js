@@ -48,10 +48,17 @@ Game.prototype.update = function(deltaTime) {
         // Actualizar la posición y acciones del jugador
         this.player.update(deltaTime);
 
-        // Daño por estar encima de magmaTile
+        // Daño por estar encima de magmaTile (aunque solo una parte del cuerpo toque magma)
         const now = Date.now();
-        const tileX = Math.floor(this.player.position.x / tileSize);
-        const tileY = Math.floor(this.player.position.y / tileSize);
+        const playerLeft = this.player.position.x;
+        const playerRight = this.player.position.x + this.player.width;
+        const playerTop = this.player.position.y;
+        const playerBottom = this.player.position.y + this.player.height;
+
+        const tileLeft = Math.floor(playerLeft / tileSize);
+        const tileRight = Math.floor((playerRight - 1) / tileSize);
+        const tileTop = Math.floor(playerTop / tileSize);
+        const tileBottom = Math.floor((playerBottom - 1) / tileSize);
 
         const currentLayoutName = this.level ? "levelClosed" :
                                   this.level2 ? "level_2" :
@@ -67,24 +74,26 @@ Game.prototype.update = function(deltaTime) {
 
         if (currentLayoutName && processedFloors[currentLayoutName]) {
             const layout = processedFloors[currentLayoutName];
-            if (layout[tileY] && layout[tileY][tileX] === "magma") {
-                if (now - this.lastMagmaDamageTime >= 500) {
-                    this.lastMagmaDamageTime = now;
-                    playerStats.life = Math.max(0, playerStats.life - 3);
-                    
-                    // Reproducir sonido y cortarlo después de 600 ms
-                    const sfx = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Fire/burning.mp3");
-                    sfx.volume = 0.2;
-                    sfx.play();
-                    sfx.currentTime = 1;
 
-                    sfx.addEventListener("timeupdate", () => {
-                        if (sfx.currentTime > 2) { // solo suena hasta el segundo 0.6
-                            sfx.pause();
-                            sfx.currentTime = 0;
-                        }
-                    });
-                }
+            const touchingMagma =
+                layout[tileTop]?.[tileLeft] === "magma" ||
+                layout[tileTop]?.[tileRight] === "magma" ||
+                layout[tileBottom]?.[tileLeft] === "magma" ||
+                layout[tileBottom]?.[tileRight] === "magma";
+
+            if (touchingMagma && now - this.lastMagmaDamageTime >= 500) {
+                this.lastMagmaDamageTime = now;
+                playerStats.life = Math.max(0, playerStats.life - 3);
+
+                const sfx = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Fire/burning.mp3");
+                sfx.volume = 0.3;
+                sfx.currentTime = 0.7;
+                sfx.play();
+
+                setTimeout(() => {
+                    sfx.pause();
+                    sfx.currentTime = 0;
+                }, 1000);
             }
         }
         
