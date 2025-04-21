@@ -4,13 +4,35 @@
 import express from 'express'
 import mysql from 'mysql2/promise'
 import fs from 'fs'
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname  = path.dirname(__filename);
 
 const app = express();
 const port = 3000;
 
 app.use(express.json())
-// Se sirve la carpeta raíz, ten cuidado con la ubicación de tus archivos estáticos
-app.use('/Videojuego', express.static('./Videojuego'))
+
+// Middleware para corregir MIME types
+app.use(function(req, res, next) {
+  if (req.path.endsWith('.css')) {
+    res.type('text/css');
+  } else if (req.path.endsWith('.js')) {
+    res.type('application/javascript');
+  }
+  next();
+});
+
+// Servir archivos estáticos del directorio principal
+app.use(express.static(path.join(__dirname)));
+
+// Servir archivos estáticos desde Videojuego
+app.use('/Videojuego', express.static(path.join(__dirname, 'Videojuego')));
+
+// Servir api_script.js específicamente
+app.use('/api_script.js', express.static(path.join(__dirname, 'api_script.js')));
 
 // Función para conectarse a la base de datos
 async function connectToDB() {
@@ -50,7 +72,7 @@ app.get('/login', (request, response) => {
             console.error('Error loading login page:', err);
             response.status(500).send('There was an error: ' + err);
         } else {
-            console.log('Loading register page...');
+            console.log('Loading login page...');
             response.send(html);
         }
     });
@@ -62,7 +84,7 @@ app.get('/prototipo', (request, response) => {
             console.error('Error loading prototipo page:', err);
             response.status(500).send('There was an error: ' + err);
         } else {
-            console.log('Loading register page...');
+            console.log('Loading prototipo page...');
             response.send(html);
         }
     });
@@ -74,7 +96,7 @@ app.get('/', (request, response) => {
             console.error('Error loading prototipo page:', err);
             response.status(500).send('There was an error: ' + err);
         } else {
-            console.log('Loading register page...');
+            console.log('Loading prototipo page...');
             response.send(html);
         }
     });
@@ -86,11 +108,12 @@ app.get('/pagina_web', (request, response) => {
             console.error('Error loading pagina web page:', err);
             response.status(500).send('There was an error: ' + err);
         } else {
-            console.log('Loading register page...');
+            console.log('Loading pagina web page...');
             response.send(html);
         }
     });
 });
+
 // GET: Obtener todos los jugadores
 app.get('/api/Jugador', async (request, response) => {
     let connection = null
