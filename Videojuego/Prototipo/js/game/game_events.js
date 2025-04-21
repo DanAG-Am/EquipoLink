@@ -45,6 +45,76 @@ function discoverSFX() {
     });
 }
 
+// Variable para controlar si se ha interactuado con la página
+let userHasInteracted = false;
+
+// Detecta cualquier interacción del usuario
+document.addEventListener('click', handleUserInteraction);
+document.addEventListener('keydown', handleUserInteraction);
+
+function handleUserInteraction() {
+    if (!userHasInteracted) {
+        userHasInteracted = true;
+        console.log("Usuario ha interactuado con la página, audio habilitado.");
+        
+        // Intenta reproducir el audio adecuado basado en el estado actual del juego
+        if (game.showMainMenu) {
+            titleScreen.play().catch(err => console.warn("Error al reproducir titleScreen:", err));
+        }
+    }
+}
+
+function handleMusicPlayback(game) {
+    // Si el usuario no ha interactuado, no intentes reproducir audio
+    if (!userHasInteracted) return;
+    
+    // Si estás en la tienda
+    if (interactingMerchant) {
+        if (shopMusic.paused) {
+            stopAllMusic();
+            shopMusic.currentTime = 0;
+            shopMusic.play().catch(err => console.warn("Error al reproducir shopMusic:", err));
+        }
+        return;
+    }
+
+    // Si estás con el hada
+    if (interactingFairy) {
+        if (fairyMusic.paused) {
+            stopAllMusic();
+            fairyMusic.currentTime = 0;
+            fairyMusic.play().catch(err => console.warn("Error al reproducir fairyMusic:", err));
+        }
+        return;
+    }
+
+    // Si estás en la batalla final
+    if (game.levelBoss && !game.levelCompleted && !isGameOver) {
+        if (bossMusic.paused) {
+            stopAllMusic();
+            bossMusic.currentTime = 0;
+            bossMusic.play().catch(err => console.warn("Error al reproducir bossMusic:", err));
+        }
+        return;
+    } else if (game.levelBoss && game.levelCompleted) {
+        if (bossKilledMusic.paused) {
+            stopAllMusic();
+            bossKilledMusic.currentTime = 0;
+            bossKilledMusic.play().catch(err => console.warn("Error al reproducir bossKilledMusic:", err));
+        }
+        return;
+    }
+    
+    // Si estás en el menú principal
+    if (game.showMainMenu) {
+        if (titleScreen.paused) {
+            stopAllMusic();
+            titleScreen.currentTime = 0;
+            titleScreen.play().catch(err => console.warn("Error al reproducir titleScreen:", err));
+        }
+        return;
+    }
+}
 function bombAttack() {
     const dropSFX = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Combat/bomb_drop.mp3");
     dropSFX.volume = 1;

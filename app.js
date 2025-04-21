@@ -29,7 +29,7 @@ app.use(function(req, res, next) {
 app.use(express.static(path.join(__dirname)));
 
 // Servir archivos estáticos desde Videojuego
-app.use('/Videojuego', express.static(path.join(__dirname, 'Videojuego')));
+app.use('/Videojuego/Assets', express.static(path.join(__dirname, 'Videojuego', 'Videojuego', 'Assets')));
 
 // Servir api_script.js específicamente
 app.use('/api_script.js', express.static(path.join(__dirname, 'api_script.js')));
