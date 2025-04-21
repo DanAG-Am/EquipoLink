@@ -2,11 +2,12 @@
 <html>
     <head>
         <title>Sprites</title>
-        <link rel="stylesheet" href="/Videojuego/Prototipo/html/pagina_web.css">
-        <script src="/Videojuego/Prototipo/js/game/background.js"></script>
-        <script src="/Videojuego/Prototipo/js/game/game_classes.js"></script>
+        <link rel="stylesheet" type="text/css" href="/Videojuego/Prototipo/html/pagina_web.css">
+        <!-- Asegurarse de que los scripts se carguen en el orden correcto -->
         <script src="/Videojuego/Prototipo/js/game/global.js"></script>
         <script src="/Videojuego/Prototipo/js/functions/function-display.js"></script>
+        <script src="/Videojuego/Prototipo/js/game/game_classes.js"></script>
+        <script src="/Videojuego/Prototipo/js/game/background.js"></script>
         <script src="/Videojuego/Prototipo/js/game/main.js"></script>
         <script src="/Videojuego/Prototipo/js/enemies/enemies.js"></script>
         <script src="/Videojuego/Prototipo/js/items/projectiles.js"></script>
@@ -19,17 +20,17 @@
         <script src="/Videojuego/Prototipo/js/enemies/enemy-spawns.js"></script>
         <script src="/Videojuego/Prototipo/js/items/itemdrops.js"></script>
         <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&display=swap" rel="stylesheet">
-        <script type="module" defer src="/api_script.js"></script>
+        <script type="module" src="/api_script.js"></script>
     </head>
     <body>   
         <!-- audio to fetch  -->
         <audio id="enterRoomSFX" preload="auto">
-            <source src="../../Videojuego/Assets/GameAssets/Sounds/Character/enter_room.wav" type="audio/wav">
+            <source src="/Videojuego/Videojuego/Assets/GameAssets/Sounds/Character/enter_room.wav" type="audio/wav">
             Tu navegador no soporta audio HTML5.
         </audio>   
         <header>
             EQUIPOLINK VIDEOGAMES
-            <a href="/Videojuego/Prototipo/html/pagina_web.css" class="botonRegresar">Regresar</a>
+            <a href="/pagina_web" class="botonRegresar">Regresar</a>
         </header>
         <div class="container">
             <canvas id="canvas"></canvas>
@@ -72,7 +73,17 @@
                <button id="errorOkButton" style="padding: 5px 10px; font-size: 10x;">OK</button>
             </div>
         </div>
-        <script> main(); </script>
+        <script>
+            // Verificar si main existe antes de llamarlo
+            document.addEventListener('DOMContentLoaded', function() {
+                // Asegurarse de que la función main esté definida antes de llamarla
+                if (typeof main === 'function') {
+                    main();
+                } else {
+                    console.error('La función main no está definida. Asegúrate de que main.js se haya cargado correctamente.');
+                }
+            });
+        </script>
         <footer>
             <p>EquipoLink &copy; 2025</p>
         </footer>
@@ -129,5 +140,4 @@
             errorDiv.textContent = 'Error de conexión con el servidor.';
         }
     });
-    </script>
-    
+</script>
