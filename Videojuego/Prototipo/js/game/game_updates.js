@@ -6,13 +6,13 @@
 
 function playerHurtSFX() {
     const sfx = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Character/link_hurt.wav");
-    sfx.volume = 0.5;
+    sfx.volume = 1;
     sfx.play();
 }
 
 function enemyDeathSFX() {
     const sfx = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Enemy/enemy_death.wav");
-    sfx.volume = 0.5;
+    sfx.volume = 1;
     sfx.play();
 }
 
@@ -164,7 +164,7 @@ Game.prototype.update = function(deltaTime) {
                                     break;
                             }
                             playerStats.rupees += rupeesEarned;
-                            playerStats.mana = Math.min(100, playerStats.mana + 10);
+                            playerStats.mana = Math.min(playerStats.maxMana, playerStats.mana + 10);
                         }
                     }
                 }
@@ -209,7 +209,7 @@ Game.prototype.update = function(deltaTime) {
                                 break;
                         }
                         playerStats.rupees += rupeesEarned;
-                        playerStats.mana = Math.min(100, playerStats.mana + 10);
+                        playerStats.mana = Math.min(playerStats.maxMana, playerStats.mana + 10);
                     }
                 }
             });
@@ -261,7 +261,7 @@ Game.prototype.update = function(deltaTime) {
                                     break;
                             }
                             playerStats.rupees += rupeesEarned;
-                            playerStats.mana = Math.min(100, playerStats.mana + 10);
+                            playerStats.mana = Math.min(playerStats.maxMana, playerStats.mana + 10);
                         }
                     }
                 }
@@ -314,7 +314,7 @@ Game.prototype.update = function(deltaTime) {
                                     break;
                             }
                             playerStats.rupees += rupeesEarned;
-                            playerStats.mana = Math.min(100, playerStats.mana + 10);
+                            playerStats.mana = Math.min(playerStats.maxMana, playerStats.mana + 10);
                         }
                     }
                 };
@@ -336,6 +336,9 @@ Game.prototype.update = function(deltaTime) {
         // Si la vida del jugador llega a cero, termina el juego
         if (playerStats.life <= 0 && !isGameOver) {
             isGameOver = true;
+            stopAllMusic();
+            gameOver.currentTime = 0;
+            gameOver.play().catch(err => console.warn("Error al reproducir gameOver:", err));
             if (isGameOver === true) {
                 game.stopTimer();
             } else {

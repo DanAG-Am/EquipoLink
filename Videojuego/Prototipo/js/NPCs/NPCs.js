@@ -29,9 +29,9 @@ Tienda.prototype.draw = function(ctx) {
 };
 
 Tienda.prototype.drawDialogue = function(ctx) {
-    let boxWidth = 320;
+    let boxWidth = 420;
     let boxHeight = 180;
-    let boxX = this.position.x - ((boxWidth - this.width) / 2);
+    let boxX = this.position.x + 50 - ((boxWidth - this.width) / 2);
     let boxY = this.position.y - boxHeight - 10;
 
     ctx.save();
@@ -53,7 +53,7 @@ Tienda.prototype.drawDialogue = function(ctx) {
         ctx.fillText(texts[i], boxX + boxWidth / 2, startY + i * lineHeight);
     }
 
-    let scaledWidth = boxWidth - 10;
+    let scaledWidth = boxWidth - 100;
     let scaledHeight = 120;
     let imgX = boxX + 5;
     let imgY = boxY + 30;
@@ -64,6 +64,7 @@ Tienda.prototype.drawDialogue = function(ctx) {
     let buttonY = imgY + scaledHeight - 20;
     let secondButtonX = firstButtonX + 100;
     let thirdButtonX = secondButtonX + 100;
+    let fourthButtonX = thirdButtonX + 100;
     
     // Botón 1
     ctx.fillStyle = "#222";
@@ -81,10 +82,29 @@ Tienda.prototype.drawDialogue = function(ctx) {
     ctx.fillRect(thirdButtonX, buttonY, itemButtonWidth, itemButtonHeight);
     ctx.strokeRect(thirdButtonX, buttonY, itemButtonWidth, itemButtonHeight);
 
+    // Botón 4: Subir MaxHP
+    ctx.save();
+    ctx.fillStyle = "red";
+    ctx.fillRect(fourthButtonX, buttonY - 60, itemButtonWidth, itemButtonHeight);
+    ctx.strokeStyle = "white";
+    ctx.strokeRect(fourthButtonX, buttonY - 60, itemButtonWidth, itemButtonHeight);
+    ctx.drawImage(rupeeImg, fourthButtonX + 25, buttonY - 80, 12, 12);
+    ctx.restore();
+
+    // Botón 5: Subir MaxMP
+    ctx.save();
+    ctx.fillStyle = "lightblue";
+    ctx.fillRect(fourthButtonX, buttonY, itemButtonWidth, itemButtonHeight);
+    ctx.strokeRect(fourthButtonX, buttonY, itemButtonWidth, itemButtonHeight);
+    ctx.drawImage(rupeeImg, fourthButtonX + 25, buttonY - 20, 12, 12);
+    ctx.restore();
+
     this.buttonPositions = {
         button1: { x: firstButtonX, y: buttonY, width: itemButtonWidth, height: itemButtonHeight },
         button2: { x: secondButtonX, y: buttonY, width: itemButtonWidth, height: itemButtonHeight },
-        button3: { x: thirdButtonX, y: buttonY, width: itemButtonWidth, height: itemButtonHeight }
+        button3: { x: thirdButtonX, y: buttonY, width: itemButtonWidth, height: itemButtonHeight },
+        button4: { x: fourthButtonX, y: buttonY - 60, width: itemButtonWidth, height: itemButtonHeight },
+        button5: { x: fourthButtonX, y: buttonY, width: itemButtonWidth, height: itemButtonHeight }
     };
 
     ctx.save();
@@ -95,10 +115,15 @@ Tienda.prototype.drawDialogue = function(ctx) {
     ctx.fillText("COMPRAR", firstButtonX + itemButtonWidth / 2, buttonY + itemButtonHeight / 2);
     ctx.fillText("COMPRAR", secondButtonX + itemButtonWidth / 2, buttonY + itemButtonHeight / 2);
     ctx.fillText("COMPRAR", thirdButtonX + itemButtonWidth / 2, buttonY + itemButtonHeight / 2);
-    ctx.restore();   
-
-    ctx.font = "8px Game";
+    ctx.fillText("Max-HP", fourthButtonX + itemButtonWidth / 2, buttonY + itemButtonHeight / 2 - 60);
+    ctx.fillText("Max-MP", fourthButtonX + itemButtonWidth / 2, buttonY + itemButtonHeight / 2);
+    ctx.fillText("30", fourthButtonX + 50, buttonY - 75, 20, 20);
+    ctx.fillText("30", fourthButtonX + 50, buttonY - 15, 20, 20);
+    ctx.restore();
+    
     ctx.fillStyle = "white";
+    ctx.font = "8px Game";
+    ctx.textAlign = "center";
     let instruction;
     if (this.dialogueStage < this.dialogueTexts.length - 1) {
         instruction = "Presiona space para continuar";

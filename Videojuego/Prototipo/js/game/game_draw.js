@@ -6,12 +6,6 @@
 "use strict";
 
 //fetch de audios
-const backgroundMusic = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Music/dungeon_theme.mp4");
-backgroundMusic.autoplay = true;
-backgroundMusic.loop = true;
-backgroundMusic.preload = 'auto';
-backgroundMusic.volume = 0.3; 
-
 const enterRoomAudio = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Character/enter_room.wav");
 enterRoomAudio.volume = 1;
 function playEnterRoomSFX() {
@@ -20,33 +14,20 @@ function playEnterRoomSFX() {
     });
 }
 
-const gameOver = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Music/game_over.wav");
-gameOver.volume = 1;
-function gameOverSFX() {
-    gameOver.play().catch(err => {
-        console.warn("Playback failed for enter room sound:", err);
-    });
-}
-
-const gameWin = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Music/game_win.wav");
-gameWin.volume = 1;
-function gameWinSFX() {
-    gameWin.play().catch(err => {
-        console.warn("Playback failed for enter room sound:", err);
-    });
-}
-
-const talk = new Audio("../../Videojuego/Assets/GameAssets/Sounds/interact/talk_or_meterup_sound.wav");
-talk.volume = 1;
+const talkAudio = new Audio("../../Videojuego/Assets/GameAssets/Sounds/interact/talk_or_meterup_sound.wav");
+talkAudio.volume = 1;
 function talkSFX() {
-    talk.play().catch(err => {
-        console.warn("Playback failed for enter room sound:", err);
+    talkAudio.pause();
+    talkAudio.currentTime = 0;
+    talkAudio.play().catch(err => {
+        console.warn("Playback failed for talkSFX:", err);
     });
 }
 
 // Dibuja el estado actual del juego
 Game.prototype.draw = function(ctx) {
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    handleMusicPlayback(this);
     
     if (this.showMainMenu) {
         // Dibuja el video como fondo (si ya está cargado)
@@ -860,23 +841,18 @@ Game.prototype.draw = function(ctx) {
         drawPauseMenu(ctx);
     }
     if (interactingNPC) {
-        talkSFX();
         drawNPCTutorial(ctx);
     }
     if (interactingMerchant) {
-        talkSFX();
         this.tienda.drawDialogue(ctx);
     }
     if (interactingFairy) {
-        talkSFX();
         this.fairy.drawDialogue(ctx);
     }
     if (this.showLevelCompleteMessage) {
         drawCompleteMessage(ctx);
-        gameWinSFX();
     }
     if (isGameOver) {
-        gameOverSFX();
         drawDeathMenu(ctx);
     }
 
