@@ -44,6 +44,53 @@ app.get('/register', (request, response) => {
     });
 });
 
+app.get('/login', (request, response) => {
+    fs.readFile("./Videojuego/Prototipo/html/login.html", 'utf8', (err, html) => {
+        if (err) {
+            console.error('Error loading login page:', err);
+            response.status(500).send('There was an error: ' + err);
+        } else {
+            console.log('Loading register page...');
+            response.send(html);
+        }
+    });
+});
+
+app.get('/prototipo', (request, response) => {
+    fs.readFile("./Videojuego/Prototipo/html/prototipo.html", 'utf8', (err, html) => {
+        if (err) {
+            console.error('Error loading prototipo page:', err);
+            response.status(500).send('There was an error: ' + err);
+        } else {
+            console.log('Loading register page...');
+            response.send(html);
+        }
+    });
+});
+
+app.get('/', (request, response) => {
+    fs.readFile("./Videojuego/Prototipo/html/prototipo.html", 'utf8', (err, html) => {
+        if (err) {
+            console.error('Error loading prototipo page:', err);
+            response.status(500).send('There was an error: ' + err);
+        } else {
+            console.log('Loading register page...');
+            response.send(html);
+        }
+    });
+});
+
+app.get('/pagina_web', (request, response) => {
+    fs.readFile("./Videojuego/Prototipo/html/pagina_web.html", 'utf8', (err, html) => {
+        if (err) {
+            console.error('Error loading pagina web page:', err);
+            response.status(500).send('There was an error: ' + err);
+        } else {
+            console.log('Loading register page...');
+            response.send(html);
+        }
+    });
+});
 // GET: Obtener todos los jugadores
 app.get('/api/Jugador', async (request, response) => {
     let connection = null
@@ -185,58 +232,6 @@ app.post('/api/Jugador', async (request, response) => {
         }
     }
 });
-
-// PUT: Actualizar un jugador
-app.put('/api/Jugador', async (request, response) => {
-    let connection = null
-
-    try {
-        connection = await connectToDB()
-        // Se actualizan las columnas 'usuario' y 'contrasena' a partir de 'name' y 'surname'
-        const [results, fields] = await connection.query(
-            'update Jugador set usuario = ?, contrasena = ? where id_jugador = ?',
-            [request.body.name, request.body.surname, request.body.userID]
-        )
-        console.log(`${results.affectedRows} rows updated`)
-        response.json({ 'message': `Data updated correctly: ${results.affectedRows} rows updated.` })
-    }
-    catch (error) {
-        response.status(500).json(error)
-        console.log(error)
-    }
-    finally {
-        if (connection !== null) {
-            connection.end()
-            console.log("Connection closed successfully!")
-        }
-    }
-})
-
-// DELETE: Eliminar un jugador
-app.delete('/api/Jugador/:id_jugador', async (request, response) => {
-    let connection = null
-
-    try {
-        connection = await connectToDB()
-        const [results, fields] = await connection.query(
-            'delete from Jugador where id_jugador = ?',
-            [request.params.id_jugador]
-        )
-        console.log(`${results.affectedRows} row deleted`)
-        response.json({ 'message': `Data deleted correctly: ${results.affectedRows} rows deleted.` })
-    }
-    catch (error) {
-        response.status(500).json(error)
-        console.log(error)
-    }
-    finally {
-        if (connection !== null) {
-            connection.end()
-            console.log("Connection closed successfully!")
-        }
-    }
-})
-
 
 // Estadisticas CRUD
 

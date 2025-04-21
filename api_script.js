@@ -64,26 +64,6 @@ function main() {
         }
     }
 
-    document.getElementById('formUpdate').onsubmit = async (e) => {
-        e.preventDefault()
-        const formUpdate = document.getElementById('formUpdate')
-        const data = new FormData(formUpdate)
-        const dataObj = Object.fromEntries(data.entries())
-
-        let response = await fetch('http://localhost:3000/api/Jugador',{
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(dataObj)
-        })
-
-        if (response.ok) {
-            let results = await response.json()
-            document.getElementById('putResults').innerHTML = results.message
-        } else {
-            document.getElementById('putResults').innerHTML = response.status
-        }
-    }
-
     /*CRUD estadisticas de los jugadores */
     document.getElementById('formSelectEstadisticas').onsubmit = async (e) => {
         e.preventDefault();
