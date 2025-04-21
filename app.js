@@ -10,7 +10,7 @@ const port = 3000;
 
 app.use(express.json())
 // Se sirve la carpeta raíz, ten cuidado con la ubicación de tus archivos estáticos
-app.use(express.static('./'))
+app.use('/Videojuego', express.static('./Videojuego'))
 
 // Función para conectarse a la base de datos
 async function connectToDB() {
