@@ -31,6 +31,19 @@ app.get('/statistics', (request, response) => {
     })
 })
 
+// Ruta para servir la página de registro
+app.get('/register', (request, response) => {
+    fs.readFile("./Videojuego/Prototipo/html/register.html", 'utf8', (err, html) => {
+        if (err) {
+            console.error('Error loading register page:', err);
+            response.status(500).send('There was an error: ' + err);
+        } else {
+            console.log('Loading register page...');
+            response.send(html);
+        }
+    });
+});
+
 // GET: Obtener todos los jugadores
 app.get('/api/Jugador', async (request, response) => {
     let connection = null
@@ -75,33 +88,101 @@ app.get('/api/Jugador/:id_jugador', async (request, response) => {
     }
 })
 
-// POST: Insertar un nuevo jugador
+// POST: Insertar un nuevo jugador con estadísticas
 app.post('/api/Jugador', async (request, response) => {
-    console.log('Incoming data:', request.body); // Debug here
-
-    const newUser = {
-        usuario: request.body.usuario,
-        contrasena: request.body.contrasena,
-        id_cuarto: 1,
-        hp_actual: 100,
-        hp_max: 100,
-        mp_actual: 100,
-        mp_max: 100,
-        monedas: 0,
-        pociones: 0,
-        bombas: 0,
-        flechas: 0
-    };
+    let connection = null;
 
     try {
-        const [results, fields] = await connection.query('INSERT INTO Jugador SET ?', newUser);
-        console.log(`${results.affectedRows} row inserted`);
-        response.status(201).json({ 'message': "Usuario registrado correctamente.", 'id_jugador': results.insertId });
-    } catch (error) {
-        console.error(error);
-        response.status(500).json({ message: "Error al insertar usuario." });
-    } finally {
-        connection.end();
+        connection = await connectToDB();
+        
+        // Paso 1: Verificar si existe al menos un mapa
+        const [mapas] = await connection.query('SELECT id_mapa FROM Mapa LIMIT 1');
+        let id_mapa;
+        
+        // Si no hay mapas, crear uno
+        if (!mapas || mapas.length === 0) {
+            console.log("No hay mapas disponibles, creando uno nuevo...");
+            const newMap = {
+                nombre: "Mapa inicial",
+                descripcion: "Mapa creado automáticamente para nuevos jugadores",
+                tamano_x: 100,
+                tamano_y: 100
+            };
+            
+            const [mapResult] = await connection.query('INSERT INTO Mapa SET ?', newMap);
+            id_mapa = mapResult.insertId;
+            console.log(`Mapa creado con ID: ${id_mapa}`);
+        } else {
+            id_mapa = mapas[0].id_mapa;
+        }
+        
+        // Paso 2: Verificar si hay cuartos disponibles
+        const [cuartos] = await connection.query('SELECT id_cuarto FROM Cuarto LIMIT 1');
+        let id_cuarto;
+        
+        // Si no hay cuartos, crear uno
+        if (!cuartos || cuartos.length === 0) {
+            console.log("No hay cuartos disponibles, creando uno nuevo...");
+            const newRoom = {
+                id_mapa: id_mapa,
+                descripcion: "Cuarto inicial para nuevos jugadores",
+                tipo: "normal",
+                acceso_bloqueado: false
+            };
+            
+            const [roomResult] = await connection.query('INSERT INTO Cuarto SET ?', newRoom);
+            id_cuarto = roomResult.insertId;
+            console.log(`Cuarto creado con ID: ${id_cuarto}`);
+        } else {
+            id_cuarto = cuartos[0].id_cuarto;
+        }
+        
+        // Paso 3: Crear el jugador con un id_cuarto válido
+        const newUser = {
+            usuario: request.body.usuario,
+            contrasena: request.body.contrasena,
+            id_cuarto: id_cuarto,
+            hp_actual: 100,
+            hp_max: 100,
+            mp_actual: 100,
+            mp_max: 100,
+            monedas: 0,
+            pociones: 0,
+            bombas: 0,
+            flechas: 0
+        };
+        
+        const [userResults] = await connection.query('INSERT INTO Jugador SET ?', newUser);
+        const id_jugador = userResults.insertId;
+        console.log(`Jugador insertado con ID: ${id_jugador}`);
+        
+        // Paso 4: Crear estadísticas iniciales para el jugador
+        const initialStats = {
+            id_jugador: id_jugador,
+            enemigos_derrotados: 0,
+            cofres_abiertos: 0,
+            objetos_usados: 0,
+            muertes: 0,
+            tiempo_jugado: '00:00:00'
+        };
+        
+        await connection.query('INSERT INTO Estadisticas SET ?', initialStats);
+        console.log(`Estadísticas iniciales creadas para el jugador ${id_jugador}`);
+        
+        response.status(201).json({ 
+            'message': "Usuario registrado correctamente con estadísticas iniciales.", 
+            'id_jugador': id_jugador
+        });
+    }
+    catch (error) {
+        console.error("Error al insertar:", error);
+        response.status(500).json({ message: "Error al insertar usuario: " + error.message });
+    }
+    finally {
+        if (connection !== null) {
+            connection.end();
+            console.log("Connection closed successfully!");
+        }
     }
 });
 
