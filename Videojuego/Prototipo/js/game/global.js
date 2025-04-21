@@ -19,6 +19,7 @@ let fairyEnemyBuffMultiplier = 1.0;
 let currentItemType = "";
 let isGameOver = false;
 this.levelCompleted = false;
+let bossKilledMusicPlayed = false;
 //tiles
 const tileSize = 32;
 const processedFloors = {};
@@ -58,7 +59,9 @@ let playerStats = {
     level: "-",
     life: 100,
     mana: 100,
-    rupees: 0,
+    maxLife: 100,
+    maxMana: 100,
+    rupees: 100,
     potions: 0,
     arrows: 0,
     bombs: 0,

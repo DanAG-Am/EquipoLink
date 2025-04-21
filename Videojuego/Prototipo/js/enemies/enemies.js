@@ -164,6 +164,7 @@ class Boss extends AnimatedObject{
                 // Bloquea el daño si el escudo está activo y no ha sido usado aún
                 if (game.player.shieldActive && currentTime - game.player.lastShieldBlockTime > game.player.shieldCooldown) {
                     game.player.lastShieldBlockTime = currentTime; // bloquea el daño e inicia cooldown
+                    shieldSFX();
                 } else {
                     // recibe daño normalmente
                     playerStats.life = Math.max(0, playerStats.life - this.attack);
@@ -317,6 +318,7 @@ class Bat extends AnimatedObject {
                 // Bloquea el daño si el escudo está activo y no ha sido usado aún
                 if (game.player.shieldActive && currentTime - game.player.lastShieldBlockTime > game.player.shieldCooldown) {
                     game.player.lastShieldBlockTime = currentTime; // bloquea el daño e inicia cooldown
+                    shieldSFX();
                 } else {
                     // recibe daño normalmente
                     playerStats.life = Math.max(0, playerStats.life - this.attack);
@@ -423,6 +425,7 @@ class Knight extends AnimatedObject{
                 // Bloquea el daño si el escudo está activo y no ha sido usado aún
                 if (game.player.shieldActive && currentTime - game.player.lastShieldBlockTime > game.player.shieldCooldown) {
                     game.player.lastShieldBlockTime = currentTime; // bloquea el daño e inicia cooldown
+                    shieldSFX();
                 } else {
                     // recibe daño normalmente
                     playerStats.life = Math.max(0, playerStats.life - this.attack);
@@ -543,6 +546,7 @@ class Mage extends AnimatedObject {
                 // Bloquea el daño si el escudo está activo y no ha sido usado aún
                 if (game.player.shieldActive && currentTime - game.player.lastShieldBlockTime > game.player.shieldCooldown) {
                     game.player.lastShieldBlockTime = currentTime; // bloquea el daño e inicia cooldown
+                    shieldSFX();
                 } else {
                     // recibe daño normalmente
                     playerStats.life = Math.max(0, playerStats.life - this.attack);
@@ -688,6 +692,7 @@ class Skull extends AnimatedObject{
                 // Bloquea el daño si el escudo está activo y no ha sido usado aún
                 if (game.player.shieldActive && currentTime - game.player.lastShieldBlockTime > game.player.shieldCooldown) {
                     game.player.lastShieldBlockTime = currentTime; // bloquea el daño e inicia cooldown
+                    shieldSFX();
                 } else {
                     // recibe daño normalmente
                     playerStats.life = Math.max(0, playerStats.life - this.attack);
@@ -792,6 +797,7 @@ class Slime extends AnimatedObject{
                 // Bloquea el daño si el escudo está activo y no ha sido usado aún
                 if (game.player.shieldActive && currentTime - game.player.lastShieldBlockTime > game.player.shieldCooldown) {
                     game.player.lastShieldBlockTime = currentTime; // bloquea el daño e inicia cooldown
+                    shieldSFX();
                 } else {
                     // recibe daño normalmente
                     playerStats.life = Math.max(0, playerStats.life - this.attack);

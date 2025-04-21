@@ -126,8 +126,9 @@ function drawUI() {
     uiCtx.fillText(`HP`, 20, 80);
     uiCtx.fillText(`MP`, 20, 120);
 
-    const hp = Math.max(0, Math.min(playerStats.life, 100)); // clamp entre 0-100
-    const hpBarWidth = (hp / 100) * maxBarWidth;
+    const maxHP = playerStats.maxLife || 100;
+    const hp = Math.max(0, Math.min(playerStats.life, maxHP));
+    const hpBarWidth = (hp / maxHP) * maxBarWidth;
     uiCtx.fillStyle = "gray";
     uiCtx.fillRect(55, 72, maxBarWidth, barHeight);
     uiCtx.fillStyle = "red";
@@ -135,10 +136,11 @@ function drawUI() {
     uiCtx.font = "7px Game";
     uiCtx.textAlign = "right";
     uiCtx.fillStyle = "white";
-    uiCtx.fillText(`${playerStats.life}/100`, 130, 64);
+    uiCtx.fillText(`${playerStats.life}/${playerStats.maxLife}`, 130, 64);
 
-    const mp = Math.max(0, Math.min(playerStats.mana, 100));
-    const mpBarWidth = (mp / 100) * maxBarWidth;
+    const maxMP = playerStats.maxMana || 100;
+    const mp = Math.max(0, Math.min(playerStats.mana, maxMP));
+    const mpBarWidth = (mp / maxMP) * maxBarWidth;
     uiCtx.fillStyle = "gray";
     uiCtx.fillRect(55, 112, maxBarWidth, barHeight);
     uiCtx.fillStyle = "lightblue";
@@ -146,7 +148,7 @@ function drawUI() {
     uiCtx.font = "7px Game";
     uiCtx.textAlign = "right";
     uiCtx.fillStyle = "white";
-    uiCtx.fillText(`${playerStats.mana}/100`, 130, 105);
+    uiCtx.fillText(`${playerStats.mana}/${playerStats.maxMana}`, 130, 105);
 }
 
 function drawChestReward(ctx) {

@@ -7,37 +7,186 @@
 //event listeners, se aplican las teclas que se dibujaron en game draw y se hace su respectivo cambio en lo que se muestra en el lienzo
 "use strict";
 
+const titleScreen = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Music/title_screen.mp3");
+titleScreen.volume = 0.3;
+titleScreen.loop = false;
+
+const backgroundMusic = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Music/dungeon_theme.mp3");
+backgroundMusic.volume = 0.3;
+backgroundMusic.loop = true;
+
+const shopMusic = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Music/shop.mp3");
+shopMusic.volume = 0.3;
+shopMusic.loop = true;
+
+const fairyMusic = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Music/fairy.mp3");
+fairyMusic.volume = 0.3;
+fairyMusic.loop = true;
+
+const bossMusic = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Music/last_boss.mp3");
+bossMusic.volume = 0.3;
+bossMusic.loop = true;
+const bossKilledMusic = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Music/boss_killed.mp3");
+bossKilledMusic.volume = 0.3;
+bossKilledMusic.loop = false;
+
+const gameOver = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Music/game_over.mp3");
+gameOver.volume = 0.3;
+gameOver.loop = false;
+const gameWin = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Music/game_win.mp3");
+gameWin.volume = 0.3;
+gameWin.loop = false;
+
 const discover = new Audio("../../Videojuego/Assets/GameAssets/Sounds/World/discovery.wav");
-discover.volume = 1;
+discover.volume = 0.7;
 function discoverSFX() {
     discover.play().catch(err => {
         console.warn("Playback failed for enter room sound:", err);
     });
 }
 
-
 function bombAttack() {
-    const sfx = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Combat/bomb_drop.wav");
-    sfx.volume = 0.5;
-    sfx.play();
+    const dropSFX = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Combat/bomb_drop.mp3");
+    dropSFX.volume = 1;
+    dropSFX.play().catch(err => console.warn("Playback failed for bomb_drop:", err));
+
+    // Después de 2 segundos, apagar el drop y reproducir la explosión
+    setTimeout(() => {
+        dropSFX.pause();
+        dropSFX.currentTime = 0;
+        bombExplode();
+    }, 2000);
+}
+function bombExplode() {
+    const sfx = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Combat/bomb_explosion.mp3");
+    sfx.volume = 0.2;
+    sfx.play().catch(err => console.warn("Playback failed for bomb_explotion:", err));
 }
 
 function arrowShot() {
     const sfx = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Combat/arrow_shot.wav");
-    sfx.volume = 0.5;
+    sfx.volume = 1;
     sfx.play();
 }
 
 function magicShot(){
     const sfx = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Combat/magic_rod.wav");
-    sfx.volume = 0.5;
+    sfx.volume = 1;
     sfx.play();
 }
 
 function swordHit(){
     const sfx = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Combat/sword_swing.wav");
-    sfx.volume = 0.5;
+    sfx.volume = 1;
     sfx.play();
+}
+
+function dashSFX() {
+    const sfx = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Combat/dash.mp3");
+    sfx.volume = 0.7;
+    sfx.currentTime = 0.1;
+    sfx.play().catch(err => console.warn("Playback failed for dash:", err));
+}
+
+function shieldSFX() {
+    const sfx = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Combat/shield.mp3");
+    sfx.volume = 1;
+    sfx.play().catch(err => console.warn("Playback failed for shield:", err));
+}
+
+titleScreen.addEventListener("ended", () => {
+    if (game.showMainMenu) {
+        titleScreen.currentTime = 0;
+        titleScreen.play().catch(err => console.warn("Playback failed:", err));
+    }
+});
+
+function stopAllMusic() {
+    [titleScreen, backgroundMusic, shopMusic, fairyMusic, bossMusic, bossKilledMusic, gameWin, gameOver].forEach(audio => {
+        if (!audio.paused) {
+            audio.pause();
+            audio.currentTime = 0;
+        }
+    });
+}
+function handleMusicPlayback(game) {
+    // Si estás en la tienda
+    if (interactingMerchant) {
+        if (shopMusic.paused) {
+            stopAllMusic();
+            shopMusic.currentTime = 0;
+            shopMusic.play().catch(err => console.warn("Playback failed for shopMusic:", err));
+        }
+        return;
+    }
+
+    // Si estás con el hada
+    if (interactingFairy) {
+        if (fairyMusic.paused) {
+            stopAllMusic();
+            fairyMusic.currentTime = 0;
+            fairyMusic.play().catch(err => console.warn("Playback failed for fairyMusic:", err));
+        }
+        return;
+    }
+
+    // Si estás en la batalla final
+    if (game.levelBoss && !game.levelCompleted && !isGameOver) {
+        if (bossMusic.paused) {
+            stopAllMusic();
+            bossMusic.currentTime = 0;
+            bossMusic.play().catch(err => console.warn("Playback failed for bossMusic:", err));
+        }
+        return;
+    } else if (game.levelBoss && game.levelCompleted) {
+        if (bossKilledMusic.paused) {
+            stopAllMusic();
+            bossKilledMusic.currentTime = 0;
+            bossKilledMusic.play().catch(err => console.warn("Playback failed for bossMusic:", err));
+        }
+        return;
+    }
+    
+    // Si estás en el menú principal
+    if (game.showMainMenu) {
+        if (titleScreen.paused) {
+            stopAllMusic();
+            titleScreen.currentTime = 0;
+            titleScreen.play().catch(err => console.warn("Playback failed for titleScreen:", err));
+        }
+        return;
+    }
+
+    // Si estás en el prólogo o mapa principal
+    if (game.showPrologue || game.mainMap || game.level || game.level2 || game.level3 || game.restStory1 || game.restRoom1 || game.level4 || game.level5 || game.level6 || game.level7 || game.restStory2 || game.restRoom2 || game.level8 || game.level9 || game.level10 || game.restStory3 || game.restRoom3 && !isGameOver) {
+        if (backgroundMusic.paused) {
+            stopAllMusic();
+            backgroundMusic.currentTime = 0;
+            backgroundMusic.play().catch(err => console.warn("Playback failed for backgroundMusic:", err));
+        }
+        return;
+    }
+
+    // Si estás en la escena de Game Over
+    if (isGameOver) {
+        if (gameOver.paused) {
+            stopAllMusic();
+            gameOver.currentTime = 0;
+            gameOver.play().catch(err => console.warn("Playback failed for gameOver:", err));
+        }
+        return;
+    }
+
+    // Si estás en la escena de finalización
+    if (game.endingScene) {
+        if (gameWin.paused) {
+            stopAllMusic();
+            gameWin.currentTime = 0;
+            gameWin.play().catch(err => console.warn("Playback failed for gameWin:", err));
+        }
+        return;
+    }
+    stopAllMusic();
 }
 
 Game.prototype.createEventListeners = function(){
@@ -50,28 +199,33 @@ Game.prototype.createEventListeners = function(){
         if (this.showPrologue && event.key === 'Enter') {
             this.showPrologue = false;
             this.mainMap = true;
+            talkSFX();
             return;
         }
         if (this.restStory1 && event.key === 'Enter') {
             this.restStory1 = false;
             this.restRoom1 = true;
             game.player.position = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 2);
+            talkSFX();
             return;
         }
         if (this.restStory2 && event.key === 'Enter') {
             this.restStory2 = false;
             this.restRoom2 = true;
             game.player.position = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 2);
+            talkSFX();
             return;
         }
         if (this.restStory3 && event.key === 'Enter') {
             this.restStory3 = false;
             this.restRoom3 = true;
             game.player.position = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 2);
+            talkSFX();
             return;
         }
         if (this.mainMap && this.dialogueStage < 5 && event.key === 'Enter') {
             this.dialogueStage++;
+            talkSFX();
             return;
         }
         if (this.mainMap && this.dialogueStage === 5 && !this.showTutorial && !this.tutorialWasShown) {
@@ -81,30 +235,37 @@ Game.prototype.createEventListeners = function(){
         }
         if (this.restRoom3 && this.dialogueStage2 < 8 && event.key === 'Enter') {
             this.dialogueStage2++;
+            talkSFX();
             return;
         }
         if (this.levelBoss && this.dialogueStage3 < 2 && event.key === 'Enter') {
             this.dialogueStage3++;
+            talkSFX();
             return;
         }
         if (this.levelBoss && this.levelCompleted && this.dialogueStage4 < 4 && event.key === 'Enter') {
             this.dialogueStage4++;
+            talkSFX();
             return;
         }
         if (this.showTutorial && event.key === 't') {
             this.showTutorial = false;
+            talkSFX();
             return;
         }
         if (!this.showTutorial && event.key === 't') {
             this.showTutorial = true;
+            talkSFX();
             return;
         }
         if (event.key === 'i' && this.showInventory) {
             this.showInventory = false;
+            talkSFX();
             return;
         }
         if (event.key === 'i' && !this.showInventory && !this.showTutorial) {
             this.showInventory = true;
+            talkSFX();
             return;
         }
         if ((this.mainMap || this.level || this.level2 || this.level3 || this.restRoom1 || this.level4 || this.level5 || this.level6 || this.level7 || this.restRoom2 || this.level8 || this.level9 || this.level10 || (this.restRoom3 && this.dialogueStage2 >= 8) || (this.levelBoss && this.dialogueStage3 >= 2)) && this.dialogueStage >= 5 && !this.showTutorial && !isGameOver && !this.showLevelCompleteMessage) {
@@ -192,7 +353,8 @@ Game.prototype.createEventListeners = function(){
                 const now = Date.now();
                 if (now - this.lastDashTime < this.dashCooldown) return;
                 this.lastDashTime = now;
-            
+                dashSFX();
+
                 let dashOffset = new Vec(0, 0);
                 if (this.player.currentDirection === "up") dashOffset = new Vec(0, -this.dashDistance);
                 if (this.player.currentDirection === "down") dashOffset = new Vec(0, this.dashDistance);
@@ -260,14 +422,15 @@ Game.prototype.createEventListeners = function(){
             game.chestReward = null;
         }
         if (event.key == "d") {
-            if (playerStats.potions > 0 && playerStats.life < 100){
+            if (playerStats.potions > 0 && playerStats.life < playerStats.maxLife){
                 playerStats.potions--;
                 let lifeRegen = Math.floor(Math.random() * 20) + 10;
-                playerStats.life = Math.min(playerStats.life + lifeRegen, 100);
+                playerStats.life = Math.min(playerStats.life + lifeRegen, playerStats.maxLife);
             }
         }
         if (event.key === "Escape") {
             gamePaused = !gamePaused;
+            talkSFX();
             if (gamePaused) {
                 game.stopTimer();
             } else {
@@ -276,6 +439,7 @@ Game.prototype.createEventListeners = function(){
         }
         if (event.key === " "){ //detectar una colision antes de permiter usar space para interactuar con npc
             if (this.mainMap || this.restRoom1 || this.restRoom2 || this.restRoom3) {
+                talkSFX();
                 if (
                     document.getElementById("purchaseDialog").style.display !== "none" ||
                     document.getElementById("errorDialog").style.display !== "none" ||
@@ -323,6 +487,7 @@ Game.prototype.createEventListeners = function(){
         if (game.endingScene && game.playerReachedCenter && event.key === "Enter") {
             if (game.endingDialogueStage < 2) {
                 game.endingDialogueStage++;
+                talkSFX();
             } else if (!game.showEndingLogo) {
                 game.showEndingLogo = true;
             } else {
@@ -365,18 +530,55 @@ Game.prototype.createEventListeners = function(){
             let btn1 = game.tienda.buttonPositions.button1;
             let btn2 = game.tienda.buttonPositions.button2;
             let btn3 = game.tienda.buttonPositions.button3;
+            let btn4 = game.tienda.buttonPositions.button4;
+            let btn5 = game.tienda.buttonPositions.button5;
             if (clickX >= btn1.x && clickX <= btn1.x + btn1.width &&
                 clickY >= btn1.y && clickY <= btn1.y + btn1.height) {
                 currentItemType = "pociones";
+                talkSFX();
                 showPurchaseDialog(currentItemType);
             } else if (clickX >= btn2.x && clickX <= btn2.x + btn2.width &&
                        clickY >= btn2.y && clickY <= btn2.y + btn2.height) {
                 currentItemType = "flechas";
+                talkSFX();
                 showPurchaseDialog(currentItemType);
             } else if (clickX >= btn3.x && clickX <= btn3.x + btn3.width &&
                        clickY >= btn3.y && clickY <= btn3.y + btn3.height) {
                 currentItemType = "bombas";
+                talkSFX();
                 showPurchaseDialog(currentItemType);
+            } else if (clickX >= btn4.x && clickX <= btn4.x + btn4.width &&
+                clickY >= btn4.y && clickY <= btn4.y + btn4.height) {
+                if (playerStats.rupees >= 30) {
+                    playerStats.rupees -= 30;
+                    playerStats.maxLife = (playerStats.maxLife || 100) + 10;
+                    playerStats.life = Math.min(playerStats.life + 10, playerStats.maxLife);
+                    talkSFX();
+                } else {
+                    let errorDialog = document.getElementById("errorDialog");
+                    let errorMessage = document.getElementById("errorMessage");
+                    errorMessage.innerText = "No tienes suficientes rupias para esta compra.";
+                    errorDialog.style.display = "block";
+                    document.getElementById("purchaseDialog").style.display = "none";
+                    interactingMerchant = false;
+                    game.tienda.dialogueStage = 0;
+                }
+            } else if (clickX >= btn5.x && clickX <= btn5.x + btn5.width &&
+                clickY >= btn5.y && clickY <= btn5.y + btn5.height) {
+                if (playerStats.rupees >= 30) {
+                    playerStats.rupees -= 30;
+                    playerStats.maxMana = (playerStats.maxMana || 100) + 10;
+                    playerStats.mana = Math.min(playerStats.mana + 10, playerStats.maxMana);
+                    talkSFX();
+                } else {
+                    let errorDialog = document.getElementById("errorDialog");
+                    let errorMessage = document.getElementById("errorMessage");
+                    errorMessage.innerText = "No tienes suficientes rupias para esta compra.";
+                    errorDialog.style.display = "block";
+                    document.getElementById("purchaseDialog").style.display = "none";
+                    interactingMerchant = false;
+                    game.tienda.dialogueStage = 0;
+                }
             }
         }
         if (gamePaused && game.pauseButton) { //logica de pausar juego
@@ -391,6 +593,7 @@ Game.prototype.createEventListeners = function(){
                 clickX >= btn.x && clickX <= btn.x + btn.width &&
                 clickY >= btn.y && clickY <= btn.y + btn.height
             ) {
+                talkSFX();
                 gamePaused = false;
                 game.resetGame();
             }
@@ -407,6 +610,7 @@ Game.prototype.createEventListeners = function(){
                 clickX >= btn.x && clickX <= btn.x + btn.width &&
                 clickY >= btn.y && clickY <= btn.y + btn.height
             ) {
+                talkSFX();
                 isGameOver = false;
                 game.resetGame();
             }
@@ -420,6 +624,7 @@ Game.prototype.createEventListeners = function(){
             let btn = game.fairy.button;
             if (clickX >= btn.x && clickX <= btn.x + btn.width &&
                 clickY >= btn.y && clickY <= btn.y + btn.height) {
+                talkSFX();
                 game.fairy.processInteraction();
                 interactingFairy = false;
             }
@@ -465,19 +670,23 @@ Game.prototype.createEventListeners = function(){
             playerStats.bombs += qty;
         }
         playerStats.rupees -= totalCost;
+        talkSFX();
         document.getElementById("purchaseDialog").style.display = "none";
     });
 
     document.getElementById("cancelButton").addEventListener("click", () => {
+        talkSFX();
         document.getElementById("purchaseDialog").style.display = "none";
     });
 
     document.getElementById("errorOkButton").addEventListener("click", () => {
+        talkSFX();
         document.getElementById("errorDialog").style.display = "none";
     });
 
     document.getElementById("purchaseQuantity").addEventListener("input", function() {
         let value = parseInt(this.value);
+        talkSFX();
         if (value < 1) {
             this.value = 1;
         } else if (value > 20) {

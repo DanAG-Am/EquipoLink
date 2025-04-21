@@ -14,9 +14,9 @@ class Game {
         this.lastArrowTime = 0;
         this.lastMagicTime = 0;
         this.lastBombTime = 0;
-        this.dashCooldown = 1000; // tiempo entre dashes (en ms)
+        this.dashCooldown = 1000; // tiempo entre dash
         this.lastDashTime = 0;
-        this.dashDistance = 64; // distancia del dash (2 tiles si tileSize = 32)
+        this.dashDistance = 64; // distancia del dash
         this.lastShieldTime = 0;
         this.shieldCooldown = 10000; // 10 segundos
         this.shieldDuration = 2000;  // 2 segundos
@@ -157,10 +157,8 @@ class Game {
     resetGame() {
         playerStats.level = "-";
         playerStats.uiTextPosition = { x: 90, y: 30 };
-        playerStats.life = 100;
-        playerStats.mana = 100;
-        playerStats.rupees = 0;
-        playerStats.potions = 0;
+        playerStats.life = playerStats.maxLife;
+        playerStats.mana = playerStats.maxMana;
         playerStats.arrows = 0;
         playerStats.bombs = 0;
 
