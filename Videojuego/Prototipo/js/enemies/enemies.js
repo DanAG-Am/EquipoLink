@@ -4,7 +4,7 @@
  */
 /*clases derivadas de los enemigos, se repite la misma estructura de boss en el resto*/
 
-let playerHurtAudio = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Character/link_hurt.wav");
+let playerHurtAudio = new Audio("/Videojuego/Videojuego/Assets/GameAssets/Sounds/Character/link_hurt.wav");
 playerHurtAudio.volume = 1;
 playerHurtAudio.loop = false;
 
@@ -15,7 +15,7 @@ function playerHurtSFX() {
 }
 
 function dragonSFX(){
-    const sfx = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Enemy/boss_ambientsound.wav");
+    const sfx = new Audio("/Videojuego/Videojuego/Assets/GameAssets/Sounds/Enemy/boss_ambientsound.wav");
     sfx.loop = true;
     sfx.volume = 0.5;
     sfx.play();
@@ -33,10 +33,10 @@ class Boss extends AnimatedObject{
 
         // Define las rutas a los sprites de la animación de ataque.
         this.sprites = {
-            "attackBoss": ["../../Videojuego/Assets/GameAssets/Bosses/boss_Dragon/Boss1-1.png", 
-                           "../../Videojuego/Assets/GameAssets/Bosses/boss_Dragon/Boss1-2.png", 
-                           "../../Videojuego/Assets/GameAssets/Bosses/boss_Dragon/Boss1-3.png", 
-                           "../../Videojuego/Assets/GameAssets/Bosses/boss_Dragon/Boss1-4.png"]
+            "attackBoss": ["/Videojuego/Videojuego/Assets/GameAssets/Bosses/boss_Dragon/Boss1-1.png", 
+                           "/Videojuego/Videojuego/Assets/GameAssets/Bosses/boss_Dragon/Boss1-2.png", 
+                           "/Videojuego/Videojuego/Assets/GameAssets/Bosses/boss_Dragon/Boss1-3.png", 
+                           "/Videojuego/Videojuego/Assets/GameAssets/Bosses/boss_Dragon/Boss1-4.png"]
         };
 
         // Define el estado actual del jefe y la animación que está usando.
@@ -235,7 +235,7 @@ class Bat extends AnimatedObject {
         this.position = new Vec(position.x, position.y);
         this.velocity = new Vec(0, 0);
         this.sprites = {
-            "fly": ["../../Videojuego/Assets/GameAssets/Enemies/enemy_Bat/Bat-1.png", "../../Videojuego/Assets/GameAssets/Enemies/enemy_Bat/Bat-2.png"],
+            "fly": ["/Videojuego/Videojuego/Assets/GameAssets/Enemies/enemy_Bat/Bat-1.png", "/Videojuego/Videojuego/Assets/GameAssets/Enemies/enemy_Bat/Bat-2.png"],
         };
         this.currentDirection = "fly";
         this.frameIndex = 0;
@@ -342,7 +342,7 @@ class Knight extends AnimatedObject{
         this.position = new Vec(position.x, position.y);
         this.velocity = new Vec(0, 0);
         this.sprites = {
-            "attackKnight": ["../../Videojuego/Assets/GameAssets/Enemies/enemy_Knight/Knight-1.png","../../Videojuego/Assets/GameAssets/Enemies/enemy_Knight/Knight-2.png","../../Videojuego/Assets/GameAssets/Enemies/enemy_Knight/Knight-3.png"],
+            "attackKnight": ["/Videojuego/Videojuego/Assets/GameAssets/Enemies/enemy_Knight/Knight-1.png","/Videojuego/Videojuego/Assets/GameAssets/Enemies/enemy_Knight/Knight-2.png","../../Videojuego/Assets/GameAssets/Enemies/enemy_Knight/Knight-3.png"],
         };
         this.currentDirection = "attackKnight";
         this.frameIndex = 0;
@@ -450,8 +450,8 @@ class Mage extends AnimatedObject {
         this.velocity = new Vec(0, 0);
         this.sprites = {
             "attackMage": [
-                "../../Videojuego/Assets/GameAssets/Enemies/enemy_Mage/Mage-1.png",
-                "../../Videojuego/Assets/GameAssets/Enemies/enemy_Mage/Mage-2.png"
+                "/Videojuego/Videojuego/Assets/GameAssets/Enemies/enemy_Mage/Mage-1.png",
+                "/Videojuego/Videojuego/Assets/GameAssets/Enemies/enemy_Mage/Mage-2.png"
             ]
         };
         this.currentDirection = "attackMage";
@@ -609,7 +609,7 @@ class Skull extends AnimatedObject{
         this.position = new Vec(position.x, position.y);
         this.velocity = new Vec(0, 0);
         this.sprites = {
-            "attackSkull": ["../../Videojuego/Assets/GameAssets/Enemies/enemy_Skull/Skull.png", "../../Videojuego/Assets/GameAssets/Enemies/enemy_Skull/Skull2.png"]
+            "attackSkull": ["/Videojuego/Videojuego/Assets/GameAssets/Enemies/enemy_Skull/Skull.png", "/Videojuego/Videojuego/Assets/GameAssets/Enemies/enemy_Skull/Skull2.png"]
         };
         this.currentDirection = "attackSkull";
         this.frameIndex = 0;
@@ -716,7 +716,7 @@ class Slime extends AnimatedObject{
         this.position = new Vec(position.x, position.y);
         this.velocity = new Vec(0, 0);
         this.sprites = {
-            "attackSlime": ["../../Videojuego/Assets/GameAssets/Enemies/enemy_Slime/Slime-1.png","../../Videojuego/Assets/GameAssets/Enemies/enemy_Slime/Slime-2.png"]
+            "attackSlime": ["/Videojuego/Videojuego/Assets/GameAssets/Enemies/enemy_Slime/Slime-1.png","/Videojuego/Videojuego/Assets/GameAssets/Enemies/enemy_Slime/Slime-2.png"]
         };
         this.currentDirection = "attackSlime";
         this.frameIndex = 0;

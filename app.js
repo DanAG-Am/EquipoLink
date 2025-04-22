@@ -90,6 +90,57 @@ app.get('/prototipo', (request, response) => {
     });
 });
 
+app.get('/creditos', (request, response) => {
+    fs.readFile("./Videojuego/Prototipo/html/creditos.html", 'utf8', (err, html) => {
+        if (err) {
+            console.error('Error loading credits page:', err);
+            response.status(500).send('There was an error: ' + err);
+        } else {
+            console.log('Loading prototipo page...');
+            response.send(html);
+        }
+    });
+});
+
+
+app.get('/assets', (request, response) => {
+    fs.readFile("./Videojuego/Prototipo/html/assets.html", 'utf8', (err, html) => {
+        if (err) {
+            console.error('Error loading assets page:', err);
+            response.status(500).send('There was an error: ' + err);
+        } else {
+            console.log('Loading prototipo page...');
+            response.send(html);
+        }
+    });
+});
+
+
+app.get('/controles', (request, response) => {
+    fs.readFile("./Videojuego/Prototipo/html/controles.html", 'utf8', (err, html) => {
+        if (err) {
+            console.error('Error loading controls page:', err);
+            response.status(500).send('There was an error: ' + err);
+        } else {
+            console.log('Loading prototipo page...');
+            response.send(html);
+        }
+    });
+});
+
+app.get('/historia', (request, response) => {
+    fs.readFile("./Videojuego/Prototipo/html/historia.html", 'utf8', (err, html) => {
+        if (err) {
+            console.error('Error loading historia page:', err);
+            response.status(500).send('There was an error: ' + err);
+        } else {
+            console.log('Loading prototipo page...');
+            response.send(html);
+        }
+    });
+});
+
+
 app.get('/', (request, response) => {
     fs.readFile("./Videojuego/Prototipo/html/prototipo.html", 'utf8', (err, html) => {
         if (err) {
