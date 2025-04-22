@@ -6,7 +6,7 @@
 "use strict";
 
 //fetch de audios
-const enterRoomAudio = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Character/enter_room.wav");
+const enterRoomAudio = new Audio("/Videojuego/Videojuego/Assets/GameAssets/Sounds/Character/enter_room.wav");
 enterRoomAudio.volume = 1;
 function playEnterRoomSFX() {
     enterRoomAudio.play().catch(err => {
@@ -14,7 +14,7 @@ function playEnterRoomSFX() {
     });
 }
 
-const talkAudio = new Audio("../../Videojuego/Assets/GameAssets/Sounds/interact/talk_or_meterup_sound.wav");
+const talkAudio = new Audio("/Videojuego/Videojuego/Assets/GameAssets/Sounds/interact/talk_or_meterup_sound.wav");
 talkAudio.volume = 1;
 function talkSFX() {
     talkAudio.pause();

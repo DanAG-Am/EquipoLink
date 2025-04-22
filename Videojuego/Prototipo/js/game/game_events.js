@@ -7,23 +7,23 @@
 //event listeners, se aplican las teclas que se dibujaron en game draw y se hace su respectivo cambio en lo que se muestra en el lienzo
 "use strict";
 
-const titleScreen = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Music/title_screen.mp3");
+const titleScreen = new Audio("/Videojuego/Videojuego/Assets/GameAssets/Sounds/Music/title_screen.mp3");
 titleScreen.volume = 0.3;
 titleScreen.loop = false;
 
-const backgroundMusic = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Music/dungeon_theme.mp3");
+const backgroundMusic = new Audio("/Videojuego/Videojuego/Assets/GameAssets/Sounds/Music/dungeon_theme.mp3");
 backgroundMusic.volume = 0.3;
 backgroundMusic.loop = true;
 
-const shopMusic = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Music/shop.mp3");
+const shopMusic = new Audio("/Videojuego/Videojuego/Assets/GameAssets/Sounds/Music/shop.mp3");
 shopMusic.volume = 0.3;
 shopMusic.loop = true;
 
-const fairyMusic = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Music/fairy.mp3");
+const fairyMusic = new Audio("/Videojuego/Videojuego/Assets/GameAssets/Sounds/Music/fairy.mp3");
 fairyMusic.volume = 0.3;
 fairyMusic.loop = true;
 
-const bossMusic = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Music/last_boss.mp3");
+const bossMusic = new Audio("/Videojuego/Videojuego/Assets/GameAssets/Sounds/Music/last_boss.mp3");
 bossMusic.volume = 0.3;
 bossMusic.loop = true;
 const bossKilledMusic = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Music/boss_killed.mp3");
