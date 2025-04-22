@@ -140,7 +140,6 @@ app.get('/historia', (request, response) => {
     });
 });
 
-
 app.get('/', (request, response) => {
     fs.readFile("./Videojuego/Prototipo/html/prototipo.html", 'utf8', (err, html) => {
         if (err) {
