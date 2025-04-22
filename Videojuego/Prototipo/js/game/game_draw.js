@@ -79,18 +79,18 @@ Game.prototype.draw = function(ctx) {
         // Dibujar NPCs (Old Man, Merchant y Fairy)
         this.oldMan.draw(ctx);
         this.tienda.draw(ctx);
-        this.fairy.draw(ctx); 
-
+        this.fairy.draw(ctx);
         this.player.draw(ctx);
+
         if (!rupeesInitialized) {
             initializeRupees();
             rupeesInitialized = true;
         }
         drawRupees(ctx, this.player);
-        this.bombs.forEach(b => b.draw(ctx));
         this.arrows.forEach(a => a.draw(ctx));
         this.magics.forEach(m => m.draw(ctx));
         this.player.draw(ctx);
+        this.bombs.forEach(b => b.draw(ctx));
         if (this.dialogueStage < 5) {
             this.drawDialogue(ctx);
             ctx.font = "10px Game";
@@ -100,6 +100,7 @@ Game.prototype.draw = function(ctx) {
             this.tutorialWasShown = true;
             playerStats.bombs = 10;
             playerStats.arrows = 20;
+            playerStats.rupees = 50;
         } else if (this.showTutorial) {
             this.drawTutorial(ctx);
         }
@@ -122,11 +123,11 @@ Game.prototype.draw = function(ctx) {
     } else if (this.level){ //dibujar el primer nivel
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
         drawBackground("levelClosed", ctx);
-        this.bombs.forEach(b => b.draw(ctx));
         this.arrows.forEach(a => a.draw(ctx));
         this.magics.forEach(m => m.draw(ctx));
         this.drawEnemies(ctx);
         this.drawEnemyHealthBars(ctx);
+        this.bombs.forEach(b => b.draw(ctx));
         if (this.levelCompleted) {
             if (this.chestIsOpen) {
                 ctx.drawImage(this.chestOpened, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
@@ -166,9 +167,9 @@ Game.prototype.draw = function(ctx) {
     } else if (this.level2) { //dibujar el segundo nivel
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
         drawBackground("level_2", ctx);
-        this.bombs.forEach(b => b.draw(ctx));
         this.arrows.forEach(a => a.draw(ctx));
         this.magics.forEach(m => m.draw(ctx));
+        this.bombs.forEach(b => b.draw(ctx));
         this.drawEnemies(ctx);
         this.drawEnemyHealthBars(ctx);
         if (this.levelCompleted) {
@@ -212,7 +213,6 @@ Game.prototype.draw = function(ctx) {
     else if (this.level3) { //dibujar nivel 3
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
         drawBackground("level_3", ctx);
-        this.bombs.forEach(b => b.draw(ctx));
         this.arrows.forEach(a => a.draw(ctx));
         this.magics.forEach(m => m.draw(ctx));
         if (this.levelCompleted) {
@@ -230,6 +230,7 @@ Game.prototype.draw = function(ctx) {
         drawRupees(ctx, this.player);
         this.drawEnemies(ctx);
         this.drawEnemyHealthBars(ctx);
+        this.bombs.forEach(b => b.draw(ctx));
     
         if (this.showInventory) {
             this.drawInventory(ctx);
@@ -319,7 +320,6 @@ Game.prototype.draw = function(ctx) {
     } else if (this.level4){ //dibujar nivel 4
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
         drawBackground("level_4", ctx);
-        this.bombs.forEach(b => b.draw(ctx));
         this.arrows.forEach(a => a.draw(ctx));
         this.magics.forEach(m => m.draw(ctx));
         this.drawEnemies(ctx);
@@ -343,6 +343,7 @@ Game.prototype.draw = function(ctx) {
             this.drawTutorial(ctx);
         }
         drawChestReward(ctx);
+        this.bombs.forEach(b => b.draw(ctx));
         if (this.player.position.y <= 0 && 
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
@@ -363,7 +364,6 @@ Game.prototype.draw = function(ctx) {
     } else if (this.level5) { //dibujar el quinto nivel
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
         drawBackground("level_5", ctx);
-        this.bombs.forEach(b => b.draw(ctx));
         this.arrows.forEach(a => a.draw(ctx));
         this.magics.forEach(m => m.draw(ctx));
         this.drawEnemies(ctx);
@@ -388,6 +388,7 @@ Game.prototype.draw = function(ctx) {
             this.drawTutorial(ctx);
         }
         drawChestReward(ctx);
+        this.bombs.forEach(b => b.draw(ctx));
         if (this.player.position.y <= 0 && //tranisicion entre nivel 2 y 3
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
@@ -408,7 +409,6 @@ Game.prototype.draw = function(ctx) {
     } else if (this.level6) { //dibujar el sexto nivel
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
         drawBackground("level_6", ctx);
-        this.bombs.forEach(b => b.draw(ctx));
         this.arrows.forEach(a => a.draw(ctx));
         this.magics.forEach(m => m.draw(ctx));
         this.drawEnemies(ctx);
@@ -433,6 +433,7 @@ Game.prototype.draw = function(ctx) {
             this.drawTutorial(ctx);
         }
         drawChestReward(ctx);
+        this.bombs.forEach(b => b.draw(ctx));
         if (this.player.position.y <= 0 && //tranisicion entre nivel 2 y 3
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
@@ -453,7 +454,6 @@ Game.prototype.draw = function(ctx) {
     } else if (this.level7) { //dibujar el septimo nivel
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
         drawBackground("level_7", ctx);
-        this.bombs.forEach(b => b.draw(ctx));
         this.arrows.forEach(a => a.draw(ctx));
         this.magics.forEach(m => m.draw(ctx));
         this.drawEnemies(ctx);
@@ -478,6 +478,7 @@ Game.prototype.draw = function(ctx) {
             this.drawTutorial(ctx);
         }
         drawChestReward(ctx);
+        this.bombs.forEach(b => b.draw(ctx));
         if (this.player.position.y <= 0 && //tranisicion entre nivel 2 y 3
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
@@ -561,7 +562,6 @@ Game.prototype.draw = function(ctx) {
     } else if (this.level8){ //dibujar nivel 8
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
         drawBackground("level_8", ctx);
-        this.bombs.forEach(b => b.draw(ctx));
         this.arrows.forEach(a => a.draw(ctx));
         this.magics.forEach(m => m.draw(ctx));
         this.drawEnemies(ctx);
@@ -585,6 +585,7 @@ Game.prototype.draw = function(ctx) {
             this.drawTutorial(ctx);
         }
         drawChestReward(ctx);
+        this.bombs.forEach(b => b.draw(ctx));
         if (this.player.position.y <= 0 && //tranisicion entre nivel 2 y 3
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
@@ -605,7 +606,6 @@ Game.prototype.draw = function(ctx) {
     } else if (this.level9){ //dibujar nivel 9
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
         drawBackground("level_9", ctx);
-        this.bombs.forEach(b => b.draw(ctx));
         this.arrows.forEach(a => a.draw(ctx));
         this.magics.forEach(m => m.draw(ctx));
         this.drawEnemies(ctx);
@@ -629,6 +629,7 @@ Game.prototype.draw = function(ctx) {
             this.drawTutorial(ctx);
         }
         drawChestReward(ctx);
+        this.bombs.forEach(b => b.draw(ctx));
         if (this.player.position.y <= 0 && //tranisicion entre nivel 2 y 3
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
@@ -650,7 +651,6 @@ Game.prototype.draw = function(ctx) {
     } else if (this.level10){ //dibujar nivel 10
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
         drawBackground("level_10", ctx);
-        this.bombs.forEach(b => b.draw(ctx));
         this.arrows.forEach(a => a.draw(ctx));
         this.magics.forEach(m => m.draw(ctx));
         this.drawEnemies(ctx);
@@ -674,6 +674,7 @@ Game.prototype.draw = function(ctx) {
             this.drawTutorial(ctx);
         }
         drawChestReward(ctx);
+        this.bombs.forEach(b => b.draw(ctx));
         if (this.player.position.y <= 0 && //tranisicion entre nivel 2 y 3
             this.player.position.x >= canvasWidth / 2 - 50 &&
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
@@ -762,7 +763,6 @@ Game.prototype.draw = function(ctx) {
     } else if (this.levelBoss) {
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
         drawBackground("prologue", ctx);
-        this.bombs.forEach(b => b.draw(ctx));
         this.arrows.forEach(a => a.draw(ctx));
         this.magics.forEach(m => m.draw(ctx));
         if (this.dialogueStage3 < 2) {
@@ -774,6 +774,7 @@ Game.prototype.draw = function(ctx) {
             this.drawEnemyHealthBars(ctx);
         }
         this.player.draw(ctx);
+        this.bombs.forEach(b => b.draw(ctx));
         if (this.showInventory) {
             this.drawInventory(ctx);
         } else if (this.showTutorial) {

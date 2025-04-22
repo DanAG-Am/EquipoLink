@@ -155,6 +155,22 @@ class Game {
 
     //regresar todo a su punto de inicio si se resetea el juego
     resetGame() {
+        if (gameWasCompleted) {
+            // Reinicia stats si terminas el juego
+            playerStats.maxLife = 100;
+            playerStats.maxMana = 100;
+            playerStats.life = 100;
+            playerStats.mana = 100;
+            playerStats.rupees = 0;
+            playerStats.potions = 0;
+            playerStats.damageSword = 10;
+            playerStats.damageArrow = 5;
+            playerStats.damageMagic = 15;
+            playerStats.damageBomb = 20;
+            fairyEnemyBuffMultiplier = 1.0;
+            gameWasCompleted = false;
+        }
+
         playerStats.level = "-";
         playerStats.uiTextPosition = { x: 90, y: 30 };
         playerStats.life = playerStats.maxLife;

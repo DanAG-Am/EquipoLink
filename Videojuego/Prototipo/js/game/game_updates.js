@@ -54,10 +54,11 @@ Game.prototype.update = function(deltaTime) {
         const playerRight = this.player.position.x + this.player.width;
         const playerTop = this.player.position.y;
         const playerBottom = this.player.position.y + this.player.height;
+        const playerMiddleY = this.player.position.y + this.player.height / 2;
 
         const tileLeft = Math.floor(playerLeft / tileSize);
         const tileRight = Math.floor((playerRight - 1) / tileSize);
-        const tileTop = Math.floor(playerTop / tileSize);
+        const tileMid = Math.floor(playerMiddleY / tileSize);
         const tileBottom = Math.floor((playerBottom - 1) / tileSize);
 
         const currentLayoutName = this.level ? "levelClosed" :
@@ -76,8 +77,8 @@ Game.prototype.update = function(deltaTime) {
             const layout = processedFloors[currentLayoutName];
 
             const touchingMagma =
-                layout[tileTop]?.[tileLeft] === "magma" ||
-                layout[tileTop]?.[tileRight] === "magma" ||
+                layout[tileMid]?.[tileLeft] === "magma" ||
+                layout[tileMid]?.[tileRight] === "magma" ||
                 layout[tileBottom]?.[tileLeft] === "magma" ||
                 layout[tileBottom]?.[tileRight] === "magma";
 

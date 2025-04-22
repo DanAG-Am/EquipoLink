@@ -50,9 +50,14 @@ class Bomb {
     }
 
     draw(ctx) {
-        if (this.alive) {
+        if (!this.alive) return;
+        if (this.frameIndex >= 1) {
+            const explosionSize = 192;
+            const offset = (explosionSize - 32) / 2;
+            ctx.drawImage(this.image, this.position.x - offset, this.position.y - offset, explosionSize, explosionSize);
+        } else {
             ctx.drawImage(this.image, this.position.x, this.position.y, 32, 32);
-        }
+        }   
     }
 }
 class Arrow {
