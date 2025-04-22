@@ -63,9 +63,21 @@ Game.prototype.spawnEnemies = function() {
 
             // Verifica si la nueva posición del enemigo es válida (no colisiona con las paredes).
             if (!this.isEnemyCollidingWithWall(newEnemy)) {
-                validSpawn = true; // Si no hay colisión, la posición es válida.
-                this.levelEnemies.push(newEnemy); // Agrega el enemigo al nivel.
-                this.totalSpawnedEnemies++; // Incrementa el contador de enemigos generados.
+                if (fairyEnemyBuffMultiplier > 1.0) {
+                    if (newEnemy.maxLife !== undefined) {
+                        newEnemy.maxLife *= fairyEnemyBuffMultiplier;
+                        newEnemy.life = newEnemy.maxLife;
+                    } else {
+                        newEnemy.life *= fairyEnemyBuffMultiplier;
+                    }
+                    if (newEnemy.attack !== undefined) {
+                        newEnemy.attack *= fairyEnemyBuffMultiplier;
+                    }
+                    newEnemy.isBuffed = true;
+                }
+                validSpawn = true;
+                this.levelEnemies.push(newEnemy);
+                this.totalSpawnedEnemies++;
             }
         }
     }

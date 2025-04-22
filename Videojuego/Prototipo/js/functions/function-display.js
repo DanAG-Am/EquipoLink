@@ -112,16 +112,16 @@ function drawUI() {
     }
 
     // icons y stats
-    uiCtx.drawImage(rupeeImg, 170, 80, 16, 32);
-    uiCtx.fillText(`x${playerStats.rupees}`, 190, 100);
+    uiCtx.drawImage(rupeeImg, 210, 50, 16, 32);
+    uiCtx.fillText(`x${playerStats.rupees}`, 230, 70);
 
-    uiCtx.drawImage(potionImg, 240, 80, 16, 32);
-    uiCtx.fillText(`x${playerStats.potions}`, 260, 100);
+    uiCtx.drawImage(potionImg, 210, 100, 16, 32);
+    uiCtx.fillText(`x${playerStats.potions}`, 230, 120);
 
     const pos = playerStats.uiTextPosition || { x: 90, y: 30 };
     uiCtx.fillText(`LEVEL - ${playerStats.level}`, pos.x, pos.y);
 
-    const maxBarWidth = 100;
+    const maxBarWidth = 140;
     const barHeight = 14;
     uiCtx.fillText(`HP`, 20, 80);
     uiCtx.fillText(`MP`, 20, 120);
@@ -136,7 +136,7 @@ function drawUI() {
     uiCtx.font = "7px Game";
     uiCtx.textAlign = "right";
     uiCtx.fillStyle = "white";
-    uiCtx.fillText(`${playerStats.life}/${playerStats.maxLife}`, 130, 64);
+    uiCtx.fillText(`${playerStats.life}/${playerStats.maxLife}`, 150, 64);
 
     const maxMP = playerStats.maxMana || 100;
     const mp = Math.max(0, Math.min(playerStats.mana, maxMP));
@@ -148,7 +148,7 @@ function drawUI() {
     uiCtx.font = "7px Game";
     uiCtx.textAlign = "right";
     uiCtx.fillStyle = "white";
-    uiCtx.fillText(`${playerStats.mana}/${playerStats.maxMana}`, 130, 105);
+    uiCtx.fillText(`${playerStats.mana}/${playerStats.maxMana}`, 150, 105);
 }
 
 function drawChestReward(ctx) {

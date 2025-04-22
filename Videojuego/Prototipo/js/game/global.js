@@ -20,6 +20,7 @@ let currentItemType = "";
 let isGameOver = false;
 this.levelCompleted = false;
 let bossKilledMusicPlayed = false;
+let gameWasCompleted = false;
 //tiles
 const tileSize = 32;
 const processedFloors = {};
@@ -61,7 +62,7 @@ let playerStats = {
     mana: 100,
     maxLife: 100,
     maxMana: 100,
-    rupees: 100,
+    rupees: 0,
     potions: 0,
     arrows: 0,
     bombs: 0,
