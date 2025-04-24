@@ -45,6 +45,16 @@ function discoverSFX() {
     });
 }
 
+const healing = new Audio("../../Videojuego/Assets/GameAssets/Sounds/World/healing.mp3");
+healing.volume = 0.5;
+function healSFX() {
+    healing.pause();
+    healing.currentTime = 0;
+    healing.play().catch(err => {
+        console.warn("Playback failed for healing sound:", err);
+    });
+}
+
 // Variable para controlar si se ha interactuado con la página
 let userHasInteracted = false;
 
@@ -456,6 +466,7 @@ Game.prototype.createEventListeners = function(){
         if (event.key == "d") {
             if (playerStats.potions > 0 && playerStats.life < playerStats.maxLife){
                 playerStats.potions--;
+                healSFX();
                 let lifeRegen = Math.floor(Math.random() * 20) + 10;
                 playerStats.life = Math.min(playerStats.life + lifeRegen, playerStats.maxLife);
             }
@@ -526,6 +537,7 @@ Game.prototype.createEventListeners = function(){
                 gameWasCompleted = true;
                 game.endingScene = false;
                 game.resetGame();
+                game.resetTimer();
             }
         }
     });
@@ -621,14 +633,37 @@ Game.prototype.createEventListeners = function(){
             let clickX = (event.clientX - rect.left) * scaleX;
             let clickY = (event.clientY - rect.top) * scaleY;
         
-            let btn = game.pauseButton;
+            const { options, return: returnBtn } = game.pauseButton;
+            if (
+                clickX >= returnBtn.x && clickX <= returnBtn.x + returnBtn.width &&
+                clickY >= returnBtn.y && clickY <= returnBtn.y + returnBtn.height
+            ) {
+                talkSFX();
+                gamePaused = false;
+                game.resetGame(true);
+            }
+            if (
+                clickX >= options.x && clickX <= options.x + options.width &&
+                clickY >= options.y && clickY <= options.y + options.height
+            ) {
+                talkSFX();
+                showSoundOptions = true;
+            }
+        }
+        if (showSoundOptions && game.soundOptionsButton) {
+            let rect = canvas.getBoundingClientRect();
+            let scaleX = canvas.width / rect.width;
+            let scaleY = canvas.height / rect.height;
+            let clickX = (event.clientX - rect.left) * scaleX;
+            let clickY = (event.clientY - rect.top) * scaleY;
+        
+            let btn = game.soundOptionsButton;
             if (
                 clickX >= btn.x && clickX <= btn.x + btn.width &&
                 clickY >= btn.y && clickY <= btn.y + btn.height
             ) {
                 talkSFX();
-                gamePaused = false;
-                game.resetGame();
+                showSoundOptions = false;
             }
         }
         if (isGameOver && game.gameOverButton) { //logica de perder

@@ -11,6 +11,7 @@ let ctx, uiCtx, game;
 let oldTime;
 let playerSpeed = 0.15;
 let gamePaused = false;
+let showSoundOptions = false;
 let interactingNPC = false;
 let interactingMerchant = false;
 let interactingFairy = false;

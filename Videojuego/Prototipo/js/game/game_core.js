@@ -154,7 +154,7 @@ class Game {
     }
 
     //regresar todo a su punto de inicio si se resetea el juego
-    resetGame() {
+    resetGame(fromPause = false) {
         if (gameWasCompleted) {
             // Reinicia stats si terminas el juego
             playerStats.maxLife = 100;
@@ -232,6 +232,8 @@ class Game {
         this.initObjects();
         this.player.velocity = new Vec(0, 0);
         this.player.setDirection("up");
-        this.resetTimer();
+        if (fromPause) {
+            this.resetTimer();
+        }
     }
 }

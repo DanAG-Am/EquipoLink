@@ -210,25 +210,94 @@ function drawPauseMenu(ctx) {
 
     const buttonWidth = 200; // Botón para regresar al inicio
     const buttonHeight = 40;
-    const buttonX = canvasWidth / 2 - buttonWidth / 2;
-    const buttonY = boxY + 110;
+
+    const buttonOptionX = canvasWidth / 2 - buttonWidth / 2;
+    const buttonOptionY = boxY + 90;
     ctx.fillStyle = "#333";
-    ctx.fillRect(buttonX, buttonY, buttonWidth, buttonHeight);
+    ctx.fillRect(buttonOptionX, buttonOptionY, buttonWidth, buttonHeight);
     ctx.strokeStyle = "white";
-    ctx.strokeRect(buttonX, buttonY, buttonWidth, buttonHeight);
+    ctx.strokeRect(buttonOptionX, buttonOptionY, buttonWidth, buttonHeight);
     ctx.fillStyle = "white";
     ctx.font = "10px Game";
-    ctx.fillText("Volver al inicio", canvasWidth / 2, buttonY + 26);
+    ctx.fillText("Opción del sonido", canvasWidth / 2, buttonOptionY + 26);
+
+    const buttonReturnX = canvasWidth / 2 - buttonWidth / 2;
+    const buttonReturnY = boxY + 150;
+    ctx.fillStyle = "#333";
+    ctx.fillRect(buttonReturnX, buttonReturnY, buttonWidth, buttonHeight);
+    ctx.strokeStyle = "white";
+    ctx.strokeRect(buttonReturnX, buttonReturnY, buttonWidth, buttonHeight);
+    ctx.fillStyle = "white";
+    ctx.font = "10px Game";
+    ctx.fillText("Volver al inicio", canvasWidth / 2, buttonReturnY + 26);
 
     ctx.font = "10px Game"; // Instrucción para continuar con el juego
     ctx.fillText("Presiona ESC para regresar al juego", canvasWidth / 2, boxY + boxHeight - 30);
     ctx.restore();
 
     game.pauseButton = { // Guardar el posición del botón
-        x: buttonX,
-        y: buttonY,
-        width: buttonWidth,
-        height: buttonHeight
+        options: {
+            x: buttonOptionX,
+            y: buttonOptionY,
+            width: buttonWidth,
+            height: buttonHeight
+        },
+        return: {
+            x: buttonReturnX,
+            y: buttonReturnY,
+            width: buttonWidth,
+            height: buttonHeight
+        }
+    };
+
+    if (showSoundOptions) {
+        drawSoundOptions(ctx);
+    }
+}
+function drawSoundOptions(ctx) {
+    const panelWidth = 300;
+    const panelHeight = 200;
+    const panelX = canvasWidth / 2 - panelWidth / 2;
+    const panelY = canvasHeight / 2 - panelHeight / 2;
+
+    ctx.save();
+    ctx.fillStyle = "#111";
+    ctx.fillRect(panelX, panelY, panelWidth, panelHeight);
+    ctx.strokeStyle = "white";
+    ctx.strokeRect(panelX, panelY, panelWidth, panelHeight);
+
+    ctx.fillStyle = "white";
+    ctx.font = "20px Game";
+    ctx.textAlign = "center";
+    ctx.fillText("Sonido", canvasWidth / 2, panelY + 30);
+
+    ctx.font = "12px Game";
+    ctx.fillText("Música de fondo", canvasWidth / 2, panelY + 90);
+    ctx.fillText("Efectos de sonido", canvasWidth / 2, panelY + 160);
+
+    ctx.fillStyle = "#555";
+    ctx.fillRect(panelX + 50, panelY + 100, 200, 10);
+    ctx.fillRect(panelX + 50, panelY + 170, 200, 10);
+
+    const closeSize = 25;
+    const closeX = panelX + panelWidth - closeSize - 5;
+    const closeY = panelY + 5;
+
+    ctx.fillStyle = "#800";
+    ctx.fillRect(closeX, closeY, closeSize, closeSize);
+    ctx.strokeStyle = "white";
+    ctx.strokeRect(closeX, closeY, closeSize, closeSize);
+    ctx.fillStyle = "white";
+    ctx.font = "18px Game";
+    ctx.fillText("X", closeX + closeSize / 2 + 1, closeY + 18);
+
+    ctx.restore();
+
+    game.soundOptionsButton = {
+        x: closeX,
+        y: closeY,
+        width: closeSize,
+        height: closeSize
     };
 }
 
