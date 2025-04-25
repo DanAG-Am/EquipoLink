@@ -205,6 +205,20 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
 function showSimpleDialog(message) {
     const dialog = document.getElementById("errorDialog");
     const messageElement = document.getElementById("errorMessage");
-    messageElement.innerText = message;
+
+    if (message === "Un mal oscuro crece rápidamente") {
+        messageElement.innerHTML = `
+            ${message}<br><br>
+            <span style="font-size: 10px;">La vida y el ataque de los enemigos se incrementan 10%</span>
+        `;
+    } else if (message === "Tu espíritu guerrero crece") {
+        messageElement.innerHTML = `
+            ${message}<br><br>
+            <span style="font-size: 10px;">La vida actual y el daño de tus ataques se incrementan 10%</span>
+        `;
+    } else {
+        messageElement.innerText = message;
+    }
+
     dialog.style.display = "block";
-  }
+}

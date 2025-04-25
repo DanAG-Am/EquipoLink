@@ -154,7 +154,10 @@ class Game {
     }
 
     //regresar todo a su punto de inicio si se resetea el juego
-    resetGame(fromPause = false) {
+    resetGame() {
+        dragonSFX1Played = false;
+        dragonSFX2Played = false;
+
         if (gameWasCompleted) {
             // Reinicia stats si terminas el juego
             playerStats.maxLife = 100;
@@ -232,8 +235,88 @@ class Game {
         this.initObjects();
         this.player.velocity = new Vec(0, 0);
         this.player.setDirection("up");
-        if (fromPause) {
-            this.resetTimer();
+    }
+
+    restartGame() {
+        dragonSFX1Played = false;
+        dragonSFX2Played = false;
+        tutorialBonusGiven = false;
+
+        
+
+        playerStats.maxLife = 100;
+        playerStats.maxMana = 100;
+        playerStats.life = 100;
+        playerStats.mana = 100;
+        playerStats.rupees = 0;
+        playerStats.potions = 0;
+        playerStats.damageSword = 10;
+        playerStats.damageArrow = 5;
+        playerStats.damageMagic = 15;
+        playerStats.damageBomb = 20;
+        playerStats.level = "-";
+        playerStats.uiTextPosition = { x: 90, y: 30 };
+        playerStats.life = playerStats.maxLife;
+        playerStats.mana = playerStats.maxMana;
+        playerStats.arrows = 0;
+        playerStats.bombs = 0;
+        fairyEnemyBuffMultiplier = 1.0;
+        gameWasCompleted = false;
+
+        this.mainMap = false;
+        this.level = false;
+        this.level2 = false;
+        this.level3 = false;
+        this.level4 = false;
+        this.level5 = false;
+        this.level6 = false;
+        this.level7 = false;
+        this.level8 = false;
+        this.level9 = false;
+        this.level10 = false;
+        
+        this.restRoom1 = false;
+        this.restRoom2 = false;
+        this.restRoom3 = false;
+        
+        this.restStory1 = false;
+        this.restStory2 = false;
+        this.restStory3 = false;
+
+        this.levelBoss = false;
+        this.endingScene = false;
+        this.playerReachedCenter = false;
+        this.endingDialogueStage = 0;
+        this.showEndingLogo = false;
+
+        this.showMainMenu = true;
+        this.mainMap = false;
+        this.dialogueStage = 0;
+        this.dialogueStage2 = 0;
+        this.dialogueStage3 = 0;
+        this.dialogueStage4 = 0;
+        this.tutorialWasShown = false;
+        this.showInventory = false;
+        this.initializeRupees = false;
+        this.totalSpawnedEnemies = 0;
+        this.levelCompleted = false;
+        this.chestHasBeenOpened = false;
+        this.chestIsOpen = false;
+        this.levelExitUnlocked = false;
+        ["prologue", "mainMap", "levelClosed", "level_2", "level_3", "level_4", "level_5", "level_6", "level_7", "level_8", "level_9", "level_10", "ending"].forEach(name => {
+            processBackgroundLayout(name);
+        });
+
+        this.actors = [];
+        this.levelEnemies = [];
+        if (this.levelEnemyInterval) {
+            clearInterval(this.levelEnemyInterval);
+            this.levelEnemyInterval = null;
         }
+
+        this.initObjects();
+        this.player.velocity = new Vec(0, 0);
+        this.player.setDirection("up");
+        this.resetTimer();
     }
 }

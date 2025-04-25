@@ -251,16 +251,16 @@ class Fairy {
         playerStats.damageBomb = Math.round(playerStats.damageBomb * 1.1);
       } else {
         showSimpleDialog("Un mal oscuro crece rápidamente");
-        fairyEnemyBuffMultiplier *= 2;
+        fairyEnemyBuffMultiplier *= 1.1;
         game.levelEnemies.forEach(enemy => {
           if (enemy.maxLife !== undefined) {
-              enemy.maxLife = Math.round(enemy.maxLife * 2);
+              enemy.maxLife = Math.round(enemy.maxLife * 1.1);
               enemy.life = enemy.maxLife;
           } else {
-              enemy.life = Math.round(enemy.life * 2);
+              enemy.life = Math.round(enemy.life * 1.1);
           }
           if (enemy.attack !== undefined) {
-              enemy.attack = Math.round(enemy.attack * 2);
+              enemy.attack = Math.round(enemy.attack * 1.1);
           }
         });
         fairyEnemyBuffActive = true;

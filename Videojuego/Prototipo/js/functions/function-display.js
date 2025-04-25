@@ -127,7 +127,7 @@ function drawUI() {
     uiCtx.fillText(`MP`, 20, 120);
 
     const maxHP = playerStats.maxLife || 100;
-    const hp = Math.max(0, Math.min(playerStats.life, maxHP));
+    const hp = Math.max(0, Math.min(playerStats.life));
     const hpBarWidth = (hp / maxHP) * maxBarWidth;
     uiCtx.fillStyle = "gray";
     uiCtx.fillRect(55, 72, maxBarWidth, barHeight);
@@ -258,7 +258,7 @@ function drawSoundOptions(ctx) {
     const panelWidth = 300;
     const panelHeight = 200;
     const panelX = canvasWidth / 2 - panelWidth / 2;
-    const panelY = canvasHeight / 2 - panelHeight / 2;
+    const panelY = canvasHeight / 2 - panelHeight + 10;
 
     ctx.save();
     ctx.fillStyle = "#111";
@@ -271,34 +271,51 @@ function drawSoundOptions(ctx) {
     ctx.textAlign = "center";
     ctx.fillText("Sonido", canvasWidth / 2, panelY + 30);
 
-    ctx.font = "12px Game";
-    ctx.fillText("Música de fondo", canvasWidth / 2, panelY + 90);
-    ctx.fillText("Efectos de sonido", canvasWidth / 2, panelY + 160);
+    // Sliders
+    const sliderWidth = 200;
+    const sliderHeight = 10;
+    const sliderX = panelX + 50;
 
-    ctx.fillStyle = "#555";
-    ctx.fillRect(panelX + 50, panelY + 100, 200, 10);
-    ctx.fillRect(panelX + 50, panelY + 170, 200, 10);
+    // Música de fondo
+    const bgY = panelY + 100;
+    ctx.fillText("Música", canvasWidth / 2, bgY - 10);
+    ctx.fillStyle = "#444";
+    ctx.fillRect(sliderX, bgY, sliderWidth, sliderHeight);
+    ctx.fillStyle = "#0f0";
+    ctx.fillRect(sliderX, bgY, sliderWidth * backgroundVolume, sliderHeight);
+    ctx.strokeStyle = "white";
+    ctx.strokeRect(sliderX, bgY, sliderWidth, sliderHeight);
 
+    // SFX
+    const sfxY = panelY + 150;
+    ctx.fillStyle = "white";
+    ctx.fillText("Efectos", canvasWidth / 2, sfxY - 10);
+    ctx.fillStyle = "#444";
+    ctx.fillRect(sliderX, sfxY, sliderWidth, sliderHeight);
+    ctx.fillStyle = "#0f0";
+    ctx.fillRect(sliderX, sfxY, sliderWidth * sfxVolume, sliderHeight);
+    ctx.strokeStyle = "white";
+    ctx.strokeRect(sliderX, sfxY, sliderWidth, sliderHeight);
+
+    // Botón para cerrar
     const closeSize = 25;
     const closeX = panelX + panelWidth - closeSize - 5;
     const closeY = panelY + 5;
-
     ctx.fillStyle = "#800";
     ctx.fillRect(closeX, closeY, closeSize, closeSize);
     ctx.strokeStyle = "white";
     ctx.strokeRect(closeX, closeY, closeSize, closeSize);
     ctx.fillStyle = "white";
     ctx.font = "18px Game";
-    ctx.fillText("X", closeX + closeSize / 2 + 1, closeY + 18);
+    ctx.fillText("X", closeX + closeSize / 2, closeY + 18);
 
-    ctx.restore();
-
-    game.soundOptionsButton = {
-        x: closeX,
-        y: closeY,
-        width: closeSize,
-        height: closeSize
+    // Guardar referencias para clics
+    game.soundOptionsButton = { x: closeX, y: closeY, width: closeSize, height: closeSize };
+    game.sliderBounds = {
+        bg: { x: sliderX, y: bgY, width: sliderWidth, height: sliderHeight },
+        sfx: { x: sliderX, y: sfxY, width: sliderWidth, height: sliderHeight }
     };
+    ctx.restore();
 }
 
 //menu de gameover

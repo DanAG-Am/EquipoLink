@@ -5,7 +5,7 @@
 /*clases derivadas de los enemigos, se repite la misma estructura de boss en el resto*/
 
 let playerHurtAudio = new Audio("/Videojuego/Videojuego/Assets/GameAssets/Sounds/Character/link_hurt.wav");
-playerHurtAudio.volume = 1;
+playerHurtAudio.volume = sfxVolume;
 playerHurtAudio.loop = false;
 
 function playerHurtSFX() {
@@ -15,10 +15,22 @@ function playerHurtSFX() {
 }
 
 function dragonSFX(){
-    const sfx = new Audio("/Videojuego/Videojuego/Assets/GameAssets/Sounds/Enemy/boss_ambientsound.wav");
-    sfx.loop = true;
-    sfx.volume = 0.5;
-    sfx.play();
+    if (dragonSFXAudio) {
+        dragonSFXAudio.pause();
+        dragonSFXAudio = null;
+    }
+    dragonSFXAudio = new Audio("/Videojuego/Videojuego/Assets/GameAssets/Sounds/Enemy/boss_ambientsound.wav");
+    dragonSFXAudio.loop = true;
+    dragonSFXAudio.volume = sfxVolume;
+    dragonSFXAudio.play().catch(err => console.warn("Error al reproducir dragonSFX:", err));
+
+    // Detenerlo después de 2 segundos
+    setTimeout(() => {
+        if (dragonSFXAudio) {
+            dragonSFXAudio.pause();
+            dragonSFXAudio = null;
+        }
+    }, 2000);
 }
 
 class Boss extends AnimatedObject{

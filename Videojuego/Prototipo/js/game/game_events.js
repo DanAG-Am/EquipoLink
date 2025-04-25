@@ -8,37 +8,29 @@
 "use strict";
 
 const titleScreen = new Audio("/Videojuego/Videojuego/Assets/GameAssets/Sounds/Music/title_screen.mp3");
-titleScreen.volume = 0.3;
 titleScreen.loop = false;
 
 const backgroundMusic = new Audio("/Videojuego/Videojuego/Assets/GameAssets/Sounds/Music/dungeon_theme.mp3");
-backgroundMusic.volume = 0.3;
 backgroundMusic.loop = true;
 
 const shopMusic = new Audio("/Videojuego/Videojuego/Assets/GameAssets/Sounds/Music/shop.mp3");
-shopMusic.volume = 0.3;
 shopMusic.loop = true;
 
 const fairyMusic = new Audio("/Videojuego/Videojuego/Assets/GameAssets/Sounds/Music/fairy.mp3");
-fairyMusic.volume = 0.3;
 fairyMusic.loop = true;
 
 const bossMusic = new Audio("/Videojuego/Videojuego/Assets/GameAssets/Sounds/Music/last_boss.mp3");
-bossMusic.volume = 0.3;
 bossMusic.loop = true;
 const bossKilledMusic = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Music/boss_killed.mp3");
-bossKilledMusic.volume = 0.3;
 bossKilledMusic.loop = false;
 
 const gameOver = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Music/game_over.mp3");
-gameOver.volume = 0.6;
 gameOver.loop = false;
 const gameWin = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Music/game_win.mp3");
-gameWin.volume = 0.3;
 gameWin.loop = false;
 
 const discover = new Audio("../../Videojuego/Assets/GameAssets/Sounds/World/discovery.wav");
-discover.volume = 0.7;
+discover.volume = sfxVolume;
 function discoverSFX() {
     discover.play().catch(err => {
         console.warn("Playback failed for enter room sound:", err);
@@ -46,7 +38,7 @@ function discoverSFX() {
 }
 
 const healing = new Audio("../../Videojuego/Assets/GameAssets/Sounds/World/healing.mp3");
-healing.volume = 0.5;
+healing.volume = sfxVolume;
 function healSFX() {
     healing.pause();
     healing.currentTime = 0;
@@ -76,7 +68,7 @@ function handleUserInteraction() {
 
 function bombAttack() {
     const dropSFX = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Combat/bomb_drop.mp3");
-    dropSFX.volume = 1;
+    dropSFX.volume = sfxVolume;
     dropSFX.play().catch(err => console.warn("Playback failed for bomb_drop:", err));
 
     // Después de 2 segundos, apagar el drop y reproducir la explosión
@@ -88,38 +80,38 @@ function bombAttack() {
 }
 function bombExplode() {
     const sfx = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Combat/bomb_explosion.mp3");
-    sfx.volume = 0.2;
+    sfx.volume = sfxVolume;
     sfx.play().catch(err => console.warn("Playback failed for bomb_explotion:", err));
 }
 
 function arrowShot() {
     const sfx = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Combat/arrow_shot.wav");
-    sfx.volume = 1;
+    sfx.volume = sfxVolume;
     sfx.play();
 }
 
 function magicShot(){
     const sfx = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Combat/magic_rod.wav");
-    sfx.volume = 1;
+    sfx.volume = sfxVolume;
     sfx.play();
 }
 
 function swordHit(){
     const sfx = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Combat/sword_swing.wav");
-    sfx.volume = 1;
+    sfx.volume = sfxVolume;
     sfx.play();
 }
 
 function dashSFX() {
     const sfx = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Combat/dash.mp3");
-    sfx.volume = 0.7;
+    sfx.volume = sfxVolume;
     sfx.currentTime = 0.1;
     sfx.play().catch(err => console.warn("Playback failed for dash:", err));
 }
 
 function shieldSFX() {
     const sfx = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Combat/shield.mp3");
-    sfx.volume = 1;
+    sfx.volume = sfxVolume;
     sfx.play().catch(err => console.warn("Playback failed for shield:", err));
 }
 
@@ -129,6 +121,17 @@ titleScreen.addEventListener("ended", () => {
         titleScreen.play().catch(err => console.warn("Playback failed:", err));
     }
 });
+
+function updateVolumes() {
+    backgroundMusic.volume = backgroundVolume;
+    shopMusic.volume = backgroundVolume;
+    fairyMusic.volume = backgroundVolume;
+    bossMusic.volume = backgroundVolume;
+    bossKilledMusic.volume = backgroundVolume;
+    titleScreen.volume = backgroundVolume;
+    gameOver.volume = backgroundVolume;
+    gameWin.volume = backgroundVolume;
+}
 
 function stopAllMusic() {
     [titleScreen, backgroundMusic, shopMusic, fairyMusic, bossMusic, bossKilledMusic, gameWin, gameOver].forEach(audio => {
@@ -412,13 +415,23 @@ Game.prototype.createEventListeners = function(){
             
                 const collidesWithWall = getWallBoxes().some(wall => boxOverlap(futureBox, wall));
             
-                const npcs = [this.tienda, this.fairy, this.oldMan];
-                const collidesWithNPC = npcs.some(npc => boxOverlap(futureBox, {
-                    position: npc.position,
-                    width: npc.width,
-                    height: npc.height
-                }));
-            
+                const npcs = [];
+                if (game.mainMap || game.restRoom1 || game.restRoom2 || game.restRoom3) {
+                    npcs.push(this.tienda);
+                    npcs.push(this.fairy);
+                }
+                if (game.mainMap || game.restRoom3) {
+                    npcs.push(this.oldMan);
+                }
+
+                const collidesWithNPC = npcs.some(npc => {
+                    if (!npc) return false; // proteger si algún NPC no existe
+                    return boxOverlap(futureBox, {
+                        position: npc.position,
+                        width: npc.width,
+                        height: npc.height
+                    });
+                });
                 if (!collidesWithWall && !collidesWithNPC) {
                     this.player.position = futurePosition;
                 }
@@ -536,8 +549,7 @@ Game.prototype.createEventListeners = function(){
             } else {
                 gameWasCompleted = true;
                 game.endingScene = false;
-                game.resetGame();
-                game.resetTimer();
+                game.restartGame();
             }
         }
     });
@@ -561,6 +573,50 @@ Game.prototype.createEventListeners = function(){
                 this.player.toggleShield(false); // desactivar cuando sueltas
             }
         }
+    });
+
+    window.addEventListener('mousedown', (event) =>{
+        if (showSoundOptions && game.sliderBounds) {
+            let rect = canvas.getBoundingClientRect();
+            let scaleX = canvas.width / rect.width;
+            let scaleY = canvas.height / rect.height;
+            let clickX = (event.clientX - rect.left) * scaleX;
+            let clickY = (event.clientY - rect.top) * scaleY;
+        
+            const checkSlider = (name, volumeRef) => {
+                const bounds = game.sliderBounds[name];
+                if (
+                    clickX >= bounds.x && clickX <= bounds.x + bounds.width &&
+                    clickY >= bounds.y - 5 && clickY <= bounds.y + bounds.height + 5
+                ) {
+                    draggingSlider = name;
+                    const newVal = (clickX - bounds.x) / bounds.width;
+                    if (name === "bg") backgroundVolume = Math.max(0, Math.min(1, newVal));
+                    else if (name === "sfx") sfxVolume = Math.max(0, Math.min(1, newVal));
+                    updateVolumes();
+                }
+            };
+            checkSlider("bg");
+            checkSlider("sfx");
+        }
+    });
+    window.addEventListener("mousemove", (event) => {
+        if (!draggingSlider || !game.sliderBounds) return;
+        let rect = canvas.getBoundingClientRect();
+        let scaleX = canvas.width / rect.width;
+        let clickX = (event.clientX - rect.left) * scaleX;
+    
+        const bounds = game.sliderBounds[draggingSlider];
+        const newVal = (clickX - bounds.x) / bounds.width;
+        if (draggingSlider === "bg") {
+            backgroundVolume = Math.max(0, Math.min(1, newVal));
+        } else if (draggingSlider === "sfx") {
+            sfxVolume = Math.max(0, Math.min(1, newVal));
+        }
+        updateVolumes();
+    });
+    window.addEventListener("mouseup", () => {
+        draggingSlider = null;
     });
 
     let currentItemType = "";

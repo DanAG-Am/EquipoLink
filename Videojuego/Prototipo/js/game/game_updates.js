@@ -6,13 +6,13 @@
 
 function playerHurtSFX() {
     const sfx = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Character/link_hurt.wav");
-    sfx.volume = 1;
+    sfx.volume = sfxVolume;
     sfx.play();
 }
 
 function enemyDeathSFX() {
     const sfx = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Enemy/enemy_death.wav");
-    sfx.volume = 1;
+    sfx.volume = sfxVolume;
     sfx.play();
 }
 
@@ -87,7 +87,7 @@ Game.prototype.update = function(deltaTime) {
                 playerStats.life = Math.max(0, playerStats.life - 3);
 
                 const sfx = new Audio("../../Videojuego/Assets/GameAssets/Sounds/Fire/burning.mp3");
-                sfx.volume = 0.3;
+                sfx.volume = sfxVolume;
                 sfx.currentTime = 0.7;
                 sfx.play();
 
