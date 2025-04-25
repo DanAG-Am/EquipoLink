@@ -6,7 +6,7 @@
 
 function rupeeSFX() {
     const sfx = new Audio("../../Videojuego/Assets/GameAssets/Sounds/World/5rupee_pickup.wav");
-    sfx.volume = 0.3;
+    sfx.volume = sfxVolume / 2;
     sfx.play();
 }
 let rupees = [];  // Arreglo para almacenar las rupees en el juego

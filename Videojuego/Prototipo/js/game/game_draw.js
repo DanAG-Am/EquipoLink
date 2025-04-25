@@ -7,18 +7,18 @@
 
 //fetch de audios
 const enterRoomAudio = new Audio("/Videojuego/Videojuego/Assets/GameAssets/Sounds/Character/enter_room.wav");
-enterRoomAudio.volume = 1;
 function playEnterRoomSFX() {
+    enterRoomAudio.volume = sfxVolume;
     enterRoomAudio.play().catch(err => {
         console.warn("Playback failed for enter room sound:", err);
     });
 }
 
 const talkAudio = new Audio("/Videojuego/Videojuego/Assets/GameAssets/Sounds/interact/talk_or_meterup_sound.wav");
-talkAudio.volume = 1;
 function talkSFX() {
     talkAudio.pause();
     talkAudio.currentTime = 0;
+    talkAudio.volume = sfxVolume;
     talkAudio.play().catch(err => {
         console.warn("Playback failed for talkSFX:", err);
     });
@@ -98,9 +98,12 @@ Game.prototype.draw = function(ctx) {
         } else if (this.dialogueStage === 5 && !this.tutorialWasShown) {
             this.showTutorial = true;
             this.tutorialWasShown = true;
-            playerStats.bombs = 10;
-            playerStats.arrows = 20;
-            playerStats.rupees = 50;
+            if (!tutorialBonusGiven) {
+                playerStats.bombs += 10;
+                playerStats.arrows += 20;
+                playerStats.rupees += 50;
+                tutorialBonusGiven = true;
+            }
         } else if (this.showTutorial) {
             this.drawTutorial(ctx);
         }
@@ -109,7 +112,7 @@ Game.prototype.draw = function(ctx) {
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
                 playEnterRoomSFX();
                 this.mainMap = false;
-                this.levelBoss = true;
+                this.level = true;
                 this.player.position = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 2);
                 playerStats.level = 1;
                 playerStats.uiTextPosition = { x: 90, y: 30 };
@@ -934,6 +937,10 @@ Game.prototype.drawDialogue3 = function(ctx) { //dibujar dialogos del jefe final
     ctx.fillStyle = "white";
     ctx.font = "14px Game";
     ctx.textAlign = "center";
+    if (this.dialogueStage3 === 0 && !dragonSFX1Played) {
+        dragonSFX();
+        dragonSFX1Played = true;
+    }
     let dialogueTexts = [
         ["¡GRAAAAAAAAAAAAAAHHH!"],
         ["¡Te destruiré, insignificante humano!"]
@@ -955,6 +962,10 @@ Game.prototype.drawDialogue4 = function(ctx) { //dibujar dialogos del jefe final
     ctx.fillStyle = "white";
     ctx.font = "15px Game";
     ctx.textAlign = "center";
+    if (this.dialogueStage4 === 0 && !dragonSFX2Played) {
+        dragonSFX();
+        dragonSFX2Played = true;
+    }
     let dialogueTexts = [
         ["¡GRAAAAAAAAAAAAAAHHH!"],
         ["¡Has derrotado al jefe", "y salvado a tu hermano!"],
