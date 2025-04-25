@@ -109,7 +109,7 @@ Game.prototype.draw = function(ctx) {
             this.player.position.x + this.player.width <= canvasWidth / 2 + 50) {
                 playEnterRoomSFX();
                 this.mainMap = false;
-                this.level = true;
+                this.levelBoss = true;
                 this.player.position = new Vec(canvasWidth / 2 - 16, canvasHeight - tileSize * 2);
                 playerStats.level = 1;
                 playerStats.uiTextPosition = { x: 90, y: 30 };
