@@ -147,13 +147,22 @@ function handleMusicPlayback(game) {
 
     // Si te mueres
     if (isGameOver) {
+        if (!deathHandled) {
+            playerStats.muertes += 1;
+            updatePlayerStats(playerStats);
+            deathHandled = true;
+        }
+    
         if (gameOver.paused) {
             stopAllMusic();
             gameOver.currentTime = 0;
             gameOver.play().catch(err => console.warn("Error al reproducir gameOver:", err));
         }
+        
+        drawDeathMenu(ctx); // si aquí también quieres mostrarlo
         return;
     }
+    
 
     // Si estás en la tienda
     if (interactingMerchant) {
@@ -364,6 +373,7 @@ Game.prototype.createEventListeners = function(){
                 if (playerStats.arrows > 0) {
                     arrowShot();
                     playerStats.arrows--;
+                    playerStats.objetos_usados++; 
                     this.player.toggleBow(true);
                     let offset = new Vec(0, 0);
                     if (this.player.currentDirection === "up") offset = new Vec(0, -tileSize);
@@ -383,6 +393,7 @@ Game.prototype.createEventListeners = function(){
                     this.lastBombTime = now;
                     bombAttack();
                     playerStats.bombs--;
+                    playerStats.objetos_usados++; 
                     this.player.toggleBomb(true);
                     let offset = new Vec(0, 0);
                     if (this.player.currentDirection === "up") offset = new Vec(0, 32);
@@ -479,6 +490,7 @@ Game.prototype.createEventListeners = function(){
         if (event.key == "d") {
             if (playerStats.potions > 0 && playerStats.life < playerStats.maxLife){
                 playerStats.potions--;
+                playerStats.objetos_usados++; 
                 healSFX();
                 let lifeRegen = Math.floor(Math.random() * 20) + 10;
                 playerStats.life = Math.min(playerStats.life + lifeRegen, playerStats.maxLife);

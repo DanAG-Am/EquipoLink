@@ -5,6 +5,15 @@
 
 "use strict";
 
+const id_jugador = localStorage.getItem("id_jugador");
+if (id_jugador) {
+    playerStats.id_jugador = parseInt(id_jugador);
+    console.log("ID jugador cargado:", playerStats.id_jugador);
+} else {
+    console.warn("No se encontró el ID del jugador en localStorage");
+}
+
+
 //fetch de audios
 const enterRoomAudio = new Audio("/Videojuego/Videojuego/Assets/GameAssets/Sounds/Character/enter_room.wav");
 function playEnterRoomSFX() {
@@ -133,6 +142,10 @@ Game.prototype.draw = function(ctx) {
         this.bombs.forEach(b => b.draw(ctx));
         if (this.levelCompleted) {
             if (this.chestIsOpen) {
+                if (this.chestIsOpen && !this.chestHandled) {
+                    playerStats.cofresAbiertos += 1;
+                    this.chestHandled = true; // Evita que se sume de nuevo
+                }
                 ctx.drawImage(this.chestOpened, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
             } else {
                 ctx.drawImage(this.chestClosed, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
@@ -163,6 +176,7 @@ Game.prototype.draw = function(ctx) {
             this.chestIsOpen = false;
             this.chestHasBeenOpened = false;
             this.levelExitUnlocked = false;
+            this.chestHandled = false;
             rupeesInitialized = false;
             playerStats.level += 1;
             this.levelEnemyInterval = setInterval(() => { this.spawnEnemies(); }, 5000);
@@ -177,6 +191,10 @@ Game.prototype.draw = function(ctx) {
         this.drawEnemyHealthBars(ctx);
         if (this.levelCompleted) {
             if (this.chestIsOpen) {
+                if (this.chestIsOpen && !this.chestHandled) {
+                    playerStats.cofresAbiertos += 1;
+                    this.chestHandled = true; // Evita que se sume de nuevo
+                }
                 ctx.drawImage(this.chestOpened, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
             } else {
                 ctx.drawImage(this.chestClosed, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
@@ -208,6 +226,7 @@ Game.prototype.draw = function(ctx) {
             this.chestIsOpen = false;
             this.chestHasBeenOpened = false;
             this.levelExitUnlocked = false;
+            this.chestHandled = false;
             rupeesInitialized = false;
             playerStats.level += 1;
             this.levelEnemyInterval = setInterval(() => { this.spawnEnemies(); }, 5000);
@@ -220,6 +239,10 @@ Game.prototype.draw = function(ctx) {
         this.magics.forEach(m => m.draw(ctx));
         if (this.levelCompleted) {
             if (this.chestIsOpen) {
+                if (this.chestIsOpen && !this.chestHandled) {
+                    playerStats.cofresAbiertos += 1;
+                    this.chestHandled = true; // Evita que se sume de nuevo
+                }
                 ctx.drawImage(this.chestOpened, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
             } else {
                 ctx.drawImage(this.chestClosed, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
@@ -253,6 +276,7 @@ Game.prototype.draw = function(ctx) {
             this.chestHasBeenOpened = false;
             this.chestIsOpen = false;
             this.levelExitUnlocked = false;
+            this.chestHandled = false;
             rupeesInitialized = false;
             playerStats.level = "Rest";
             playerStats.uiTextPosition = { x: 70, y: 30 };
@@ -329,6 +353,10 @@ Game.prototype.draw = function(ctx) {
         this.drawEnemyHealthBars(ctx);
         if (this.levelCompleted) {
             if (this.chestIsOpen) {
+                if (this.chestIsOpen && !this.chestHandled) {
+                    playerStats.cofresAbiertos += 1;
+                    this.chestHandled = true; // Evita que se sume de nuevo
+                }
                 ctx.drawImage(this.chestOpened, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
             } else {
                 ctx.drawImage(this.chestClosed, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
@@ -360,6 +388,7 @@ Game.prototype.draw = function(ctx) {
             this.chestIsOpen = false;
             this.chestHasBeenOpened = false;
             this.levelExitUnlocked = false;
+            this.chestHandled = false;
             rupeesInitialized = false;
             playerStats.level += 1;
             this.levelEnemyInterval = setInterval(() => { this.spawnEnemies(); }, 5000);
@@ -373,6 +402,10 @@ Game.prototype.draw = function(ctx) {
         this.drawEnemyHealthBars(ctx);
         if (this.levelCompleted) {
             if (this.chestIsOpen) {
+                if (this.chestIsOpen && !this.chestHandled) {
+                    playerStats.cofresAbiertos += 1;
+                    this.chestHandled = true; // Evita que se sume de nuevo
+                }
                 ctx.drawImage(this.chestOpened, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
             } else {
                 ctx.drawImage(this.chestClosed, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
@@ -405,6 +438,7 @@ Game.prototype.draw = function(ctx) {
             this.chestIsOpen = false;
             this.chestHasBeenOpened = false;
             this.levelExitUnlocked = false;
+            this.chestHandled = false;
             rupeesInitialized = false;
             playerStats.level += 1;
             this.levelEnemyInterval = setInterval(() => { this.spawnEnemies(); }, 5000);
@@ -418,6 +452,10 @@ Game.prototype.draw = function(ctx) {
         this.drawEnemyHealthBars(ctx);
         if (this.levelCompleted) {
             if (this.chestIsOpen) {
+                if (this.chestIsOpen && !this.chestHandled) {
+                    playerStats.cofresAbiertos += 1;
+                    this.chestHandled = true; // Evita que se sume de nuevo
+                }
                 ctx.drawImage(this.chestOpened, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
             } else {
                 ctx.drawImage(this.chestClosed, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
@@ -450,6 +488,7 @@ Game.prototype.draw = function(ctx) {
             this.chestIsOpen = false;
             this.chestHasBeenOpened = false;
             this.levelExitUnlocked = false;
+            this.chestHandled = false;
             rupeesInitialized = false;
             playerStats.level += 1;
             this.levelEnemyInterval = setInterval(() => { this.spawnEnemies(); }, 5000);
@@ -463,6 +502,10 @@ Game.prototype.draw = function(ctx) {
         this.drawEnemyHealthBars(ctx);
         if (this.levelCompleted) {
             if (this.chestIsOpen) {
+                if (this.chestIsOpen && !this.chestHandled) {
+                    playerStats.cofresAbiertos += 1;
+                    this.chestHandled = true; // Evita que se sume de nuevo
+                }
                 ctx.drawImage(this.chestOpened, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
             } else {
                 ctx.drawImage(this.chestClosed, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
@@ -494,6 +537,7 @@ Game.prototype.draw = function(ctx) {
             this.chestHasBeenOpened = false;
             this.chestIsOpen = false;
             this.levelExitUnlocked = false;
+            this.chestHandled = false;
             rupeesInitialized = false;
             playerStats.level = "Rest";
             playerStats.uiTextPosition = { x: 70, y: 40 };
@@ -571,6 +615,10 @@ Game.prototype.draw = function(ctx) {
         this.drawEnemyHealthBars(ctx);
         if (this.levelCompleted) {
             if (this.chestIsOpen) {
+                if (this.chestIsOpen && !this.chestHandled) {
+                    playerStats.cofresAbiertos += 1;
+                    this.chestHandled = true; // Evita que se sume de nuevo
+                }
                 ctx.drawImage(this.chestOpened, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
             } else {
                 ctx.drawImage(this.chestClosed, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
@@ -602,6 +650,7 @@ Game.prototype.draw = function(ctx) {
             this.chestIsOpen = false;
             this.chestHasBeenOpened = false;
             this.levelExitUnlocked = false;
+            this.chestHandled = false;
             rupeesInitialized = false;
             playerStats.level += 1;
             this.levelEnemyInterval = setInterval(() => { this.spawnEnemies(); }, 5000);
@@ -615,6 +664,10 @@ Game.prototype.draw = function(ctx) {
         this.drawEnemyHealthBars(ctx);
         if (this.levelCompleted) {
             if (this.chestIsOpen) {
+                if (this.chestIsOpen && !this.chestHandled) {
+                    playerStats.cofresAbiertos += 1;
+                    this.chestHandled = true; // Evita que se sume de nuevo
+                }
                 ctx.drawImage(this.chestOpened, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
             } else {
                 ctx.drawImage(this.chestClosed, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
@@ -646,6 +699,7 @@ Game.prototype.draw = function(ctx) {
             this.chestIsOpen = false;
             this.chestHasBeenOpened = false;
             this.levelExitUnlocked = false;
+            this.chestHandled = false;
             rupeesInitialized = false;
             playerStats.level += 1;
             playerStats.uiTextPosition = { x: 85, y: 30 };
@@ -660,6 +714,10 @@ Game.prototype.draw = function(ctx) {
         this.drawEnemyHealthBars(ctx);
         if (this.levelCompleted) {
             if (this.chestIsOpen) {
+                if (this.chestIsOpen && !this.chestHandled) {
+                    playerStats.cofresAbiertos += 1;
+                    this.chestHandled = true; // Evita que se sume de nuevo
+                }
                 ctx.drawImage(this.chestOpened, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
             } else {
                 ctx.drawImage(this.chestClosed, this.levelChestPosition.x, this.levelChestPosition.y, 32, 32);
@@ -690,6 +748,7 @@ Game.prototype.draw = function(ctx) {
             this.chestHasBeenOpened = false;
             this.chestIsOpen = false;
             this.levelExitUnlocked = false;
+            this.chestHandled = false;
             rupeesInitialized = false;
             playerStats.level = "Rest";
             playerStats.uiTextPosition = { x: 70, y: 30 };
@@ -856,10 +915,12 @@ Game.prototype.draw = function(ctx) {
     if (this.showLevelCompleteMessage) {
         drawCompleteMessage(ctx);
     }
+    
     if (isGameOver) {
         drawDeathMenu(ctx);
     }
 
+    
     // ───── INICIAR si acaba de entrar al prólogo ─────
     if (this.showPrologue && !this._wasInPrologue) this.startTimer();
     this._wasInPrologue = this.showPrologue;
@@ -1071,3 +1132,33 @@ Game.prototype.unlockNextLevel = function() { //desbloquear nivel si se ha compl
         }
     }
 };
+
+async function updatePlayerStats(stats) {
+    try {
+        const response = await fetch('http://localhost:3000/api/Estadisticas', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id_jugador: stats.id_jugador,
+                enemigos_derrotados: stats.enemigos_derrotados,
+                cofres_abiertos: stats.cofresAbiertos,
+                objetos_usados: stats.objetos_usados,
+                muertes: stats.muertes,
+                tiempo_jugado: stats.tiempo_jugado
+            })
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+            console.log('Estadísticas actualizadas correctamente:', result);
+        } else {
+            console.log('Error al actualizar estadísticas:', result.message);
+        }
+    } catch (error) {
+        console.error('Error al enviar la solicitud:', error);
+    }
+}
+
+

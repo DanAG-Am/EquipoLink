@@ -164,6 +164,7 @@ Game.prototype.update = function(deltaTime) {
                                     rupeesEarned = Math.floor(Math.random() * 3) + 17; // 17 a 19
                                     break;
                             }
+                            playerStats.enemigos_derrotados += 1;
                             playerStats.rupees += rupeesEarned;
                             playerStats.mana = Math.min(playerStats.maxMana, playerStats.mana + 10);
                         }
@@ -209,6 +210,7 @@ Game.prototype.update = function(deltaTime) {
                                 rupeesEarned = Math.floor(Math.random() * 3) + 17; // 17 a 19
                                 break;
                         }
+                        playerStats.enemigos_derrotados += 1;
                         playerStats.rupees += rupeesEarned;
                         playerStats.mana = Math.min(playerStats.maxMana, playerStats.mana + 10);
                     }
@@ -261,6 +263,7 @@ Game.prototype.update = function(deltaTime) {
                                     rupeesEarned = Math.floor(Math.random() * 3) + 17; // 17 a 19
                                     break;
                             }
+                            playerStats.enemigos_derrotados += 1;
                             playerStats.rupees += rupeesEarned;
                             playerStats.mana = Math.min(playerStats.maxMana, playerStats.mana + 10);
                         }
@@ -314,6 +317,7 @@ Game.prototype.update = function(deltaTime) {
                                     rupeesEarned = Math.floor(Math.random() * 3) + 17; // 17 a 19
                                     break;
                             }
+                            playerStats.enemigos_derrotados += 1;
                             playerStats.rupees += rupeesEarned;
                             playerStats.mana = Math.min(playerStats.maxMana, playerStats.mana + 10);
                         }
@@ -334,17 +338,25 @@ Game.prototype.update = function(deltaTime) {
             }
         });
         
-        // Si la vida del jugador llega a cero, termina el juego
         if (playerStats.life <= 0 && !isGameOver) {
+            // Marcar el juego como terminado
             isGameOver = true;
+        
+            // Solo contar la muerte una vez
+            if (!deathHandled) {
+                playerStats.tiempo_jugado = this.getElapsedTimeInSeconds();
+                playerStats.muertes += 1;
+                updatePlayerStats(playerStats);
+                deathHandled = true;
+            }
+        
+            // Detener música y cronómetro
             stopAllMusic();
             gameOver.currentTime = 0;
             gameOver.play().catch(err => console.warn("Error al reproducir gameOver:", err));
-            if (isGameOver === true) {
-                game.stopTimer();
-            } else {
-                game.startTimer();
-            }
+            game.stopTimer();
+            drawDeathMenu(ctx); // Aquí podrías incluir el menú de muerte también
         }
     }
+        
 };
