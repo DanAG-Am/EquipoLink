@@ -559,6 +559,8 @@ Game.prototype.createEventListeners = function(){
             } else if (!game.showEndingLogo) {
                 game.showEndingLogo = true;
             } else {
+                playerStats.tiempo_jugado = game.getElapsedTimeInSeconds();
+                updatePlayerStats(playerStats);
                 gameWasCompleted = true;
                 game.endingScene = false;
                 game.restartGame();
@@ -694,7 +696,7 @@ Game.prototype.createEventListeners = function(){
                 }
             }
         }
-        if (gamePaused && game.pauseButton) { //logica de pausar juego
+        if (gamePaused && game.pauseButton) {
             let rect = canvas.getBoundingClientRect();
             let scaleX = canvas.width / rect.width;
             let scaleY = canvas.height / rect.height;
@@ -707,6 +709,13 @@ Game.prototype.createEventListeners = function(){
                 clickY >= returnBtn.y && clickY <= returnBtn.y + returnBtn.height
             ) {
                 talkSFX();
+                // Añadir aquí: Actualizar estadísticas antes de reiniciar
+                if (id_jugador && playerStats.id_jugador) {
+                    playerStats.tiempo_jugado = game.getElapsedTimeInSeconds();
+                    console.log("Reinicio desde menú de pausa. Enviando estadísticas...");
+                    updatePlayerStats(playerStats);
+                }
+                
                 gamePaused = false;
                 game.resetGame(true);
             }
@@ -734,7 +743,7 @@ Game.prototype.createEventListeners = function(){
                 showSoundOptions = false;
             }
         }
-        if (isGameOver && game.gameOverButton) { //logica de perder
+        if (isGameOver && game.gameOverButton) {
             let rect = canvas.getBoundingClientRect();
             let scaleX = canvas.width / rect.width;
             let scaleY = canvas.height / rect.height;
@@ -747,6 +756,15 @@ Game.prototype.createEventListeners = function(){
                 clickY >= btn.y && clickY <= btn.y + btn.height
             ) {
                 talkSFX();
+                // No necesitamos actualizar aquí porque ya se hizo cuando el jugador murió
+                // Pero podemos agregar una doble verificación por si acaso
+                if (!deathHandled && id_jugador && playerStats.id_jugador) {
+                    playerStats.tiempo_jugado = game.getElapsedTimeInSeconds();
+                    playerStats.muertes += 1;
+                    updatePlayerStats(playerStats);
+                    deathHandled = true;
+                }
+                
                 isGameOver = false;
                 game.resetGame();
             }
