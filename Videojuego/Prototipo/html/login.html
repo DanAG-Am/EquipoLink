@@ -39,20 +39,48 @@
         <a href="/Videojuego/Prototipo/html/pagina_web.html" class="botonRegresar">Regresar</a>
     </div>
 </form>
-    <script>
-    document.getElementById("loginForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const usuario = document.getElementById("usuario").value.trim();
-      const contrasena = document.getElementById("contrasena").value.trim();
-      const error = document.getElementById("mensajeError");
-
-      if (!usuario || !contrasena) {
-        error.textContent = "Por favor, llena todos los campos";
-      } else {
-        window.location.href = "prototipo.html";
+<script>
+  document.getElementById("loginForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    const usuario = document.getElementById("usuario").value.trim();
+    const contrasena = document.getElementById("contrasena").value.trim();
+    const error = document.getElementById("mensajeError");
+  
+    if (!usuario || !contrasena) {
+      error.textContent = "Por favor, llena todos los campos";
+      error.style.color = "red";
+      return;
+    }
+  
+    try {
+      const response = await fetch("http://localhost:3000/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ usuario, contrasena })
+      });
+  
+      const result = await response.json();
+  
+      if (response.ok) {
+        // Login exitoso
+        error.textContent = "¡Login exitoso!";
+        error.style.color = "green";
+        localStorage.setItem("id_jugador", result.id_jugador);
+        setTimeout(() => {
+          window.location.href = "prototipo.html";
+        }, 1000);
+      } 
+      else {
+        error.textContent = result.message;
+        error.style.color = "red";
       }
-    });
-    </script>
+    } catch (err) {
+      error.textContent = "Error de conexión: " + err.message;
+      error.style.color = "red";
+    }
+  });
+  </script>
+  
     <footer>
         <p>EquipoLink &copy; 2025</p>
     </footer>

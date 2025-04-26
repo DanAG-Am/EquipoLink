@@ -51,7 +51,7 @@ app.get('/statistics', (request, response) => {
         console.log('Loading page...')
         response.send(html)
     })
-})
+});
 
 // Ruta para servir la página de registro
 app.get('/register', (request, response) => {
@@ -170,7 +170,7 @@ app.get('/api/Jugador', async (request, response) => {
 
     try {
         connection = await connectToDB()
-        const [results, fields] = await connection.execute('select * from Jugador')
+        const [results, fields] = await connection.execute('select id_jugador, usuario from Jugador')
         console.log(`${results.length} rows returned`)
         response.json(results)
     }
@@ -192,7 +192,7 @@ app.get('/api/Jugador/:id_jugador', async (request, response) => {
 
     try {
         connection = await connectToDB()
-        const [results_user, _] = await connection.query('select * from Jugador where id_jugador= ?', [request.params.id_jugador])
+        const [results_user, _] = await connection.query('select id_jugador, usuario from Jugador where id_jugador= ?', [request.params.id_jugador])
         console.log(`${results_user.length} rows returned`)
         response.json(results_user)
     }
@@ -276,7 +276,6 @@ app.post('/api/Jugador', async (request, response) => {
         const id_jugador = userResults.insertId;
         console.log(`Jugador insertado con ID: ${id_jugador}`);
         
-        // Paso 4: Crear estadísticas iniciales para el jugador
         const initialStats = {
             id_jugador: id_jugador,
             enemigos_derrotados: 0,
@@ -295,8 +294,11 @@ app.post('/api/Jugador', async (request, response) => {
         });
     }
     catch (error) {
-        console.error("Error al insertar:", error);
-        response.status(500).json({ message: "Error al insertar usuario: " + error.message });
+        if (error.code === 'ER_DUP_ENTRY') {
+            response.status(400).json({ message: "Este nombre de usuario ya está registrado." });
+        } else {
+            response.status(500).json({ message: "Error al insertar usuario: " + error.message });
+        }
     }
     finally {
         if (connection !== null) {
@@ -306,37 +308,105 @@ app.post('/api/Jugador', async (request, response) => {
     }
 });
 
-// Estadisticas CRUD
-
-// GET: Obtener todos los jugadores
-app.get('/api/Estadisticas', async (request, response) => {
-    let connection = null
+app.post('/api/login', async (request, response) => {
+    let connection = null;
 
     try {
-        connection = await connectToDB()
-        const [results, fields] = await connection.execute('select * from Estadisticas')
-        console.log(`${results.length} rows returned`)
-        response.json(results)
-    }
-    catch (error) {
-        response.status(500).json(error)
-        console.log(error)
-    }
-    finally {
-        if (connection !== null) {
-            connection.end()
-            console.log("Connection closed successfully!")
+        const { usuario, contrasena } = request.body;
+
+        if (!usuario || !contrasena) {
+            return response.status(400).json({ message: "Faltan usuario o contraseña." });
+        }
+
+        connection = await connectToDB();
+
+        const [rows] = await connection.query(
+            'SELECT id_jugador, contrasena FROM Jugador WHERE usuario = ?',
+            [usuario]
+        );
+
+        if (rows.length === 0) {
+            return response.status(401).json({ message: "Usuario no encontrado." });
+        }
+
+        const jugador = rows[0];
+
+        if (jugador.contrasena !== contrasena) {
+            return response.status(401).json({ message: "Contraseña incorrecta." });
+        }
+
+        // Login exitoso
+        return response.status(200).json({ 
+            message: "Login exitoso", 
+            id_jugador: jugador.id_jugador 
+        });
+
+    } catch (error) {
+        console.error("Error en login:", error);
+        response.status(500).json({ message: "Error en el servidor: " + error.message });
+    } finally {
+        if (connection) {
+            connection.end();
         }
     }
-})
+});
+
+
+// Estadisticas CRUD
+
+// Ruta: Obtener estadísticas de todos los jugadores con sus nombres
+app.get('/api/Estadisticas', async (req, res) => {
+    let connection = null;
+
+    try {
+        // Conexión a la base de datos
+        connection = await connectToDB();
+
+        // Consulta que une Estadísticas con el nombre del jugador
+        const [results] = await connection.execute(`
+            SELECT 
+                Jugador.usuario,
+                Estadisticas.enemigos_derrotados,
+                Estadisticas.cofres_abiertos,
+                Estadisticas.objetos_usados,
+                Estadisticas.muertes,
+                Estadisticas.tiempo_jugado
+            FROM Estadisticas
+            INNER JOIN Jugador USING (id_jugador)
+        `);
+
+        console.log(`${results.length} registros encontrados`);
+        res.json(results);
+    } catch (error) {
+        console.error("Error al obtener estadísticas:", error);
+        res.status(500).json({ message: "Error del servidor", error });
+    } finally {
+        if (connection) {
+            await connection.end();
+            console.log("Conexión cerrada correctamente");
+        }
+    }
+});
+
 
 // GET: Obtener un jugador específico por id
-app.get('/api/Estadisticas/:id_jugador', async (request, response) => {
+app.get('/api/Estadisticas/:usuario', async (request, response) => {
     let connection = null
 
     try {
         connection = await connectToDB()
-        const [results_user, _] = await connection.query('select * from Estadisticas where id_jugador= ?', [request.params.id_jugador])
+        const [results_user, _] = await connection.query(`
+            SELECT 
+            Jugador.usuario,
+            Estadisticas.enemigos_derrotados,
+            Estadisticas.cofres_abiertos,
+            Estadisticas.objetos_usados,
+            Estadisticas.muertes,
+            Estadisticas.tiempo_jugado
+            FROM Estadisticas 
+            LEFT JOIN Jugador ON Estadisticas.id_jugador = Jugador.id_jugador 
+            WHERE Jugador.usuario = ?
+        `, [request.params.usuario]) 
         console.log(`${results_user.length} rows returned`)
         response.json(results_user)
     }
@@ -350,137 +420,49 @@ app.get('/api/Estadisticas/:id_jugador', async (request, response) => {
             console.log("Connection closed successfully!")
         }
     }
-})
+});
 
-// POST: Insertar un nuevo jugador
-app.post('/api/Estadisticas', async (request, response) => {
-    let connection = null
+// PUT: Actualizar estadísticas de un jugador
+app.put('/api/Estadisticas', async (request, response) => {
+    let connection = null;
 
     try {
-        connection = await connectToDB()
+        connection = await connectToDB();
 
-        // Mapeamos los campos del formulario a los de la tabla
-        const newStats = {
-            id_jugador: request.body.id_jugador, // Pass this in the request body
+        // Mapeamos los campos del cuerpo de la solicitud a los de la tabla
+        const updatedStats = {
+            id_jugador: request.body.id_jugador,
             enemigos_derrotados: request.body.enemigos_derrotados || 0,
             cofres_abiertos: request.body.cofres_abiertos || 0,
             objetos_usados: request.body.objetos_usados || 0,
             muertes: request.body.muertes || 0,
-            tiempo_jugado: request.body.tiempo_jugado || '00:00:00' // Use default if not provided
-        }
-        
-        const [results, fields] = await connection.query('INSERT INTO Estadisticas SET ?', newStats)
-        console.log(`${results.affectedRows} row inserted`)
-        response.status(201).json({ 'message': "Data inserted correctly.", "id_jugador": results.insertId })
-    }
-    catch (error) {
-        response.status(500).json(error)
-        console.log(error)
-    }
-    finally {
-        if (connection !== null) {
-            connection.end()
-            console.log("Connection closed successfully!")
-        }
-    }
-})
+            tiempo_jugado: request.body.tiempo_jugado || '00:00:00' // Usar valor por defecto si no se proporciona
+        };
 
-// PUT: Actualizar un jugador
-app.put('/api/Estadisticas', async (request, response) => {
-    let connection = null
-
-    try {
-        connection = await connectToDB()
-        // Se actualizan las columnas 'usuario' y 'contrasena' a partir de 'name' y 'surname'
+        // Aquí estamos usando el `id_jugador` para actualizar las estadísticas de ese jugador
         const [results, fields] = await connection.query(
-            'update Jugador set usuario = ?, contrasena = ? where id_jugador = ?',
-            [request.body.name, request.body.surname, request.body.userID]
-        )
-        console.log(`${results.affectedRows} rows updated`)
-        response.json({ 'message': `Data updated correctly: ${results.affectedRows} rows updated.` })
-    }
-    catch (error) {
-        response.status(500).json(error)
-        console.log(error)
-    }
-    finally {
+            'UPDATE Estadisticas SET ? WHERE id_jugador = ?',
+            [updatedStats, request.body.id_jugador]
+        );
+
+        if (results.affectedRows === 0) {
+            // Si no se encuentra el jugador, lo creamos (fallback)
+            const [insertResults] = await connection.query('INSERT INTO Estadisticas SET ?', updatedStats);
+            response.status(201).json({ message: 'Estadísticas insertadas correctamente', id_jugador: insertResults.insertId });
+        } else {
+            response.status(200).json({ message: 'Estadísticas actualizadas correctamente' });
+        }
+    } catch (error) {
+        response.status(500).json(error);
+        console.error(error);
+    } finally {
         if (connection !== null) {
-            connection.end()
-            console.log("Connection closed successfully!")
+            connection.end();
+            console.log("Connection closed successfully!");
         }
     }
-})
+});
 
-// DELETE: Eliminar un jugador
-app.delete('/api/Estadisticas/:id_jugador', async (request, response) => {
-    let connection = null
-
-    try {
-        connection = await connectToDB()
-        const [results, fields] = await connection.query(
-            'delete from Estadisticas where id_jugador = ?',
-            [request.params.id_jugador]
-        )
-        console.log(`${results.affectedRows} row deleted`)
-        response.json({ 'message': `Data deleted correctly: ${results.affectedRows} rows deleted.` })
-    }
-    catch (error) {
-        response.status(500).json(error)
-        console.log(error)
-    }
-    finally {
-        if (connection !== null) {
-            connection.end()
-            console.log("Connection closed successfully!")
-        }
-    }
-})
-
-//CRUD Enemigo
-
-// GET: Obtener todos los jugadores
-app.get('/api/Enemigo', async (request, response) => {
-    let connection = null
-
-    try {
-        connection = await connectToDB()
-        const [results, fields] = await connection.execute('select * from Enemigo')
-        console.log(`${results.length} rows returned`)
-        response.json(results)
-    }
-    catch (error) {
-        response.status(500).json(error)
-        console.log(error)
-    }
-    finally {
-        if (connection !== null) {
-            connection.end()
-            console.log("Connection closed successfully!")
-        }
-    }
-})
-
-// GET: Obtener un jugador específico por id
-app.get('/api/Enemigo/:id_enemigo', async (request, response) => {
-    let connection = null
-
-    try {
-        connection = await connectToDB()
-        const [results_user, _] = await connection.query('select * from Enemigo where id_enemigo= ?', [request.params.id_enemigo])
-        console.log(`${results_user.length} rows returned`)
-        response.json(results_user)
-    }
-    catch (error) {
-        response.status(500).json(error)
-        console.log(error)
-    }
-    finally {
-        if (connection !== null) {
-            connection.end()
-            console.log("Connection closed successfully!")
-        }
-    }
-})
 
 
 //campeones 

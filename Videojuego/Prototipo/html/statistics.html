@@ -15,6 +15,18 @@
     </header>
 
     <div id="grid-item-L">
+
+          <!-- Campeón Section -->
+    <div class="leaderboard-section">
+      <form id="championForm" class="formInput">
+        <h1 style="color: yellow;">Campeón del juego 🏆</h1>
+        <button type="submit" id="loadChampion">Mostrar campeón</button>
+      </form>
+      <div class="resultDisplay">
+        <div id="campeonResults"></div>
+      </div>
+    </div>
+
       <!-- Usuarios CRUD Section -->
       <div class="leaderboard-section">
         <h1 style="color: yellow;">Información de Login</h1>
@@ -49,109 +61,6 @@
             <div id="getEstadisticasResults"></div>
           </div>
         </div>
-
-        <!-- Add Estadísticas Section -->
-        <div class="leaderboard-section">
-          <div class="formInput">
-            <h1>Agregar estadísticas</h1>
-            <form id="formInsertEstadisticas">
-              <input type="text" name="id_jugador" placeholder="Escribe el ID del jugador">
-              <input type="number" name="partidas_jugadas" placeholder="Número de partidas jugadas">
-              <input type="number" name="victorias" placeholder="Número de victorias">
-              <input type="number" name="derrotas" placeholder="Número de derrotas">
-              <input type="number" name="puntaje" placeholder="Puntaje total">
-              <input type="submit" value="Agregar estadísticas">
-            </form>
-          </div>
-          <div class="resultDisplay">
-            <h1>Resultado</h1>
-            <p id="postEstadisticasResults"></p>
-          </div>
-        </div>
-
-        <!-- Update Estadísticas Section -->
-        <div class="leaderboard-section">
-          <div class="formInput">
-            <h1>Actualizar estadísticas</h1>
-            <form id="formUpdateEstadisticas">
-              <input type="number" name="enemigos_derrotados" placeholder="Enemigos derrotados">
-              <input type="number" name="cofres_abiertos" placeholder="Cofres abiertos">
-              <input type="number" name="objetos_usados" placeholder="Objetos usados">
-              <input type="number" name="muertes" placeholder="Muertes">
-              <input type="text" name="tiempo_jugado" placeholder="Tiempo jugado (hh:mm:ss)">               
-              <input type="submit" value="Actualizar estadísticas">
-            </form>
-          </div>
-          <div class="resultDisplay">
-            <h1>Resultado</h1>
-            <p id="putEstadisticasResults"></p>
-          </div>
-        </div>
-
-        <!-- Delete Estadísticas Section -->
-        <div class="leaderboard-section">
-          <div class="formInput">
-            <h1>Eliminar estadísticas</h1>
-            <form id="formDeleteEstadisticas" method="delete">
-              <input type="text" name="id_jugador" placeholder="Escribe el ID del jugador">
-              <input type="submit" value="Eliminar estadísticas">
-            </form>
-          </div>
-          <div class="resultDisplay">
-            <h1>Resultado</h1>
-            <p id="deleteEstadisticasResults"></p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Enemigos CRUD Section -->
-      <div class="leaderboard-section">
-        <h1 style="color: yellow;">Acerca de los Enemigos</h1>
-        <div class="formInput">
-          <h1>Mostrar enemigos</h1>
-          <form id="formSelectEnemigo">
-            <input type="text" name="id_enemigo" placeholder="Escribe el ID del enemigo, o déjalo vacío para ver todos los enemigos">
-            <input type="submit" value="Mostrar enemigos">
-          </form>
-        </div>
-        <div class="resultDisplay">
-          <h1>Resultado</h1>
-          <div id="getEnemigosResults"></div>
-        </div>
-      </div>
-
-      <!-- Add Enemigo Section -->
-      <div class="leaderboard-section">
-        <div class="formInput">
-          <h1>Agregar enemigo</h1>
-          <form id="formInsertEnemigo">
-            <input type="number" name="id_cuarto" placeholder="ID del cuarto" required>
-            <input type="text" name="nombre" placeholder="Nombre del enemigo" required>
-            <input type="number" name="vida_max" placeholder="Vida máxima" required>
-            <input type="number" name="vida_actual" placeholder="Vida actual" required>
-            <input type="number" name="velocidad" placeholder="Velocidad" required>
-            <input type="number" name="dano" placeholder="Daño" required>
-            <input type="number" name="drop_monedas" placeholder="Monedas al ser derrotado" required>
-            <input type="submit" value="Agregar enemigo">
-          </form>
-        </div>
-        <div class="resultDisplay">
-          <h1>Resultado</h1>
-          <p id="postEnemigosResults"></p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Campeón Section -->
-    <div class="leaderboard-section">
-      <form id="championForm" class="formInput">
-        <h1 style="color: yellow;">Campeón del juego 🏆</h1>
-        <button type="submit" id="loadChampion">Mostrar campeón</button>
-      </form>
-      <div class="resultDisplay">
-        <div id="campeonResults"></div>
-      </div>
-    </div>
 
   </div> <!-- Closing tag for leaderboardContainer -->
 </body>

@@ -147,13 +147,22 @@ function handleMusicPlayback(game) {
 
     // Si te mueres
     if (isGameOver) {
+        if (!deathHandled) {
+            playerStats.muertes += 1;
+            updatePlayerStats(playerStats);
+            deathHandled = true;
+        }
+    
         if (gameOver.paused) {
             stopAllMusic();
             gameOver.currentTime = 0;
             gameOver.play().catch(err => console.warn("Error al reproducir gameOver:", err));
         }
+        
+        drawDeathMenu(ctx); // si aquí también quieres mostrarlo
         return;
     }
+    
 
     // Si estás en la tienda
     if (interactingMerchant) {

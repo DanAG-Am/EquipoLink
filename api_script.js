@@ -46,34 +46,6 @@ function main() {
         }
     }
 
-    const formInsert = document.getElementById('formInsert');
-    if (formInsert) {
-        formInsert.onsubmit = async (e) => {
-            e.preventDefault()
-            const data = new FormData(formInsert)
-            const dataObj = Object.fromEntries(data.entries())
-
-            let response = await fetch('http://localhost:3000/api/Jugador',{
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(dataObj)
-            })
-
-            if (response.ok) {
-                let results = await response.json()
-                const postResults = document.getElementById('postResults');
-                if (postResults) {
-                    postResults.innerHTML = results.message + ' ID: ' + results.id_jugador;
-                }
-            } else {
-                const postResults = document.getElementById('postResults');
-                if (postResults) {
-                    postResults.innerHTML = response.status;
-                }
-            }
-        }
-    }
-
     /*CRUD estadisticas de los jugadores */
     const formSelectEstadisticas = document.getElementById('formSelectEstadisticas');
     if (formSelectEstadisticas) {
@@ -130,33 +102,6 @@ function main() {
         };
     }
     
-    const formInsertEstadisticas = document.getElementById('formInsertEstadisticas');
-    if (formInsertEstadisticas) {
-        formInsertEstadisticas.onsubmit = async (e) => {
-            e.preventDefault()
-            const data = new FormData(formInsertEstadisticas)
-            const dataObj = Object.fromEntries(data.entries())
-
-            let response = await fetch('http://localhost:3000/api/Estadisticas',{
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(dataObj)
-            })
-
-            if (response.ok) {
-                let results = await response.json()
-                const resultsContainer = document.getElementById('postEstadisticasResults');
-                if (resultsContainer) {
-                    resultsContainer.innerHTML = results.message + ' ID: ' + results.id_jugador;
-                }
-            } else {
-                const resultsContainer = document.getElementById('postEstadisticasResults');
-                if (resultsContainer) {
-                    resultsContainer.innerHTML = response.status;
-                }
-            }
-        }
-    }
 
     const formUpdateEstadisticas = document.getElementById('formUpdateEstadisticas');
     if (formUpdateEstadisticas) {
@@ -181,115 +126,6 @@ function main() {
                 const resultsContainer = document.getElementById('putEstadisticasResults');
                 if (resultsContainer) {
                     resultsContainer.innerHTML = response.status;
-                }
-            }
-        }
-    }
-
-    const formDeleteEstadisticas = document.getElementById('formDeleteEstadisticas');
-    if (formDeleteEstadisticas) {
-        formDeleteEstadisticas.onsubmit = async (e) => {
-            e.preventDefault()
-            const data = new FormData(formDeleteEstadisticas)
-            const dataObj = Object.fromEntries(data.entries())
-
-            // Se asume que se envia userID en el formulario. Si deseas usar otro nombre, ajústalo.
-            let response = await fetch(`http://localhost:3000/api/Estadisticas/${dataObj['id_jugador']}`,{
-                method: 'DELETE'
-            })
-
-            if (response.ok) {
-                let results = await response.json()
-                const resultsContainer = document.getElementById('deleteEstadisticasResults');
-                if (resultsContainer) {
-                    resultsContainer.innerHTML = results.message;
-                }
-            } else {
-                const resultsContainer = document.getElementById('deleteEstadisticasResults');
-                if (resultsContainer) {
-                    resultsContainer.innerHTML = `Error! Status: ${response.status}`;
-                }
-            }
-        }
-    }
-
-    const formSelectEnemigo = document.getElementById('formSelectEnemigo');
-    if (formSelectEnemigo) {
-        formSelectEnemigo.onsubmit = async (e) => {
-            e.preventDefault()
-
-            const data = new FormData(formSelectEnemigo)
-            console.log(data)
-            const dataObj = Object.fromEntries(data.entries())
-            console.log(dataObj);
-            let response = await fetch(`http://localhost:3000/api/Enemigo/${dataObj['id_enemigo']}`, {
-                method: 'GET'
-            })
-            console.log(response);
-            if(response.ok)
-            {
-                let results = await response.json()
-
-                if(results.length > 0)
-                {
-                    const headers = Object.keys(results[0])
-                    let table = document.createElement("table")
-                    let tr = table.insertRow(-1)
-                    for (const header of headers) {
-                        let th = document.createElement("th")
-                        th.innerHTML = header
-                        tr.appendChild(th)
-                    }
-                    for (const row of results) {
-                        let tr = table.insertRow(-1)
-                        for (const key in row) {
-                            let tabCell = tr.insertCell(-1)
-                            tabCell.innerHTML = row[key]
-                        }
-                    }
-                    const container = document.getElementById('getEnemigosResults')
-                    if (container) {
-                        container.innerHTML = ''
-                        container.appendChild(table)
-                    }
-                } else {
-                    const container = document.getElementById('getEnemigosResults')
-                    if (container) {
-                        container.innerHTML = 'No hay resultados para mostrar.'
-                    }
-                }
-            } else {
-                const container = document.getElementById('getEnemigosResults')
-                if (container) {
-                    container.innerHTML = response.status
-                }
-            }
-        }
-    }
-
-    const formInsertEnemigo = document.getElementById('formInsertEnemigo');
-    if (formInsertEnemigo) {
-        formInsertEnemigo.onsubmit = async (e) => {
-            e.preventDefault()
-            const data = new FormData(formInsertEnemigo)
-            const dataObj = Object.fromEntries(data.entries())
-
-            let response = await fetch('http://localhost:3000/api/Enemigo',{
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(dataObj)
-            })
-
-            if (response.ok) {
-                let results = await response.json()
-                const container = document.getElementById('postEnemigosResults')
-                if (container) {
-                    container.innerHTML = results.message + ' ID: ' + results.id_jugador
-                }
-            } else {
-                const container = document.getElementById('postEnemigosResults')
-                if (container) {
-                    container.innerHTML = response.status
                 }
             }
         }

@@ -155,6 +155,8 @@ class Game {
 
     //regresar todo a su punto de inicio si se resetea el juego
     resetGame() {
+        isGameOver = false;
+        deathHandled = false;
         dragonSFX1Played = false;
         dragonSFX2Played = false;
 

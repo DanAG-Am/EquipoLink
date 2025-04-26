@@ -25,10 +25,12 @@ let fairyEnemyBuffActive = false;
 let fairyEnemyBuffMultiplier = 1.0;
 let currentItemType = "";
 let isGameOver = false;
+let deathHandled = false;
 this.levelCompleted = false;
 let tutorialBonusGiven = false;
 let bossKilledMusicPlayed = false;
 let gameWasCompleted = false;
+let chestHandled = false;
 //tiles
 const tileSize = 32;
 const processedFloors = {};
@@ -65,6 +67,7 @@ const shieldImg = new Image();
 shieldImg.src = "../../Videojuego/Assets/GameAssets/Keys/Shield.png";
 
 let playerStats = {
+    id_jugador: null,              
     level: "-",
     life: 100,
     mana: 100,
@@ -77,5 +80,10 @@ let playerStats = {
     damageSword: 10,
     damageArrow: 5,
     damageMagic: 15,
-    damageBomb: 20
+    damageBomb: 20,
+    enemigos_derrotados: 0,
+    cofresAbiertos: 0,
+    objetos_usados: 0,
+    muertes: 0,
+    tiempoJugado: "00:00:00"
 };
