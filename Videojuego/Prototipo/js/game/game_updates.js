@@ -344,6 +344,7 @@ Game.prototype.update = function(deltaTime) {
         
             // Solo contar la muerte una vez
             if (!deathHandled) {
+                playerStats.tiempo_jugado = this.getElapsedTimeInSeconds();
                 playerStats.muertes += 1;
                 updatePlayerStats(playerStats);
                 deathHandled = true;

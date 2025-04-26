@@ -1160,3 +1160,5 @@ async function updatePlayerStats(stats) {
         console.error('Error al enviar la solicitud:', error);
     }
 }
+
+

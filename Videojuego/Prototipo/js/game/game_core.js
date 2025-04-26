@@ -145,6 +145,11 @@ class Game {
         if (timerDiv) timerDiv.textContent = `Tiempo - ${formattedTime}`;
     }
 
+    getElapsedTimeInSeconds() {
+        return Math.floor(this.elapsedTime / 1000);
+    }
+    
+
     //Crear el player y actores
     initObjects() {
         this.player = new Player(new Vec(canvasWidth / 2 - 14, 305), 32, 32);
@@ -243,8 +248,6 @@ class Game {
         dragonSFX1Played = false;
         dragonSFX2Played = false;
         tutorialBonusGiven = false;
-
-        
 
         playerStats.maxLife = 100;
         playerStats.maxMana = 100;

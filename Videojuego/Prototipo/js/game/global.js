@@ -31,6 +31,7 @@ let tutorialBonusGiven = false;
 let bossKilledMusicPlayed = false;
 let gameWasCompleted = false;
 let chestHandled = false;
+let levelsPlayed = 0;
 //tiles
 const tileSize = 32;
 const processedFloors = {};
@@ -85,5 +86,5 @@ let playerStats = {
     cofresAbiertos: 0,
     objetos_usados: 0,
     muertes: 0,
-    tiempoJugado: "00:00:00"
+    tiempo_jugado: "00:00:00"
 };
