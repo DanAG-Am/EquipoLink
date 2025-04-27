@@ -102,35 +102,6 @@ function main() {
         };
     }
     
-
-    const formUpdateEstadisticas = document.getElementById('formUpdateEstadisticas');
-    if (formUpdateEstadisticas) {
-        formUpdateEstadisticas.onsubmit = async (e) => {
-            e.preventDefault()
-            const data = new FormData(formUpdateEstadisticas)
-            const dataObj = Object.fromEntries(data.entries())
-
-            let response = await fetch('http://localhost:3000/api/Estadisticas',{
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(dataObj)
-            })
-
-            if (response.ok) {
-                let results = await response.json()
-                const resultsContainer = document.getElementById('putEstadisticasResults');
-                if (resultsContainer) {
-                    resultsContainer.innerHTML = results.message;
-                }
-            } else {
-                const resultsContainer = document.getElementById('putEstadisticasResults');
-                if (resultsContainer) {
-                    resultsContainer.innerHTML = response.status;
-                }
-            }
-        }
-    }
-
     // Campeones 
     const championButton = document.getElementById('championForm');
     if (championButton) {

@@ -170,7 +170,7 @@ app.get('/api/Jugador', async (request, response) => {
 
     try {
         connection = await connectToDB()
-        const [results, fields] = await connection.execute('select id_jugador, usuario from Jugador')
+        const [results, fields] = await connection.execute('select id_jugador, usuario, monedas, pociones, flechas, bombas from Jugador')
         console.log(`${results.length} rows returned`)
         response.json(results)
     }
@@ -192,7 +192,7 @@ app.get('/api/Jugador/:id_jugador', async (request, response) => {
 
     try {
         connection = await connectToDB()
-        const [results_user, _] = await connection.query('select id_jugador, usuario from Jugador where id_jugador= ?', [request.params.id_jugador])
+        const [results_user, _] = await connection.query('select id_jugador, usuario, monedas, pociones, flechas, bombas from Jugador where id_jugador= ?', [request.params.id_jugador])
         console.log(`${results_user.length} rows returned`)
         response.json(results_user)
     }
@@ -299,6 +299,56 @@ app.post('/api/Jugador', async (request, response) => {
         } else {
             response.status(500).json({ message: "Error al insertar usuario: " + error.message });
         }
+    }
+    finally {
+        if (connection !== null) {
+            connection.end();
+            console.log("Connection closed successfully!");
+        }
+    }
+});
+
+// PUT: Actualizar las estadísticas de un jugador
+app.put('/api/Jugador/:id_jugador', async (request, response) => {
+    let connection = null;
+
+    try {
+        // Extraemos los valores a actualizar desde el cuerpo de la solicitud
+        const { monedas, pociones, flechas, bombas } = request.body;
+
+        // Validamos que al menos uno de los parámetros esté presente
+        if (monedas === undefined && pociones === undefined && flechas === undefined && bombas === undefined) {
+            return response.status(400).json({ message: "Debe proporcionar al menos una estadística para actualizar." });
+        }
+
+        connection = await connectToDB();
+
+        // Construir la parte de la consulta dinámica para los campos a actualizar
+        const updateFields = {};
+        if (monedas !== undefined) updateFields.monedas = monedas;
+        if (pociones !== undefined) updateFields.pociones = pociones;
+        if (flechas !== undefined) updateFields.flechas = flechas;
+        if (bombas !== undefined) updateFields.bombas = bombas;
+
+        // Ejecutar la consulta de actualización
+        const [result] = await connection.query(
+            'UPDATE Jugador SET ? WHERE id_jugador = ?',
+            [updateFields, request.params.id_jugador]
+        );
+
+        if (result.affectedRows === 0) {
+            return response.status(404).json({ message: `Jugador con ID ${request.params.id_jugador} no encontrado.` });
+        }
+
+        response.status(200).json({
+            message: "Estadísticas del jugador actualizadas correctamente.",
+            updatedFields: updateFields,
+            id_jugador: request.params.id_jugador
+        });
+    }
+    catch (error) {
+        response.status(500).json({ message: "Error al actualizar estadísticas del jugador: " + error.message });
+        console.log(error);
     }
     finally {
         if (connection !== null) {

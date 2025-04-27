@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="/Videojuego/Prototipo/html/pagina_web.css"> 
   <script type="module" defer src="/api_script.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <title>CRUD de Usuarios, Estadísticas, Enemigos y Jefes</title>
 </head>
 <header>
@@ -43,7 +44,6 @@
       <div class="leaderboard-section">
         <h1 style="color: yellow;">Información de Login</h1>
         <div class="formInput">
-          <h1>Mostrar usuarios</h1>
           <form id="formSelectUser">
             <input type="text" name="id_jugador" placeholder="Escribe el ID del jugador, o déjalo vacío para ver todos los usuarios">
             <input type="submit" value="Mostrar usuarios">
@@ -62,7 +62,6 @@
         <!-- Show Estadísticas Section -->
         <div class="leaderboard-section">
           <div class="formInput">
-            <h1>Mostrar estadísticas</h1>
             <form id="formSelectEstadisticas">
               <input type="text" name="id_jugador" placeholder="Escribe el ID del jugador, o déjalo vacío para ver todas las estadísticas">
               <input type="submit" value="Mostrar estadísticas">
@@ -74,7 +73,99 @@
           </div>
         </div>
 
+          <!-- Nueva Sección: Gráficos -->
+      <div class="leaderboard-section">
+        <h1 style="color: yellow;">Gráficos de Estadísticas</h1>
+        <div class="formInput">
+          <button id="loadGraph">Cargar Gráficos</button>
+        </div>
+        <div class="resultDisplay">
+          <!-- Canvas para los gráficos -->
+          <canvas id="estadisticasChart" width="400" height="200"></canvas>
+        </div>
+      </div>
+
   </div> <!-- Closing tag for leaderboardContainer -->
+
+  <script>
+   // Global variable to store the chart instance
+let chartInstance = null;
+
+document.getElementById('loadGraph').addEventListener('click', async function () {
+  // Fetch the statistics data
+  const response = await fetch('/api/Estadisticas');
+  const statsData = await response.json();
+
+  // Check if data is received properly
+  console.log(statsData);
+
+  if (!statsData || statsData.length === 0) {
+    console.log("No data available");
+    return;
+  }
+
+  // Extract data for the chart
+  const usuarios = statsData.map(item => item.usuario); // Usernames
+  const enemigosDerrotados = statsData.map(item => item.enemigos_derrotados);
+  const cofresAbiertos = statsData.map(item => item.cofres_abiertos);
+  const objetosUsados = statsData.map(item => item.objetos_usados);
+  const muertes = statsData.map(item => item.muertes);
+
+  // Destroy the previous chart if it exists
+  if (chartInstance) {
+    chartInstance.destroy();
+  }
+
+  // Get the canvas context
+  const ctx = document.getElementById('estadisticasChart').getContext('2d');
+
+  // Create a new chart
+  chartInstance = new Chart(ctx, {
+    type: 'bar', // Type of chart (Bar chart)
+    data: {
+      labels: usuarios, // Labels: Usernames
+      datasets: [
+        {
+          label: 'Enemigos Derrotados',
+          data: enemigosDerrotados,
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderWidth: 1
+        },
+        {
+          label: 'Cofres Abiertos',
+          data: cofresAbiertos,
+          backgroundColor: 'rgba(54, 162, 235, 0.2)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1
+        },
+        {
+          label: 'Objetos Usados',
+          data: objetosUsados,
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1
+        },
+        {
+          label: 'Muertes',
+          data: muertes,
+          backgroundColor: 'rgba(153, 102, 255, 0.2)',
+          borderColor: 'rgba(153, 102, 255, 1)',
+          borderWidth: 1
+        }
+      ]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true // Start the y-axis from 0
+        }
+      }
+    }
+  });
+});
+
+  </script>
 </body>
 </html>
 
