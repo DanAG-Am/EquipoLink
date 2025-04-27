@@ -1133,7 +1133,25 @@ Game.prototype.unlockNextLevel = function() { //desbloquear nivel si se ha compl
     }
 };
 
+// Función mejorada para actualizar las estadísticas del jugador
+// Añadir esto al final de game_draw.js o donde tengas la función original
+
 async function updatePlayerStats(stats) {
+    // Si no hay ID de jugador, no intentar actualizar
+    if (!stats.id_jugador) {
+        console.warn("No se puede actualizar estadísticas: ID de jugador no disponible");
+        return;
+    }
+    
+    // Convertir segundos a formato "HH:MM:SS"
+    let tiempo = stats.tiempo_jugado;
+    if (typeof tiempo === 'number') {
+        const horas = Math.floor(tiempo / 3600);
+        const minutos = Math.floor((tiempo % 3600) / 60);
+        const segundos = tiempo % 60;
+        tiempo = `${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}:${segundos.toString().padStart(2, '0')}`;
+    }
+    
     try {
         const response = await fetch('http://localhost:3000/api/Estadisticas', {
             method: 'PUT',
@@ -1146,7 +1164,7 @@ async function updatePlayerStats(stats) {
                 cofres_abiertos: stats.cofresAbiertos,
                 objetos_usados: stats.objetos_usados,
                 muertes: stats.muertes,
-                tiempo_jugado: stats.tiempo_jugado
+                tiempo_jugado: tiempo
             })
         });
 
@@ -1154,7 +1172,7 @@ async function updatePlayerStats(stats) {
         if (response.ok) {
             console.log('Estadísticas actualizadas correctamente:', result);
         } else {
-            console.log('Error al actualizar estadísticas:', result.message);
+            console.error('Error al actualizar estadísticas:', result.message);
         }
     } catch (error) {
         console.error('Error al enviar la solicitud:', error);
