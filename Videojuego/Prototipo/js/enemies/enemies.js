@@ -64,8 +64,8 @@ class Boss extends AnimatedObject{
         // Establece el rango de persecución, la velocidad de persecución y las estadísticas del jefe.
         this.chaseRange = 1000;
         this.chaseSpeed = 0.025;
-        this.life = 150;
-        this.maxLife = 150;
+        this.life = 400;
+        this.maxLife = 400;
         this.attackFire = 20;
         this.attack = 10; 
 
@@ -482,7 +482,7 @@ class Mage extends AnimatedObject {
         this.attackInterval = 3000;
         this.lastDamageTime = 0;
         this.damageCooldown = 500;
-        this.magicCooldown = 2000;
+        this.magicCooldown = 10000;
         this.lastMagicCastTime = 0;
         this.magics = [];
     }
@@ -595,6 +595,7 @@ class Mage extends AnimatedObject {
             )) {
                 if (playerStats.life > 0) {
                     playerStats.life = Math.max(0, Math.round(playerStats.life - magic.attack));
+                    playerHurtSFX();
                     magic.alive = false;
                 }
             }

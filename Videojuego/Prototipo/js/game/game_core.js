@@ -82,16 +82,16 @@ class Game {
 
         this.totalSpawnedEnemies = 0;
         this.maxEnemiesPerLevel = {
-            1: 1,
-            2: 1,
-            3: 1,
-            4: 1,
-            5: 1,
-            6: 1,
-            7: 1,
-            8: 1,
-            9: 1,
-            10: 1,
+            1: 3,
+            2: 5,
+            3: 8,
+            4: 5,
+            5: 8,
+            6: 6,
+            7: 6,
+            8: 5,
+            9: 5,
+            10: 3,
             "Final": 1
         };
         
