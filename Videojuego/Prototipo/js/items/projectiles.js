@@ -188,14 +188,6 @@ class Magic {
         if (this.distanceTraveled >= this.maxDistance) {
             this.alive = false;
         }
-
-        const wallBoxes = getWallBoxes();
-        for (let wall of wallBoxes) {
-            if (boxOverlap({ position: this.position, width: this.width, height: this.height }, wall)) {
-                this.alive = false;
-                break;
-            }
-        }
     }
 
     draw(ctx) {
@@ -297,7 +289,7 @@ class Fireball {
             { position: this.position, width: this.width, height: this.height }
         )) {
             if (playerStats.life > 0) {
-                playerStats.life = Math.max(0, playerStats.life - this.attack);
+                playerStats.life = Math.max(0, Math.round(playerStats.life - this.attack));
             }
             this.explode();
             return;

@@ -127,7 +127,7 @@ function drawUI() {
     uiCtx.fillText(`MP`, 20, 120);
 
     const maxHP = playerStats.maxLife || 100;
-    const hp = Math.max(0, Math.min(playerStats.life));
+    const hp = Math.max(0, Math.min(playerStats.life, maxHP));
     const hpBarWidth = (hp / maxHP) * maxBarWidth;
     uiCtx.fillStyle = "gray";
     uiCtx.fillRect(55, 72, maxBarWidth, barHeight);
