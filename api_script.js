@@ -102,45 +102,56 @@ function main() {
         };
     }
     
-    // Campeones 
-    const championButton = document.getElementById('championForm');
-    if (championButton) {
-        championButton.addEventListener('click', async (e) => {
-            e.preventDefault();  // Esto previene que el formulario se envíe normalmente
+    // Campeones
+const championButton = document.getElementById('championForm');
+if (championButton) {
+    championButton.addEventListener('click', async (e) => {
+        e.preventDefault();  // Esto previene que el formulario se envíe normalmente
 
-            const container = document.getElementById('campeonResults');
-            if (!container) return;
-            
-            container.innerHTML = 'Cargando campeones...';
+        const container = document.getElementById('campeonResults');
+        if (!container) return;
 
-            try {
-                const response = await fetch('http://localhost:3000/api/Campeon');
-                if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
+        container.innerHTML = 'Cargando campeones...';
 
-                const data = await response.json();
-                console.log('Datos de campeones:', data);  // Aquí imprimimos los datos para inspeccionar su estructura
+        try {
+            const response = await fetch('http://localhost:3000/api/Campeon');
+            if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
 
-                // Verifica si los datos tienen la propiedad `menor_tiempo`, `mas_inventario`, `mas_enemigos`
-                if (data && data.menor_tiempo && data.mas_inventario && data.mas_enemigos) {
-                    container.innerHTML = `
-                    <h3 style="margin: 10px;">🏃‍♂️ Jugador más rápido</h3>
-                    <p style="margin-top: 20px;"><strong>${data.menor_tiempo.usuario}</strong> - Tiempo: ${data.menor_tiempo.tiempo_jugado}</p>
-                
-                    <h3 style="margin: 10px;">🎒 Inventario más grande</h3>
-                    <p style="margin-top: 20px;"><strong>${data.mas_inventario.usuario}</strong> - Objetos: ${data.mas_inventario.total_objetos}</p>
-                
-                    <h3 style="margin: 10px;">⚔️ Más enemigos derrotados</h3>
-                    <p style="margin-top: 20px;"><strong>${data.mas_enemigos.usuario}</strong> - Enemigos derrotados: ${data.mas_enemigos.enemigos_derrotados}</p>
-                `;        
-                } else {
-                    container.innerHTML = 'No se pudieron cargar los datos de campeones.';
-                }
-            } catch (err) {
-                console.error("Error al cargar campeones:", err);
+            const data = await response.json();
+            console.log('Datos de campeones:', data);  // Aquí imprimimos los datos para inspeccionar su estructura
+
+            // Verifica si los datos tienen la propiedad `menor_tiempo`, `mas_inventario`, `mas_enemigos`
+            if (data && data.menor_tiempo && data.mas_inventario && data.mas_enemigos) {
+                let htmlContent = '';
+
+                // Mostrar los 5 jugadores más rápidos
+                htmlContent += '<h3 style="margin: 30px;">🏃‍♂️ Jugador más rápido</h3>';
+                data.menor_tiempo.forEach((champion) => {
+                    htmlContent += `<p style="margin-top: 20px; margin-bottom: 20px;"><strong>${champion.usuario}</strong> - Tiempo: ${champion.tiempo_jugado}</p>`;
+                });
+
+                // Mostrar los 5 jugadores con más inventario
+                htmlContent += '<h3 style="margin: 30px;">🎒 Inventario más grande</h3>';
+                data.mas_inventario.forEach((champion) => {
+                    htmlContent += `<p style="margin-top: 20px; margin-bottom: 20px;"><strong>${champion.usuario}</strong> - Objetos: ${champion.total_objetos}</p>`;
+                });
+
+                // Mostrar los 5 jugadores con más enemigos derrotados
+                htmlContent += '<h3 style="margin: 30px;">⚔️ Más enemigos derrotados</h3>';
+                data.mas_enemigos.forEach((champion) => {
+                    htmlContent += `<p style="margin-top: 20px; margin-bottom: 20px;"><strong>${champion.usuario}</strong> - Enemigos derrotados: ${champion.enemigos_derrotados}</p>`;
+                });
+
+                container.innerHTML = htmlContent;        
+            } else {
                 container.innerHTML = 'No se pudieron cargar los datos de campeones.';
             }
-        });
-    }
+        } catch (err) {
+            console.error("Error al cargar campeones:", err);
+            container.innerHTML = 'No se pudieron cargar los datos de campeones.';
+        }
+    });
+}
 }
 
 // Espera a que el DOM esté completamente cargado antes de ejecutar main()
