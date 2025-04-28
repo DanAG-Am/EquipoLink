@@ -1,34 +1,33 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/Videojuego/Prototipo/html/pagina_web.css"> 
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/Videojuego/Prototipo/html/pagina_web.css" />
   <script type="module" defer src="/api_script.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <title>CRUD de Usuarios, Estadísticas, Enemigos y Jefes</title>
 </head>
-<header>
-  <div id="headerCharacter">
-    <h1>Estadisticas</h1>
-    <nav>
-    <a href="/Videojuego/Prototipo/html/pagina_web.html" class="return-button">Regresar</a>
-</nav>
-</div>
-</header>
+
 <body id="leaderboardBody">
+  <header>
+    <div id="headerCharacter">
+      <h1>Estadísticas</h1>
+      <nav>
+        <a href="/Videojuego/Prototipo/html/pagina_web.html" class="return-button">Regresar</a>
+      </nav>
+    </div>
+  </header>
+
   <audio autoplay loop hidden>
-    <source src="/Videojuego/Videojuego/Assets/GameAssets/Sounds/Music/title_screen.mp3" type="audio/mpeg">
+    <source src="/Videojuego/Videojuego/Assets/GameAssets/Sounds/Music/title_screen.mp3" type="audio/mpeg" />
     Tu navegador no soporta audio HTML5.
-</audio>      
+  </audio>
+
   <div class="leaderboardContainer">
-    <header id="grid-item-L-1">
-    </header>
-
-    <div id="grid-item-L">
-
-          <!-- Campeón Section -->
+    <!-- Campeón Section -->
     <div class="leaderboard-section">
       <form id="championForm" class="formInput">
         <h1 style="color: yellow;">Campeón del juego 🏆</h1>
@@ -39,42 +38,190 @@
       </div>
     </div>
 
-      <!-- Usuarios CRUD Section -->
-      <div class="leaderboard-section">
-        <h1 style="color: yellow;">Información de Login</h1>
-        <div class="formInput">
-          <h1>Mostrar usuarios</h1>
-          <form id="formSelectUser">
-            <input type="text" name="id_jugador" placeholder="Escribe el ID del jugador, o déjalo vacío para ver todos los usuarios">
-            <input type="submit" value="Mostrar usuarios">
-          </form>
-        </div>
-        <div class="resultDisplay">
-          <h1>Resultado</h1>
-          <div id="getResultsID"></div>
-        </div>
-      </div>  
+    <!-- Usuarios CRUD Section -->
+    <div class="leaderboard-section">
+      <h1 style="color: yellow;">Información de Login</h1>
+      <div class="formInput">
+        <form id="formSelectUser">
+          <input type="text" name="id_jugador" placeholder="Escribe el ID del jugador, o déjalo vacío para ver todos los usuarios" />
+          <input type="submit" value="Mostrar usuarios" />
+        </form>
+      </div>
+      <div class="resultDisplay">
+        <h1>Resultado</h1>
+        <div id="getResultsID"></div>
+      </div>
+    </div>
 
-      <!-- Estadísticas CRUD Section -->
-      <div class="leaderboard-section">
-        <h1 style="color: yellow;">Estadísticas de los jugadores</h1>
+    <!-- Estadísticas CRUD Section -->
+    <div class="leaderboard-section">
+      <h1 style="color: yellow;">Estadísticas de los jugadores</h1>
+      <div class="formInput">
+        <form id="formSelectEstadisticas">
+          <input type="text" name="id_jugador" placeholder="Escribe el ID del jugador, o déjalo vacío para ver todas las estadísticas" />
+          <input type="submit" value="Mostrar estadísticas" />
+        </form>
+      </div>
+      <div class="resultDisplay">
+        <h1>Resultado</h1>
+        <div id="getEstadisticasResults"></div>
+      </div>
+    </div>
 
-        <!-- Show Estadísticas Section -->
-        <div class="leaderboard-section">
-          <div class="formInput">
-            <h1>Mostrar estadísticas</h1>
-            <form id="formSelectEstadisticas">
-              <input type="text" name="id_jugador" placeholder="Escribe el ID del jugador, o déjalo vacío para ver todas las estadísticas">
-              <input type="submit" value="Mostrar estadísticas">
-            </form>
-          </div>
-          <div class="resultDisplay">
-            <h1>Resultado</h1>
-            <div id="getEstadisticasResults"></div>
-          </div>
+    <!-- Gráficos -->
+    <div class="leaderboard-section">
+      <h1 style="color: yellow;">Gráficos de Estadísticas</h1>
+      <div class="formInput">
+        <button id="loadGraph">Cargar Gráficos</button>
+      </div>
+      <div class="resultDisplay">
+        <div id="barChartContainer">
+          <canvas id="estadisticasChart"></canvas>
         </div>
+        <div id="pieChartContainer" style="width: 100%; height: 500px; margin-top: 50px; margin-left: 30%;">
+        </div>
+        <div id="radarChartContainer" style="width: 100%; height: 500px; margin-top: 50px; margin-left: 30%;">
+        </div>
+        <div id="lineChartContainer" style="width: 100%; height: 500px; margin-top: 50px; margin-left: 10%;">
+        </div>
+      </div>
+    </div>
+  </div>
 
-  </div> <!-- Closing tag for leaderboardContainer -->
+  <script>
+    let chartInstance = null;
+
+    function timeToMinutes(timeStr) {
+      const [hours, minutes, seconds] = timeStr.split(":").map(Number);
+      return hours * 60 + minutes + seconds / 60;
+    }
+
+    document.getElementById("loadGraph").addEventListener("click", async function () {
+      const response = await fetch("/api/Estadisticas");
+      const statsData = await response.json();
+
+      if (!statsData || statsData.length === 0) {
+        console.log("No data available");
+        return;
+      }
+
+      const usuarios = statsData.map(item => item.usuario);
+      const enemigosDerrotados = statsData.map(item => item.enemigos_derrotados);
+      const cofresAbiertos = statsData.map(item => item.cofres_abiertos);
+      const objetosUsados = statsData.map(item => item.objetos_usados);
+      const muertes = statsData.map(item => item.muertes);
+      const tiempoJugado = statsData.map(item => item.tiempo_jugado);
+      const tiempoJugadoMinutos = tiempoJugado.map(timeToMinutes);
+
+      // Destroy previous chart
+      if (chartInstance) chartInstance.destroy();
+
+      const ctx = document.getElementById("estadisticasChart").getContext("2d");
+      chartInstance = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: usuarios,
+          datasets: [
+            { label: "Enemigos Derrotados", data: enemigosDerrotados, backgroundColor: "rgba(255, 99, 132, 0.6)", borderColor: "rgba(255, 99, 132, 1)", borderWidth: 1 },
+            { label: "Cofres Abiertos", data: cofresAbiertos, backgroundColor: "rgba(255, 215, 0, 0.6)", borderColor: "rgba(255, 215, 0, 1)", borderWidth: 1 },
+            { label: "Objetos Usados", data: objetosUsados, backgroundColor: "rgba(255, 165, 0, 0.6)", borderColor: "rgba(255, 165, 0, 1)", borderWidth: 1 },
+            { label: "Muertes", data: muertes, backgroundColor: "rgba(255, 0, 0, 0.6)", borderColor: "rgba(255, 0, 0, 1)", borderWidth: 1 }
+          ]
+        },
+        options: {
+          scales: {
+            y: { beginAtZero: true }
+          },
+          plugins: {
+            legend: { labels: { color: "white" } },
+            title: { display: true, text: "Estadísticas de Jugadores", color: "white" } 
+          },
+          ticks: {
+            color: "white"
+          }
+        }
+      });
+
+      const totalKills = enemigosDerrotados.reduce((a, b) => a + b, 0);
+      const totalDeaths = muertes.reduce((a, b) => a + b, 0);
+
+      const pieCanvas = document.createElement("canvas");
+      document.getElementById("pieChartContainer").appendChild(pieCanvas);
+      new Chart(pieCanvas, {
+        type: "pie",
+        data: {
+          labels: ["Enemigos Derrotados", "Muertes"],
+          datasets: [{
+            data: [totalKills, totalDeaths],
+            backgroundColor: ["#ff0000", "#ffdc00"]
+          }]
+        },
+        options: {
+          plugins: {
+            title: { display: true, text: "Enemigos Derrotados vs Muertes Totales", color: "white" } 
+          },
+          legend: { labels: { color: "white" } }, 
+        }
+      });
+
+
+      const radarUsers = usuarios.slice(0, 5);
+      const radarEnemies = enemigosDerrotados.slice(0, 5);
+      const radarChests = cofresAbiertos.slice(0, 5);
+      const radarItems = objetosUsados.slice(0, 5);
+      const radarDeaths = muertes.slice(0, 5);
+
+      const radarCanvas = document.createElement("canvas");
+      document.getElementById("radarChartContainer").appendChild(radarCanvas);
+      new Chart(radarCanvas, {
+        type: "radar",
+        data: {
+          labels: ["Enemigos Derrotados", "Cofres Abiertos", "Objetos Usados", "Muertes"],
+          datasets: radarUsers.map((usuario, i) => ({
+            label: usuario,
+            data: [radarEnemies[i], radarChests[i], radarItems[i], radarDeaths[i]],
+            fill: true,
+            backgroundColor: `rgba(${i * 50}, ${i * 30}, 255, 0.4)`,
+            borderColor: `rgba(${i * 50}, ${i * 30}, 255, 1)`,
+            borderWidth: 1
+          }))
+        },
+        options: {
+          plugins: {
+            title: { display: true, text: "Rendimiento por Jugador", color: "white" } 
+          },
+          legend: { labels: { color: "white" } }, 
+          scale: { ticks: { color: "white" } } 
+        }
+      });
+
+      const lineCanvas = document.createElement("canvas");
+      document.getElementById("lineChartContainer").appendChild(lineCanvas);
+      new Chart(lineCanvas, {
+        type: "line",
+        data: {
+          labels: radarUsers,
+          datasets: [{
+            label: "Tiempo Jugado (minutos)",
+            data: tiempoJugadoMinutos.slice(0, 5),
+            borderColor: "yellow",
+            backgroundColor: "rgba(255, 215, 0, 0.3)",
+            fill: true
+          }]
+        },
+        options: {
+          plugins: {
+            title: { display: true, text: "Tiempo Jugado por Usuario", color: "white" } 
+          },
+          legend: { labels: { color: "white" } }, 
+          scales: {
+            y: { ticks: { color: "white" } },
+            x: { ticks: { color: "white" } } 
+          }
+        }
+      });
+    });
+  </script>
 </body>
 </html>
 

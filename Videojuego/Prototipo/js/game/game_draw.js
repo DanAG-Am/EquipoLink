@@ -1133,8 +1133,6 @@ Game.prototype.unlockNextLevel = function() { //desbloquear nivel si se ha compl
     }
 };
 
-// Función mejorada para actualizar las estadísticas del jugador
-// Añadir esto al final de game_draw.js o donde tengas la función original
 
 async function updatePlayerStats(stats) {
     // Si no hay ID de jugador, no intentar actualizar

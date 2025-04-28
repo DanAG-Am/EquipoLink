@@ -467,6 +467,7 @@ app.put('/api/Estadisticas', async (request, response) => {
 
 //campeones 
 // Endpoint para obtener los campeones
+// Endpoint para obtener los campeones
 app.get('/api/Campeon', async (req, res) => {
     let connection = null;
 
@@ -479,7 +480,7 @@ app.get('/api/Campeon', async (req, res) => {
             FROM Estadisticas e 
             JOIN Jugador j ON e.id_jugador = j.id_jugador 
             ORDER BY e.tiempo_jugado ASC 
-            LIMIT 1
+            LIMIT 5
         `);
 
         // Jugador con más objetos en el inventario
@@ -489,7 +490,7 @@ app.get('/api/Campeon', async (req, res) => {
             JOIN Jugador j ON i.id_jugador = j.id_jugador 
             GROUP BY i.id_jugador 
             ORDER BY total_objetos DESC 
-            LIMIT 1
+            LIMIT 5
         `);
 
         // Jugador con más enemigos derrotados
@@ -498,13 +499,14 @@ app.get('/api/Campeon', async (req, res) => {
             FROM Estadisticas e 
             JOIN Jugador j ON e.id_jugador = j.id_jugador 
             ORDER BY e.enemigos_derrotados DESC 
-            LIMIT 1
+            LIMIT 5
         `);
 
+        // Devuelve los resultados completos, no solo el primer jugador de cada categoría
         res.json({
-            menor_tiempo: menorTiempo[0] || {},
-            mas_inventario: masInventario[0] || {},
-            mas_enemigos: masEnemigos[0] || {}
+            menor_tiempo: menorTiempo || [],
+            mas_inventario: masInventario || [],
+            mas_enemigos: masEnemigos || []
         });
 
     } catch (error) {
