@@ -289,6 +289,7 @@ class Fireball {
             { position: this.position, width: this.width, height: this.height }
         )) {
             if (playerStats.life > 0) {
+                playerHurtSFX();
                 playerStats.life = Math.max(0, Math.round(playerStats.life - this.attack));
             }
             this.explode();
