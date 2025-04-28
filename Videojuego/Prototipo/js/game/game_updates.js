@@ -333,7 +333,7 @@ Game.prototype.update = function(deltaTime) {
         
                 if (boxOverlap(bombBox, playerBox)) {
                     playerHurtSFX();
-                    playerStats.life = Math.max(0, playerStats.life - playerStats.damageBomb);
+                    playerStats.life = Math.max(0, playerStats.life - 20);
                 }
             }
         });

@@ -169,6 +169,9 @@ Game.prototype.restartGame = function() {
     dragonSFX1Played = false;
     dragonSFX2Played = false;
     tutorialBonusGiven = false;
+    interactingMerchant = false;
+    interactingFairy = false;
+    interactingNPC = false;
 
     playerStats.maxLife = 100;
     playerStats.maxMana = 100;
@@ -259,6 +262,10 @@ Game.prototype.restartGame = function() {
         deathHandled = false;
         dragonSFX1Played = false;
         dragonSFX2Played = false;
+        interactingMerchant = false;
+        interactingFairy = false;
+        interactingNPC = false;
+        rupeesInitialized = false;
 
         if (gameWasCompleted) {
             // Reinicia stats si terminas el juego
@@ -276,12 +283,20 @@ Game.prototype.restartGame = function() {
             gameWasCompleted = false;
         }
 
+        const dialogIds = ["errorDialog", "purchaseDialog", "fairyDialog", "merchantDialog"];
+        dialogIds.forEach(id => {
+            const elem = document.getElementById(id);
+            if (elem) {
+                elem.style.display = "none";
+            }
+        });
+
         playerStats.level = "-";
         playerStats.uiTextPosition = { x: 90, y: 30 };
         playerStats.life = playerStats.maxLife;
         playerStats.mana = playerStats.maxMana;
-        playerStats.arrows = 0;
-        playerStats.bombs = 0;
+        playerStats.arrows = playerStats.arrows;
+        playerStats.bombs = playerStats.bombs;
 
         this.mainMap = false;
         this.level = false;

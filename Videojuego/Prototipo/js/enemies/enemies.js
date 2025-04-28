@@ -179,7 +179,7 @@ class Boss extends AnimatedObject{
                     shieldSFX();
                 } else {
                     // recibe daño normalmente
-                    playerStats.life = Math.max(0, playerStats.life - this.attack);
+                    playerStats.life = Math.max(0, Math.round(playerStats.life - this.attack));
                     playerHurtSFX();
                 }
             }
@@ -333,7 +333,7 @@ class Bat extends AnimatedObject {
                     shieldSFX();
                 } else {
                     // recibe daño normalmente
-                    playerStats.life = Math.max(0, playerStats.life - this.attack);
+                    playerStats.life = Math.max(0, Math.round(playerStats.life - this.attack));
                     playerHurtSFX();
                 }
             }
@@ -440,7 +440,7 @@ class Knight extends AnimatedObject{
                     shieldSFX();
                 } else {
                     // recibe daño normalmente
-                    playerStats.life = Math.max(0, playerStats.life - this.attack);
+                    playerStats.life = Math.max(0, Math.round(playerStats.life - this.attack));
                     playerHurtSFX();
                 }
             }
@@ -561,7 +561,7 @@ class Mage extends AnimatedObject {
                     shieldSFX();
                 } else {
                     // recibe daño normalmente
-                    playerStats.life = Math.max(0, playerStats.life - this.attack);
+                    playerStats.life = Math.max(0, Math.round(playerStats.life - this.attack));
                     playerHurtSFX();
                 }
             }
@@ -594,7 +594,7 @@ class Mage extends AnimatedObject {
                 { position: magic.position, width: magic.width, height: magic.height }
             )) {
                 if (playerStats.life > 0) {
-                    playerStats.life = Math.max(0, playerStats.life - magic.attack);
+                    playerStats.life = Math.max(0, Math.round(playerStats.life - magic.attack));
                     magic.alive = false;
                 }
             }
@@ -707,7 +707,7 @@ class Skull extends AnimatedObject{
                     shieldSFX();
                 } else {
                     // recibe daño normalmente
-                    playerStats.life = Math.max(0, playerStats.life - this.attack);
+                    playerStats.life = Math.max(0, Math.round(playerStats.life - this.attack));
                     playerHurtSFX();
                 }
             }
@@ -812,7 +812,7 @@ class Slime extends AnimatedObject{
                     shieldSFX();
                 } else {
                     // recibe daño normalmente
-                    playerStats.life = Math.max(0, playerStats.life - this.attack);
+                    playerStats.life = Math.max(0, Math.round(playerStats.life - this.attack));
                     playerHurtSFX();
                 }
             }
