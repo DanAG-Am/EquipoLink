@@ -370,7 +370,15 @@ app.get('/api/Estadisticas', async (req, res) => {
                 Estadisticas.cofres_abiertos,
                 Estadisticas.objetos_usados,
                 Estadisticas.muertes,
-                Estadisticas.tiempo_jugado
+                Estadisticas.tiempo_jugado,
+                Estadisticas.bombas_usadas,
+                Estadisticas.flechas_disparadas,
+                Estadisticas.magias_usadas,
+                Estadisticas.dinero_recolectado,
+                Estadisticas.dashs_realizados,
+                Estadisticas.jefes_derrotados,
+                Estadisticas.niveles_completados,
+                Estadisticas.pociones_usadas
             FROM Estadisticas
             INNER JOIN Jugador USING (id_jugador)
         `);
@@ -397,12 +405,20 @@ app.get('/api/Estadisticas/:usuario', async (request, response) => {
         connection = await connectToDB()
         const [results_user, _] = await connection.query(`
             SELECT 
-            Jugador.usuario,
-            Estadisticas.enemigos_derrotados,
-            Estadisticas.cofres_abiertos,
-            Estadisticas.objetos_usados,
-            Estadisticas.muertes,
-            Estadisticas.tiempo_jugado
+                Jugador.usuario,
+                Estadisticas.enemigos_derrotados,
+                Estadisticas.cofres_abiertos,
+                Estadisticas.objetos_usados,
+                Estadisticas.muertes,
+                Estadisticas.tiempo_jugado,
+                Estadisticas.bombas_usadas,
+                Estadisticas.flechas_disparadas,
+                Estadisticas.magias_usadas,
+                Estadisticas.dinero_recolectado,
+                Estadisticas.dashs_realizados,
+                Estadisticas.jefes_derrotados,
+                Estadisticas.niveles_completados,
+                Estadisticas.pociones_usadas
             FROM Estadisticas 
             LEFT JOIN Jugador ON Estadisticas.id_jugador = Jugador.id_jugador 
             WHERE Jugador.usuario = ?
@@ -423,6 +439,7 @@ app.get('/api/Estadisticas/:usuario', async (request, response) => {
 });
 
 // PUT: Actualizar estadísticas de un jugador
+// PUT: Actualizar estadísticas de un jugador
 app.put('/api/Estadisticas', async (request, response) => {
     let connection = null;
 
@@ -431,34 +448,47 @@ app.put('/api/Estadisticas', async (request, response) => {
 
         // Mapeamos los campos del cuerpo de la solicitud a los de la tabla
         const updatedStats = {
-            id_jugador: request.body.id_jugador,
             enemigos_derrotados: request.body.enemigos_derrotados || 0,
             cofres_abiertos: request.body.cofres_abiertos || 0,
             objetos_usados: request.body.objetos_usados || 0,
             muertes: request.body.muertes || 0,
-            tiempo_jugado: request.body.tiempo_jugado || '00:00:00' // Usar valor por defecto si no se proporciona
+            tiempo_jugado: request.body.tiempo_jugado || '00:00:00',
+            bombas_usadas: request.body.bombas_usadas || 0,
+            flechas_disparadas: request.body.flechas_disparadas || 0,
+            magias_usadas: request.body.magias_usadas || 0,
+            dinero_recolectado: request.body.dinero_recolectado || 0,
+            dashs_realizados: request.body.dashs_realizados || 0,
+            jefes_derrotados: request.body.jefes_derrotados || 0,
+            niveles_completados: request.body.niveles_completados || 0,
+            pociones_usadas: request.body.pociones_usadas || 0
         };
 
-        // Aquí estamos usando el `id_jugador` para actualizar las estadísticas de ese jugador
-        const [results, fields] = await connection.query(
+        const idJugador = request.body.id_jugador;
+
+        if (!idJugador) {
+            return response.status(400).json({ message: "Falta el id_jugador en la solicitud." });
+        }
+
+        const [results] = await connection.query(
             'UPDATE Estadisticas SET ? WHERE id_jugador = ?',
-            [updatedStats, request.body.id_jugador]
+            [updatedStats, idJugador]
         );
 
         if (results.affectedRows === 0) {
-            // Si no se encuentra el jugador, lo creamos (fallback)
-            const [insertResults] = await connection.query('INSERT INTO Estadisticas SET ?', updatedStats);
-            response.status(201).json({ message: 'Estadísticas insertadas correctamente', id_jugador: insertResults.insertId });
+            // Si no existe, insertarlo
+            const newStats = { id_jugador: idJugador, ...updatedStats };
+            await connection.query('INSERT INTO Estadisticas SET ?', newStats);
+            response.status(201).json({ message: 'Estadísticas insertadas correctamente', id_jugador: idJugador });
         } else {
             response.status(200).json({ message: 'Estadísticas actualizadas correctamente' });
         }
     } catch (error) {
-        response.status(500).json(error);
-        console.error(error);
+        console.error('Error al actualizar estadísticas:', error);
+        response.status(500).json({ message: 'Error en el servidor', error });
     } finally {
-        if (connection !== null) {
+        if (connection) {
             connection.end();
-            console.log("Connection closed successfully!");
+            console.log("Conexión cerrada correctamente!");
         }
     }
 });

@@ -35,8 +35,10 @@ Game.prototype.update = function(deltaTime) {
                 !this.levelCompleted
             ) {
                 this.levelCompleted = true;
+                playerStats.niveles_completados = (playerStats.niveles_completados || 0) + 1;
                 if (!this.levelBoss) {
                     this.showLevelCompleteMessage = true;
+                    playerStats.jefes_derrotados = (playerStats.jefes_derrotados || 0) + 1;
                 }
                 this.unlockNextLevel();
             }
@@ -147,6 +149,7 @@ Game.prototype.update = function(deltaTime) {
                             enemyDeathSFX();
                             enemy.dead = true;
                             let rupeesEarned = 1; // 1 rupee por defecto
+                            playerStats.dinero_recolectado = (playerStats.dinero_recolectado || 0) + rupeesEarned;
                             switch (enemy.name) { // Determina la recompensa según el tipo de enemigo
                                 case "slime":
                                     rupeesEarned = Math.floor(Math.random() * 2) + 1; // 1 a 2

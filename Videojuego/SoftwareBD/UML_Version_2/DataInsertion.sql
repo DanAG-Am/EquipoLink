@@ -527,3 +527,15 @@ SELECT * FROM Enemigo;
 SELECT * FROM Jefe;
 SELECT * FROM Accion;
 SELECT * FROM Jugador_Accion;
+
+USE TheLostSentinel;
+
+ALTER TABLE Estadisticas
+ADD COLUMN bombas_usadas INT DEFAULT 0,
+ADD COLUMN flechas_disparadas INT DEFAULT 0,
+ADD COLUMN magias_usadas INT DEFAULT 0,
+ADD COLUMN dinero_recolectado INT DEFAULT 0,
+ADD COLUMN dashs_realizados INT DEFAULT 0,
+ADD COLUMN jefes_derrotados INT DEFAULT 0,
+ADD COLUMN niveles_completados INT DEFAULT 0,
+ADD COLUMN pociones_usadas INT DEFAULT 0;

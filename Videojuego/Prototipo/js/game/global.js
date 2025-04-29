@@ -86,5 +86,15 @@ let playerStats = {
     cofresAbiertos: 0,
     objetos_usados: 0,
     muertes: 0,
-    tiempo_jugado: "00:00:00"
+    tiempo_jugado: "00:00:00",
+    
+    // NUEVAS ESTADÍSTICAS:
+    bombas_usadas: 0,
+    flechas_disparadas: 0,
+    magias_usadas: 0,
+    dinero_recolectado: 0,
+    dashs_realizados: 0,
+    jefes_derrotados: 0,
+    niveles_completados: 0,
+    pociones_usadas: 0
 };
