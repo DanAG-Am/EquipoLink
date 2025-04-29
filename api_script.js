@@ -46,61 +46,70 @@ function main() {
         }
     }
 
-    /*CRUD estadisticas de los jugadores */
-    const formSelectEstadisticas = document.getElementById('formSelectEstadisticas');
-    if (formSelectEstadisticas) {
-        formSelectEstadisticas.onsubmit = async (e) => {
-            e.preventDefault();
-        
-            const data = new FormData(formSelectEstadisticas);
-            const dataObj = Object.fromEntries(data.entries());
-        
-            const id = dataObj['id_jugador'];
-        
-            let response = await fetch(`http://localhost:3000/api/Estadisticas/${id}`, {
-                method: 'GET'
-            });
-        
-            if (response.ok) {
-                let results = await response.json();
-        
-                const container = document.getElementById('getEstadisticasResults');
-                if (container) {
-                    if (results.length > 0) {
-                        const headers = Object.keys(results[0]);
-                        let table = document.createElement("table");
-                
-                        // Header
-                        let tr = table.insertRow(-1);
-                        for (const header of headers) {
-                            let th = document.createElement("th");
-                            th.innerHTML = header;
-                            tr.appendChild(th);
-                        }
-                
-                        // Rows
-                        for (const row of results) {
-                            let tr = table.insertRow(-1);
-                            for (const key in row) {
-                                let tabCell = tr.insertCell(-1);
-                                tabCell.innerHTML = row[key];
-                            }
-                        }
-                
-                        container.innerHTML = '';
-                        container.appendChild(table);
-                    } else {
-                        container.innerHTML = 'No hay resultados para mostrar.';
-                    }
-                }
-            } else {
-                const resultsContainer = document.getElementById('getEstadisticasResults');
-                if (resultsContainer) {
-                    resultsContainer.innerHTML = `Error! Status: ${response.status}`;
-                }
-            }
-        };
+/* CRUD estadísticas de los jugadores */
+const formSelectEstadisticas = document.getElementById('formSelectEstadisticas');
+if (formSelectEstadisticas) {
+    function createStatBar(label, value, max, color) {
+        const percent = Math.min(100, (value / max) * 100).toFixed(1);
+        return `
+          <div class="progress-container">
+            <div class="progress-label">${label}</div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: ${percent}%; background-color: ${color};">
+                <div class="progress-number">${value}</div>
+              </div>
+            </div>
+          </div>
+        `;
     }
+    formSelectEstadisticas.onsubmit = async (e) => {
+        e.preventDefault();
+        const data = new FormData(formSelectEstadisticas);
+        const dataObj = Object.fromEntries(data.entries());
+        const id = dataObj['id_jugador'];
+
+        let response = await fetch(`http://localhost:3000/api/Estadisticas/${id}`);
+        if (response.ok) {
+            let results = await response.json();
+            const container = document.getElementById('getEstadisticasResults');
+            container.innerHTML = '';
+
+            if (results.length > 0) {
+                results.forEach(stat => {
+                    const card = document.createElement('div');
+                    card.classList.add('stat-card');
+
+                    card.innerHTML = `
+                        <h3 style="color: yellow;">${stat.usuario}</h3>
+
+                        ${createStatBar("⚔️ Enemigos derrotados", stat.enemigos_derrotados, 500, "#ff4d4d")}
+                        ${createStatBar("🗝️ Cofres abiertos", stat.cofres_abiertos, 100, "#ffc107")}
+                        ${createStatBar("🧪 Objetos usados", stat.objetos_usados, 300, "#ff9100")}
+                        ${createStatBar("💀 Muertes", stat.muertes, 100, "#b71c1c")}
+                        ${createStatBar("⏳ Tiempo jugado (min)", timeToMinutes(stat.tiempo_jugado), 180, "#00bcd4")}
+                        <hr style="margin: 10px 0; border-color: yellow;">
+                        ${createStatBar("💣 Bombas usadas", stat.bombas_usadas, 100, "#ba68c8")}
+                        ${createStatBar("🏹 Flechas disparadas", stat.flechas_disparadas, 100, "#64b5f6")}
+                        ${createStatBar("🧙 Magias usadas", stat.magias_usadas, 100, "#81c784")}
+                        ${createStatBar("💰 Dinero recolectado", stat.dinero_recolectado, 300, "#ffd700")}
+                        ${createStatBar("⚡ Dash realizados", stat.dashs_realizados, 100, "#ff8a65")}
+                        ${createStatBar("👑 Jefes derrotados", stat.jefes_derrotados, 10, "#9575cd")}
+                        ${createStatBar("🏁 Niveles completados", stat.niveles_completados, 10, "#4db6ac")}
+                        ${createStatBar("🧴 Pociones usadas", stat.pociones_usadas, 100, "#f06292")}
+                    `;
+                    container.appendChild(card);
+                });
+            } else {
+                container.innerHTML = 'No hay resultados para mostrar.';
+            }
+        } else {
+            const resultsContainer = document.getElementById('getEstadisticasResults');
+            if (resultsContainer) {
+                resultsContainer.innerHTML = `Error! Status: ${response.status}`;
+            }
+        }
+    };
+}
     
     // Campeones
 const championButton = document.getElementById('championForm');

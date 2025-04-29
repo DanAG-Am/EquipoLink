@@ -194,4 +194,3 @@ CREATE TABLE Jugador_Accion(
 	FOREIGN KEY (id_enemigo) REFERENCES Enemigo(id_enemigo),
 	FOREIGN KEY (id_npc) REFERENCES NPC(id_npc)
 );
-

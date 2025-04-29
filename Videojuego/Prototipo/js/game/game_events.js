@@ -347,6 +347,7 @@ Game.prototype.createEventListeners = function(){
             }
             else if(event.key=="c"){
                 const now = Date.now();
+                playerStats.magias_usadas = (playerStats.magias_usadas || 0) + 1;
                 if (now - this.lastMagicTime < 500) return; // cooldown de 0.5s
                 this.lastMagicTime = now;
 
@@ -369,6 +370,7 @@ Game.prototype.createEventListeners = function(){
                 const now = Date.now();
                 if (now - this.lastArrowTime < 500) return; // cooldown de 0.5s
                 this.lastArrowTime = now;
+                playerStats.magias_usadas = (playerStats.magias_usadas || 0) + 1;
 
                 if (playerStats.arrows > 0) {
                     arrowShot();
@@ -388,6 +390,7 @@ Game.prototype.createEventListeners = function(){
             } else if (event.key == "a") {
                 const now = Date.now();
                 if (now - this.lastBombTime < 2000) return; // Cooldown de 2 segundos para dejar bomba
+                playerStats.bombas_usadas = (playerStats.bombas_usadas || 0) + 1;
                 
                 if (playerStats.bombs > 0) {
                     this.lastBombTime = now;
@@ -407,6 +410,7 @@ Game.prototype.createEventListeners = function(){
                 }
             } else if (event.key === "f") {
                 const now = Date.now();
+                playerStats.dashs_realizados = (playerStats.dashs_realizados || 0) + 1;
                 if (now - this.lastDashTime < this.dashCooldown) return;
                 this.lastDashTime = now;
                 dashSFX();
@@ -489,6 +493,7 @@ Game.prototype.createEventListeners = function(){
         }
         if (event.key == "d") {
             if (playerStats.potions > 0 && playerStats.life < playerStats.maxLife){
+                playerStats.pociones_usadas = (playerStats.pociones_usadas || 0) + 1;
                 playerStats.potions--;
                 playerStats.objetos_usados++; 
                 healSFX();

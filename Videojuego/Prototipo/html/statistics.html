@@ -28,7 +28,27 @@
 
   <div class="leaderboardContainer">
     <!-- Campeón Section -->
-    <div class="leaderboard-section">
+<!-- Gráficos -->
+      <div class="leaderboard-section">
+        <h1 style="color: yellow;">Gráficos de Estadísticas</h1>
+        <div class="formInput">
+          <button id="loadGraph">Cargar Gráficos</button>
+        </div>
+        <div class="resultDisplay" id="graphsDisplay" style="display: flex; flex-wrap: wrap; justify-content: center;">
+          <div class="chart-card">
+            <canvas id="estadisticasChart" width="400" height="300"></canvas>
+          </div>
+          <div class="chart-card">
+            <canvas id="pieChart" width="400" height="300"></canvas>
+          </div>
+          <div class="chart-card">
+            <canvas id="radarChart" width="400" height="300"></canvas>
+          </div>
+          <div class="chart-card">
+            <canvas id="lineChart" width="400" height="300"></canvas>
+          </div>
+        </div>
+      </div>
       <form id="championForm" class="formInput">
         <h1 style="color: yellow;">Campeón del juego 🏆</h1>
         <button type="submit" id="loadChampion">Mostrar campeón</button>
@@ -67,25 +87,6 @@
         <div id="getEstadisticasResults"></div>
       </div>
     </div>
-
-    <!-- Gráficos -->
-    <div class="leaderboard-section">
-      <h1 style="color: yellow;">Gráficos de Estadísticas</h1>
-      <div class="formInput">
-        <button id="loadGraph">Cargar Gráficos</button>
-      </div>
-      <div class="resultDisplay">
-        <div id="barChartContainer">
-          <canvas id="estadisticasChart"></canvas>
-        </div>
-        <div id="pieChartContainer" style="width: 100%; height: 500px; margin-top: 50px; margin-left: 30%;">
-        </div>
-        <div id="radarChartContainer" style="width: 100%; height: 500px; margin-top: 50px; margin-left: 30%;">
-        </div>
-        <div id="lineChartContainer" style="width: 100%; height: 500px; margin-top: 50px; margin-left: 10%;">
-        </div>
-      </div>
-    </div>
   </div>
 
   <script>
@@ -96,131 +97,123 @@
       return hours * 60 + minutes + seconds / 60;
     }
 
-    document.getElementById("loadGraph").addEventListener("click", async function () {
-      const response = await fetch("/api/Estadisticas");
-      const statsData = await response.json();
+    let barChartInstance = null;
+let pieChartInstance = null;
+let radarChartInstance = null;
+let lineChartInstance = null;
 
-      if (!statsData || statsData.length === 0) {
-        console.log("No data available");
-        return;
-      }
+function timeToMinutes(timeStr) {
+  const [hours, minutes, seconds] = timeStr.split(":").map(Number);
+  return hours * 60 + minutes + seconds / 60;
+}
 
-      const usuarios = statsData.map(item => item.usuario);
-      const enemigosDerrotados = statsData.map(item => item.enemigos_derrotados);
-      const cofresAbiertos = statsData.map(item => item.cofres_abiertos);
-      const objetosUsados = statsData.map(item => item.objetos_usados);
-      const muertes = statsData.map(item => item.muertes);
-      const tiempoJugado = statsData.map(item => item.tiempo_jugado);
-      const tiempoJugadoMinutos = tiempoJugado.map(timeToMinutes);
+document.getElementById("loadGraph").addEventListener("click", async function () {
+  const response = await fetch("/api/Estadisticas");
+  const statsData = await response.json();
 
-      // Destroy previous chart
-      if (chartInstance) chartInstance.destroy();
+  if (!statsData || statsData.length === 0) {
+    console.log("No data available");
+    return;
+  }
 
-      const ctx = document.getElementById("estadisticasChart").getContext("2d");
-      chartInstance = new Chart(ctx, {
-        type: "bar",
-        data: {
-          labels: usuarios,
-          datasets: [
-            { label: "Enemigos Derrotados", data: enemigosDerrotados, backgroundColor: "rgba(255, 99, 132, 0.6)", borderColor: "rgba(255, 99, 132, 1)", borderWidth: 1 },
-            { label: "Cofres Abiertos", data: cofresAbiertos, backgroundColor: "rgba(255, 215, 0, 0.6)", borderColor: "rgba(255, 215, 0, 1)", borderWidth: 1 },
-            { label: "Objetos Usados", data: objetosUsados, backgroundColor: "rgba(255, 165, 0, 0.6)", borderColor: "rgba(255, 165, 0, 1)", borderWidth: 1 },
-            { label: "Muertes", data: muertes, backgroundColor: "rgba(255, 0, 0, 0.6)", borderColor: "rgba(255, 0, 0, 1)", borderWidth: 1 }
-          ]
-        },
-        options: {
-          scales: {
-            y: { beginAtZero: true }
-          },
-          plugins: {
-            legend: { labels: { color: "white" } },
-            title: { display: true, text: "Estadísticas de Jugadores", color: "white" } 
-          },
-          ticks: {
-            color: "white"
-          }
-        }
-      });
+  const usuarios = statsData.map(item => item.usuario);
+  const enemigosDerrotados = statsData.map(item => item.enemigos_derrotados);
+  const cofresAbiertos = statsData.map(item => item.cofres_abiertos);
+  const objetosUsados = statsData.map(item => item.objetos_usados);
+  const muertes = statsData.map(item => item.muertes);
+  const tiempoJugadoMinutos = statsData.map(item => timeToMinutes(item.tiempo_jugado));
 
-      const totalKills = enemigosDerrotados.reduce((a, b) => a + b, 0);
-      const totalDeaths = muertes.reduce((a, b) => a + b, 0);
+  if (barChartInstance) barChartInstance.destroy();
+  if (pieChartInstance) pieChartInstance.destroy();
+  if (radarChartInstance) radarChartInstance.destroy();
+  if (lineChartInstance) lineChartInstance.destroy();
 
-      const pieCanvas = document.createElement("canvas");
-      document.getElementById("pieChartContainer").appendChild(pieCanvas);
-      new Chart(pieCanvas, {
-        type: "pie",
-        data: {
-          labels: ["Enemigos Derrotados", "Muertes"],
-          datasets: [{
-            data: [totalKills, totalDeaths],
-            backgroundColor: ["#ff0000", "#ffdc00"]
-          }]
-        },
-        options: {
-          plugins: {
-            title: { display: true, text: "Enemigos Derrotados vs Muertes Totales", color: "white" } 
-          },
-          legend: { labels: { color: "white" } }, 
-        }
-      });
+  const ctxBar = document.getElementById("estadisticasChart").getContext("2d");
+  barChartInstance = new Chart(ctxBar, {
+    type: "bar",
+    data: {
+      labels: usuarios,
+      datasets: [
+        { label: "Enemigos Derrotados", data: enemigosDerrotados, backgroundColor: "rgba(255, 99, 132, 0.6)" },
+        { label: "Cofres Abiertos", data: cofresAbiertos, backgroundColor: "rgba(255, 215, 0, 0.6)" },
+        { label: "Objetos Usados", data: objetosUsados, backgroundColor: "rgba(255, 165, 0, 0.6)" },
+        { label: "Muertes", data: muertes, backgroundColor: "rgba(255, 0, 0, 0.6)" },
+        { label: "Bombas Usadas", data: statsData.map(item => item.bombas_usadas), backgroundColor: "rgba(200, 100, 255, 0.6)" },
+        { label: "Flechas Disparadas", data: statsData.map(item => item.flechas_disparadas), backgroundColor: "rgba(100, 200, 255, 0.6)" },
+        { label: "Magias Usadas", data: statsData.map(item => item.magias_usadas), backgroundColor: "rgba(0, 255, 127, 0.6)" },
+        { label: "Dashs", data: statsData.map(item => item.dashs_realizados), backgroundColor: "rgba(255, 140, 0, 0.6)" },
+        { label: "Pociones Usadas", data: statsData.map(item => item.pociones_usadas), backgroundColor: "rgba(255, 255, 102, 0.6)" },
+        { label: "Jefes Derrotados", data: statsData.map(item => item.jefes_derrotados), backgroundColor: "rgba(128, 0, 128, 0.6)" },
+        { label: "Niveles Completados", data: statsData.map(item => item.niveles_completados), backgroundColor: "rgba(0, 255, 255, 0.6)" },
+        { label: "Dinero Recolectado", data: statsData.map(item => item.dinero_recolectado), backgroundColor: "rgba(255, 255, 255, 0.6)" }
+      ]
+    },
+    options: {
+      scales: { y: { beginAtZero: true } },
+      plugins: { legend: { labels: { color: "white" } }, title: { display: true, text: "Estadísticas de Jugadores", color: "white" } }
+    }
+  });
 
+  const ctxPie = document.getElementById("pieChart").getContext("2d");
+  pieChartInstance = new Chart(ctxPie, {
+    type: "pie",
+    data: {
+      labels: ["Enemigos Derrotados", "Muertes"],
+      datasets: [{
+        data: [enemigosDerrotados.reduce((a, b) => a + b, 0), muertes.reduce((a, b) => a + b, 0)],
+        backgroundColor: ["#ff0000", "#ffdc00"]
+      }]
+    },
+    options: {
+      plugins: { title: { display: true, text: "Derrotas vs Muertes", color: "white" } },
+      legend: { labels: { color: "white" } }
+    }
+  });
 
-      const radarUsers = usuarios.slice(0, 5);
-      const radarEnemies = enemigosDerrotados.slice(0, 5);
-      const radarChests = cofresAbiertos.slice(0, 5);
-      const radarItems = objetosUsados.slice(0, 5);
-      const radarDeaths = muertes.slice(0, 5);
+  const radarUsers = usuarios.slice(0, 5);
+  const radarEnemies = enemigosDerrotados.slice(0, 5);
+  const radarChests = cofresAbiertos.slice(0, 5);
+  const radarItems = objetosUsados.slice(0, 5);
+  const radarDeaths = muertes.slice(0, 5);
 
-      const radarCanvas = document.createElement("canvas");
-      document.getElementById("radarChartContainer").appendChild(radarCanvas);
-      new Chart(radarCanvas, {
-        type: "radar",
-        data: {
-          labels: ["Enemigos Derrotados", "Cofres Abiertos", "Objetos Usados", "Muertes"],
-          datasets: radarUsers.map((usuario, i) => ({
-            label: usuario,
-            data: [radarEnemies[i], radarChests[i], radarItems[i], radarDeaths[i]],
-            fill: true,
-            backgroundColor: `rgba(${i * 50}, ${i * 30}, 255, 0.4)`,
-            borderColor: `rgba(${i * 50}, ${i * 30}, 255, 1)`,
-            borderWidth: 1
-          }))
-        },
-        options: {
-          plugins: {
-            title: { display: true, text: "Rendimiento por Jugador", color: "white" } 
-          },
-          legend: { labels: { color: "white" } }, 
-          scale: { ticks: { color: "white" } } 
-        }
-      });
+  const ctxRadar = document.getElementById("radarChart").getContext("2d");
+  radarChartInstance = new Chart(ctxRadar, {
+    type: "radar",
+    data: {
+      labels: ["Enemigos Derrotados", "Cofres Abiertos", "Objetos Usados", "Muertes"],
+      datasets: radarUsers.map((usuario, i) => ({
+        label: usuario,
+        data: [radarEnemies[i], radarChests[i], radarItems[i], radarDeaths[i]],
+        fill: true,
+        backgroundColor: `rgba(${i * 50}, ${i * 30}, 255, 0.4)`,
+        borderColor: `rgba(${i * 50}, ${i * 30}, 255, 1)`,
+      }))
+    },
+    options: {
+      plugins: { title: { display: true, text: "Top 5 Jugadores", color: "white" } },
+      scales: { r: { pointLabels: { color: "white" }, grid: { color: "white" }, angleLines: { color: "white" } } }
+    }
+  });
 
-      const lineCanvas = document.createElement("canvas");
-      document.getElementById("lineChartContainer").appendChild(lineCanvas);
-      new Chart(lineCanvas, {
-        type: "line",
-        data: {
-          labels: radarUsers,
-          datasets: [{
-            label: "Tiempo Jugado (minutos)",
-            data: tiempoJugadoMinutos.slice(0, 5),
-            borderColor: "yellow",
-            backgroundColor: "rgba(255, 215, 0, 0.3)",
-            fill: true
-          }]
-        },
-        options: {
-          plugins: {
-            title: { display: true, text: "Tiempo Jugado por Usuario", color: "white" } 
-          },
-          legend: { labels: { color: "white" } }, 
-          scales: {
-            y: { ticks: { color: "white" } },
-            x: { ticks: { color: "white" } } 
-          }
-        }
-      });
-    });
+  const ctxLine = document.getElementById("lineChart").getContext("2d");
+  lineChartInstance = new Chart(ctxLine, {
+    type: "line",
+    data: {
+      labels: radarUsers,
+      datasets: [{
+        label: "Tiempo Jugado (minutos)",
+        data: tiempoJugadoMinutos.slice(0, 5),
+        backgroundColor: "rgba(0, 255, 255, 0.4)",
+        borderColor: "cyan",
+        fill: true
+      }]
+    },
+    options: {
+      plugins: { title: { display: true, text: "Tiempo Jugado", color: "white" } },
+      scales: { y: { beginAtZero: true, ticks: { color: "white" } }, x: { ticks: { color: "white" } } }
+    }
+  });
+});
   </script>
 </body>
 </html>

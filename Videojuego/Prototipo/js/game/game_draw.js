@@ -1135,7 +1135,6 @@ Game.prototype.unlockNextLevel = function() { //desbloquear nivel si se ha compl
 
 
 async function updatePlayerStats(stats) {
-    // Si no hay ID de jugador, no intentar actualizar
     if (!stats.id_jugador) {
         console.warn("No se puede actualizar estadísticas: ID de jugador no disponible");
         return;
@@ -1162,7 +1161,15 @@ async function updatePlayerStats(stats) {
                 cofres_abiertos: stats.cofresAbiertos,
                 objetos_usados: stats.objetos_usados,
                 muertes: stats.muertes,
-                tiempo_jugado: tiempo
+                tiempo_jugado: tiempo,
+                bombas_usadas: stats.bombas_usadas,
+                flechas_disparadas: stats.flechas_disparadas,
+                magias_usadas: stats.magias_usadas,
+                dinero_recolectado: stats.dinero_recolectado,
+                dashs_realizados: stats.dashs_realizados,
+                jefes_derrotados: stats.jefes_derrotados,
+                niveles_completados: stats.niveles_completados,
+                pociones_usadas: stats.pociones_usadas
             })
         });
 
