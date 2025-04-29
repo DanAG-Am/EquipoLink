@@ -145,7 +145,7 @@ Game.prototype.update = function(deltaTime) {
                         enemy.lastDamageTime = currentTime;
                         if (enemy.life <= 0) {
                             enemyDeathSFX();
-                            enemigos.splice(i, 1);
+                            enemy.dead = true;
                             let rupeesEarned = 1; // 1 rupee por defecto
                             switch (enemy.name) { // Determina la recompensa según el tipo de enemigo
                                 case "slime":
@@ -191,7 +191,7 @@ Game.prototype.update = function(deltaTime) {
                     arrow.alive = false;
                     if (enemy.life <= 0) {
                         enemyDeathSFX();
-                        enemigos.splice(i, 1);
+                        enemy.dead = true;
                         let rupeesEarned = 1; // 1 rupee por defecto
                         switch (enemy.name) { // Determina la recompensa según el tipo de enemigo
                             case "slime":
@@ -244,7 +244,7 @@ Game.prototype.update = function(deltaTime) {
                         enemy.lastDamageTime = currentTime;
                         if (enemy.life <= 0) {
                             enemyDeathSFX();
-                            enemigos.splice(i, 1);
+                            enemy.dead = true;
                             let rupeesEarned = 1; // 1 rupee por defecto
                             switch (enemy.name) { // Determina la recompensa según el tipo de enemigo
                                 case "slime":
@@ -298,7 +298,7 @@ Game.prototype.update = function(deltaTime) {
                         enemy.life -= playerStats.damageBomb;
                         if (enemy.life <= 0) {
                             enemyDeathSFX();
-                            enemigos.splice(i, 1);
+                            enemy.dead = true;
                             let rupeesEarned = 1; // 1 rupee por defecto
                             switch (enemy.name) { // Determina la recompensa según el tipo de enemigo
                                 case "slime":
@@ -337,6 +337,9 @@ Game.prototype.update = function(deltaTime) {
                 }
             }
         });
+        
+        this.levelEnemies = this.levelEnemies.filter(enemy => !enemy.dead);
+        this.actors = this.actors.filter(actor => !actor.dead);
         
         if (playerStats.life <= 0 && !isGameOver) {
             // Marcar el juego como terminado

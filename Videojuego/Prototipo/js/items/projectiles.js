@@ -128,6 +128,8 @@ class Arrow {
 
 class Magic {
     constructor(position, direction) {
+        this.owner = "player";
+        this.owner = "enemy";
         this.alive = true;
         this.position = position;
         this.width = 32;
