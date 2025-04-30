@@ -41,11 +41,19 @@ CREATE TABLE Jugador(
 
 CREATE TABLE Estadisticas(
 	id_jugador INT,
-	enemigos_derrotados INT,
-	cofres_abiertos INT,
-	objetos_usados INT,
-	muertes INT,
-	tiempo_jugado TIME,
+	enemigos_derrotados INT DEFAULT 0,
+	cofres_abiertos INT DEFAULT 0,
+	objetos_usados INT DEFAULT 0,
+	muertes INT DEFAULT 0,
+	tiempo_jugado TIME DEFAULT '00:00:00',
+	bombas_usadas INT DEFAULT 0,
+	flechas_disparadas INT DEFAULT 0,
+	magias_usadas INT DEFAULT 0,
+	dinero_recolectado INT DEFAULT 0,
+	dashs_realizados INT DEFAULT 0,
+	jefes_derrotados INT DEFAULT 0,
+	niveles_completados INT DEFAULT 0,
+	pociones_usadas INT DEFAULT 0,
 	PRIMARY KEY (id_jugador),
 	FOREIGN KEY (id_jugador) REFERENCES Jugador(id_jugador)
 );
