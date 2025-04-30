@@ -179,7 +179,11 @@ h1 {
     margin-right: 5px;
 }
   
-.link-github {
+.link-github{
+    color: #1e90ff;
+    text-decoration: underline;
+}
+._blank{
     color: #1e90ff;
     text-decoration: underline;
 }
@@ -754,7 +758,8 @@ canvas {
 }
 
 .assets-wrapper {
-    margin-top: 30px;  /* Push the gallery below the heading */
+    margin-top: 0px;  /* Push the gallery below the heading */
+    padding-top: 0px;
 }
 
 #assets.container {
@@ -843,4 +848,40 @@ canvas {
     font-size: 14px;
     z-index: 2;
     position: relative;
+}
+
+.examples-section {
+    margin-top: 50px;
+    text-align: center;
+}
+
+.examples-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 25px;
+}
+
+.example {
+    width: 220px;
+    background: #111;
+    border: 2px solid white;
+    padding: 10px;
+    font-family: 'Pixelify Sans', sans-serif;
+}
+
+.examples-section h2 {
+    font-size: 32px;
+    margin-bottom: 30px;
+}
+
+.example p {
+    font-size: 32px;
+}
+
+.example img {
+    width: 100%;
+    max-width: 180px;
+    margin-bottom: 8px;
+    border-radius: 4px;
 }
