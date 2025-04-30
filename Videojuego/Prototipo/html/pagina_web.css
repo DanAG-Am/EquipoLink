@@ -485,7 +485,7 @@ a.botonRegresar:hover {
     align-items: center;
     width: max-content; 
     justify-content: flex-start;
-    animation: scroll-left 40s linear infinite;
+    animation: scroll-left 200s linear infinite;
 }
 
 .assets-gallery img {
@@ -885,3 +885,4 @@ canvas {
     margin-bottom: 8px;
     border-radius: 4px;
 }
+
