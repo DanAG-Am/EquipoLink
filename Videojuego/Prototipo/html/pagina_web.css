@@ -737,9 +737,43 @@ table {
   text-align: center;
 }
 
+.container {
+    margin-left: 750px; /* Adjust the value to shift it more or less */
+}
+
 canvas {
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
 }
+#assets {
+    padding-top: 120px;
+}
 
-    
+#assets h2 {
+    margin-top: 100px; /* Push the heading down */
+}
+
+.assets-wrapper {
+    margin-top: 30px;  /* Push the gallery below the heading */
+}
+
+#assets.container {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+}
+
+#registerForm {
+    margin-top: 0;
+    padding-top: 0;
+    margin-bottom: 20px;
+  }
+
+
+  body.login-register {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
