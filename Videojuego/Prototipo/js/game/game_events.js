@@ -497,7 +497,7 @@ Game.prototype.createEventListeners = function(){
                 playerStats.potions--;
                 playerStats.objetos_usados++; 
                 healSFX();
-                let lifeRegen = Math.floor(Math.random() * 20) + 10;
+                let lifeRegen = Math.floor(Math.random() * 30) + 10;
                 playerStats.life = Math.min(playerStats.life + lifeRegen, playerStats.maxLife);
             }
         }
