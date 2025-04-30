@@ -89,36 +89,37 @@ INSERT INTO Jugador (id_cuarto, usuario, contrasena, hp_actual, hp_max, mp_actua
 INSERT INTO Jugador (id_cuarto, usuario, contrasena, hp_actual, hp_max, mp_actual, mp_max, monedas, pociones, bombas, flechas) VALUES (5, 'usuario_28', 'pass_28', 12, 100, 87, 100, 416, 4, 1, 6);
 INSERT INTO Jugador (id_cuarto, usuario, contrasena, hp_actual, hp_max, mp_actual, mp_max, monedas, pociones, bombas, flechas) VALUES (1, 'usuario_29', 'pass_29', 97, 100, 38, 100, 316, 10, 5, 6);
 INSERT INTO Jugador (id_cuarto, usuario, contrasena, hp_actual, hp_max, mp_actual, mp_max, monedas, pociones, bombas, flechas) VALUES (17, 'usuario_30', 'pass_30', 50, 100, 60, 100, 474, 10, 0, 17);
-INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (1, 20, 8, 7, 3, '07:47:00');
-INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (2, 20, 4, 9, 5, '02:13:00');
-INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (3, 4, 6, 1, 4, '01:24:00');
-INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (4, 18, 10, 6, 1, '04:41:00');
-INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (5, 18, 0, 7, 0, '02:22:00');
-INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (6, 14, 7, 8, 1, '08:22:00');
-INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (7, 3, 5, 8, 0, '07:48:00');
-INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (8, 4, 7, 6, 1, '02:31:00');
-INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (9, 4, 9, 6, 5, '01:18:00');
-INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (10, 7, 9, 3, 2, '07:29:00');
-INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (11, 1, 2, 2, 2, '05:16:00');
-INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (12, 13, 2, 8, 2, '04:42:00');
-INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (13, 18, 6, 1, 1, '03:52:00');
-INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (14, 4, 6, 2, 1, '00:53:00');
-INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (15, 3, 6, 3, 5, '03:26:00');
-INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (16, 14, 10, 2, 3, '05:17:00');
-INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (17, 0, 2, 6, 1, '09:16:00');
-INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (18, 14, 9, 9, 0, '03:12:00');
-INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (19, 4, 3, 6, 1, '07:57:00');
-INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (20, 16, 6, 6, 5, '01:55:00');
-INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (21, 13, 10, 1, 2, '02:47:00');
-INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (22, 12, 1, 1, 1, '02:21:00');
-INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (23, 0, 6, 8, 0, '03:49:00');
-INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (24, 19, 5, 10, 3, '05:55:00');
-INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (25, 17, 2, 0, 5, '00:48:00');
-INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (26, 16, 4, 5, 3, '09:55:00');
-INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (27, 17, 8, 8, 3, '04:19:00');
-INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (28, 2, 10, 7, 1, '07:14:00');
-INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (29, 16, 2, 4, 0, '04:11:00');
-INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado) VALUES (30, 6, 4, 8, 2, '01:40:00');
+INSERT INTO Estadisticas (id_jugador, enemigos_derrotados, cofres_abiertos, objetos_usados, muertes, tiempo_jugado, bombas_usadas, flechas_disparadas, magias_usadas, dinero_recolectado, dashs_realizados, jefes_derrotados, niveles_completados, pociones_usadas) VALUES
+(1, 20, 8, 7, 3, '07:47:00', 5, 12, 3, 487, 20, 2, 6, 4),
+(2, 20, 4, 9, 5, '02:13:00', 8, 5, 1, 295, 15, 3, 5, 6),
+(3, 4, 6, 1, 4, '01:24:00', 1, 3, 0, 123, 8, 1, 3, 2),
+(4, 18, 10, 6, 1, '04:41:00', 3, 7, 2, 382, 18, 2, 6, 5),
+(5, 18, 0, 7, 0, '02:22:00', 2, 6, 2, 305, 10, 2, 5, 4),
+(6, 14, 7, 8, 1, '08:22:00', 4, 9, 3, 401, 21, 3, 7, 6),
+(7, 3, 5, 8, 0, '07:48:00', 1, 2, 2, 220, 6, 0, 2, 3),
+(8, 4, 7, 6, 1, '02:31:00', 2, 4, 1, 198, 7, 1, 4, 4),
+(9, 4, 9, 6, 5, '01:18:00', 3, 6, 2, 250, 9, 0, 2, 3),
+(10, 7, 9, 3, 2, '07:29:00', 2, 10, 2, 329, 14, 1, 5, 5),
+(11, 1, 2, 2, 2, '05:16:00', 0, 1, 0, 95, 2, 0, 1, 1),
+(12, 13, 2, 8, 2, '04:42:00', 4, 8, 3, 330, 13, 1, 6, 5),
+(13, 18, 6, 1, 1, '03:52:00', 5, 12, 1, 401, 19, 2, 5, 4),
+(14, 4, 6, 2, 1, '00:53:00', 2, 5, 1, 210, 10, 0, 2, 2),
+(15, 3, 6, 3, 5, '03:26:00', 3, 4, 2, 189, 5, 1, 3, 3),
+(16, 14, 10, 2, 3, '05:17:00', 3, 7, 1, 356, 11, 2, 4, 4),
+(17, 0, 2, 6, 1, '09:16:00', 1, 1, 0, 75, 3, 0, 1, 1),
+(18, 14, 9, 9, 0, '03:12:00', 5, 11, 4, 480, 17, 3, 6, 6),
+(19, 4, 3, 6, 1, '07:57:00', 2, 3, 2, 220, 5, 1, 3, 2),
+(20, 16, 6, 6, 5, '01:55:00', 4, 8, 2, 350, 12, 2, 4, 4),
+(21, 13, 10, 1, 2, '02:47:00', 2, 7, 1, 289, 9, 2, 5, 3),
+(22, 12, 1, 1, 1, '02:21:00', 1, 3, 1, 201, 6, 1, 2, 2),
+(23, 0, 6, 8, 0, '03:49:00', 3, 6, 3, 198, 10, 1, 3, 3),
+(24, 19, 5, 10, 3, '05:55:00', 6, 10, 3, 520, 15, 3, 7, 5),
+(25, 17, 2, 0, 5, '00:48:00', 2, 6, 1, 210, 4, 1, 3, 2),
+(26, 16, 4, 5, 3, '09:55:00', 3, 7, 2, 395, 11, 2, 4, 4),
+(27, 17, 8, 8, 3, '04:19:00', 4, 9, 2, 430, 13, 3, 6, 4),
+(28, 2, 10, 7, 1, '07:14:00', 2, 3, 2, 160, 6, 0, 2, 3),
+(29, 16, 2, 4, 0, '04:11:00', 3, 5, 1, 295, 10, 2, 4, 3),
+(30, 6, 4, 8, 2, '01:40:00', 2, 6, 2, 208, 7, 1, 3, 3);
 INSERT INTO Objeto (nombre, tipo, efecto, stackable, precio) VALUES ('objeto_1', 'flecha', 'Efecto 1', 1, 84);
 INSERT INTO Objeto (nombre, tipo, efecto, stackable, precio) VALUES ('objeto_2', 'pocion', 'Efecto 2', 1, 53);
 INSERT INTO Objeto (nombre, tipo, efecto, stackable, precio) VALUES ('objeto_3', 'pocion', 'Efecto 3', 1, 80);
@@ -527,15 +528,3 @@ SELECT * FROM Enemigo;
 SELECT * FROM Jefe;
 SELECT * FROM Accion;
 SELECT * FROM Jugador_Accion;
-
-USE TheLostSentinel;
-
-ALTER TABLE Estadisticas
-ADD COLUMN bombas_usadas INT DEFAULT 0,
-ADD COLUMN flechas_disparadas INT DEFAULT 0,
-ADD COLUMN magias_usadas INT DEFAULT 0,
-ADD COLUMN dinero_recolectado INT DEFAULT 0,
-ADD COLUMN dashs_realizados INT DEFAULT 0,
-ADD COLUMN jefes_derrotados INT DEFAULT 0,
-ADD COLUMN niveles_completados INT DEFAULT 0,
-ADD COLUMN pociones_usadas INT DEFAULT 0;
