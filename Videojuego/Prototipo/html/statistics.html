@@ -36,9 +36,6 @@
         </div>
         <div class="resultDisplay" id="graphsDisplay" style="display: flex; flex-wrap: wrap; justify-content: center;">
           <div class="chart-card">
-            <canvas id="estadisticasChart" width="400" height="300"></canvas>
-          </div>
-          <div class="chart-card">
             <canvas id="pieChart" width="400" height="300"></canvas>
           </div>
           <div class="chart-card">
@@ -97,7 +94,6 @@
       return hours * 60 + minutes + seconds / 60;
     }
 
-    let barChartInstance = null;
 let pieChartInstance = null;
 let radarChartInstance = null;
 let lineChartInstance = null;
@@ -123,36 +119,11 @@ document.getElementById("loadGraph").addEventListener("click", async function ()
   const muertes = statsData.map(item => item.muertes);
   const tiempoJugadoMinutos = statsData.map(item => timeToMinutes(item.tiempo_jugado));
 
-  if (barChartInstance) barChartInstance.destroy();
+
   if (pieChartInstance) pieChartInstance.destroy();
   if (radarChartInstance) radarChartInstance.destroy();
   if (lineChartInstance) lineChartInstance.destroy();
 
-  const ctxBar = document.getElementById("estadisticasChart").getContext("2d");
-  barChartInstance = new Chart(ctxBar, {
-    type: "bar",
-    data: {
-      labels: usuarios,
-      datasets: [
-        { label: "Enemigos Derrotados", data: enemigosDerrotados, backgroundColor: "rgba(255, 99, 132, 0.6)" },
-        { label: "Cofres Abiertos", data: cofresAbiertos, backgroundColor: "rgba(255, 215, 0, 0.6)" },
-        { label: "Objetos Usados", data: objetosUsados, backgroundColor: "rgba(255, 165, 0, 0.6)" },
-        { label: "Muertes", data: muertes, backgroundColor: "rgba(255, 0, 0, 0.6)" },
-        { label: "Bombas Usadas", data: statsData.map(item => item.bombas_usadas), backgroundColor: "rgba(200, 100, 255, 0.6)" },
-        { label: "Flechas Disparadas", data: statsData.map(item => item.flechas_disparadas), backgroundColor: "rgba(100, 200, 255, 0.6)" },
-        { label: "Magias Usadas", data: statsData.map(item => item.magias_usadas), backgroundColor: "rgba(0, 255, 127, 0.6)" },
-        { label: "Dashs", data: statsData.map(item => item.dashs_realizados), backgroundColor: "rgba(255, 140, 0, 0.6)" },
-        { label: "Pociones Usadas", data: statsData.map(item => item.pociones_usadas), backgroundColor: "rgba(255, 255, 102, 0.6)" },
-        { label: "Jefes Derrotados", data: statsData.map(item => item.jefes_derrotados), backgroundColor: "rgba(128, 0, 128, 0.6)" },
-        { label: "Niveles Completados", data: statsData.map(item => item.niveles_completados), backgroundColor: "rgba(0, 255, 255, 0.6)" },
-        { label: "Dinero Recolectado", data: statsData.map(item => item.dinero_recolectado), backgroundColor: "rgba(255, 255, 255, 0.6)" }
-      ]
-    },
-    options: {
-      scales: { y: { beginAtZero: true } },
-      plugins: { legend: { labels: { color: "white" } }, title: { display: true, text: "Estadísticas de Jugadores", color: "white" } }
-    }
-  });
 
   const ctxPie = document.getElementById("pieChart").getContext("2d");
   pieChartInstance = new Chart(ctxPie, {

@@ -2,7 +2,7 @@
 Repositorio de equipo que contiene todos los archivos a trabajar en conjunto para la creación del videojuego.
 
 # Acceso por carpetas 
-Videojuego - Prototipo - HTML -Prototipo.html
+Videojuego - Prototipo - HTML - TheLostSentinel.html
 
 # 🛡️ THE LOST SENTINEL
 
