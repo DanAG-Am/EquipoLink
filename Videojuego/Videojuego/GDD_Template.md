@@ -134,7 +134,9 @@ Con la espada aún en su mano, mira a su alrededor. La mazmorra, que antes parec
 ### **Pantallas**
 
 - **Pantalla de Inicio:** Vista previa del mapa. Sentinel camina por la pantalla hasta que el jugador haga clic en el botón de inicio.
+![Inicio](Assets/MDAssets/Inicio.png)
 - **Pantalla de Historia:** Se muestra un resumen de la historia breve de cómo Sentinel terminó en la mazmorra.
+![Inicio](Assets/MDAssets/Historia.png)
 - **Opciones:**
   - El botón de inicio solicitará al jugador que inicie sesión con su nombre de usuario.
   - Pantalla de controles con las teclas de dirección, clic izquierdo, 'Q' y 'Z'.
@@ -145,6 +147,8 @@ Con la espada aún en su mano, mira a su alrededor. La mazmorra, que antes parec
   - **Pantalla de Mazmorra**
   - **Salida de la mazmorra:** Iluminación natural, mapa con arbustos y suelo amarillo de concreto.
   - **Créditos Finales:** Nombres de los creadores y referencias en formato APA.
+
+  ![Inicio](Assets/MDAssets/mainscreen.png)
 
 ### **Controles**
 
@@ -293,6 +297,10 @@ Habitación 10: Batalla contra el Jefe Final.
 - Si el jugador intenta **robar tres veces**, el anciano lo expulsa de la tienda.
 - El jugador puede **comprar objetos de curación, mejoras de armas y habilidades** _(HP, Atk, Def, etc.)_.
 
+![Merchant](Assets/MDAssets/Screenshot%202025-04-30%20183050.png)
+
+![Hada](Assets/MDAssets/hada.png)
+
 ---
 
 ### 3. Reino de las Hadas
@@ -321,6 +329,9 @@ Habitación 10: Batalla contra el Jefe Final.
 3. Aparece la **pantalla de inicio de sesión**, donde el jugador ingresa su nombre de usuario.
 4. Una vez que inicia sesión, el jugador es llevado a la **Pantalla de Historia**.
 
+
+![Historia](Assets/MDAssets/GameFlow.png)
+
 ---
 
 ### **Pantalla de Historia y Prólogo**
@@ -345,6 +356,7 @@ Habitación 10: Batalla contra el Jefe Final.
 4. El anciano le entrega **una espada de madera** como su primera arma.
 5. El jugador puede **explorar la mazmorra** e interactuar con NPCs.
 
+![Controles](Assets/MDAssets/controles.png)
 ---
 
 ### **Explorando la Mazmorra**
@@ -372,9 +384,11 @@ El jugador avanza enfrentando:
 - **Hadas consejeras**, que dan advertencias sobre peligros futuros.
 - Cada **tres habitaciones**, se revelan **más detalles** sobre el pasado de Sentinel y los motivos del villano principal.
 
+![Mazmorras](Assets/MDAssets/Mazmorra.png)
+
 ---
 
-### **Visitación a la Tienda y al Reino de las Hadas**
+### **Visita a la Tienda y al Reino de las Hadas**
 En las habitaciones **3, 6 y 9**, el jugador puede **visitar**:
    - **Tienda** para comprar ítems con las monedas obtenidas.
    - **Reino de las Hadas** para recibir pistas y objetos mágicos.
@@ -413,9 +427,12 @@ Define propiedades básicas como posición, movimiento y renderizado.
 ---
 
 ## **BaseCharacter**
+
+
 Representa a todos los personajes (jugador, NPCs y enemigos).  
 Maneja la salud, el movimiento y las animaciones.
 
+![Characters](Assets/MDAssets/Characters.png)
 ### **Atributos:**
 - `health`: Puntos de vida del personaje.
 - `damage`: Cantidad de daño que el personaje puede causar.
@@ -658,7 +675,10 @@ Un anciano que administra la tienda del juego.
 
 # **Objetos**
 
+![Assets](Assets/MDAssets/Assets.png)
+
 ## **Espada (Sword)**
+
 El arma estándar de combate cuerpo a cuerpo.
 
 ### **Atributos:**

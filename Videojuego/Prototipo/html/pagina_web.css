@@ -515,11 +515,11 @@ a.botonRegresar:hover {
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-top: 30px; /* Adds space above the comic image */
+    margin-top: 30px; 
 }
 
 .story img {
-    max-width: 90%; /* Adjust image size */
+    max-width: 90%; 
     height: auto;
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -529,7 +529,7 @@ footer {
     padding: 20px 0;
     font-size: 0.8em;
 }
-/* Section styling */
+
 .leaderboard-section {
     background-color: #2c2f33;
     padding: 100px;
@@ -537,10 +537,9 @@ footer {
 }
 
 .leaderboard-section h1 {
-    margin-bottom: 100px; /* Adjust as needed */
+    margin-bottom: 100px; 
   }
   
-/* Form styling */
 .formInput {
     display: flex;
     flex-direction: column;
@@ -548,7 +547,7 @@ footer {
 }
 
 #championForm button {
-    margin-bottom: 20px; /* Adjust this value to control the space */
+    margin-bottom: 20px; 
   }  
 
 .formInput input {
@@ -572,7 +571,7 @@ footer {
     background-color: #4F4F4F;
 }
 
-/* Result display styling */
+
 .resultDisplay {
     background-color: #333;
     padding: 20px;
@@ -742,7 +741,7 @@ table {
 }
 
 .container {
-    margin-left: 750px; /* Adjust the value to shift it more or less */
+    margin-left: 750px; 
 }
 
 canvas {
@@ -754,11 +753,11 @@ canvas {
 }
 
 #assets h2 {
-    margin-top: 100px; /* Push the heading down */
+    margin-top: 100px; 
 }
 
 .assets-wrapper {
-    margin-top: 0px;  /* Push the gallery below the heading */
+    margin-top: 0px;  
     padding-top: 0px;
 }
 
